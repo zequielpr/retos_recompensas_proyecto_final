@@ -2,18 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../datos/TransferirDatos.dart';
-import 'Misiones.dart';
-import 'Ruleta.dart';
-import 'UsuariosTutorados.dart';
+import 'pages/Misiones.dart';
+import 'pages/Ruleta.dart';
+import 'pages/UsuariosTutorados.dart';
 
 
 
 //Store this globally
 final GlobalKey<NavigatorState> _navKey = GlobalKey<NavigatorState>();
 
-class MenuSala extends StatefulWidget {
+class TabPagesSala extends StatefulWidget {
 
-  const MenuSala({Key? key}) : super(key: key);
+  const TabPagesSala({Key? key}) : super(key: key);
 
   static const routeName = '/extractArguments';
 
@@ -22,13 +22,13 @@ class MenuSala extends StatefulWidget {
     throw UnimplementedError();
   }
   @override
-  _MenuSalaState createState() => _MenuSalaState();
+  _TabPagesSalaState createState() => _TabPagesSalaState();
 
 }
 
 
 
-class _MenuSalaState extends State<MenuSala> with SingleTickerProviderStateMixin {
+class _TabPagesSalaState extends State<TabPagesSala> with SingleTickerProviderStateMixin {
   late final TabController _tabController;
   @override
   void initState() {

@@ -2,7 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../../datos/SalaDatos.dart';
+import '../../../datos/SalaDatos.dart';
 
 class Usuarios extends StatelessWidget {
   final CollectionReference  collectionReferenceUsuariosTutorados;
@@ -94,7 +94,8 @@ class Usuarios extends StatelessWidget {
                               ),
                             ),
                           )
-                      ),);
+                      ),
+                      );
                   },
                 );
               }

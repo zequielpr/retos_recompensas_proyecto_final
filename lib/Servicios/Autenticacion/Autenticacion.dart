@@ -2,16 +2,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import 'main.dart';
+import '../../main.dart';
 
 class Autenticar{
 
   //Metodo para iniciar sesion con google
-  static Future<User?>  signInWithGoogle(BuildContext context) async {
+  static Future<dynamic>  signInWithGoogle(BuildContext context, AuthCredential credential) async {
     FirebaseAuth autenticador = FirebaseAuth.instance;
     User? user;
 
+
     // Trigger the authentication flow
+    /*
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
     // Obtain the auth details from the request
@@ -22,7 +24,7 @@ class Autenticar{
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
-    );
+    );*/
 
     try {
       UserCredential userCredential = await autenticador.signInWithCredential(
@@ -30,15 +32,17 @@ class Autenticar{
 
       user = userCredential.user;
 
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => Inicio()));
+      //Si el usuario no es nulo, se verifica si es nuevo o no, en el caso contrario, se le asignará null a la variable
+      var isNewUser = user != null ? userCredential.additionalUserInfo?.isNewUser : null;
 
+      return isNewUser;
 
-      return user;
     } on FirebaseAuthException catch (e) {
+      return null;
       print("Error en la autenticación");
     }
   }
+
+
+
 }

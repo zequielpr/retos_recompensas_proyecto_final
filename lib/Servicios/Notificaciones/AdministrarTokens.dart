@@ -8,15 +8,15 @@ Future<void> saveTokenToDatabase(String token) async {
 
   DocumentReference docRefUsuario =  FirebaseFirestore.instance.collection('usuarios').doc(userId);
   await docRefUsuario.get().then( (value) => {
-        if(value.exists){
-            docRefUsuario.update({
-              'tokens': FieldValue.arrayUnion([token])
-            })
-          }else{
-          docRefUsuario.set({
-            'tokens': FieldValue.arrayUnion([token])
-          })
-        }
+    if(value.exists){
+      docRefUsuario.update({
+        'tokens': FieldValue.arrayUnion([token])
+      })
+    }else{
+      docRefUsuario.set({
+        'tokens': FieldValue.arrayUnion([token])
+      })
+    }
   });
 
 
