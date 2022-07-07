@@ -16,24 +16,24 @@ class Misiones extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-          //listar misiones
-          child: StreamBuilder(
-        stream: collectionMisiones.snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-          if (streamSnapshot.hasData) {
-            return ListView.builder(
-              itemCount: streamSnapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                final DocumentSnapshot documentSnapshot =
-                    streamSnapshot.data!.docs[index];
-                return Padding(
-                  padding: EdgeInsets.only(top: 10, bottom: 10),
-                  child: FlatButton(
-                      color: Colors.transparent,
-                      splashColor: Colors.black26,
-                      onPressed: () {
-                        /* Navigator.pushNamed(
+        body: Center(
+            //listar misiones
+            child: StreamBuilder(
+          stream: collectionMisiones.snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+            if (streamSnapshot.hasData) {
+              return ListView.builder(
+                itemCount: streamSnapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  final DocumentSnapshot documentSnapshot =
+                      streamSnapshot.data!.docs[index];
+                  return Padding(
+                    padding: EdgeInsets.only(top: 10, bottom: 10),
+                    child: FlatButton(
+                        color: Colors.transparent,
+                        splashColor: Colors.black26,
+                        onPressed: () {
+                          /* Navigator.pushNamed(
                         context,
                         MenuSala.routeName,
                         arguments: TransferirDatos(
@@ -42,80 +42,86 @@ class Misiones extends StatelessWidget {
                         ),
                       );
 */
-                        //this.titulo = 'holaaa';
+                          //this.titulo = 'holaaa';
 
-                        //Navigator.push(context, MaterialPageRoute(builder: (context)=>MenuSala()) );
-                      },
-                      child: Card(
-                        margin: const EdgeInsets.all(10),
-                        child: ListTile(
-                          /*leading: CircleAvatar(
+                          //Navigator.push(context, MaterialPageRoute(builder: (context)=>MenuSala()) );
+                        },
+                        child: Card(
+                          margin: const EdgeInsets.all(10),
+                          child: ListTile(
+                            /*leading: CircleAvatar(
                   backgroundImage: NetworkImage(
                       "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1581413287870&di=35491998b94817cbcf04d9f9f3d2d4b3&imgtype=jpg&src=http%3A%2F%2Fimg0.imgtn.bdimg.com%2Fit%2Fu%3D2464547320%2C3316604757%26fm%3D214%26gp%3D0.jpg"),
                 ),*/
-                          title: Text(Text(documentSnapshot['nombreMision'])
-                              .data
-                              .toString()),
-                          subtitle: Text(
-                              Text(documentSnapshot['objetivoMision'])
-                                  .data
-                                  .toString(),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1),
-                          trailing: SizedBox(
-                            width: 100,
-                            child: Row(
-                              children: [
-                                IconButton(
-                                    icon:
-                                        const Icon(Icons.visibility, size: 20),
-                                    onPressed: () {}),
-                                // Press this button to edit a single product
-                                IconButton(
-                                    icon: const Icon(Icons.edit, size: 20),
-                                    onPressed: () {}),
-                                // This icon button is used to delete a single product
-                              ],
+                            title: Text(Text(documentSnapshot['nombreMision'])
+                                .data
+                                .toString()),
+                            subtitle: Text(
+                                Text(documentSnapshot['objetivoMision'])
+                                    .data
+                                    .toString(),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1),
+                            trailing: SizedBox(
+                              width: 100,
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                      icon: const Icon(Icons.visibility,
+                                          size: 20),
+                                      onPressed: () {}),
+                                  // Press this button to edit a single product
+                                  IconButton(
+                                      icon: const Icon(Icons.edit, size: 20),
+                                      onPressed: () {}),
+                                  // This icon button is used to delete a single product
+                                ],
+                              ),
                             ),
                           ),
-
-                        ),
-                      )),
-                );
-              },
+                        )),
+                  );
+                },
+              );
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
             );
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      )),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print('hola');
-          /* Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const MyApp()),
-            //MaterialPageRoute(builder: (context) => SecondRoute()),
-          );*/
-
-          Navigator.of(contextSala).push(MaterialPageRoute(
-              builder: (context) => AddMision(
-                    collectionReferenceMisiones: collectionMisiones,
-                    contextSala: contextSala,
-                  )));
-        },
-        child: const Icon(Icons.add),
-      ),
-    );
+          },
+        )),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: SizedBox(
+            width: 400,
+            height: 50,
+            child: Container(
+              color: Colors.green,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: FloatingActionButton(
+                      backgroundColor: Colors.green,
+                      onPressed: () {
+                        Navigator.of(contextSala).push(MaterialPageRoute(
+                            builder: (context) => AddMision(
+                                  collectionReferenceMisiones:
+                                      collectionMisiones,
+                                  contextSala: contextSala,
+                                )));
+                      },
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.black,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            )));
     ;
   }
 }
-
-
-
-
-
 
 //Añadir misión --------------------------------------------------------------------------------------------------------------
 class AddMision extends StatelessWidget {

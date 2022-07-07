@@ -6,13 +6,10 @@ import 'pages/Misiones.dart';
 import 'pages/Ruleta.dart';
 import 'pages/UsuariosTutorados.dart';
 
-
-
 //Store this globally
 final GlobalKey<NavigatorState> _navKey = GlobalKey<NavigatorState>();
 
 class TabPagesSala extends StatefulWidget {
-
   const TabPagesSala({Key? key}) : super(key: key);
 
   static const routeName = '/extractArguments';
@@ -21,14 +18,13 @@ class TabPagesSala extends StatefulWidget {
     // TODO: implement print
     throw UnimplementedError();
   }
+
   @override
   _TabPagesSalaState createState() => _TabPagesSalaState();
-
 }
 
-
-
-class _TabPagesSalaState extends State<TabPagesSala> with SingleTickerProviderStateMixin {
+class _TabPagesSalaState extends State<TabPagesSala>
+    with SingleTickerProviderStateMixin {
   late final TabController _tabController;
   @override
   void initState() {
@@ -36,13 +32,17 @@ class _TabPagesSalaState extends State<TabPagesSala> with SingleTickerProviderSt
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as TransferirDatos;
     return Scaffold(
       appBar: AppBar(
-        title: Text(args.nombreSala),
+        title: Row(children: [
+          Text(args.nombreSala),
+          Padding(padding: EdgeInsets.only(left: 190), child: IconButton(onPressed: () {
+            enviarSolicitudeUsuario.InterfaceEnviarSolicitud(context, args.collecionUsuarios, args.sala.getIdSala);
+          }, icon: Icon(Icons.person_add)),)
+        ]),
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
@@ -63,11 +63,16 @@ class _TabPagesSalaState extends State<TabPagesSala> with SingleTickerProviderSt
         onGenerateRoute: (_) => MaterialPageRoute(
           builder: (_) => TabBarView(
             controller: _tabController,
-            children:  [
-              Misiones(collectionMisiones: args.sala.getColecMisiones, contextSala: context),
-              Usuarios(collectionReferenceUsuariosTutorados: args.sala.getColecUsuariosTutorados, collectionReferenceUsuariosDocPersonal: args.collecionUsuarios),
+            children: [
+              Misiones(
+                  collectionMisiones: args.sala.getColecMisiones,
+                  contextSala: context),
+              Usuarios(
+                  collectionReferenceUsuariosTutorados:
+                      args.sala.getColecUsuariosTutorados,
+                  collectionReferenceUsuariosDocPersonal:
+                      args.collecionUsuarios),
               Ruleta(collectionReferenceRuleta: args.sala.getColecRuletas),
-
             ],
           ),
         ),
@@ -75,5 +80,3 @@ class _TabPagesSalaState extends State<TabPagesSala> with SingleTickerProviderSt
     );
   }
 }
-
-
