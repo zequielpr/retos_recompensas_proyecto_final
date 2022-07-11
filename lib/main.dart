@@ -21,7 +21,7 @@ import 'Servicios/Autenticacion/login.dart';
 class Inicio extends StatelessWidget {
   final  bool isTutorado;
   const Inicio(bool this.isTutorado, {Key? key}) : super(key: key);
-  static const String _title = 'Flutter Code Sample';
+  static const String _title = 'Flutter';
 
   @override
   Widget build(BuildContext context) {
@@ -223,7 +223,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
     if(isTutorado){
       _widgetOptions.addAll(<Widget>[
-        bandejaNotificaciones.getBandejaNotificaciones(CollecionUsuarios),
+        bandejaNotificaciones.getBandejaNotificaciones(CollecionUsuarios, context),
         //Misiones.vistaCrearMisiones,
         //MenuOpcionesSala.getVistaSala,
 
@@ -236,7 +236,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       ]);
     }else{
       _widgetOptions.addAll(<Widget>[
-        bandejaNotificaciones.getBandejaNotificaciones(CollecionUsuarios),
+        bandejaNotificaciones.getBandejaNotificaciones(CollecionUsuarios, context),
         //Misiones.vistaCrearMisiones,
         //MenuOpcionesSala.getVistaSala,
 

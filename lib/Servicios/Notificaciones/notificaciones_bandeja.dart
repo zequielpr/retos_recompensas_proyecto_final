@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:retos_proyecto/splashScreen.dart';
 
+import '../Solicitudes/AdminSolicitudes.dart';
+
 /*
 class Notificacion_Bandeja {
  static  FirebaseAuth auth = FirebaseAuth.instance;
@@ -115,9 +117,10 @@ class Notificacion_Bandeja {
 //Nueva bandeja de notificaciones---------------------------------------------------------------------------------
 class bandejaNotificaciones {
   static FirebaseAuth auth = FirebaseAuth.instance;
+  static User? currentUser = auth.currentUser;
 
   static Widget getBandejaNotificaciones(
-      CollectionReference collectionReference) {
+      CollectionReference collectionReference, BuildContext context) {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -137,21 +140,21 @@ class bandejaNotificaciones {
         body: TabBarView(
           children: [
             getMisiones(collectionReference),
-            getSolicitudesRecibidas(collectionReference),
+            getSolicitudesRecibidas(collectionReference, context),
           ],
         ),
       ),
     );
   }
 
-  //Obtener notificaciones
+  //Obtener las solicitudes recibidas------------------------------------------------------------------
   static Widget getSolicitudesRecibidas(
-      CollectionReference collectionReference) {
+      CollectionReference collectionReference, BuildContext context) {
     CollectionReference notificacionesRecibidas = collectionReference
-        .doc(auth.currentUser?.uid)
+        .doc(currentUser?.uid)
         .collection('notificaciones')
-        .doc(auth.currentUser?.uid)
-        .collection('solicitudes_recibidas');
+        .doc(currentUser?.uid)
+        .collection('solicitudesRecibidas');
     return StreamBuilder(
       stream: notificacionesRecibidas.snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
@@ -190,15 +193,16 @@ class bandejaNotificaciones {
                                       height: 30,
                                       width: 100,
                                       child: ElevatedButton(
-                                          onPressed: () {},
-                                          child: Text("Confirmar")),
+                                          onPressed: () async => Solicitudes.aceptarSolicitud(documentSnapshot['id_emisor'],
+                                              documentSnapshot['id_sala'], collectionReference, currentUser, context),
+                                          child: Text("Aceptar")),
                                     )),
                                 SizedBox(
                                   height: 30,
                                   width: 100,
                                   child: ElevatedButton(
-                                      onPressed: () {},
-                                      child: Text("Aliminar")),
+                                      onPressed: () async => Solicitudes.eliminarNotificacion(documentSnapshot['id_sala'], collectionReference, currentUser, context, 'rechazada'),
+                                      child: Text("Rechazar")),
                                 )
                               ],
                             )
@@ -215,7 +219,7 @@ class bandejaNotificaciones {
     );
   }
 
-  //Obtener las misiones
+  //Obtener las misiones recibidas------------------------------------------------------------------
   static Widget getMisiones(CollectionReference collectionReference) {
     CollectionReference notificacionesRecibidas = collectionReference
         .doc(auth.currentUser?.uid)
@@ -236,13 +240,14 @@ class bandejaNotificaciones {
                       EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 5),
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      elevation: MaterialStateProperty.all(0),
+                        elevation: MaterialStateProperty.all(0),
                         backgroundColor:
                             MaterialStateProperty.all(Colors.transparent),
                         foregroundColor:
                             MaterialStateProperty.all(Colors.transparent)),
-                    onPressed: () {print("se ha pulsado la misión");},
-
+                    onPressed: () {
+                      print("se ha pulsado la misión");
+                    },
                     child: Card(
                         elevation: 1,
                         child: SizedBox(

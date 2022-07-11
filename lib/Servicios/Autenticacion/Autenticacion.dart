@@ -9,6 +9,7 @@ class Autenticar{
 
   //Metodo para iniciar sesion con google
   static Future<dynamic>  signInWithGoogle(BuildContext context, AuthCredential credential) async {
+    print("Se intenta acceder con google");
     FirebaseAuth autenticador = FirebaseAuth.instance;
     User? user;
 

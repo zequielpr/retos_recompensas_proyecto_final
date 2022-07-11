@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:retos_proyecto/Servicios/Solicitudes/AdminSolicitudes.dart';
 
 import '../../../Servicios/Autenticacion/Autenticacion.dart';
 import '../../../datos/SalaDatos.dart';
@@ -164,38 +165,55 @@ class enviarSolicitudeUsuario {
       CollectionReference collectionReferenceUser, String idSala) async {
     var _userNameController = TextEditingController();
     return await showModalBottomSheet(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         isScrollControlled: true,
         context: context,
         builder: (BuildContext ctx) {
           return Padding(
             padding: EdgeInsets.only(
-                top: 20,
+                top: 10,
                 left: 20,
                 right: 20,
                 // prevent the soft keyboard from covering text fields
-                bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
+                bottom: MediaQuery.of(ctx).viewInsets.bottom + 30),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ListTile(
-                    contentPadding: EdgeInsets.fromLTRB(0, 0, 50, 0),
-                    leading: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Icon(Icons.arrow_back) // the arrow back icon
-                          ),
-                    ),
-                    title: const Center(
+                /*  Row(children: [
+                  IconButton(onPressed: (){}, icon: Icon(Icons.cancel_outlined))
+                ],),*/
+
+                Row(
+                  //mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Align(
+                      alignment: Alignment.centerLeft,
                       child: Text(
                         "Enviar solicitud a usuario",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
-                      ), // Your desired title
-                    )),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 90),
+                      child: IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          icon: const Icon(Icons.close)),
+                    )
+                  ],
+                ),
+                /*const ListTile(
+                    leading: Material(
+                      color: Colors.transparent,
+                    ),
+                    title: Text(
+                      "Enviar solicitud a usuario",
+                      style: TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                ),*/
                 TextField(
                   controller: _userNameController,
                   decoration:
@@ -207,9 +225,21 @@ class enviarSolicitudeUsuario {
 
                 //Boton de enviar solicitud
                 ElevatedButton(
-                    onPressed: () {
-                      enviarSolicitud(_userNameController.text,
-                          collectionReferenceUser, idSala);
+                    onPressed: () async {
+                      var resultadoFinal = await Solicitudes.enviarSolicitud(
+                          _userNameController.text,
+                          collectionReferenceUser,
+                          idSala);
+
+                      var colorSnackBar =
+                          resultadoFinal == true ? Colors.green : Colors.red;
+                      var mensaje = resultadoFinal == true
+                          ? 'Solicitud enviada correctamente'
+                          : 'Error al enviar solicitud, el usuario no existe';
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: colorSnackBar,
+                          content: Text(mensaje)));
+                      Navigator.of(context).pop();
                     },
                     child: Text('Enviar solicitud'))
               ],
@@ -220,30 +250,4 @@ class enviarSolicitudeUsuario {
 
   //Metodo para ennviar solicitud de usuario
 
-  static Future<void> enviarSolicitud(String userName,
-      CollectionReference collectionReferenceUsers, String idSala) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    await collectionReferenceUsers
-        .where('nombre_usuario', isEqualTo: userName)
-        .get()
-        .then((resultado) async => {
-              if (resultado.docs.length == 1)
-                {
-                  await resultado.docs[0].reference
-                      .collection('notificaciones')
-                      .doc(resultado.docs[0].id)
-                      .collection('solicitudes_recibidas')
-                      .doc(idSala)
-                      .set({
-                    'id_emisor': auth.currentUser?.uid,
-                    'id_sala': idSala,
-                    'nombre_emisor': auth.currentUser?.displayName
-                  }),
-                }
-              else
-                {
-                  print("el usuario especificado no existe")
-                }
-            });
-  }
 }

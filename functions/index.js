@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
+"use strict";
 
-const functions = require('firebase-functions');
-const admin = require('firebase-admin');
+const functions = require("firebase-functions");
+const admin = require("firebase-admin");
 admin.initializeApp();
-
 /**
  * Triggers when a user gets a new follower and sends a notification.
  *
@@ -28,7 +27,8 @@ admin.initializeApp();
 
 const db = admin.firestore();
 
-exports.createUserEuropean = functions.region('europe-west1')
+/*
+export const createUserEuropean = region('europe-west1')
   .firestore
   .document('/usuarios/{tutorId}/rolTutor/{idSala}/misiones/{idMision}')
   .onCreate(async (snap, context) => {
@@ -68,7 +68,7 @@ exports.createUserEuropean = functions.region('europe-west1')
       console.log('Tokens encontrados: ', post);
       //await usuariosRef.doc(doc.id).update({tokens: admin.firestore.FieldValue.arrayRemove(token)}); //Borrar token de un array
 
-      respuesta = await admin.messaging().sendToDevice(post.tokens, payload);
+      respuesta = await messaging().sendToDevice(post.tokens, payload);
       await cleanupTokens(respuesta, post.tokens, docUsuario);
     });
 
@@ -82,7 +82,7 @@ exports.createUserEuropean = functions.region('europe-west1')
           // Cleanup the tokens who are not registered anymore.
           if (error.code === 'messaging/invalid-registration-token' ||
             error.code === 'messaging/registration-token-not-registered') {
-              const deleteTask = await documento.update({ tokens: admin.firestore.FieldValue.arrayRemove(tokens[index]) }); //Borrar token obsoleto
+              const deleteTask = await documento.update({ tokens: firestore.FieldValue.arrayRemove(tokens[index]) }); //Borrar token obsoleto
             tokensDelete.push(deleteTask);
           }
         }
@@ -90,47 +90,50 @@ exports.createUserEuropean = functions.region('europe-west1')
       return Promise.all(tokensDelete);
     }
   });//final de metodo
-
+*/
 
 //------------------------------------------------------------------------------------------------------
 
-/*exports.createUser = functions.firestore
-  .document('/usuarios/{tutorId}/rolTutor/{idSala}/misiones/{idMision}')
+exports.notificarNuevaMision = functions.firestore
+  .document("/usuarios/{tutorId}/rolTutor/{idSala}/misiones/{idMision}")
   .onCreate(async (snap, context) => {
-
     const tutorId = context.params.tutorId;
     const idSala = context.params.idSala;
 
-    const usuariosRef = db.collection('usuarios');
-    const snapshot = await usuariosRef.doc(tutorId).collection('rolTutor').doc(idSala).collection('usersTutorados').get();
+    const usuariosRef = db.collection("usuarios");
+    const snapshot = await usuariosRef
+      .doc(tutorId)
+      .collection("rolTutor")
+      .doc(idSala)
+      .collection("usersTutorados")
+      .get();
     if (snapshot.empty) {
-      console.log('No matching documents.');
+      console.log("No matching documents.");
       return;
     }
 
-    var docUsuario = ''
-    var post = '';
-    var respuesta = '';
-    var docUParametro = '';
-    var snapShotUsuariosTutorados = '';
+    var docUsuario = "";
+    var post = "";
+    var respuesta = "";
+    var docUParametro = "";
+    var snapShotUsuariosTutorados = "";
 
     const payload = {
       notification: {
-        title: 'Nueva misión',
-        body: 'Leer',
-        icon: 'https://imborrable.com/wp-content/uploads/2021/04/fotos-gratis-de-stock-1.jpg'
-      }
+        title: "Nueva misión",
+        body: "Leer",
+        icon: "https://imborrable.com/wp-content/uploads/2021/04/fotos-gratis-de-stock-1.jpg",
+      },
     };
 
     //El bucle forEach debe ser asíncrono ya que debe esperar a que la consulta se realice y continuar con la ejecución
-    snapshot.forEach(async doc => {
+    snapshot.forEach(async (doc) => {
       docUsuario = usuariosRef.doc(doc.id.trim());
       snapShotUsuariosTutorados = await docUsuario.get();
-      console.log('Id de usuario encontrado:*',doc.id,'*')
+      console.log("Id de usuario encontrado:*", doc.id, "*");
       post = snapShotUsuariosTutorados.data();
-      console.log('Tokens encontrados: ', post);
+      console.log("Tokens encontrados: ", post);
       //await usuariosRef.doc(doc.id).update({tokens: admin.firestore.FieldValue.arrayRemove(token)}); //Borrar token de un array
-
       respuesta = await admin.messaging().sendToDevice(post.tokens, payload);
       await cleanupTokens(respuesta, post.tokens, docUsuario);
     });
@@ -141,18 +144,83 @@ exports.createUserEuropean = functions.region('europe-west1')
       response.results.forEach(async (result, index) => {
         const error = result.error;
         if (error) {
-          console.error('Failure sending notification to', tokens[index], error);
+          console.error(
+            "Failure sending notification to",
+            tokens[index],
+            error
+          );
           // Cleanup the tokens who are not registered anymore.
-          if (error.code === 'messaging/invalid-registration-token' ||
-            error.code === 'messaging/registration-token-not-registered') {
-              const deleteTask = await documento.update({ tokens: admin.firestore.FieldValue.arrayRemove(tokens[index]) }); //Borrar token obsoleto
+          if (
+            error.code === "messaging/invalid-registration-token" ||
+            error.code === "messaging/registration-token-not-registered"
+          ) {
+            const deleteTask = await documento.update({
+              tokens: admin.firestore.FieldValue.arrayRemove(tokens[index]),
+            }); //Borrar token obsoleto
             tokensDelete.push(deleteTask);
           }
         }
       });
       return Promise.all(tokensDelete);
     }
+  }); //final de metodo
 
+//Notificar solicitud________________________________________________________________________________________________
+exports.notificarSolicitudesRecibidas = functions.firestore
+  .document(
+    "/usuarios/{userId}/notificaciones/{userId2}/solicitudesRecibidas/{idSolicitud}"
+  )
+  .onCreate(async (snap, context) => {
+    var nuevaSolicitud = snap.data();
 
-  });//final de metodo*/
+    var user_id = context.params.userId;
+    var nombre_emisor = nuevaSolicitud.nombre_emisor;
 
+    //Obtener documento de usuaro al cual se le ha enviado la solicitud
+    var documentUser = db.collection("usuarios").doc(user_id.trim());
+
+    //Crea la notificacion
+    const payload = {
+      notification: {
+        title: "Solicitud de tutoría",
+        body: nombre_emisor + " te ha enviado una solicitud de tutoría",
+        icon: "https://imborrable.com/wp-content/uploads/2021/04/fotos-gratis-de-stock-1.jpg",
+      },
+    };
+
+    //Obtiene los tokens del usuario que se le ha enviado la solicitud y se le envia la notificación
+    await documentUser.get().then(async (snap) => {
+      var tokens = snap.data().tokens;
+
+      //console.log("Tokens encontrados: ", tokens);
+      var respuesta = await admin.messaging().sendToDevice(tokens, payload);
+      await cleanupTokens(respuesta, tokens, documentUser);
+    });
+
+    //Funcion para eliminar todos los tokens que no tengan ningun dispositivo asosciado
+    //Funcion para eliminar todos los tokens que no tengan ningun dispositivo asosciado
+    async function cleanupTokens(response, tokens, documento) {
+      const tokensDelete = [];
+      response.results.forEach(async (result, index) => {
+        const error = result.error;
+        if (error) {
+          console.error(
+            "Failure sending notification to",
+            tokens[index],
+            error
+          );
+          // Cleanup the tokens who are not registered anymore.
+          if (
+            error.code === "messaging/invalid-registration-token" ||
+            error.code === "messaging/registration-token-not-registered"
+          ) {
+            const deleteTask = await documento.update({
+              tokens: admin.firestore.FieldValue.arrayRemove(tokens[index]),
+            }); //Borrar token obsoleto
+            tokensDelete.push(deleteTask);
+          }
+        }
+      });
+      return Promise.all(tokensDelete);
+    }
+  }); //final de metodo
