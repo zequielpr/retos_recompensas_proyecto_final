@@ -117,7 +117,7 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
                     contador++;
                     cambiarCheck(espera);
                     if (contador >= 2) {
-                      await comprUserName(usuario).then((resultado) => {
+                      await Autenticar.comprUserName(usuario, collectionReferenceUsers).then((resultado) => {
                             if (resultado)
                               {botonActivo = true, cambiarCheck(disponible)}
                             else
@@ -187,25 +187,7 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
     throw UnimplementedError();
   }
 
-  //Comprobar nombre de usuario:
-  Future<bool> comprUserName(String userName) async {
-    bool userNameValido = false;
 
-    await collectionReferenceUsers
-        .where("nombre_usuario", isEqualTo: userName)
-        .get()
-        .then((value) => {
-              if (value.docs.isEmpty)
-                {
-                  print("nombre de usuario disponible"),
-                  userNameValido = true,
-                }
-              else
-                {print("Nombre de usuario no disponible"), userName = ""}
-            });
-
-    return userNameValido;
-  }
 
   //Cambiar estado del check
   void cambiarCheck(Transform check) {
