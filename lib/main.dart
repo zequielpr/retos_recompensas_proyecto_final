@@ -11,7 +11,8 @@ import 'package:retos_proyecto/vista_tutor/TabPages/TaPagesSala.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:retos_proyecto/vista_tutor/TabPages/pages/Misiones.dart';
 import 'package:retos_proyecto/vista_tutorado/AdminCuenta.dart';
-import 'package:retos_proyecto/vista_tutorado/ListaMisionesVtutorado.dart';
+import 'package:retos_proyecto/vista_tutorado/Salas/ListaMisiones.dart';
+import 'package:retos_proyecto/vista_tutorado/Salas/ListaSalas.dart';
 
 import 'Servicios/Notificaciones/notificaciones_bandeja.dart';
 import 'Servicios/Autenticacion/login.dart';
@@ -27,6 +28,7 @@ class Inicio extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
+        ListaMisiones.routeName: (context) => const ListaMisiones(),
         TabPagesSala.routeName: (context) => const TabPagesSala(),
       },
       title: _title,
@@ -228,7 +230,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         //MenuOpcionesSala.getVistaSala,
 
         //tarjeta de las misiones---------------------------------------------------
-        ListSalaTutorado.getListSalas(),
+        ListaSala_v_Tutorado.listar(context, CollecionUsuarios),
 
         AdminCuenta.getPerfilTutorado(context),
 
@@ -240,7 +242,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         //Misiones.vistaCrearMisiones,
         //MenuOpcionesSala.getVistaSala,
 
-        //tarjeta de las misiones---------------------------------------------------
+        //Tarjeta de las salas---------------------------------------------------
         ListaSalas.getInstance(context, CollecionUsuarios),
 
         //Solo de prueba

@@ -117,23 +117,23 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
                     contador++;
                     cambiarCheck(espera);
                     if (contador >= 2) {
-                      await Autenticar.comprUserName(usuario, collectionReferenceUsers).then((resultado) => {
-                            if (resultado)
-                              {botonActivo = true, cambiarCheck(disponible)}
-                            else
-                              {botonActivo = false, cambiarCheck(noDisponible)}
-                          });
+                      await Autenticar.comprUserName(
+                              usuario, collectionReferenceUsers)
+                          .then((resultado) => {
+                                if (resultado)
+                                  {botonActivo = true, cambiarCheck(disponible)}
+                                else
+                                  {
+                                    botonActivo = false,
+                                    cambiarCheck(noDisponible)
+                                  }
+                              });
 
                       contador = 0;
                       timer.cancel();
                       print("Debe comprobarse el nombre de usuario");
                     }
                   });
-
-                  /*
-                  Future.delayed(const Duration(seconds: 2, microseconds: 500), () {
-                    print('Nombre de usuario: $usuario'); // Prints after 1 second.
-                  });*/
                 },
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -145,36 +145,7 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
               padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
               child: ElevatedButton(
                 onPressed: botonActivo == true
-                    ? () async {
-                        await Autenticar.signInWithGoogle(
-                                context, userCredential)
-                            .then((usuario) async => {
-                                  if (usuario != null)
-                                    {
-                                      await collectionReferenceUsers
-                                          .doc(FirebaseAuth
-                                              .instance.currentUser?.uid)
-                                          .set({
-                                        "nombre_usuario": textController.text,
-                                        "rol_tutorado": dropdownValue == "Tutor"
-                                            ? false
-                                            : true
-                                      }),
-                                      Token.guardarToken(),
-
-                                      //Dirigirse a la pantalla principal
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  Inicio(
-                                                      dropdownValue == "Tutor"
-                                                          ? false
-                                                          : true)))
-                                    }
-                                });
-                        print("Roll seleccionado: ${dropdownValue}");
-                      }
+                    ?  () async => _registrarUsuario()
                     : () {
                         print("Boton no activo");
                       },
@@ -187,7 +158,30 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
     throw UnimplementedError();
   }
 
+  //Registra al usuario con google y guarda sus dato
+  Future<void> _registrarUsuario() async {
 
+    await Autenticar.signInWithGoogle(context, userCredential)
+        .then((usuario) async => {
+              if (usuario != null)
+                {
+                  await collectionReferenceUsers.doc(FirebaseAuth.instance.currentUser?.uid).set({
+                    "nombre_usuario": textController.text.trim(),
+                    "rol_tutorado": dropdownValue == "Tutor" ? false : true,
+                    'nombre': FirebaseAuth.instance.currentUser?.displayName
+                  }),
+                  Token.guardarToken(),
+
+                  //Dirigirse a la pantalla principal
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              Inicio(dropdownValue == "Tutor" ? false : true)))
+                }
+            });
+    print("Roll seleccionado: ${dropdownValue}");
+  }
 
   //Cambiar estado del check
   void cambiarCheck(Transform check) {
@@ -195,6 +189,9 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
       estadoUsuario = check;
     });
   }
+
+  //GUardar nuevos datos del usuario
+
 }
 
 //Introducir roll -------------------------------------------------------------------------------------------------------
@@ -241,7 +238,9 @@ class _StateRoll extends State<StateRoll> {
       body: Center(
         child: Column(
           children: [
-            SizedBox(height:100 ,),
+            SizedBox(
+              height: 100,
+            ),
             /*
             const Padding(
               padding: EdgeInsets.only(left: 30, right: 30, bottom: 100),
