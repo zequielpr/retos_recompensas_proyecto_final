@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import '../../widgets/Sala.dart';
+import '../../widgets/Cards.dart';
 
 class ListaSala_v_Tutorado {
   static Widget listar(
@@ -42,7 +41,7 @@ class ListaSala_v_Tutorado {
                       return const Text('Cargando');
                     }
                     var documentSnapShot = snapshot.data as DocumentSnapshot;
-                    return Sala.vistaTutorado(
+                    return Cards.CardSalaVistaTutorado(
                         context, collecionUsuarios, documentSnapShot);
                   });
             },

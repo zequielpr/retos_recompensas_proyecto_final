@@ -289,7 +289,9 @@ class MyStatefulWidgetState extends State<MyStatefulWidget> {
                     'nombreMision': nombreMision.getValor,
                     'objetivoMision': objetivoMision.getValor,
                     'recompensaMision': _currentSliderValue,
-                    'tipo': tipoMissSelect
+                    'tipo': tipoMissSelect,
+                    'completada_por': FieldValue.arrayUnion([]),
+                    'solicitu_confirmacion': FieldValue.arrayUnion([])
                   }).then((value) {
                     Navigator.pop(
                         contextSala); //Regresa al contextxo de la sala

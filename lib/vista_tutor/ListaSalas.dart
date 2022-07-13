@@ -1,13 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
-
-import '../datos/SalaDatos.dart';
-import '../datos/TransferirDatos.dart';
 import 'package:flutter/material.dart';
-
-import '../widgets/Sala.dart';
-import 'TabPages/TaPagesSala.dart';
+import '../widgets/Cards.dart';
 
 class ListaSalas {
   //Creando los parámetros que serán pasado a la siguiente pagina
@@ -31,7 +25,7 @@ class ListaSalas {
             itemBuilder: (context, index) {
               final DocumentSnapshot documentSnapshot =
                   streamSnapshot.data!.docs[index];
-              return Sala.vistaTutor(context, collecionUsuarios, documentSnapshot);//Devuele la vista de la sala
+              return Cards.vistaTutor(context, collecionUsuarios, documentSnapshot);//Devuele la vista de la sala
             },
           );
         }

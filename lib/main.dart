@@ -11,7 +11,7 @@ import 'package:retos_proyecto/vista_tutor/TabPages/TaPagesSala.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:retos_proyecto/vista_tutor/TabPages/pages/Misiones.dart';
 import 'package:retos_proyecto/vista_tutorado/AdminCuenta.dart';
-import 'package:retos_proyecto/vista_tutorado/Salas/ListaMisionesVtutorado.dart';
+import 'package:retos_proyecto/vista_tutorado/Salas/ListaMisiones.dart';
 import 'package:retos_proyecto/vista_tutorado/Salas/ListaSalas.dart';
 
 import 'Servicios/Notificaciones/notificaciones_bandeja.dart';
@@ -28,6 +28,7 @@ class Inicio extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
+        ListaMisiones.routeName: (context) => const ListaMisiones(),
         TabPagesSala.routeName: (context) => const TabPagesSala(),
       },
       title: _title,
