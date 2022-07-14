@@ -4,7 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 
 import 'Servicios/Autenticacion/login.dart';
 import 'main.dart';
@@ -53,6 +55,7 @@ class splashScreen extends StatelessWidget {
 
 
   Widget build(BuildContext context) {
+    //FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
     return MaterialApp(
       title: 'Splash Screen',
       theme: ThemeData(
@@ -78,6 +81,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    FlutterStatusbarcolor.setStatusBarWhiteForeground(false);//Colores de los iconos de la barra superior
+    FlutterStatusbarcolor.setStatusBarColor(Colors.transparent, animate: false); //Color de barra superior
+
+    FlutterStatusbarcolor.setNavigationBarColor(Colors.black); //Color de la barra inferior
     return Container(
         color: Colors.white,
         child: FlutterLogo(size: MediaQuery.of(context).size.height));
@@ -104,9 +111,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
 
-      if (user == null) {
-        //print('User is currently signed out!');
-        Navigator.pushReplacement(context,
+      if (user == null) {;
+       Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (BuildContext context) => Login(CollecionUsuarios)));
       } else {
         //Si el usuario esta registrado
