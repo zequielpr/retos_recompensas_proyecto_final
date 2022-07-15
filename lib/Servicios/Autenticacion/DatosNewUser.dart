@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,55 +10,37 @@ import '../../main.dart';
 import '../Notificaciones/AdministrarTokens.dart';
 import 'Autenticacion.dart';
 
-//En esta vista se implementará el metodo setState().
-class NombreUsuario extends StatelessWidget {
+
+class NombreUsuario extends StatefulWidget {
   final OAuthCredential userCredential;
   final String dropdownValue;
   final String userName;
   final CollectionReference collectionReferenceUsers;
-  const NombreUsuario(this.userCredential, this.dropdownValue, this.userName,
-      this.collectionReferenceUsers,
-      {Key? key})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return MaterialApp(
-      home: StateNombreUsuario(
-          userCredential, dropdownValue, userName, collectionReferenceUsers),
-    );
-    throw UnimplementedError();
-  }
-}
-
-class StateNombreUsuario extends StatefulWidget {
-  final OAuthCredential userCredential;
-  final String dropdownValue;
-  final String userName;
-  final CollectionReference collectionReferenceUsers;
-  const StateNombreUsuario(this.userCredential, this.dropdownValue,
-      this.userName, this.collectionReferenceUsers,
+  final String metodoDeInicio;
+  const NombreUsuario(this.userCredential, this.dropdownValue,
+      this.userName, this.collectionReferenceUsers, this.metodoDeInicio,
       {Key? key})
       : super(key: key);
   @override
   State<StatefulWidget> createState() => _StateNombreUsuario(
-      userCredential, dropdownValue, userName, collectionReferenceUsers);
+      userCredential, dropdownValue, userName, collectionReferenceUsers, metodoDeInicio);
 }
 
-class _StateNombreUsuario extends State<StateNombreUsuario> {
-  final OAuthCredential userCredential;
+class _StateNombreUsuario extends State<NombreUsuario> {
+  final OAuthCredential oaUthCredential;
   final String dropdownValue;
   final String userName;
   final CollectionReference collectionReferenceUsers;
-  _StateNombreUsuario(this.userCredential, this.dropdownValue, this.userName,
-      this.collectionReferenceUsers);
+  final String metodoDeinicio;
+  _StateNombreUsuario(this.oaUthCredential, this.dropdownValue, this.userName,
+      this.collectionReferenceUsers, this.metodoDeinicio);
 
   void initState() {
     super.initState();
     textController.text = userName;
   }
 
+  late User? currentUser;
   var textController = TextEditingController();
   Timer timer = Timer.periodic(Duration(seconds: 1), (timer) {});
   late int contador;
@@ -161,26 +142,27 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
   //Registra al usuario con google y guarda sus dato
   Future<void> _registrarUsuario() async {
 
-    await Autenticar.signInWithGoogle(context, userCredential)
-        .then((usuario) async => {
-              if (usuario != null)
-                {
-                  await collectionReferenceUsers.doc(FirebaseAuth.instance.currentUser?.uid).set({
-                    "nombre_usuario": textController.text.trim(),
-                    "rol_tutorado": dropdownValue == "Tutor" ? false : true,
-                    'nombre': FirebaseAuth.instance.currentUser?.displayName
-                  }),
-                  Token.guardarToken(),
+    await Autenticar.iniciarSesion(oaUthCredential)
+        .then((userCredential) async => {
+      currentUser = userCredential?.user,
+      if (currentUser != null)
+        {
+          await collectionReferenceUsers.doc(currentUser?.uid).set({
+            "nombre_usuario": textController.text.trim(),
+            "rol_tutorado": dropdownValue == "Tutor" ? false : true,
+            'nombre': FirebaseAuth.instance.currentUser?.displayName
+          }),
+          Token.guardarToken(),
 
-                  //Dirigirse a la pantalla principal
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              Inicio(dropdownValue == "Tutor" ? false : true)))
-                }
-            });
-    print("Roll seleccionado: ${dropdownValue}");
+          //Dirigirse a la pantalla principal
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      Inicio(dropdownValue == "Tutor" ? false : true)))
+        }
+    });
+
   }
 
   //Cambiar estado del check
@@ -190,41 +172,35 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
     });
   }
 
-  //GUardar nuevos datos del usuario
 
 }
+
+
+
+
+
 
 //Introducir roll -------------------------------------------------------------------------------------------------------
-class Roll extends StatelessWidget {
+
+
+class Roll extends StatefulWidget {
   final OAuthCredential userCredential;
   final CollectionReference collectionReferenceUsers;
-  const Roll(this.userCredential, this.collectionReferenceUsers, {Key? key})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: StateRoll(userCredential, collectionReferenceUsers),
-    );
-  }
-}
-
-class StateRoll extends StatefulWidget {
-  final OAuthCredential userCredential;
-  final CollectionReference collectionReferenceUsers;
-  const StateRoll(this.userCredential, this.collectionReferenceUsers,
+  final String metodoInicio;
+  const Roll(this.userCredential, this.collectionReferenceUsers, this.metodoInicio,
       {Key? key})
       : super(key: key);
 
   @override
   State<StatefulWidget> createState() =>
-      _StateRoll(userCredential, collectionReferenceUsers);
+      _StateRoll(userCredential, collectionReferenceUsers, metodoInicio);
 }
 
-class _StateRoll extends State<StateRoll> {
+class _StateRoll extends State<Roll> {
   final OAuthCredential userCredential;
   final CollectionReference collectionReferenceUsers;
-  _StateRoll(this.userCredential, this.collectionReferenceUsers);
+  final String metodoDeInicio;
+  _StateRoll(this.userCredential, this.collectionReferenceUsers, this.metodoDeInicio);
   String dropdownValue = 'Tutorado';
   @override
   Widget build(BuildContext context) {
@@ -289,7 +265,7 @@ class _StateRoll extends State<StateRoll> {
                               userCredential,
                               dropdownValue,
                               userName,
-                              collectionReferenceUsers)));
+                              collectionReferenceUsers, metodoDeInicio)));
                 },
                 child: Text("Siguiente"))
           ],

@@ -8,6 +8,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 
+import 'Servicios/Autenticacion/DatosNewUser.dart';
 import 'Servicios/Autenticacion/login.dart';
 import 'main.dart';
 

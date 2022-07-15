@@ -10,7 +10,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 
-
 import '../Notificaciones/AdministrarTokens.dart';
 import 'Autenticacion.dart';
 import '../../main.dart';
@@ -146,8 +145,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           EdgeInsetsGeometry.lerp(
                               EdgeInsets.all(0), EdgeInsets.all(0), 0)),
                       elevation: MaterialStateProperty.all(0)),
-                  onPressed: () async =>
-                      Autenticar.continuarConGoogle(collecUsuarios, context),
+                  onPressed: () async => {
+                    /*Autenticar.comprobarNewOrOld(collecUsuarios, context)*/
+                  },
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -194,7 +194,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       elevation: MaterialStateProperty.all(0)),
                   onPressed: () async {
                     _onLoading();
-                    await Autenticar.continuarConGoogle(collecUsuarios, context)
+                    var credencialGoogle =
+                        await Autenticar.obtenerCredencialesGoogle();
+                    var userCredential =
+                        await Autenticar.iniciarSesion(credencialGoogle!);
+                    var isNewUser =
+                        userCredential?.additionalUserInfo?.isNewUser;
+                    await Autenticar.comprobarNewOrOld(collecUsuarios, context,
+                            isNewUser, credencialGoogle, 'Google')
                         .whenComplete(() => _login());
                   },
                   child: Row(
@@ -234,8 +241,16 @@ class _MyHomePageState extends State<MyHomePage> {
                               EdgeInsets.all(0), EdgeInsets.all(0), 0)),
                       elevation: MaterialStateProperty.all(0)),
                   onPressed: () async {
+                    _onLoading();
                     print('Continuar con facebook');
-                    await Autenticar.signInWithFacebook()
+                    var oaUthCredential =
+                        await Autenticar.obtenerCredencialesFacebook();
+                    var credentialUser = await Autenticar.iniciarSesion(
+                        oaUthCredential!);
+                    var isNewUser =
+                        credentialUser?.additionalUserInfo?.isNewUser;
+                    await Autenticar.comprobarNewOrOld(collecUsuarios, context,
+                            isNewUser, oaUthCredential, 'Facebook')
                         .whenComplete(() => _login());
                   },
                   child: Row(
@@ -280,8 +295,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           EdgeInsetsGeometry.lerp(
                               EdgeInsets.all(0), EdgeInsets.all(0), 0)),
                       elevation: MaterialStateProperty.all(0)),
-                  onPressed: () async =>
-                      Autenticar.continuarConGoogle(collecUsuarios, context),
+                  onPressed: () async {/*await Autenticar.signInWithApple();*/},
                   child: Row(
                     children: [
                       const Padding(

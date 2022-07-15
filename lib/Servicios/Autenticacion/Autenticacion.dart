@@ -10,28 +10,24 @@ import 'DatosNewUser.dart';
 import 'login.dart';
 
 class Autenticar {
+  static FirebaseAuth aut = FirebaseAuth.instance;
+  static User? currentUser = aut.currentUser;
+
   //Metodo para iniciar sesion con google
-  static Future<dynamic> signInWithGoogle(
-      BuildContext context, AuthCredential credential) async {
-    print("Se intenta acceder con google");
-    FirebaseAuth autenticador = FirebaseAuth.instance;
-    User? user;
+  static Future<OAuthCredential?> obtenerCredencialesGoogle() async {
+    //Ofrece el panel para que esl usuario elija la cuenta con la que desea registrarse.
+    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    try {
-      UserCredential userCredential =
-          await autenticador.signInWithCredential(credential);
+    //Obtiene el autenticador
+    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
-      user = userCredential.user;
+    ////Crea una credencial con el token de acceso facilitado por facebook
+    var credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
 
-      //Si el usuario no es nulo, se verifica si es nuevo o no, en el caso contrario, se le asignará null a la variable
-      var isNewUser =
-          user != null ? userCredential.additionalUserInfo?.isNewUser : null;
-
-      return isNewUser;
-    } on FirebaseAuthException catch (e) {
-      return null;
-      print("Error en la autenticación");
-    }
+    return credential;
   }
 
   //Metodo para comprobar que el nombre de usuario sea válido
@@ -56,34 +52,22 @@ class Autenticar {
     return userNameValido;
   }
 
-  //Acciones que suceden al pulsar el boton iniciar con google
-  static Future<void> continuarConGoogle(
-      CollectionReference collecUsuarios, BuildContext context) async {
+  //Comprueba si el usuario es nuevo o viejo
+  static Future<void> comprobarNewOrOld(
+      CollectionReference collecUsuarios,
+      BuildContext context,
+      var isNewUser,
+      OAuthCredential? credential,
+      String metodoDeInicio) async {
     {
-      FirebaseAuth aut = FirebaseAuth.instance;
-      //Obtiene las credenciales ofrecidas por google
-      GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      print("Registrar");
-      // Obtain the auth details from the request
-      GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-
-      // Create a new credential
-      var credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
-
-      //Regitra el usuario en la app y devuelve si es nuevo o no
-      var isNewUser = await Autenticar.signInWithGoogle(context, credential);
-
       if (isNewUser) {
         await GoogleSignIn().disconnect().whenComplete(() async => {
               await aut.currentUser?.delete().whenComplete(() => {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                Roll(credential, collecUsuarios)))
+                            builder: (BuildContext context) => Roll(
+                                credential!, collecUsuarios, metodoDeInicio)))
                   })
             });
       } else if (!isNewUser) {
@@ -101,26 +85,25 @@ class Autenticar {
             });
       } else {
         print(
-            "A ocurrido un error, no ha sido posible obtener el usuario con las credenciales especificadas por google");
+            "A ocurrido un error, no ha sido posible obtener el usuario con las credenciales ofrecidas por " +
+                metodoDeInicio);
       }
     }
   }
 
-
-  //inicio de sesion con faceboock
-
-
-  static Future<void> signInWithFacebook() async {
+  static Future<OAuthCredential?> obtenerCredencialesFacebook() async {
     final LoginResult result = await FacebookAuth.instance.login();
 
-    if(result.status == LoginStatus.success){
-      print('longin exitoso');
-      // Create a credential from the access token
-      final OAuthCredential credential =  FacebookAuthProvider.credential(result.accessToken!.token);
-      String? token = 'toke';
-      print('token');
-      // Once signed in, return the UserCredential
-      await FirebaseAuth.instance.signInWithCredential(credential);
+    if (result.status == LoginStatus.success) {
+      //devuelve una credencial creada con el token de acceso facilitado por facebook
+      return FacebookAuthProvider.credential(result.accessToken!.token);
     }
+  }
+
+  static Future<UserCredential?> iniciarSesion(
+      OAuthCredential credential) async {
+    try {
+      return await aut.signInWithCredential(credential);
+    } catch (e) {}
   }
 }
