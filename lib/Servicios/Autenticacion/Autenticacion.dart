@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:retos_proyecto/datos/TransferirDatos.dart';
 
 import '../../main.dart';
 import '../Notificaciones/AdministrarTokens.dart';
@@ -14,17 +15,22 @@ class Autenticar {
   static User? currentUser = aut.currentUser;
 
   //Metodo para iniciar sesion con google
-  static Future<OAuthCredential?> obtenerCredencialesGoogle() async {
+  static Future<dynamic> obtenerCredencialesGoogle() async {
     //Ofrece el panel para que esl usuario elija la cuenta con la que desea registrarse.
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
+    //Si el usuario no selecciona un usuario, retorna null
+    if (googleUser == null) {
+      return null;
+    }
+
     //Obtiene el autenticador
-    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    GoogleSignInAuthentication? googleAuth = await googleUser.authentication;
 
     ////Crea una credencial con el token de acceso facilitado por facebook
     var credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
     );
 
     return credential;
@@ -61,13 +67,12 @@ class Autenticar {
       String metodoDeInicio) async {
     {
       if (isNewUser) {
+        var credentialColecUsers =
+            TranferirDatosRoll(credential, collecUsuarios);
         await GoogleSignIn().disconnect().whenComplete(() async => {
               await aut.currentUser?.delete().whenComplete(() => {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => Roll(
-                                credential!, collecUsuarios, metodoDeInicio)))
+                    Navigator.pushNamed(context, Roll.routeName,
+                        arguments: credentialColecUsers),
                   })
             });
       } else if (!isNewUser) {

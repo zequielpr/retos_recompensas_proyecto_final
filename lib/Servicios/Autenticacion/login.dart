@@ -10,10 +10,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 
+import '../../datos/TransferirDatos.dart';
 import '../Notificaciones/AdministrarTokens.dart';
 import 'Autenticacion.dart';
 import '../../main.dart';
 import 'DatosNewUser.dart';
+import 'emailPassword.dart';
 
 class Login extends StatelessWidget {
   final CollectionReference collectionReferenceUsuarios;
@@ -22,6 +24,10 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     //FlutterStatusbarcolor.setStatusBarWhiteForeground(true); //Permite cambiar el color de las barras de estadp
     return MaterialApp(
+      routes: {
+        Roll.routeName: (context) => const Roll(),
+        IniSesionEmailPassword.routeName: (context) => const IniSesionEmailPassword(),
+      },
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -146,6 +152,11 @@ class _MyHomePageState extends State<MyHomePage> {
                               EdgeInsets.all(0), EdgeInsets.all(0), 0)),
                       elevation: MaterialStateProperty.all(0)),
                   onPressed: () async => {
+                    Navigator.pushNamed(
+                      context,
+                      IniSesionEmailPassword.routeName,
+                    )
+
                     /*Autenticar.comprobarNewOrOld(collecUsuarios, context)*/
                   },
                   child: Row(
@@ -195,11 +206,21 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () async {
                     _onLoading();
                     var credencialGoogle =
-                        await Autenticar.obtenerCredencialesGoogle();
+                        await Autenticar.obtenerCredencialesGoogle()
+                            .catchError((e) {
+                      print('holaa');
+                    });
+
+                    if (credencialGoogle == null) {
+                      _login();
+                      return;
+                    }
                     var userCredential =
                         await Autenticar.iniciarSesion(credencialGoogle!);
+
                     var isNewUser =
                         userCredential?.additionalUserInfo?.isNewUser;
+
                     await Autenticar.comprobarNewOrOld(collecUsuarios, context,
                             isNewUser, credencialGoogle, 'Google')
                         .whenComplete(() => _login());
@@ -245,8 +266,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     print('Continuar con facebook');
                     var oaUthCredential =
                         await Autenticar.obtenerCredencialesFacebook();
-                    var credentialUser = await Autenticar.iniciarSesion(
-                        oaUthCredential!);
+                    var credentialUser =
+                        await Autenticar.iniciarSesion(oaUthCredential!);
                     var isNewUser =
                         credentialUser?.additionalUserInfo?.isNewUser;
                     await Autenticar.comprobarNewOrOld(collecUsuarios, context,
@@ -362,7 +383,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       fontSize: 17,
                     )),
                 TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      TranferirDatosRoll datos = TranferirDatosRoll('userContraseña', collecUsuarios);
+                      _irRollPage(datos);
+                    },
                     child: Text(
                       'Registrarse',
                       style: GoogleFonts.roboto(
@@ -430,4 +454,11 @@ class _MyHomePageState extends State<MyHomePage> {
   void _politicaDePrivacidad() {
     print('Politica de privacidad');
   }
+
+  void _irRollPage(TranferirDatosRoll datos){
+    Navigator.pushNamed(context, Roll.routeName,
+        arguments: datos);
+  }
+
+
 }

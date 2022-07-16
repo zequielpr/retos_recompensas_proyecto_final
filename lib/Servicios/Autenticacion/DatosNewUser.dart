@@ -6,24 +6,25 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth_platform_interface/src/providers/oauth.dart';
 import 'package:flutter/material.dart';
 
+import '../../datos/TransferirDatos.dart';
 import '../../main.dart';
 import '../Notificaciones/AdministrarTokens.dart';
 import 'Autenticacion.dart';
-
+import 'emailPassword.dart';
 
 class NombreUsuario extends StatefulWidget {
+  static const routeName = 'NombreUsuario';
   final OAuthCredential userCredential;
   final String dropdownValue;
   final String userName;
   final CollectionReference collectionReferenceUsers;
-  final String metodoDeInicio;
-  const NombreUsuario(this.userCredential, this.dropdownValue,
-      this.userName, this.collectionReferenceUsers, this.metodoDeInicio,
+  const NombreUsuario(this.userCredential, this.dropdownValue, this.userName,
+      this.collectionReferenceUsers,
       {Key? key})
       : super(key: key);
   @override
   State<StatefulWidget> createState() => _StateNombreUsuario(
-      userCredential, dropdownValue, userName, collectionReferenceUsers, metodoDeInicio);
+      userCredential, dropdownValue, userName, collectionReferenceUsers);
 }
 
 class _StateNombreUsuario extends State<NombreUsuario> {
@@ -31,9 +32,8 @@ class _StateNombreUsuario extends State<NombreUsuario> {
   final String dropdownValue;
   final String userName;
   final CollectionReference collectionReferenceUsers;
-  final String metodoDeinicio;
   _StateNombreUsuario(this.oaUthCredential, this.dropdownValue, this.userName,
-      this.collectionReferenceUsers, this.metodoDeinicio);
+      this.collectionReferenceUsers);
 
   void initState() {
     super.initState();
@@ -126,7 +126,7 @@ class _StateNombreUsuario extends State<NombreUsuario> {
               padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
               child: ElevatedButton(
                 onPressed: botonActivo == true
-                    ?  () async => _registrarUsuario()
+                    ? () async => _registrarUsuario()
                     : () {
                         print("Boton no activo");
                       },
@@ -141,28 +141,26 @@ class _StateNombreUsuario extends State<NombreUsuario> {
 
   //Registra al usuario con google y guarda sus dato
   Future<void> _registrarUsuario() async {
-
     await Autenticar.iniciarSesion(oaUthCredential)
         .then((userCredential) async => {
-      currentUser = userCredential?.user,
-      if (currentUser != null)
-        {
-          await collectionReferenceUsers.doc(currentUser?.uid).set({
-            "nombre_usuario": textController.text.trim(),
-            "rol_tutorado": dropdownValue == "Tutor" ? false : true,
-            'nombre': FirebaseAuth.instance.currentUser?.displayName
-          }),
-          Token.guardarToken(),
+              currentUser = userCredential?.user,
+              if (currentUser != null)
+                {
+                  await collectionReferenceUsers.doc(currentUser?.uid).set({
+                    "nombre_usuario": textController.text.trim(),
+                    "rol_tutorado": dropdownValue == "Tutor" ? false : true,
+                    'nombre': FirebaseAuth.instance.currentUser?.displayName
+                  }),
+                  Token.guardarToken(),
 
-          //Dirigirse a la pantalla principal
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      Inicio(dropdownValue == "Tutor" ? false : true)))
-        }
-    });
-
+                  //Dirigirse a la pantalla principal
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              Inicio(dropdownValue == "Tutor" ? false : true)))
+                }
+            });
   }
 
   //Cambiar estado del check
@@ -171,39 +169,24 @@ class _StateNombreUsuario extends State<NombreUsuario> {
       estadoUsuario = check;
     });
   }
-
-
 }
 
-
-
-
-
-
 //Introducir roll -------------------------------------------------------------------------------------------------------
-
-
 class Roll extends StatefulWidget {
-  final OAuthCredential userCredential;
-  final CollectionReference collectionReferenceUsers;
-  final String metodoInicio;
-  const Roll(this.userCredential, this.collectionReferenceUsers, this.metodoInicio,
-      {Key? key})
-      : super(key: key);
+  static const routeName = 'Roll';
+
+  const Roll({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() =>
-      _StateRoll(userCredential, collectionReferenceUsers, metodoInicio);
+  State<StatefulWidget> createState() => _StateRoll();
 }
 
 class _StateRoll extends State<Roll> {
-  final OAuthCredential userCredential;
-  final CollectionReference collectionReferenceUsers;
-  final String metodoDeInicio;
-  _StateRoll(this.userCredential, this.collectionReferenceUsers, this.metodoDeInicio);
   String dropdownValue = 'Tutorado';
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as TranferirDatosRoll;
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -255,17 +238,26 @@ class _StateRoll extends State<Roll> {
             ElevatedButton(
                 onPressed: () async {
                   String userName =
-                      await generarUserName(collectionReferenceUsers);
+                      await generarUserName(args.collectionReferenceUsers);
                   print("Nombre de usuario: ${userName}");
 
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => NombreUsuario(
-                              userCredential,
-                              dropdownValue,
-                              userName,
-                              collectionReferenceUsers, metodoDeInicio)));
+                  if(args.oaUthCredential.runtimeType != GoogleAuthCredential){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RecogerEmail()));
+                  }else{
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => NombreUsuario(
+                                args.oaUthCredential,
+                                dropdownValue,
+                                userName,
+                                args.collectionReferenceUsers)));
+                  }
+
+
                 },
                 child: Text("Siguiente"))
           ],
