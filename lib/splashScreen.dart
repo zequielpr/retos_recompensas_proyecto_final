@@ -7,9 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
+import 'package:retos_proyecto/vista_tutor/TabPages/TaPagesSala.dart';
+import 'package:retos_proyecto/vista_tutorado/Salas/ListaMisiones.dart';
 
 import 'Servicios/Autenticacion/DatosNewUser.dart';
+import 'Servicios/Autenticacion/emailPassword.dart';
 import 'Servicios/Autenticacion/login.dart';
+import 'datos/TransferirDatos.dart';
 import 'main.dart';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -48,23 +52,21 @@ Future<void> main() async {
 
 class splashScreen extends StatelessWidget {
   @override
-
-  //Crea instancia de firebase y obtiene la coleccion de usuarios
-  final CollectionReference CollecionUsuarios = FirebaseFirestore.instance
-      .collection('usuarios');
-
-
-
   Widget build(BuildContext context) {
-    //FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
-    return MaterialApp(
-      title: 'Splash Screen',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: MyHomePage(),
-      debugShowCheckedModeBanner: false,
-    );
+    return MaterialApp(initialRoute: '/', routes: {
+      '/': (context) => MyHomePage(),
+      Login.ROUTE_NAME: (context) => const Login(),
+      Roll.ROUTE_NAME: (context) => const Roll(),
+      NombreUsuario.ROUTE_NAME: (context) => const NombreUsuario(),
+      IniSesionEmailPassword.ROUTE_NAME: (context) =>
+          const IniSesionEmailPassword(),
+      Inicio.ROUTE_NAME: (context) => Inicio(),
+      ListaMisiones.ROUTE_NAME: (context) => const ListaMisiones(),
+      TabPagesSala.ROUTE_NAME: (context) => const TabPagesSala(),
+      RecogerPassw.ROUTE_NAME: (context) => const RecogerPassw(),
+      RecogerEmail.ROUTE_NAME: (context) => const RecogerEmail(),
+      IniSesionEmailPassword.ROUTE_NAME: (context) => const IniSesionEmailPassword(),
+    });
   }
 }
 
@@ -80,12 +82,17 @@ class _MyHomePageState extends State<MyHomePage> {
     _navigateToHome();
   }
 
+  var datos;
+
   @override
   Widget build(BuildContext context) {
-    FlutterStatusbarcolor.setStatusBarWhiteForeground(false);//Colores de los iconos de la barra superior
-    FlutterStatusbarcolor.setStatusBarColor(Colors.transparent, animate: false); //Color de barra superior
+    FlutterStatusbarcolor.setStatusBarWhiteForeground(
+        false); //Colores de los iconos de la barra superior
+    FlutterStatusbarcolor.setStatusBarColor(Colors.transparent,
+        animate: false); //Color de barra superior
 
-    FlutterStatusbarcolor.setNavigationBarColor(Colors.black); //Color de la barra inferior
+    FlutterStatusbarcolor.setNavigationBarColor(
+        Colors.black); //Color de la barra inferior
     return Container(
         color: Colors.white,
         child: FlutterLogo(size: MediaQuery.of(context).size.height));
@@ -93,50 +100,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _navigateToHome() async {
     final CollectionReference CollecionUsuarios =
-    FirebaseFirestore.instance.collection('usuarios');
+        FirebaseFirestore.instance.collection('usuarios');
     await Future.delayed(Duration(milliseconds: 2500), () {});
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
-
-      //Probando la consulta:
-      //Generar consulta para comprobar si el nombre de usuario esta en uso
-
-      /*
-      await CollecionUsuarios.where("nombre_usuario", isEqualTo: "maikel11").get().then((value) => {
-        if(value.docs.isEmpty){
-          print("nombre de usuario disponible")
-        }else{
-          print("Nombre de usuario no disponible")
-        }
-      });
-       */
-
-
-
-      if (user == null) {;
-       Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (BuildContext context) => Login(CollecionUsuarios)));
+      if (user == null) {
+        var datos = TransferirDatosLogin(CollecionUsuarios);
+        Navigator.pushReplacementNamed(context, Login.ROUTE_NAME,
+            arguments: datos);
       } else {
-        //Si el usuario esta registrado
-        late bool isTutorado;
-
         DocumentReference docUser =
             CollecionUsuarios.doc(FirebaseAuth.instance.currentUser?.uid);
         await docUser.get().then((value) => {
-        Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (BuildContext context) => Inicio(value['rol_tutorado']))),
-              if (value['rol_tutorado'])
-                {
-                  print("Es tutorado")
-                }
-              else
-                {
-                  //_widgetOptions.clear();
-
-                  print("Es tutor")
-                }
+              datos = TransferirDatosInicio(value['rol_tutorado']),
+              Navigator.pushReplacementNamed(context, Inicio.ROUTE_NAME,
+                  arguments: datos)
             });
-
-
       }
     });
   }

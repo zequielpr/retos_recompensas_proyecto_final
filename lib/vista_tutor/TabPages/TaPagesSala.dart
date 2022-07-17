@@ -12,7 +12,7 @@ final GlobalKey<NavigatorState> _navKey = GlobalKey<NavigatorState>();
 class TabPagesSala extends StatefulWidget {
   const TabPagesSala({Key? key}) : super(key: key);
 
-  static const routeName = '/extractArguments';
+  static const ROUTE_NAME = '/extractArguments';
 
   print(text) {
     // TODO: implement print

@@ -13,33 +13,14 @@ import 'Autenticacion.dart';
 import 'emailPassword.dart';
 
 class NombreUsuario extends StatefulWidget {
-  static const routeName = 'NombreUsuario';
-  final OAuthCredential userCredential;
-  final String dropdownValue;
-  final String userName;
-  final CollectionReference collectionReferenceUsers;
-  const NombreUsuario(this.userCredential, this.dropdownValue, this.userName,
-      this.collectionReferenceUsers,
-      {Key? key})
-      : super(key: key);
+  static const ROUTE_NAME = 'NombreUsuario';
+
+  const NombreUsuario({Key? key}) : super(key: key);
   @override
-  State<StatefulWidget> createState() => _StateNombreUsuario(
-      userCredential, dropdownValue, userName, collectionReferenceUsers);
+  State<StatefulWidget> createState() => _StateNombreUsuario();
 }
 
 class _StateNombreUsuario extends State<NombreUsuario> {
-  final OAuthCredential oaUthCredential;
-  final String dropdownValue;
-  final String userName;
-  final CollectionReference collectionReferenceUsers;
-  _StateNombreUsuario(this.oaUthCredential, this.dropdownValue, this.userName,
-      this.collectionReferenceUsers);
-
-  void initState() {
-    super.initState();
-    textController.text = userName;
-  }
-
   late User? currentUser;
   var textController = TextEditingController();
   Timer timer = Timer.periodic(Duration(seconds: 1), (timer) {});
@@ -74,15 +55,12 @@ class _StateNombreUsuario extends State<NombreUsuario> {
     ),
   );
 
-  /*
-  CircularProgressIndicator(
-      color: Colors.grey,
-      strokeWidth: 5,
-    ),
-   */
-
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as TrasnferirDatosNombreUser;
+    textController.text = args.userName;
+
     return Scaffold(
         appBar: AppBar(),
         body: Column(
@@ -99,7 +77,7 @@ class _StateNombreUsuario extends State<NombreUsuario> {
                     cambiarCheck(espera);
                     if (contador >= 2) {
                       await Autenticar.comprUserName(
-                              usuario, collectionReferenceUsers)
+                              usuario, args.collectionReferenceUsers)
                           .then((resultado) => {
                                 if (resultado)
                                   {botonActivo = true, cambiarCheck(disponible)}
@@ -126,7 +104,7 @@ class _StateNombreUsuario extends State<NombreUsuario> {
               padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
               child: ElevatedButton(
                 onPressed: botonActivo == true
-                    ? () async => _registrarUsuario()
+                    ? () async => _registrarUsuario(args)
                     : () {
                         print("Boton no activo");
                       },
@@ -140,25 +118,28 @@ class _StateNombreUsuario extends State<NombreUsuario> {
   }
 
   //Registra al usuario con google y guarda sus dato
-  Future<void> _registrarUsuario() async {
-    await Autenticar.iniciarSesion(oaUthCredential)
+  Future<void> _registrarUsuario(TrasnferirDatosNombreUser args) async {
+    var datos;
+    await Autenticar.iniciarSesion(args.oaUthCredential)
         .then((userCredential) async => {
               currentUser = userCredential?.user,
               if (currentUser != null)
                 {
-                  await collectionReferenceUsers.doc(currentUser?.uid).set({
+                  await args.collectionReferenceUsers
+                      .doc(currentUser?.uid)
+                      .set({
                     "nombre_usuario": textController.text.trim(),
-                    "rol_tutorado": dropdownValue == "Tutor" ? false : true,
+                    "rol_tutorado":
+                        args.dropdownValue == "Tutor" ? false : true,
                     'nombre': FirebaseAuth.instance.currentUser?.displayName
                   }),
                   Token.guardarToken(),
 
+                  datos = TransferirDatosInicio(
+                      args.dropdownValue == "Tutor" ? false : true),
                   //Dirigirse a la pantalla principal
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              Inicio(dropdownValue == "Tutor" ? false : true)))
+                  Navigator.pushNamed(context, Inicio.ROUTE_NAME,
+                      arguments: datos)
                 }
             });
   }
@@ -173,7 +154,7 @@ class _StateNombreUsuario extends State<NombreUsuario> {
 
 //Introducir roll -------------------------------------------------------------------------------------------------------
 class Roll extends StatefulWidget {
-  static const routeName = 'Roll';
+  static const ROUTE_NAME = 'Roll';
 
   const Roll({Key? key}) : super(key: key);
 
@@ -241,23 +222,15 @@ class _StateRoll extends State<Roll> {
                       await generarUserName(args.collectionReferenceUsers);
                   print("Nombre de usuario: ${userName}");
 
-                  if(args.oaUthCredential.runtimeType != GoogleAuthCredential){
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => RecogerEmail()));
-                  }else{
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => NombreUsuario(
-                                args.oaUthCredential,
-                                dropdownValue,
-                                userName,
-                                args.collectionReferenceUsers)));
+                  if (args.oaUthCredential.runtimeType !=
+                      GoogleAuthCredential) {
+                    Navigator.pushNamed(context, RecogerEmail.ROUTE_NAME);
+                  } else {
+                    var datos = TrasnferirDatosNombreUser(args.oaUthCredential,
+                        dropdownValue, userName, args.collectionReferenceUsers);
+                    Navigator.pushNamed(context, NombreUsuario.ROUTE_NAME,
+                        arguments: datos);
                   }
-
-
                 },
                 child: Text("Siguiente"))
           ],

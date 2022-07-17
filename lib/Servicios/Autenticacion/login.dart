@@ -17,40 +17,15 @@ import '../../main.dart';
 import 'DatosNewUser.dart';
 import 'emailPassword.dart';
 
-class Login extends StatelessWidget {
-  final CollectionReference collectionReferenceUsuarios;
-  const Login(this.collectionReferenceUsuarios, {Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    //FlutterStatusbarcolor.setStatusBarWhiteForeground(true); //Permite cambiar el color de las barras de estadp
-    return MaterialApp(
-      routes: {
-        Roll.routeName: (context) => const Roll(),
-        IniSesionEmailPassword.routeName: (context) => const IniSesionEmailPassword(),
-      },
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(
-          title: 'Flutter Demo Home Page',
-          collecUsuarios: collectionReferenceUsuarios),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage(
-      {Key? key, required this.title, required this.collecUsuarios})
-      : super(key: key);
-  final String title;
-  final CollectionReference collecUsuarios;
+class Login extends StatefulWidget {
+  static const ROUTE_NAME = 'Login';
+  const Login({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState(collecUsuarios);
+  State<Login> createState() => _LoginState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _LoginState extends State<Login> {
   bool _loading = false;
 
   void _onLoading() {
@@ -68,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final passw = TextEditingController();
   final correo = TextEditingController();
   String descripcion = '';
-  final CollectionReference collecUsuarios;
+  late CollectionReference collecUsuarios;
 
   Color colorBorde = const Color.fromARGB(226, 114, 114, 114);
 
@@ -78,9 +53,10 @@ class _MyHomePageState extends State<MyHomePage> {
         fontSize: 19, color: Colors.black, fontWeight: FontWeight.w400),
   );
 
-  _MyHomePageState(this.collecUsuarios);
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as TransferirDatosLogin;
+    collecUsuarios = args.collectionReferenceUser;
     FlutterStatusbarcolor.setNavigationBarWhiteForeground(
         true); //Colores de los iconos de la barra inferior
     FlutterStatusbarcolor.setNavigationBarColor(
@@ -154,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () async => {
                     Navigator.pushNamed(
                       context,
-                      IniSesionEmailPassword.routeName,
+                      IniSesionEmailPassword.ROUTE_NAME,
                     )
 
                     /*Autenticar.comprobarNewOrOld(collecUsuarios, context)*/
@@ -384,7 +360,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     )),
                 TextButton(
                     onPressed: () {
-                      TranferirDatosRoll datos = TranferirDatosRoll('userContraseña', collecUsuarios);
+                      TranferirDatosRoll datos =
+                          TranferirDatosRoll('userContraseña', collecUsuarios);
                       _irRollPage(datos);
                     },
                     child: Text(
@@ -455,10 +432,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print('Politica de privacidad');
   }
 
-  void _irRollPage(TranferirDatosRoll datos){
-    Navigator.pushNamed(context, Roll.routeName,
-        arguments: datos);
+  void _irRollPage(TranferirDatosRoll datos) {
+    Navigator.pushNamed(context, Roll.ROUTE_NAME, arguments: datos);
   }
-
-
 }

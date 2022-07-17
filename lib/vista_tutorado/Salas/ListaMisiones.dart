@@ -7,7 +7,7 @@ import '../../widgets/Cards.dart';
 final GlobalKey<NavigatorState> _navKey = GlobalKey<NavigatorState>();
 
 class ListaMisiones extends StatefulWidget {
-  static final routeName = '/ListaMisiones';
+  static final ROUTE_NAME = '/ListaMisiones';
   const ListaMisiones({Key? key}) : super(key: key);
   @override
   _ListaMisionesState createState() => _ListaMisionesState();

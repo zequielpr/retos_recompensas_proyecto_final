@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class IniSesionEmailPassword extends StatefulWidget {
-  static const routeName = 'iniciarSesionEmailPassw';
+  static const ROUTE_NAME = 'iniciarSesionEmailPassw';
   const IniSesionEmailPassword({Key? key}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _IniSesionEmailPassword();
@@ -98,6 +98,8 @@ class _IniSesionEmailPassword extends State<IniSesionEmailPassword> {
 
 //Registrarse con email y contrase
 class RecogerEmail extends StatefulWidget {
+  static const ROUTE_NAME = 'RecogerEmail';
+  const RecogerEmail({Key? key}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _RecogerEmail();
 }
@@ -106,7 +108,8 @@ class _RecogerEmail extends State<RecogerEmail> {
   var emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final val = TextSelection.fromPosition(TextPosition(offset: emailController.text.length));
+    final val = TextSelection.fromPosition(
+        TextPosition(offset: emailController.text.length));
     emailController.selection = val;
     return Scaffold(
       appBar: AppBar(),
@@ -127,7 +130,7 @@ class _RecogerEmail extends State<RecogerEmail> {
                     height: 50,
                     child: ElevatedButton(
                         onPressed: () async {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => RecogerPassw()));
+                          Navigator.pushNamed(context, RecogerPassw.ROUTE_NAME);
                         },
                         child: Text(
                           'Continuar',
@@ -143,12 +146,10 @@ class _RecogerEmail extends State<RecogerEmail> {
   }
 }
 
-
-
-
-
 //Recoger contraseña
 class RecogerPassw extends StatefulWidget {
+  static const ROUTE_NAME = 'RecogerPassw';
+  const RecogerPassw({Key? key}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _RecogerPassw();
 }
@@ -175,7 +176,7 @@ class _RecogerPassw extends State<RecogerPassw> {
                     width: 200,
                     height: 50,
                     child: ElevatedButton(
-                        onPressed: (){},
+                        onPressed: () {},
                         child: Text(
                           'Continuar',
                           style: GoogleFonts.roboto(
