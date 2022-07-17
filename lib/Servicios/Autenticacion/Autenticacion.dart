@@ -66,12 +66,13 @@ class Autenticar {
       OAuthCredential? credential,
       String metodoDeInicio) async {
     {
+      var datos;
       if (isNewUser) {
         var credentialColecUsers =
             TranferirDatosRoll(credential, collecUsuarios);
         await GoogleSignIn().disconnect().whenComplete(() async => {
               await aut.currentUser?.delete().whenComplete(() => {
-                    Navigator.pushNamed(context, Roll.routeName,
+                    Navigator.pushNamed(context, Roll.ROUTE_NAME,
                         arguments: credentialColecUsers),
                   })
             });
@@ -82,11 +83,11 @@ class Autenticar {
         DocumentReference docUser =
             collecUsuarios.doc(FirebaseAuth.instance.currentUser?.uid);
         await docUser.get().then((value) => {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          Inicio(value['rol_tutorado'])))
+
+          datos = TransferirDatosInicio(value['rol_tutorado']),
+          //Dirigirse a la pantalla principal
+          Navigator.pushNamed(context, Inicio.ROUTE_NAME, arguments: datos )
+
             });
       } else {
         print(

@@ -178,7 +178,7 @@ class Cards {
 
           Navigator.pushNamed(
             context,
-            ListaMisiones.routeName,
+            ListaMisiones.ROUTE_NAME,
             arguments: TransferirDatos(
                 Text(documentSnapshot['NombreSala'])
                     .data
@@ -297,7 +297,7 @@ class Cards {
 
           Navigator.pushNamed(
             context,
-            TabPagesSala.routeName,
+            TabPagesSala.ROUTE_NAME,
             arguments: TransferirDatos(
                 Text(documentSnapshot['NombreSala'])
                     .data
