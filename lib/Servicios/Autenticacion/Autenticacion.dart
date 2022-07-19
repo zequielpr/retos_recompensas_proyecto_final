@@ -14,23 +14,20 @@ class Autenticar {
   static FirebaseAuth aut = FirebaseAuth.instance;
   static User? currentUser = aut.currentUser;
 
+  //Obtener cuenta de google
+  static Future<GoogleSignInAccount?> getGoogleAcount() async {
+    return await GoogleSignIn().signIn();
+  }
+
   //Metodo para iniciar sesion con google
-  static Future<dynamic> obtenerCredencialesGoogle() async {
-    //Ofrece el panel para que esl usuario elija la cuenta con la que desea registrarse.
-    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    //Si el usuario no selecciona un usuario, retorna null
-    if (googleUser == null) {
-      return null;
-    }
-
+  static Future<dynamic> obtenerCredencialesGoogle(
+      GoogleSignInAccount? googleUser) async {
     //Obtiene el autenticador
-    GoogleSignInAuthentication? googleAuth = await googleUser.authentication;
-
+    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
     ////Crea una credencial con el token de acceso facilitado por facebook
     var credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
     );
 
     return credential;
@@ -59,7 +56,7 @@ class Autenticar {
   }
 
   //Comprueba si el usuario es nuevo o viejo
-  static Future<void> comprobarNewOrOld(
+  static Future<void> newOrOld(
       CollectionReference collecUsuarios,
       BuildContext context,
       var isNewUser,
@@ -70,24 +67,25 @@ class Autenticar {
       if (isNewUser) {
         var credentialColecUsers =
             TranferirDatosRoll(credential, collecUsuarios);
+
         await GoogleSignIn().disconnect().whenComplete(() async => {
-              await aut.currentUser?.delete().whenComplete(() => {
-                    Navigator.pushNamed(context, Roll.ROUTE_NAME,
-                        arguments: credentialColecUsers),
-                  })
+              Navigator.pushNamed(context, Roll.ROUTE_NAME,
+                  arguments: credentialColecUsers)
             });
       } else if (!isNewUser) {
+        late DocumentReference docUser;
         print("El usuario no es nuevo");
-        Token.guardarToken();
-        //El usuario accede su cuenta con las vista correspendiente al roll preestablecido.
-        DocumentReference docUser =
-            collecUsuarios.doc(FirebaseAuth.instance.currentUser?.uid);
-        await docUser.get().then((value) => {
-
-          datos = TransferirDatosInicio(value['rol_tutorado']),
-          //Dirigirse a la pantalla principal
-          Navigator.pushNamed(context, Inicio.ROUTE_NAME, arguments: datos )
-
+        await iniciarSesion(credential!).then((userCredential) async => {
+              Token.guardarToken(),
+              //El usuario accede su cuenta con las vista correspendiente al roll preestablecido.
+              docUser =
+                  collecUsuarios.doc(userCredential?.user?.uid),
+              await docUser.get().then((snap) => {
+                    datos = TransferirDatosInicio(snap['rol_tutorado']),
+                    //Dirigirse a la pantalla principal
+                    Navigator.pushReplacementNamed(context, Inicio.ROUTE_NAME,
+                        arguments: datos)
+                  })
             });
       } else {
         print(
@@ -98,7 +96,8 @@ class Autenticar {
   }
 
   static Future<OAuthCredential?> obtenerCredencialesFacebook() async {
-    final LoginResult result = await FacebookAuth.instance.login();
+    final LoginResult result = await FacebookAuth.instance
+        .login(permissions: ['email', 'public_profile']);
 
     if (result.status == LoginStatus.success) {
       //devuelve una credencial creada con el token de acceso facilitado por facebook
@@ -111,5 +110,75 @@ class Autenticar {
     try {
       return await aut.signInWithCredential(credential);
     } catch (e) {}
+  }
+
+  static Future<UserCredential?> registrarConEmailPassw(
+      Map<String, String> emialPasswd) async {
+    try {
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emialPasswd['email'] as String,
+        password: emialPasswd['passw'] as String,
+      );
+
+      return credential;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  static Future<void> inciarSesionEmailPasswd(String email, String password,
+      CollectionReference collectionReferenceUser, BuildContext context) async {
+    try {
+      print(email);
+      print(password);
+      final credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+
+      String? uidUser = credential.user?.uid.trim();
+      var datos;
+
+      await collectionReferenceUser.doc(uidUser).get().then((snap) => {
+        datos = TransferirDatosInicio(snap['rol_tutorado']),
+        Navigator.pushReplacementNamed(context, Inicio.ROUTE_NAME, arguments: datos)
+      });
+
+      /*
+      User? user = credential.user;
+      if (user?.emailVerified as bool) {
+        var datos;
+        await collectionReferenceUser.doc(user?.uid).get().then((value) => {
+              datos = TransferirDatosInicio(value['rol_tutorado']),
+              Navigator.pushReplacementNamed(context, Inicio.ROUTE_NAME, arguments: datos)
+            });
+        //navegar a la ruta de inicio
+        print('usurio listo para iniciar sesion');
+        return;
+      }
+      print('se envió el link de verificacion');
+      await user
+          ?.sendEmailVerification()
+          .whenComplete(() async => {await aut.signOut()});
+       */
+
+
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user');
+      }
+    }
+  }
+
+  //Comprobar si el email dado ya esta registrado
+  static Future<List<String>> metodoInicioSesion(String email) async {
+    return await aut.fetchSignInMethodsForEmail(email);
   }
 }

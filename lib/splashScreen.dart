@@ -10,8 +10,11 @@ import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:retos_proyecto/vista_tutor/TabPages/TaPagesSala.dart';
 import 'package:retos_proyecto/vista_tutorado/Salas/ListaMisiones.dart';
 
+import 'Rutas.dart';
 import 'Servicios/Autenticacion/DatosNewUser.dart';
-import 'Servicios/Autenticacion/emailPassword.dart';
+import 'Servicios/Autenticacion/EmailPassw/IniciarSessionEmailPassw.dart';
+import 'Servicios/Autenticacion/EmailPassw/RecogerEmail.dart';
+import 'Servicios/Autenticacion/EmailPassw/RecogerPassw.dart';
 import 'Servicios/Autenticacion/login.dart';
 import 'datos/TransferirDatos.dart';
 import 'main.dart';
@@ -53,21 +56,9 @@ Future<void> main() async {
 class splashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(initialRoute: '/', routes: {
-      '/': (context) => MyHomePage(),
-      Login.ROUTE_NAME: (context) => const Login(),
-      Roll.ROUTE_NAME: (context) => const Roll(),
-      NombreUsuario.ROUTE_NAME: (context) => const NombreUsuario(),
-      IniSesionEmailPassword.ROUTE_NAME: (context) =>
-          const IniSesionEmailPassword(),
-      Inicio.ROUTE_NAME: (context) => Inicio(),
-      ListaMisiones.ROUTE_NAME: (context) => const ListaMisiones(),
-      TabPagesSala.ROUTE_NAME: (context) => const TabPagesSala(),
-      RecogerPassw.ROUTE_NAME: (context) => const RecogerPassw(),
-      RecogerEmail.ROUTE_NAME: (context) => const RecogerEmail(),
-      IniSesionEmailPassword.ROUTE_NAME: (context) => const IniSesionEmailPassword(),
-    });
+    return MaterialApp(initialRoute: '/', routes:Rutas.getRutas() );
   }
+
 }
 
 class MyHomePage extends StatefulWidget {
@@ -86,6 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    /*
     FlutterStatusbarcolor.setStatusBarWhiteForeground(
         false); //Colores de los iconos de la barra superior
     FlutterStatusbarcolor.setStatusBarColor(Colors.transparent,
@@ -93,6 +85,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
     FlutterStatusbarcolor.setNavigationBarColor(
         Colors.black); //Color de la barra inferior
+     */
+
+    FlutterStatusbarcolor.setNavigationBarColor(
+        Colors.black); //Color de la barra inferior
+    FlutterStatusbarcolor.setNavigationBarWhiteForeground(false);
+
     return Container(
         color: Colors.white,
         child: FlutterLogo(size: MediaQuery.of(context).size.height));
@@ -104,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
     await Future.delayed(Duration(milliseconds: 2500), () {});
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user == null) {
-        var datos = TransferirDatosLogin(CollecionUsuarios);
+        var datos = TransferirCollecion(CollecionUsuarios);
         Navigator.pushReplacementNamed(context, Login.ROUTE_NAME,
             arguments: datos);
       } else {

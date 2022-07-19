@@ -2,10 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'SalaDatos.dart';
 
 //Transferir datos a las ruta login
-class TransferirDatosLogin {
+class TransferirCollecion {
   final CollectionReference collectionReferenceUser;
-  TransferirDatosLogin(this.collectionReferenceUser);
+  TransferirCollecion(this.collectionReferenceUser);
 }
+
 
 class TransferirDatos {
   final String nombreSala;
@@ -28,18 +29,41 @@ class TranferirDatosRoll {
   TranferirDatosRoll(this.oaUthCredential, this.collectionReferenceUsers);
 }
 
+class TransDatosInicioSesion{
+  final String titulo;
+  final bool focusEmail;
+  final bool focusPassw;
+  final String email;
+  final CollectionReference collectionReferenceUsers;
+
+  TransDatosInicioSesion(this.titulo, this.focusEmail, this.focusPassw, this.email, this.collectionReferenceUsers);
+}
+
+
 class TrasnferirDatosNombreUser {
-  final dynamic oaUthCredential;
+  late  dynamic oaUthCredential;
   final String dropdownValue;
-  final String userName;
+  late  String userName;
   final CollectionReference collectionReferenceUsers;
 
   TrasnferirDatosNombreUser(this.oaUthCredential, this.dropdownValue,
       this.userName, this.collectionReferenceUsers);
+
+  setValor(String clave, String valor){
+
+    oaUthCredential[clave] = valor;
+
+  }
+
+  setUserName(String userName){
+    this.userName = userName;
+  }
 }
+
 
 
 class TransferirDatosInicio{
   final bool isTutorado;
   TransferirDatosInicio(this.isTutorado);
 }
+

@@ -9,13 +9,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
+import 'package:retos_proyecto/Servicios/Autenticacion/EmailPassw/IniciarSessionEmailPassw.dart';
 
 import '../../datos/TransferirDatos.dart';
 import '../Notificaciones/AdministrarTokens.dart';
 import 'Autenticacion.dart';
 import '../../main.dart';
 import 'DatosNewUser.dart';
-import 'emailPassword.dart';
 
 class Login extends StatefulWidget {
   static const ROUTE_NAME = 'Login';
@@ -53,19 +53,24 @@ class _LoginState extends State<Login> {
         fontSize: 19, color: Colors.black, fontWeight: FontWeight.w400),
   );
 
+
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as TransferirDatosLogin;
+    final args =
+        ModalRoute.of(context)!.settings.arguments as TransferirCollecion;
     collecUsuarios = args.collectionReferenceUser;
+
+    /*FlutterStatusbarcolor.setStatusBarWhiteForeground(
+        false); //Colores de los iconos de la barra superior
+    FlutterStatusbarcolor.setStatusBarColor(Colors.white,
+        animate: true); //Color de la barra superior*/
+
     FlutterStatusbarcolor.setNavigationBarWhiteForeground(
-        true); //Colores de los iconos de la barra inferior
+        false); //Colores de los iconos de la barra inferior
     FlutterStatusbarcolor.setNavigationBarColor(
         Colors.black); //Color de la barra inferior
 
-    FlutterStatusbarcolor.setStatusBarWhiteForeground(
-        true); //Colores de los iconos de la barra superior
-    FlutterStatusbarcolor.setStatusBarColor(Colors.black,
-        animate: true); //Color de la barra superior
+
     final correo = TextEditingController();
 
     var body = Column(
@@ -127,11 +132,13 @@ class _LoginState extends State<Login> {
                           EdgeInsetsGeometry.lerp(
                               EdgeInsets.all(0), EdgeInsets.all(0), 0)),
                       elevation: MaterialStateProperty.all(0)),
-                  onPressed: () async => {
+                  onPressed: () {
+
+                    var datos = TransDatosInicioSesion('', true, false, '', collecUsuarios);
                     Navigator.pushNamed(
                       context,
-                      IniSesionEmailPassword.ROUTE_NAME,
-                    )
+                      IniSesionEmailPassword.ROUTE_NAME, arguments: datos
+                    );
 
                     /*Autenticar.comprobarNewOrOld(collecUsuarios, context)*/
                   },
@@ -181,23 +188,27 @@ class _LoginState extends State<Login> {
                       elevation: MaterialStateProperty.all(0)),
                   onPressed: () async {
                     _onLoading();
+                    var googleAccount = await Autenticar.getGoogleAcount();
+
+                    if (googleAccount== null) {
+                      _login();
+                      return;
+                    }
+
                     var credencialGoogle =
-                        await Autenticar.obtenerCredencialesGoogle()
+                        await Autenticar.obtenerCredencialesGoogle(googleAccount)
                             .catchError((e) {
                       print('holaa');
                     });
 
-                    if (credencialGoogle == null) {
-                      _login();
-                      return;
-                    }
-                    var userCredential =
-                        await Autenticar.iniciarSesion(credencialGoogle!);
+                    //Obtiene los método de inicio correspondiente al email pasado por parámetro.
+                    List<String> metodosInicioSesion = await Autenticar.metodoInicioSesion(googleAccount.email);
 
-                    var isNewUser =
-                        userCredential?.additionalUserInfo?.isNewUser;
+                    var isNewUser = metodosInicioSesion.isNotEmpty? false: true;
 
-                    await Autenticar.comprobarNewOrOld(collecUsuarios, context,
+                    if (!mounted) return;
+
+                    await Autenticar.newOrOld(collecUsuarios, context,
                             isNewUser, credencialGoogle, 'Google')
                         .whenComplete(() => _login());
                   },
@@ -246,7 +257,7 @@ class _LoginState extends State<Login> {
                         await Autenticar.iniciarSesion(oaUthCredential!);
                     var isNewUser =
                         credentialUser?.additionalUserInfo?.isNewUser;
-                    await Autenticar.comprobarNewOrOld(collecUsuarios, context,
+                    await Autenticar.newOrOld(collecUsuarios, context,
                             isNewUser, oaUthCredential, 'Facebook')
                         .whenComplete(() => _login());
                   },
