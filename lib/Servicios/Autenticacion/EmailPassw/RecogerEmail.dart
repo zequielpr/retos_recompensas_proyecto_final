@@ -19,7 +19,7 @@ class _RecogerEmail extends State<RecogerEmail> {
   var emailController = TextEditingController();
   var colorWarning = Colors.transparent;
   var colorSubfix = Colors.transparent;
-
+  bool btnActivo = true;
   void _cambiarColor(Color colorWarning, Color colorSubfix) {
     setState(() {
       this.colorWarning = colorWarning;
@@ -68,6 +68,7 @@ class _RecogerEmail extends State<RecogerEmail> {
               SizedBox(
                 height: 70,
                 child: TextField(
+                  onChanged: (value) => _statusBoton(true),
                   autofocus: true,
                   maxLength: 60,
                   controller: emailController,
@@ -101,7 +102,7 @@ class _RecogerEmail extends State<RecogerEmail> {
                     width: 200,
                     height: 42,
                     child: ElevatedButton(
-                        onPressed: () async => _continua(args),
+                        onPressed: btnActivo?  () async => _continua(args): null,
                         child: Text(
                           'Continuar',
                           style: GoogleFonts.roboto(
@@ -114,6 +115,8 @@ class _RecogerEmail extends State<RecogerEmail> {
       ),
     );
   }
+
+
 
   Future<void> _continua(TrasnferirDatosNombreUser args) async {
     var email = emailController.text.trim();
@@ -139,7 +142,15 @@ class _RecogerEmail extends State<RecogerEmail> {
       _cambiarColor(Colors.transparent, Colors.transparent);
       return;
     } else {
+      _statusBoton(false);
       _cambiarColor(Colors.deepOrange, Colors.grey);
     }
+  }
+
+
+  void _statusBoton(bool status){
+    setState((){
+      btnActivo = status;
+    });
   }
 }

@@ -4,9 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:retos_proyecto/vista_tutor/TabPages/TaPagesSala.dart';
 import 'package:retos_proyecto/vista_tutorado/Salas/ListaMisiones.dart';
 
@@ -56,7 +58,12 @@ Future<void> main() async {
 class splashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(initialRoute: '/', routes:Rutas.getRutas() );
+    return MaterialApp(initialRoute: '/', routes:Rutas.getRutas(),
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
+        ),
+      ),);
   }
 
 }
@@ -70,6 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+
     _navigateToHome();
   }
 
@@ -77,6 +85,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    FlutterStatusbarcolor.setStatusBarColor(Colors.transparent,
+        animate: true);
+    FlutterStatusbarcolor.setStatusBarWhiteForeground(
+        false);
     /*
     FlutterStatusbarcolor.setStatusBarWhiteForeground(
         false); //Colores de los iconos de la barra superior
@@ -89,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     FlutterStatusbarcolor.setNavigationBarColor(
         Colors.black); //Color de la barra inferior
-    FlutterStatusbarcolor.setNavigationBarWhiteForeground(false);
+    FlutterStatusbarcolor.setNavigationBarWhiteForeground(true);
 
     return Container(
         color: Colors.white,

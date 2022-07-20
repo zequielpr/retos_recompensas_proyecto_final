@@ -114,18 +114,16 @@ class _RecogerPassw extends State<RecogerPassw> {
                     height: 42,
                     child: ElevatedButton(
                         style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                botoActivado ? Colors.blue : Colors.grey),
                             elevation: MaterialStateProperty.all(0)),
-                        onPressed: () => botoActivado
-                            ? _continuar(args, passwController.text)
+                        onPressed: botoActivado
+                            ? () => _continuar(args, passwController.text)
                             : null,
                         child: Text(
                           'Continuar',
                           style: GoogleFonts.roboto(
                               fontSize: 17, fontWeight: FontWeight.w600),
                         ))),
-              )
+              ),
             ],
           ),
         ),

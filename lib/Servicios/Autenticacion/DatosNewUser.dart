@@ -145,15 +145,11 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
                   width: 200,
                   height: 42,
                   child: ElevatedButton(
+
                     style: ButtonStyle(
-                        backgroundColor: botonActivo == true
-                            ? MaterialStateProperty.all(Colors.blue)
-                            : MaterialStateProperty.all(Colors.grey)),
-                    onPressed: botonActivo == true
-                        ? () async => _registrarUsuario(args)
-                        : () {
-                            print("Boton no activo");
-                          },
+                        elevation: MaterialStateProperty.all(0)),
+                    onPressed: botonActivo? () async => _registrarUsuario(args)
+                        : null,
                     child: Text("Registrarme",
                         style: GoogleFonts.roboto(
                             fontSize: 17, fontWeight: FontWeight.w600)),
@@ -273,18 +269,10 @@ class Roll extends StatefulWidget {
 }
 
 class _StateRoll extends State<Roll> {
-
-  iniState(){
-    super.initState();
-    FlutterStatusbarcolor.setStatusBarWhiteForeground(
-        false); //Colores de los iconos de la barra superior
-    FlutterStatusbarcolor.setStatusBarColor(Colors.white,
-        animate: true);
-  }
-
   String dropdownValue = 'Tutorado';
   @override
   Widget build(BuildContext context) {
+
     /*
     FlutterStatusbarcolor.setStatusBarWhiteForeground(
         false); //Colores de los iconos de la barra superior
@@ -295,6 +283,7 @@ class _StateRoll extends State<Roll> {
         ModalRoute.of(context)!.settings.arguments as TranferirDatosRoll;
     return Scaffold(
       appBar: AppBar(
+
         foregroundColor: Colors.black,
         elevation: 0,
         title: Row(
