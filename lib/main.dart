@@ -16,39 +16,22 @@ import 'package:retos_proyecto/vista_tutorado/Salas/ListaSalas.dart';
 
 import 'Servicios/Notificaciones/notificaciones_bandeja.dart';
 import 'Servicios/Autenticacion/login.dart';
+import 'datos/TransferirDatos.dart';
 
 
 
-class Inicio extends StatelessWidget {
-  final  bool isTutorado;
-  const Inicio(bool this.isTutorado, {Key? key}) : super(key: key);
-  static const String _title = 'Flutter';
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: {
-        ListaMisiones.routeName: (context) => const ListaMisiones(),
-        TabPagesSala.routeName: (context) => const TabPagesSala(),
-      },
-      title: _title,
-      home: MyStatefulWidget(isTutorado),
-    );
-  }
-}
 
-class MyStatefulWidget extends StatefulWidget {
-  final bool isTutorado;
-  const MyStatefulWidget(this.isTutorado, {Key? key}) : super(key: key);
+class Inicio extends StatefulWidget {
+  static const ROUTE_NAME = 'Inicio';
+  const Inicio({Key? key}) : super(key: key);
 
   @override
-  State<MyStatefulWidget> createState() => _MyStatefulWidgetState(isTutorado);
+  State<Inicio> createState() => _InicioState();
 }
 
 //Clase donde se probara to el proceso de crear una misión
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  final bool isTutorado;
-  _MyStatefulWidgetState(this.isTutorado);
+class _InicioState extends State<Inicio> {
 
   void initState() {
     super.initState();
@@ -255,7 +238,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
   @override
   Widget build(BuildContext context) {
-    iniciarColeccion(context, isTutorado);
+    final args =
+    ModalRoute.of(context)!.settings.arguments as TransferirDatosInicio;
+    iniciarColeccion(context, args.isTutorado);
 
     return WillPopScope(
       onWillPop: _onWillPop,

@@ -4,9 +4,22 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:retos_proyecto/vista_tutor/TabPages/TaPagesSala.dart';
+import 'package:retos_proyecto/vista_tutorado/Salas/ListaMisiones.dart';
 
+import 'Rutas.dart';
+import 'Servicios/Autenticacion/DatosNewUser.dart';
+import 'Servicios/Autenticacion/EmailPassw/IniciarSessionEmailPassw.dart';
+import 'Servicios/Autenticacion/EmailPassw/RecogerEmail.dart';
+import 'Servicios/Autenticacion/EmailPassw/RecogerPassw.dart';
 import 'Servicios/Autenticacion/login.dart';
+import 'datos/TransferirDatos.dart';
 import 'main.dart';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -45,26 +58,47 @@ Future<void> main() async {
 
 class splashScreen extends StatelessWidget {
   @override
-
-  //Crea instancia de firebase y obtiene la coleccion de usuarios
-  final CollectionReference CollecionUsuarios = FirebaseFirestore.instance
-      .collection('usuarios');
-
-
-
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Splash Screen',
+      initialRoute: '/',
+      routes: Rutas.getRutas(),
       theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: MyHomePage(),
-      debugShowCheckedModeBanner: false,
+          textTheme: const TextTheme(bodyText2: TextStyle(color: Colors.black, fontSize: 17) , button: TextStyle(color: Colors.black) ),
+        inputDecorationTheme: const InputDecorationTheme(
+          contentPadding: EdgeInsets.only(left: 10),
+            constraints: BoxConstraints.expand(height: 48, width: 300),
+            border:OutlineInputBorder(
+              borderSide: BorderSide(
+                  style: BorderStyle.solid,
+              ),
+            ) ,
+
+            focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              style: BorderStyle.solid,
+              color: Colors.blue
+          ),
+        )),
+          appBarTheme: const AppBarTheme(
+            systemOverlayStyle: SystemUiOverlayStyle.dark,
+          ),
+          primaryTextTheme: TextTheme(button: TextStyle(color: Colors.black)),
+          buttonTheme: ButtonThemeData(disabledColor: Colors.black),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ButtonStyle(
+                //foregroundColor: MaterialStateProperty.all(Colors.black26),
+                  overlayColor: MaterialStateProperty.all(
+                      const Color.fromARGB(165, 243, 241, 241)),
+                  elevation: MaterialStateProperty.all(0),
+                  backgroundColor: MaterialStateProperty.all(Colors.blue),
+                  textStyle: MaterialStateProperty.all(GoogleFonts.roboto( color: Colors.black,
+                      fontSize: 16, fontWeight: FontWeight.w700))))),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -73,11 +107,30 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+
     _navigateToHome();
   }
 
+  var datos;
+
   @override
   Widget build(BuildContext context) {
+    FlutterStatusbarcolor.setStatusBarColor(Colors.transparent, animate: true);
+    FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
+    /*
+    FlutterStatusbarcolor.setStatusBarWhiteForeground(
+        false); //Colores de los iconos de la barra superior
+    FlutterStatusbarcolor.setStatusBarColor(Colors.transparent,
+        animate: false); //Color de barra superior
+
+    FlutterStatusbarcolor.setNavigationBarColor(
+        Colors.black); //Color de la barra inferior
+     */
+
+    FlutterStatusbarcolor.setNavigationBarColor(
+        Colors.black); //Color de la barra inferior
+    FlutterStatusbarcolor.setNavigationBarWhiteForeground(true);
+
     return Container(
         color: Colors.white,
         child: FlutterLogo(size: MediaQuery.of(context).size.height));
@@ -85,51 +138,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _navigateToHome() async {
     final CollectionReference CollecionUsuarios =
-    FirebaseFirestore.instance.collection('usuarios');
+        FirebaseFirestore.instance.collection('usuarios');
     await Future.delayed(Duration(milliseconds: 2500), () {});
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
-
-      //Probando la consulta:
-      //Generar consulta para comprobar si el nombre de usuario esta en uso
-
-      /*
-      await CollecionUsuarios.where("nombre_usuario", isEqualTo: "maikel11").get().then((value) => {
-        if(value.docs.isEmpty){
-          print("nombre de usuario disponible")
-        }else{
-          print("Nombre de usuario no disponible")
-        }
-      });
-       */
-
-
-
       if (user == null) {
-        //print('User is currently signed out!');
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (BuildContext context) => Login(CollecionUsuarios)));
+        var datos = TransferirCollecion(CollecionUsuarios);
+        Navigator.pushReplacementNamed(context, Login.ROUTE_NAME,
+            arguments: datos);
       } else {
-        //Si el usuario esta registrado
-        late bool isTutorado;
-
         DocumentReference docUser =
             CollecionUsuarios.doc(FirebaseAuth.instance.currentUser?.uid);
-        await docUser.get().then((value) => {
-        Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (BuildContext context) => Inicio(value['rol_tutorado']))),
-              if (value['rol_tutorado'])
-                {
-                  print("Es tutorado")
-                }
-              else
-                {
-                  //_widgetOptions.clear();
+        await docUser.get().then((value) {
+              datos = TransferirDatosInicio(value['rol_tutorado']);
 
-                  print("Es tutor")
-                }
+              if(!mounted)return;
+              Navigator.pushReplacementNamed(context, Inicio.ROUTE_NAME,
+                  arguments: datos);
             });
-
-
       }
     });
   }

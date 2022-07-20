@@ -9,16 +9,22 @@ class AdminCuenta {
     return Column(
       children: [
         ElevatedButton(
-            onPressed: () {
-              FirebaseAuth.instance.signOut().then((value) => {
-                GoogleSignIn().disconnect(),
-                Navigator.push(context, MaterialPageRoute(
-                    builder: (BuildContext context) => splashScreen()))
-                
-              });
+            onPressed: () async {
+
+              await FirebaseAuth.instance.signOut().then((value) async => {
+
+                 await _p(),
+                    Navigator.pushReplacementNamed(context, '/')
+                  });
             },
             child: Text("Cerrar sesión"))
       ],
     );
+  }
+
+  static Future<void> _p() async {
+    try{
+      await GoogleSignIn().disconnect();
+    }catch(e){}
   }
 }
