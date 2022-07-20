@@ -17,6 +17,7 @@ class IniSesionEmailPassword extends StatelessWidget {
   const IniSesionEmailPassword({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+
     final args =
         ModalRoute.of(context)!.settings.arguments as TransDatosInicioSesion;
 
@@ -42,6 +43,7 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
   @override
   void initState() {
     super.initState();
+
     emailController.text = args.email;
 
     //Controlar la visibilidad del teclado
@@ -116,6 +118,7 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
 
   @override
   Widget build(BuildContext context) {
+    //emailController.selection = TextSelection.fromPosition(TextPosition(offset: emailController.text.length));
     return Scaffold(
       /*
       appBar: AppBar(
@@ -180,25 +183,22 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
   }
 
   Widget _getTextFielCorreo() {
-    return SizedBox(
-      height: 50,
-      child: TextField(
-        onEditingComplete: (){print('holaa');},
-        keyboardType: TextInputType.visiblePassword,
-        autofocus: false,
-        onChanged: (email) {
-          if (email.isNotEmpty && passwdController.text.isNotEmpty && Validar.validarEmail(email.trim())) {
-            setStateBtn(true);
-            return;
-          }
-          setStateBtn(false);
-        },
-        controller: emailController,
-        decoration: const InputDecoration(
-            hintText: 'ejemplo@gmail.com',
-            border: OutlineInputBorder(),
-            labelText: 'Email'),
-      ),
+    return TextField(
+      autocorrect: true,
+      onEditingComplete: (){print('holaa');},
+      keyboardType: TextInputType.emailAddress,
+      onChanged: (email) {
+        if (email.isNotEmpty && passwdController.text.isNotEmpty && Validar.validarEmail(email.trim())) {
+          setStateBtn(true);
+          return;
+        }
+        setStateBtn(false);
+      },
+      controller: emailController,
+      decoration: const InputDecoration(
+          hintText: 'ejemplo@gmail.com',
+          border: OutlineInputBorder(),
+          labelText: 'Email'),
     );
   }
 
@@ -206,31 +206,28 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
   Widget _getTextFieldPassw() {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
-      child: SizedBox(
-          height: 50,
-          child: TextField(
-            keyboardType: TextInputType.visiblePassword,
-            autofocus: false,
-            onChanged: (passw) {
-              passw.isNotEmpty? _stateBtnOjo(true): _stateBtnOjo(false);
-              if (passw.isNotEmpty && emailController.text.isNotEmpty && Validar.validarEmail(emailController.text.trim())) {
-                setStateBtn(true);
-                return;
-              }
-              setStateBtn(false);
-            },
-            controller: passwdController,
-            obscureText: passwOculta,
-            decoration: InputDecoration(
-                suffixIcon: isBtnOjoVisible? IconButton(
-                  onPressed: () =>
-                  passwOculta == true ? _mostrarPassw() : _ocultarPassw(),
-                  icon: iconPassw,
-                ): null,
-                border: const OutlineInputBorder(),
-                hintText: 'escribe tu contraseña',
-                labelText: 'Contraseña'),
-          )),
+      child: TextField(
+        keyboardType: TextInputType.visiblePassword,
+        autofocus: false,
+        onChanged: (passw) {
+          passw.isNotEmpty? _stateBtnOjo(true): _stateBtnOjo(false);
+          if (passw.isNotEmpty && emailController.text.isNotEmpty && Validar.validarEmail(emailController.text.trim())) {
+            setStateBtn(true);
+            return;
+          }
+          setStateBtn(false);
+        },
+        controller: passwdController,
+        obscureText: passwOculta,
+        decoration: InputDecoration(
+            suffixIcon: isBtnOjoVisible? IconButton(
+              onPressed: () =>
+              passwOculta == true ? _mostrarPassw() : _ocultarPassw(),
+              icon: iconPassw,
+            ): null,
+            hintText: 'escribe tu contraseña',
+            labelText: 'Contraseña'),
+      ),
     );
   }
 
@@ -244,7 +241,6 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
         width: 200,
         height: 40,
         child: ElevatedButton(
-            style: ButtonStyle(elevation: MaterialStateProperty.all(0)),
             onPressed: isBtnActivo
                 ? () async {
                     await Autenticar.inciarSesionEmailPasswd(
@@ -256,8 +252,6 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
                 : null,
             child: Text(
               'Iniciar sesion',
-              style:
-                  GoogleFonts.roboto(fontSize: 18, fontWeight: FontWeight.w600),
             )));
   }
 

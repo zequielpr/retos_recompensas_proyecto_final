@@ -59,31 +59,28 @@ class _RecogerPassw extends State<RecogerPassw> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 65,
-                child: TextField(
-                  onChanged: (passw) {
-                    passw.length >= 8
-                        ? _checkLongitud(true)
-                        : _checkLongitud(false);
-                    Validar.validarPassw(passw) == true
-                        ? _checkLetrasNumb(true)
-                        : _checkLetrasNumb(false);
-                  },
-                  obscureText: passwOculta,
-                  autofocus: true,
-                  maxLength: 16,
-                  controller: passwController,
-                  decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                        onPressed: () => passwOculta == true
-                            ? _mostrarPassw()
-                            : _ocultarPassw(),
-                        icon: iconPassw,
-                      ),
-                      border: OutlineInputBorder(),
-                      labelText: 'Contraseña'),
-                ),
+              TextField(
+                keyboardType: TextInputType.visiblePassword,
+                onChanged: (passw) {
+                  passw.length >= 8?
+                      passw.length <=16? _checkLongitud(true):_checkLongitud(false)
+                      : _checkLongitud(false);
+                  Validar.validarPassw(passw) == true
+                      ? _checkLetrasNumb(true)
+                      : _checkLetrasNumb(false);
+                },
+                obscureText: passwOculta,
+                autofocus: true,
+                controller: passwController,
+                decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                      onPressed: () => passwOculta == true
+                          ? _mostrarPassw()
+                          : _ocultarPassw(),
+                      icon: iconPassw,
+                    ),
+                    border: OutlineInputBorder(),
+                    labelText: 'Contraseña'),
               ),
               Align(
                 alignment: Alignment.centerLeft,

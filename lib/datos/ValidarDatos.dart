@@ -12,4 +12,9 @@ class Validar {
             r'^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[a-z])\S{1,16}$')
         .hasMatch(passw);
   }
+
+  static bool validarUserName(String userName){
+    print('is valid: ${RegExp(r"^[A-Za-z0-9]+(?:[_][A-Za-z0-9]+)*([_]?)$").hasMatch(userName)}');
+    return RegExp(r"^[A-Za-z0-9]+(?:[_][A-Za-z0-9]+)*([_]?)$").hasMatch(userName);
+  }
 }

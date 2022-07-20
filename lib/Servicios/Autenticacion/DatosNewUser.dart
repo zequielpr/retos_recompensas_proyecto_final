@@ -8,6 +8,7 @@ import 'package:firebase_auth_platform_interface/src/providers/oauth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:retos_proyecto/datos/ValidarDatos.dart';
 
 import '../../Rutas.dart';
 import '../../datos/TransferirDatos.dart';
@@ -36,6 +37,7 @@ class NombreUsuario extends StatelessWidget {
   }
 }
 
+
 class StateNombreUsuario extends StatefulWidget {
   static const ROUTE_NAME = 'NombreUsuario';
   final TrasnferirDatosNombreUser args;
@@ -49,8 +51,12 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
   _StateNombreUsuario(this.args);
 
   //Inicia el text field con el nombre de usuario generado en la ruta roll
+  @override
   initState() {
     super.initState();
+    userNameController.selection = TextSelection.fromPosition(
+        TextPosition(offset: userNameController.text.length));
+    _esperar(args.userName, args);
     userNameController.text = args.userName;
   }
 
@@ -100,8 +106,6 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
   @override
   Widget build(BuildContext context) {
     //Coloca el cursor al final del texto
-    userNameController.selection = TextSelection.fromPosition(
-        TextPosition(offset: userNameController.text.length));
 
     return Scaffold(
         appBar: AppBar(
@@ -114,7 +118,7 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: EdgeInsets.only(bottom: 25),
+                  padding: const EdgeInsets.only(bottom: 25),
                   child: Text(
                     'Nombre de usuario',
                     style: GoogleFonts.roboto(
@@ -122,33 +126,31 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 50,
-                child: Padding(
-                  padding: EdgeInsets.only(top: 0),
-                  child: TextField(
-                    autofocus: true,
-                    controller: userNameController,
-                    onChanged: (usuario) {
-                      _esperar(usuario, args);
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Nombre de usuario",
-                        suffixIcon: estadoUsuario),
-                  ),
+              Padding(
+                padding: const EdgeInsets.only(top: 0),
+                child: TextField(
+                  keyboardType: TextInputType.text,
+                  autofocus: true,
+                  controller: userNameController,
+                  onChanged: (usuario) {
+                    _esperar(usuario.trim(), args);
+                  },
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "Nombre de usuario",
+                      suffixIcon: estadoUsuario),
                 ),
               ),
+
               Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: SizedBox(
                   width: 200,
                   height: 42,
                   child: ElevatedButton(
-
-                    style: ButtonStyle(
-                        elevation: MaterialStateProperty.all(0)),
-                    onPressed: botonActivo? () async => _registrarUsuario(args)
+                    style: ButtonStyle(elevation: MaterialStateProperty.all(0)),
+                    onPressed: botonActivo
+                        ? () async => _registrarUsuario(args)
                         : null,
                     child: Text("Registrarme",
                         style: GoogleFonts.roboto(
@@ -169,12 +171,19 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
   //Esperear antes de comprobar
   void _esperar(String userName, TrasnferirDatosNombreUser args) {
     cambiarCheck(escribiendo);
+    if (!mounted) return;
     setState(() {
       botonActivo = false;
     });
+
     args.setUserName(userName);
     contador = 0;
     timer.cancel();
+    if (!Validar.validarUserName(userName)) {
+      botonActivo = false;
+      cambiarCheck(noDisponible);
+      return;
+    }
     timer = Timer.periodic(Duration(milliseconds: 800), (timer) async {
       contador++;
       if (contador >= 2) {
@@ -199,7 +208,7 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
     var datos;
     var tipoDato = args.oaUthCredential.runtimeType;
     print('dato: $tipoDato');
-    if (args.oaUthCredential.runtimeType != OAuthCredential) {
+    if (args.oaUthCredential.runtimeType != OAuthCredential && args.oaUthCredential.runtimeType != FacebookAuthCredential) {
       //En este caso el el atributo oaUthCredebtial continiene un hash map con la clave y la contrasela para realizar el registro
       //Registrarse con email y contreña
       await Autenticar.registrarConEmailPassw(args.oaUthCredential)
@@ -216,11 +225,9 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
                       'nombre': args.userName
                     }),
                     Token.guardarToken(),
-
                     datos = TransferirDatosInicio(
                         args.dropdownValue == "Tutor" ? false : true),
-                    Navigator.pushReplacementNamed(
-                        context, Inicio.ROUTE_NAME,
+                    Navigator.pushReplacementNamed(context, Inicio.ROUTE_NAME,
                         arguments: datos)
                   }
               });
@@ -252,6 +259,8 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
 
   //Cambiar estado del check
   void cambiarCheck(Transform check) {
+    if (!mounted)
+      return; //verifica que el widget este montado antes de actualizar su estado
     setState(() {
       estadoUsuario = check;
     });
@@ -272,7 +281,6 @@ class _StateRoll extends State<Roll> {
   String dropdownValue = 'Tutorado';
   @override
   Widget build(BuildContext context) {
-
     /*
     FlutterStatusbarcolor.setStatusBarWhiteForeground(
         false); //Colores de los iconos de la barra superior
@@ -283,11 +291,10 @@ class _StateRoll extends State<Roll> {
         ModalRoute.of(context)!.settings.arguments as TranferirDatosRoll;
     return Scaffold(
       appBar: AppBar(
-
         foregroundColor: Colors.black,
         elevation: 0,
         title: Row(
-          children: [
+          children: const [
             Text(
               "Registrarse",
             )
@@ -296,10 +303,8 @@ class _StateRoll extends State<Roll> {
       ),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              height: 20,
-            ),
             /*
             const Padding(
               padding: EdgeInsets.only(left: 30, right: 30, bottom: 100),
@@ -312,16 +317,18 @@ class _StateRoll extends State<Roll> {
               child: Column(
                 children: [
                   Align(
-                    alignment: Alignment.centerLeft,
                     child: Padding(
-                      padding: EdgeInsets.only(bottom: 20),
+                      padding: EdgeInsets.only(
+                        bottom: 20,
+                      ),
                       child: Text(
-                        'Selecciona un roll',
+                        'Selecciona un roll para continuar',
                         style: GoogleFonts.roboto(
                             fontSize: 25, fontWeight: FontWeight.w500),
                       ),
                     ),
                   ),
+                  /*
                   Align(
                     alignment: Alignment.centerLeft,
                     child: RichText(
@@ -342,6 +349,7 @@ class _StateRoll extends State<Roll> {
                                   color: Colors.black))
                         ])),
                   ),
+
                   Padding(
                     padding: EdgeInsets.only(top: 10, bottom: 20),
                     child: Align(
@@ -365,45 +373,52 @@ class _StateRoll extends State<Roll> {
                           ])),
                     ),
                   ),
-                  DropdownButton<String>(
-                    value: dropdownValue,
-                    icon: const Padding(
-                      padding: EdgeInsets.only(left: 217),
-                      child: Icon(Icons.arrow_drop_down),
-                    ),
-                    elevation: 1,
-                    style:
-                        const TextStyle(color: Colors.deepPurple, fontSize: 18),
-                    underline: Container(
-                      height: 2,
-                      color: Colors.green,
-                    ),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropdownValue = newValue!;
-                      });
-                    },
-                    items: <String>['Tutorado', 'Tutor']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  )
+                   */
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('Roll seleccionado: ',
+                          style: TextStyle(fontSize: 20)),
+                      DropdownButton<String>(
+                        value: dropdownValue,
+                        icon: const Padding(
+                          padding: EdgeInsets.only(left: 5),
+                          child: Icon(Icons.arrow_drop_down),
+                        ),
+                        elevation: 1,
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18),
+                        underline: Container(
+                          height: 2,
+                          color: Colors.green,
+                        ),
+                        onChanged: (String? newValue) {
+                          if (!mounted) return;
+                          setState(() {
+                            dropdownValue = newValue!;
+                          });
+                        },
+                        items: <String>['Tutorado', 'Tutor']
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      )
+                    ],
+                  ),
                 ],
               ),
             ),
-            SizedBox(
-              width: 200,
-              height: 42,
+            Padding(
+              padding: EdgeInsets.only(top: 20),
               child: ElevatedButton(
-                  style: ButtonStyle(elevation: MaterialStateProperty.all(0)),
                   onPressed: () async => _siguiente(args),
-                  child: Text(
+                  child: const Text(
                     "Siguiente",
-                    style: GoogleFonts.roboto(
-                        fontSize: 16, fontWeight: FontWeight.w700),
                   )),
             )
           ],

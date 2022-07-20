@@ -65,22 +65,19 @@ class _RecogerEmail extends State<RecogerEmail> {
                 ),
               ),
                */
-              SizedBox(
-                height: 70,
-                child: TextField(
-                  onChanged: (value) => _statusBoton(true),
-                  autofocus: true,
-                  maxLength: 60,
-                  controller: emailController,
-                  decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText: 'Email',
-                      suffixIcon: Icon(
-                        Icons.error,
-                        color: colorSubfix,
-                        size: 20,
-                      )),
-                ),
+              TextField(
+                onChanged: (value) => _statusBoton(true),
+                autofocus: true,
+                keyboardType: TextInputType.emailAddress,
+                controller: emailController,
+                decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: 'Email',
+                    suffixIcon: Icon(
+                      Icons.error,
+                      color: colorSubfix,
+                      size: 20,
+                    )),
               ),
               Align(
                 alignment: Alignment.centerLeft,
@@ -108,7 +105,7 @@ class _RecogerEmail extends State<RecogerEmail> {
                           style: GoogleFonts.roboto(
                               fontSize: 17, fontWeight: FontWeight.w600),
                         ))),
-              )
+              ),
             ],
           ),
         ),
@@ -128,6 +125,9 @@ class _RecogerEmail extends State<RecogerEmail> {
       if (metodoInicioSesion.isNotEmpty) {
         var datos = TransDatosInicioSesion('Ya estas registrado, inicia sesión',
             false, true, email, args.collectionReferenceUsers);
+
+        FocusScope.of(context).requestFocus(FocusNode());
+        await Future.delayed(const Duration(milliseconds: 70));
         if (!mounted) return;
         Navigator.pushNamed(context, IniSesionEmailPassword.ROUTE_NAME,
             arguments: datos);

@@ -13,13 +13,13 @@ import 'main.dart';
 class Rutas{
   static dynamic getRutas(){
     return{
-      '/': (context) => MyHomePage(),
+      '/': (context) => const MyHomePage(),
       Login.ROUTE_NAME: (context) => const Login(),
       Roll.ROUTE_NAME: (context) => const Roll(),
       StateNombreUsuario.ROUTE_NAME: (context) => const NombreUsuario(),
       IniSesionEmailPassword.ROUTE_NAME: (context) =>
       const IniSesionEmailPassword(),
-      Inicio.ROUTE_NAME: (context) => Inicio(),
+      Inicio.ROUTE_NAME: (context) => const Inicio(),
       ListaMisiones.ROUTE_NAME: (context) => const ListaMisiones(),
       TabPagesSala.ROUTE_NAME: (context) => const TabPagesSala(),
       RecogerPassw.ROUTE_NAME: (context) => const RecogerPassw(),

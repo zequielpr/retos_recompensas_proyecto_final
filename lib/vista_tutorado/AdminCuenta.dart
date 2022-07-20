@@ -10,6 +10,7 @@ class AdminCuenta {
       children: [
         ElevatedButton(
             onPressed: () async {
+
               await FirebaseAuth.instance.signOut().then((value) async => {
 
                  await _p(),

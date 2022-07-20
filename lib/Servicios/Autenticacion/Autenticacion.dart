@@ -65,6 +65,8 @@ class Autenticar {
     {
       var datos;
       if (isNewUser) {
+        //Si el usuario es de facebook se elimina, ya que para comprobar si es nuevo o no, es necesario registrarlo previamente
+
         var credentialColecUsers =
             TranferirDatosRoll(credential, collecUsuarios);
 
@@ -78,8 +80,7 @@ class Autenticar {
         await iniciarSesion(credential!).then((userCredential) async => {
               Token.guardarToken(),
               //El usuario accede su cuenta con las vista correspendiente al roll preestablecido.
-              docUser =
-                  collecUsuarios.doc(userCredential?.user?.uid),
+              docUser = collecUsuarios.doc(userCredential?.user?.uid),
               await docUser.get().then((snap) => {
                     datos = TransferirDatosInicio(snap['rol_tutorado']),
                     //Dirigirse a la pantalla principal
@@ -95,7 +96,7 @@ class Autenticar {
     }
   }
 
-  static Future<OAuthCredential?> obtenerCredencialesFacebook() async {
+  static Future<dynamic> obtenerCredencialesFacebook() async {
     final LoginResult result = await FacebookAuth.instance
         .login(permissions: ['email', 'public_profile']);
 
@@ -103,6 +104,8 @@ class Autenticar {
       //devuelve una credencial creada con el token de acceso facilitado por facebook
       return FacebookAuthProvider.credential(result.accessToken!.token);
     }
+    print('holaaa');
+    return null;
   }
 
   static Future<UserCredential?> iniciarSesion(
@@ -145,9 +148,10 @@ class Autenticar {
       var datos;
 
       await collectionReferenceUser.doc(uidUser).get().then((snap) => {
-        datos = TransferirDatosInicio(snap['rol_tutorado']),
-        Navigator.pushReplacementNamed(context, Inicio.ROUTE_NAME, arguments: datos)
-      });
+            datos = TransferirDatosInicio(snap['rol_tutorado']),
+            Navigator.pushReplacementNamed(context, Inicio.ROUTE_NAME,
+                arguments: datos)
+          });
 
       /*
       User? user = credential.user;
@@ -166,7 +170,6 @@ class Autenticar {
           ?.sendEmailVerification()
           .whenComplete(() async => {await aut.signOut()});
        */
-
 
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

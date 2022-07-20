@@ -53,7 +53,6 @@ class _LoginState extends State<Login> {
         fontSize: 19, color: Colors.black, fontWeight: FontWeight.w400),
   );
 
-
   @override
   Widget build(BuildContext context) {
     final args =
@@ -69,7 +68,6 @@ class _LoginState extends State<Login> {
         false); //Colores de los iconos de la barra inferior
     FlutterStatusbarcolor.setNavigationBarColor(
         Colors.black); //Color de la barra inferior
-
 
     final correo = TextEditingController();
 
@@ -114,55 +112,49 @@ class _LoginState extends State<Login> {
         //Iniciar sesion con correo y contraseña
         Padding(
           padding: EdgeInsets.only(top: 0),
-          child: Card(
-              margin: EdgeInsets.all(0),
-              semanticContainer: true,
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6),
-                  side: BorderSide(color: colorBorde)),
-              child: SizedBox(
-                width: 300,
-                height: 47,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                      padding: MaterialStateProperty.all(
-                          EdgeInsetsGeometry.lerp(
-                              EdgeInsets.all(0), EdgeInsets.all(0), 0)),
-                      elevation: MaterialStateProperty.all(0)),
-                  onPressed: () {
+          child: SizedBox(
+            width: 305,
+            height: 47,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
+                      side: BorderSide(color: colorBorde))),
+                  backgroundColor:
+                      MaterialStateProperty.all(Colors.transparent),
+                  padding: MaterialStateProperty.all(EdgeInsetsGeometry.lerp(
+                      EdgeInsets.all(0), EdgeInsets.all(0), 0)),
+                  elevation: MaterialStateProperty.all(0)),
+              onPressed: () {
+                var datos =
+                    TransDatosInicioSesion('', true, false, '', collecUsuarios);
+                Navigator.pushNamed(context, IniSesionEmailPassword.ROUTE_NAME,
+                    arguments: datos);
 
-                    var datos = TransDatosInicioSesion('', true, false, '', collecUsuarios);
-                    Navigator.pushNamed(
-                      context,
-                      IniSesionEmailPassword.ROUTE_NAME, arguments: datos
-                    );
-
-                    /*Autenticar.comprobarNewOrOld(collecUsuarios, context)*/
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      const Padding(
-                          padding: EdgeInsets.only(right: 43, left: 10),
-                          child: Icon(
-                            Icons.person,
-                            size: 30,
-                            color: Colors.black,
-                          )),
-                      Text(
-                        'Correo/constraseña',
-                        style: GoogleFonts.roboto(
-                            fontSize: 19,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400),
-                      )
-                    ],
+                /*Autenticar.comprobarNewOrOld(collecUsuarios, context)*/
+              },
+              child: Container(
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(
+                        'lib/imgs/img_logo_provicional.png',
+                      ),
+                      alignment: Alignment(-0.9, 0),
+                      scale: 39,
+                    ),
                   ),
-                ),
-              )),
+                  child: Center(
+                    child: Text(
+                      'Continuar con <App Name>',
+                      //textAlign: TextAlign.justify,
+                      style: GoogleFonts.roboto(
+                          fontSize: 19,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  )),
+            ),
+          ),
         ),
 
         //Iniciar sesión con google
@@ -176,54 +168,66 @@ class _LoginState extends State<Login> {
                   borderRadius: BorderRadius.circular(6),
                   side: BorderSide(color: colorBorde)),
               child: SizedBox(
-                width: 300,
+                width: 305,
                 height: 47,
                 child: ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                      padding: MaterialStateProperty.all(
-                          EdgeInsetsGeometry.lerp(
-                              EdgeInsets.all(0), EdgeInsets.all(0), 0)),
-                      elevation: MaterialStateProperty.all(0)),
-                  onPressed: () async {
-                    _onLoading();
-                    var googleAccount = await Autenticar.getGoogleAcount();
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        padding: MaterialStateProperty.all(
+                            EdgeInsetsGeometry.lerp(
+                                EdgeInsets.all(0), EdgeInsets.all(0), 0)),
+                        elevation: MaterialStateProperty.all(0)),
+                    onPressed: () async {
+                      _onLoading();
+                      var googleAccount = await Autenticar.getGoogleAcount();
 
-                    if (googleAccount== null) {
-                      _login();
-                      return;
-                    }
+                      if (googleAccount == null) {
+                        _login();
+                        return;
+                      }
 
-                    var credencialGoogle =
-                        await Autenticar.obtenerCredencialesGoogle(googleAccount)
-                            .catchError((e) {
-                      print('holaa');
-                    });
+                      var credencialGoogle =
+                          await Autenticar.obtenerCredencialesGoogle(
+                                  googleAccount)
+                              .catchError((e) {
+                        print('holaa');
+                      });
 
-                    //Obtiene los método de inicio correspondiente al email pasado por parámetro.
-                    List<String> metodosInicioSesion = await Autenticar.metodoInicioSesion(googleAccount.email);
+                      //Obtiene los método de inicio correspondiente al email pasado por parámetro.
+                      List<String> metodosInicioSesion =
+                          await Autenticar.metodoInicioSesion(
+                              googleAccount.email);
 
-                    var isNewUser = metodosInicioSesion.isNotEmpty? false: true;
+                      var isNewUser =
+                          metodosInicioSesion.isNotEmpty ? false : true;
 
-                    if (!mounted) return;
+                      if (!mounted) return;
 
-                    await Autenticar.newOrOld(collecUsuarios, context,
-                            isNewUser, credencialGoogle, 'Google')
-                        .whenComplete(() => _login());
-                  },
-                  child: Row(
-                    children: [
-                      const Padding(
-                          padding: EdgeInsets.only(right: 40, left: 10),
-                          child: Image(
-                              image: AssetImage('lib/imgs/img_google.png'),
-                              height: 25,
-                              width: 25)),
-                      contenidoBoton
-                    ],
-                  ),
-                ),
+                      await Autenticar.newOrOld(collecUsuarios, context,
+                              isNewUser, credencialGoogle, 'Google')
+                          .whenComplete(() => _login());
+                    },
+                    child: Container(
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                              'lib/imgs/img_google.png',
+                            ),
+                            alignment: Alignment(-0.9, 0),
+                            scale: 5,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Continuar con google',
+                            //textAlign: TextAlign.justify,
+                            style: GoogleFonts.roboto(
+                                fontSize: 19,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ))),
               )),
         ),
 
@@ -238,47 +242,54 @@ class _LoginState extends State<Login> {
                   borderRadius: BorderRadius.circular(6),
                   side: BorderSide(color: colorBorde)),
               child: SizedBox(
-                width: 300,
+                width: 305,
                 height: 47,
                 child: ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                      padding: MaterialStateProperty.all(
-                          EdgeInsetsGeometry.lerp(
-                              EdgeInsets.all(0), EdgeInsets.all(0), 0)),
-                      elevation: MaterialStateProperty.all(0)),
-                  onPressed: () async {
-                    _onLoading();
-                    print('Continuar con facebook');
-                    var oaUthCredential =
-                        await Autenticar.obtenerCredencialesFacebook();
-                    var credentialUser =
-                        await Autenticar.iniciarSesion(oaUthCredential!);
-                    var isNewUser =
-                        credentialUser?.additionalUserInfo?.isNewUser;
-                    await Autenticar.newOrOld(collecUsuarios, context,
-                            isNewUser, oaUthCredential, 'Facebook')
-                        .whenComplete(() => _login());
-                  },
-                  child: Row(
-                    children: [
-                      const Padding(
-                          padding: EdgeInsets.only(right: 35, left: 10),
-                          child: Image(
-                              image: AssetImage('lib/imgs/img_facebook.png'),
-                              height: 25,
-                              width: 25)),
-                      Text(
-                        'Continuar con Facebook',
-                        style: GoogleFonts.roboto(
-                            fontSize: 19,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400),
-                      )
-                    ],
-                  ),
-                ),
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        padding: MaterialStateProperty.all(
+                            EdgeInsetsGeometry.lerp(
+                                EdgeInsets.all(0), EdgeInsets.all(0), 0)),
+                        elevation: MaterialStateProperty.all(0)),
+                    onPressed: () async {
+                      _onLoading();
+                      print('Continuar con facebook');
+                      var oaUthCredential =
+                          await Autenticar.obtenerCredencialesFacebook();
+                      if(oaUthCredential == null){
+                        _login();
+                        return;
+                      }
+                      var credentialUser =
+                          await Autenticar.iniciarSesion(oaUthCredential!);
+                      bool isNewUser =
+                          credentialUser?.additionalUserInfo?.isNewUser as bool;
+
+                      isNewUser? await credentialUser?.user?.delete():null;//Si es nuevo se borra el usuario
+
+                      await Autenticar.newOrOld(collecUsuarios, context,
+                              isNewUser, oaUthCredential, 'Facebook')
+                          .whenComplete(() => _login());
+                    },
+                    child: Container(
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('lib/imgs/img_facebook.png'),
+                            alignment: Alignment(-0.9, 0),
+                            scale: 14.5,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Continuar con Facebook',
+                            //textAlign: TextAlign.justify,
+                            style: GoogleFonts.roboto(
+                                fontSize: 19,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ))),
               )),
         ),
 
@@ -293,35 +304,37 @@ class _LoginState extends State<Login> {
                   borderRadius: BorderRadius.circular(6),
                   side: BorderSide(color: colorBorde)),
               child: SizedBox(
-                width: 300,
+                width: 305,
                 height: 47,
                 child: ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                      padding: MaterialStateProperty.all(
-                          EdgeInsetsGeometry.lerp(
-                              EdgeInsets.all(0), EdgeInsets.all(0), 0)),
-                      elevation: MaterialStateProperty.all(0)),
-                  onPressed: () async {/*await Autenticar.signInWithApple();*/},
-                  child: Row(
-                    children: [
-                      const Padding(
-                          padding: EdgeInsets.only(right: 45, left: 10),
-                          child: Image(
-                              image: AssetImage('lib/imgs/img_apple.png'),
-                              height: 27,
-                              width: 27)),
-                      Text(
-                        'Continuar con Apple',
-                        style: GoogleFonts.roboto(
-                            fontSize: 19,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400),
-                      )
-                    ],
-                  ),
-                ),
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        padding: MaterialStateProperty.all(
+                            EdgeInsetsGeometry.lerp(
+                                EdgeInsets.all(0), EdgeInsets.all(0), 0)),
+                        elevation: MaterialStateProperty.all(0)),
+                    onPressed: () async {
+                      /*await Autenticar.signInWithApple();*/
+                    },
+                    child: Container(
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('lib/imgs/img_apple.png'),
+                            alignment: Alignment(-0.9, 0),
+                            scale: 155,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Continuar con Apple',
+                            //textAlign: TextAlign.justify,
+                            style: GoogleFonts.roboto(
+                                fontSize: 19,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ))),
               )),
         ),
 
