@@ -19,6 +19,7 @@ class DatosPersonales{
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data =
           snapshot.data!.data() as Map<String, dynamic>;
+
           return Text(data[key]);
         }
 
@@ -26,4 +27,38 @@ class DatosPersonales{
       },
     );
   }
+
+
+  ///Devuelve el avatar del usuario con el id especificado. El tamaño del avatar será el pasado por parámetro
+  static Widget getAvatar(CollectionReference collectionReferenceUser, String idUser, double size){
+    return FutureBuilder<DocumentSnapshot>(
+      future: collectionReferenceUser.doc(idUser).get(),
+      builder: (BuildContext context,
+          AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return const Text("Something went wrong");
+        }
+
+        if (snapshot.hasData && !snapshot.data!.exists) {
+          return const Text("Document does not exist");
+        }
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          Map<String, dynamic> data =
+          snapshot.data!.data() as Map<String, dynamic>;
+
+          return CircleAvatar(
+            maxRadius: size,
+            backgroundImage: NetworkImage(
+                data['imgPerfil']),
+          );
+        }
+
+        return Text("loading");
+      },
+    );
+  }
+
+
+
 }

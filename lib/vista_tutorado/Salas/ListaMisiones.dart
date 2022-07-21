@@ -38,7 +38,7 @@ class _ListaMisionesState extends State<ListaMisiones> {
                     documentSnapshot['nombreMision'],
                     documentSnapshot['objetivoMision'],
                     documentSnapshot['completada_por'],
-                    documentSnapshot['solicitu_confirmacion'], currentUser?.uid as String, context, documentSnapshot.reference);
+                    documentSnapshot['solicitu_confirmacion'], currentUser?.uid as String, context, documentSnapshot.reference, 0, 0);
               },
             );
           }

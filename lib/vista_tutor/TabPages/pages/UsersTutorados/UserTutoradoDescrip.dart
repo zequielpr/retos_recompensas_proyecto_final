@@ -49,12 +49,7 @@ class _UserTotoradoDescrip extends State<UserTutoradoDescrip> {
                           Expanded(
                             flex: 4,
                             child: Center(
-                              child: ClipOval(
-                                clipper: MyClip(),
-                                child: Image.network(
-                                    'https://lh3.googleusercontent.com/a-/AFdZucqG-OoiZpmpl7-MotCx9riNufTDF71pHPUGlDwG=s96-c',
-                                    fit: BoxFit.fill),
-                              ),
+                              child: DatosPersonales.getAvatar(colecTodosLosUsuarios, args.snap.id, 40),
                             ),
                           ),
                           Expanded(
@@ -133,7 +128,7 @@ class _UserTotoradoDescrip extends State<UserTutoradoDescrip> {
             animation: true,
             lineHeight: 20.0,
             animateFromLastPercent: true,
-            animationDuration: 1000,
+            animationDuration: 1500,
             percent: userDocument['puntosTotal']/200,
             center: Text(userDocument['puntosTotal'].toString()),
             barRadius: Radius.circular(10),
@@ -157,7 +152,9 @@ class _UserTotoradoDescrip extends State<UserTutoradoDescrip> {
                   documentSnapshot['nombreMision'],
                   documentSnapshot['objetivoMision'],
                   documentSnapshot['completada_por'],
-                  documentSnapshot['solicitu_confirmacion'], args.snap.id.trim(), context, documentSnapshot.reference);
+                  documentSnapshot['solicitu_confirmacion'], args.snap.id.trim(), context, documentSnapshot.reference,
+                  documentSnapshot['recompensaMision'], args.snap['puntosTotal']
+              );
             },
           );
         }

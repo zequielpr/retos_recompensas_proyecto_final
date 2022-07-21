@@ -108,9 +108,15 @@ class Cards {
   }
 
   //Terjeta de misiones
-  static Widget getCardMision(String nombreMision, String objetivoMision,
-      List<dynamic> completada_por, List<dynamic> solicitudeConf, String userId, BuildContext context, DocumentReference docMision) {
-
+  static Widget getCardMision(
+      String nombreMision,
+      String objetivoMision,
+      List<dynamic> completada_por,
+      List<dynamic> solicitudeConf,
+      String userId,
+      BuildContext context,
+      DocumentReference docMision,
+      double Recompensa, PuntosActualUser) {
     return Padding(
       padding: EdgeInsets.only(top: 10, bottom: 10),
       child: FlatButton(
@@ -146,11 +152,24 @@ class Cards {
                   children: [
                     IconButton(
                         icon: completada_por.contains(userId)
-                            ? const Icon(Icons.done, size: 20, color: Colors.green,)
+                            ? const Icon(
+                                Icons.done,
+                                size: 20,
+                                color: Colors.green,
+                              )
                             : solicitudeConf.contains(userId)
                                 ? Icon(Icons.info)
                                 : Icon(Icons.hourglass_top_rounded),
-                        onPressed: !Roll_Data.ROLL_USER_IS_TUTORADO? ()=> mostrarDialog(context,  completada_por,  solicitudeConf, userId, nombreMision, docMision):(){}),
+                        onPressed: !Roll_Data.ROLL_USER_IS_TUTORADO
+                            ? () => mostrarDialog(
+                                context,
+                                completada_por,
+                                solicitudeConf,
+                                userId,
+                                nombreMision,
+                                docMision,
+                                Recompensa, PuntosActualUser)
+                            : () {}),
                     // Press this button to edit a single product
                     // This icon button is used to delete a single product
                   ],
@@ -161,10 +180,19 @@ class Cards {
     );
   }
 
-  //Acciones para el usuario tutor
-   static mostrarDialog(BuildContext context, List completada_por, List solicitudeConf, String userId, String nombreMisoin, DocumentReference docMision){
 
-    if(completada_por.contains(userId)){
+
+
+  //Acciones para el usuario tutor
+  static mostrarDialog(
+      BuildContext context,
+      List completada_por,
+      List solicitudeConf,
+      String userId,
+      String nombreMisoin,
+      DocumentReference docMision,
+      double recompensa, puntosActualUser) {
+    if (completada_por.contains(userId)) {
       showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
@@ -178,19 +206,27 @@ class Cards {
           ],
         ),
       );
-    }else if(solicitudeConf.contains(userId)){
+    } else if (solicitudeConf.contains(userId)) {
       showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
           title: Text(nombreMisoin),
-          content: Text('¿La tarea ha sido completada?'),
+          content: Text(
+              '¿La tarea ha sido completada?. \ No será posible deshacer el cambio'),
           actions: <Widget>[
             TextButton(
               onPressed: () async {
-                await docMision.update({'solicitu_confirmacion': FieldValue.arrayRemove([userId])}).then((value) async{
-                  await docMision.update({'completada_por': FieldValue.arrayUnion([userId])});
+                await docMision.update({
+                  'solicitu_confirmacion': FieldValue.arrayRemove([userId])
+                }).then((value) async {
+                  await docMision.update({
+                    'completada_por': FieldValue.arrayUnion([userId])
+                  }).then((value) async {
+                    await docMision.parent.parent?.collection('usersTutorados').doc(userId).update(
+                    {'puntosTotal': puntosActualUser + recompensa});
+                  });
                 });
-                ;
+
                 Navigator.pop(context, 'OK');
               },
               child: const Text('si'),
@@ -202,7 +238,7 @@ class Cards {
           ],
         ),
       );
-    }else{
+    } else {
       showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
@@ -216,15 +252,8 @@ class Cards {
           ],
         ),
       );
-
     }
-
-
   }
-
-
-
-
 
   //Aspecto que tendrán las salas para los usuario tutorados
   static Widget CardSalaVistaTutorado(

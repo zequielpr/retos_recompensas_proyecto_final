@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:retos_proyecto/Servicios/Solicitudes/AdminSolicitudes.dart';
 
 import '../../../../Servicios/Autenticacion/Autenticacion.dart';
+import '../../../../datos/DatosPersonalUser.dart';
 import '../../../../datos/SalaDatos.dart';
 import '../../../../datos/TransferirDatos.dart';
 import 'UserTutoradoDescrip.dart';
@@ -59,10 +60,7 @@ class ListUsuarios extends StatelessWidget {
                             margin: const EdgeInsets.all(10),
                             elevation: 1,
                             child: ListTile(
-                              leading: CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4U5WnC1MCC0IFVbJPePBA2H0oEep5aDR_xS_FbNx3wlqqORv2QRsf5L5fbwOZBeqMdl4&usqp=CAU"),
-                              ),
+                              leading: DatosPersonales.getAvatar(collectionReferenceUsuariosDocPersonal, documentSnapshot.id, 20),
                               title: SalaDatos.getNombreUsuario(
                                   collectionReferenceUsuariosDocPersonal,
                                   documentSnapshot.id),
@@ -72,47 +70,13 @@ class ListUsuarios extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1),
                               trailing: SizedBox(
-                                width: 100,
+                                width: 50,
                                 child: Row(
                                   children: [
                                     IconButton(
                                         icon: const Icon(Icons.more_vert,
                                             size: 25),
                                         onPressed: () {}),
-                                    // Press this button to edit a single product
-
-                                    IconButton(
-                                      icon: const Icon(
-                                          Icons.exit_to_app_outlined,
-                                          color: Colors.red,
-                                          size: 20),
-                                      onPressed: () => showDialog<String>(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            AlertDialog(
-                                          title: const Text('Expulsar usuario'),
-                                          content: const Text(
-                                              'Al expulsar este usuario se perderán los logros conseguidos en esta sala'),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () {
-                                                print('no');
-                                                Navigator.pop(
-                                                    context, 'Cancel');
-                                              },
-                                              child: const Text('Cancel'),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                print('si');
-                                                Navigator.pop(context, 'OK');
-                                              },
-                                              child: const Text('OK'),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
                                     // This icon button is used to delete a single product
                                   ],
                                 ),
