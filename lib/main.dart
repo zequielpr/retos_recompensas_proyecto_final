@@ -257,7 +257,7 @@ class _InicioState extends State<Inicio> {
               label: 'Notificaciones',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.apartment_rounded),
+              icon: Icon(Icons.meeting_room),
               label: 'Salas',
             ),
             BottomNavigationBarItem(

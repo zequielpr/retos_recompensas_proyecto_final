@@ -222,7 +222,8 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
                       "nombre_usuario": userNameController.text.trim(),
                       "rol_tutorado":
                           args.dropdownValue == "Tutor" ? false : true,
-                      'nombre': args.userName
+                      'nombre': args.userName,
+                      'imgPerfil': currentUser?.photoURL
                     }),
                     Token.guardarToken(),
                     datos = TransferirDatosInicio(

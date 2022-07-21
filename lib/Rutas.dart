@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:retos_proyecto/splashScreen.dart';
 import 'package:retos_proyecto/vista_tutor/TabPages/TaPagesSala.dart';
+import 'package:retos_proyecto/vista_tutor/TabPages/pages/UsersTutorados/UserTutoradoDescrip.dart';
 import 'package:retos_proyecto/vista_tutorado/Salas/ListaMisiones.dart';
 
 import 'Servicios/Autenticacion/DatosNewUser.dart';
@@ -25,6 +26,7 @@ class Rutas{
       RecogerPassw.ROUTE_NAME: (context) => const RecogerPassw(),
       RecogerEmail.ROUTE_NAME: (context) => const RecogerEmail(),
       IniSesionEmailPassword.ROUTE_NAME: (context) => const IniSesionEmailPassword(),
+      UserTutoradoDescrip.ROUTE_NAME: (context) =>const UserTutoradoDescrip()
     };
   }
 }

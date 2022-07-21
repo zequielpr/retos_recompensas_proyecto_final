@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../datos/TransferirDatos.dart';
 import '../../widgets/Cards.dart';
@@ -14,6 +15,7 @@ class ListaMisiones extends StatefulWidget {
 }
 
 class _ListaMisionesState extends State<ListaMisiones> {
+  User? currentUser = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as TransferirDatos;
@@ -36,7 +38,7 @@ class _ListaMisionesState extends State<ListaMisiones> {
                     documentSnapshot['nombreMision'],
                     documentSnapshot['objetivoMision'],
                     documentSnapshot['completada_por'],
-                    documentSnapshot['solicitu_confirmacion']);
+                    documentSnapshot['solicitu_confirmacion'], currentUser?.uid as String, context, documentSnapshot.reference, 0, 0);
               },
             );
           }

@@ -10,12 +10,18 @@ class AdminCuenta {
       children: [
         ElevatedButton(
             onPressed: () async {
+              //print(FirebaseAuth.instance.currentUser?.providerData);
+
 
               await FirebaseAuth.instance.signOut().then((value) async => {
 
                  await _p(),
                     Navigator.pushReplacementNamed(context, '/')
+
+
                   });
+
+
             },
             child: Text("Cerrar sesión"))
       ],

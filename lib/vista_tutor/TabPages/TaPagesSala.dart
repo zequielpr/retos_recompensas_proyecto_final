@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../datos/TransferirDatos.dart';
 import 'pages/Misiones.dart';
 import 'pages/Ruleta.dart';
-import 'pages/UsuariosTutorados.dart';
+import 'pages/UsersTutorados/ListUsuariosTutorados.dart';
 
 //Store this globally
 final GlobalKey<NavigatorState> _navKey = GlobalKey<NavigatorState>();
@@ -37,12 +37,16 @@ class _TabPagesSalaState extends State<TabPagesSala>
     final args = ModalRoute.of(context)!.settings.arguments as TransferirDatos;
     return Scaffold(
       appBar: AppBar(
-        title: Row(children: [
-          Text(args.nombreSala),
-          Padding(padding: EdgeInsets.only(left: 190), child: IconButton(onPressed: () {
-            enviarSolicitudeUsuario.InterfaceEnviarSolicitud(context, args.collecionUsuarios, args.sala.getIdSala);
-          }, icon: Icon(Icons.person_add)),)
-        ]),
+        title: Text(args.nombreSala),
+        actions: [
+
+          Padding(padding: EdgeInsets.only(right: 20), child: IconButton(
+              onPressed: () {
+                enviarSolicitudeUsuario.InterfaceEnviarSolicitud(
+                    context, args.collecionUsuarios, args.sala.getIdSala);
+              },
+              icon: Icon(Icons.person_add)),)
+        ],
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
@@ -67,11 +71,11 @@ class _TabPagesSalaState extends State<TabPagesSala>
               Misiones(
                   collectionMisiones: args.sala.getColecMisiones,
                   contextSala: context),
-              Usuarios(
+              ListUsuarios(
                   collectionReferenceUsuariosTutorados:
                       args.sala.getColecUsuariosTutorados,
                   collectionReferenceUsuariosDocPersonal:
-                      args.collecionUsuarios),
+                      args.collecionUsuarios, contextSala: context, collectionReferenceMisiones: args.sala.getColecMisiones),
               Ruleta(collectionReferenceRuleta: args.sala.getColecRuletas),
             ],
           ),

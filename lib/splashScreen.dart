@@ -13,6 +13,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:retos_proyecto/vista_tutor/TabPages/TaPagesSala.dart';
 import 'package:retos_proyecto/vista_tutorado/Salas/ListaMisiones.dart';
 
+import 'Roll_Data.dart';
 import 'Rutas.dart';
 import 'Servicios/Autenticacion/DatosNewUser.dart';
 import 'Servicios/Autenticacion/EmailPassw/IniciarSessionEmailPassw.dart';
@@ -59,40 +60,47 @@ Future<void> main() async {
 class splashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //Color de la barra inferior
+
     return MaterialApp(
       initialRoute: '/',
       routes: Rutas.getRutas(),
       theme: ThemeData(
-          textTheme: const TextTheme(bodyText2: TextStyle(color: Colors.black, fontSize: 17) , button: TextStyle(color: Colors.black) ),
-        inputDecorationTheme: const InputDecorationTheme(
-          contentPadding: EdgeInsets.only(left: 10),
-            constraints: BoxConstraints.expand(height: 48, width: 300),
-            border:OutlineInputBorder(
-              borderSide: BorderSide(
+          textTheme: const TextTheme(
+              bodyText2: TextStyle(color: Colors.black, fontSize: 17),
+              button: TextStyle(color: Colors.black)),
+          inputDecorationTheme: const InputDecorationTheme(
+              contentPadding: EdgeInsets.only(left: 10),
+              constraints: BoxConstraints.expand(height: 48, width: 300),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(
                   style: BorderStyle.solid,
+                ),
               ),
-            ) ,
-
-            focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-              style: BorderStyle.solid,
-              color: Colors.blue
-          ),
-        )),
+              focusedBorder: OutlineInputBorder(
+                borderSide:
+                    BorderSide(style: BorderStyle.solid, color: Colors.blue),
+              )),
           appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
+            elevation: 0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
           ),
+          bottomAppBarTheme: const BottomAppBarTheme(color: Colors.amber),
           primaryTextTheme: TextTheme(button: TextStyle(color: Colors.black)),
-          buttonTheme: ButtonThemeData(disabledColor: Colors.black),
+          tabBarTheme: TabBarTheme(labelColor: Colors.black),
           elevatedButtonTheme: ElevatedButtonThemeData(
               style: ButtonStyle(
-                //foregroundColor: MaterialStateProperty.all(Colors.black26),
+                  //foregroundColor: MaterialStateProperty.all(Colors.black26),
                   overlayColor: MaterialStateProperty.all(
                       const Color.fromARGB(165, 243, 241, 241)),
                   elevation: MaterialStateProperty.all(0),
                   backgroundColor: MaterialStateProperty.all(Colors.blue),
-                  textStyle: MaterialStateProperty.all(GoogleFonts.roboto( color: Colors.black,
-                      fontSize: 16, fontWeight: FontWeight.w700))))),
+                  textStyle: MaterialStateProperty.all(GoogleFonts.roboto(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700))))),
     );
   }
 }
@@ -107,6 +115,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    FlutterStatusbarcolor.setNavigationBarWhiteForeground(
+        false); //Colores de los iconos de la barra inferior
+    FlutterStatusbarcolor.setNavigationBarColor(Colors.red);
 
     _navigateToHome();
   }
@@ -117,6 +128,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     FlutterStatusbarcolor.setStatusBarColor(Colors.transparent, animate: true);
     FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
+
+    FlutterStatusbarcolor.setNavigationBarWhiteForeground(true); //Colores de los iconos de la barra inferior
+    FlutterStatusbarcolor.setNavigationBarColor(Colors.transparent);
     /*
     FlutterStatusbarcolor.setStatusBarWhiteForeground(
         false); //Colores de los iconos de la barra superior
@@ -149,12 +163,13 @@ class _MyHomePageState extends State<MyHomePage> {
         DocumentReference docUser =
             CollecionUsuarios.doc(FirebaseAuth.instance.currentUser?.uid);
         await docUser.get().then((value) {
-              datos = TransferirDatosInicio(value['rol_tutorado']);
+          Roll_Data.ROLL_USER_IS_TUTORADO = value['rol_tutorado'];
+          datos = TransferirDatosInicio(value['rol_tutorado']);
 
-              if(!mounted)return;
-              Navigator.pushReplacementNamed(context, Inicio.ROUTE_NAME,
-                  arguments: datos);
-            });
+          if (!mounted) return;
+          Navigator.pushReplacementNamed(context, Inicio.ROUTE_NAME,
+              arguments: datos);
+        });
       }
     });
   }
