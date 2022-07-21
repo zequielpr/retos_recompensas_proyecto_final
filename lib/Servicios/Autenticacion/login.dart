@@ -64,10 +64,7 @@ class _LoginState extends State<Login> {
     FlutterStatusbarcolor.setStatusBarColor(Colors.white,
         animate: true); //Color de la barra superior*/
 
-    FlutterStatusbarcolor.setNavigationBarWhiteForeground(
-        false); //Colores de los iconos de la barra inferior
-    FlutterStatusbarcolor.setNavigationBarColor(
-        Colors.black); //Color de la barra inferior
+
 
     final correo = TextEditingController();
 

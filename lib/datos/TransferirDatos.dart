@@ -22,6 +22,13 @@ class TransferirDatosMisiones {
   TransferirDatosMisiones(this.collectionReferenceMisiones);
 }
 
+class TransfDatosUserTutorado{
+  final CollectionReference collectionReferenceMisiones;
+  final DocumentSnapshot snap;
+
+  TransfDatosUserTutorado(this.collectionReferenceMisiones, this.snap);
+}
+
 class TranferirDatosRoll {
   final dynamic oaUthCredential;
   final CollectionReference collectionReferenceUsers;

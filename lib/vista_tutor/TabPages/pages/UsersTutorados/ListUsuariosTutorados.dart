@@ -3,16 +3,22 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:retos_proyecto/Servicios/Solicitudes/AdminSolicitudes.dart';
 
-import '../../../Servicios/Autenticacion/Autenticacion.dart';
-import '../../../datos/SalaDatos.dart';
+import '../../../../Servicios/Autenticacion/Autenticacion.dart';
+import '../../../../datos/SalaDatos.dart';
+import '../../../../datos/TransferirDatos.dart';
+import 'UserTutoradoDescrip.dart';
 
-class Usuarios extends StatelessWidget {
+class ListUsuarios extends StatelessWidget {
   final CollectionReference collectionReferenceUsuariosTutorados;
   final CollectionReference collectionReferenceUsuariosDocPersonal;
-  Usuarios(
+  final BuildContext contextSala;
+  final CollectionReference collectionReferenceMisiones;
+  ListUsuarios(
       {Key? key,
       required this.collectionReferenceUsuariosTutorados,
-      required this.collectionReferenceUsuariosDocPersonal})
+      required this.collectionReferenceUsuariosDocPersonal,
+      required this.contextSala,
+      required this.collectionReferenceMisiones})
       : super(key: key);
 
   @override
@@ -34,6 +40,8 @@ class Usuarios extends StatelessWidget {
                           color: Colors.transparent,
                           splashColor: Colors.black26,
                           onPressed: () {
+                            var datos = TransfDatosUserTutorado(collectionReferenceMisiones, documentSnapshot);
+                            Navigator.pushNamed(contextSala, UserTutoradoDescrip.ROUTE_NAME, arguments: datos);
                             /* Navigator.pushNamed(
                         context,
                         MenuSala.routeName,
