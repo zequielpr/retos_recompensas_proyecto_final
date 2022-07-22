@@ -65,7 +65,7 @@ class ListUsuarios extends StatelessWidget {
                                   collectionReferenceUsuariosDocPersonal,
                                   documentSnapshot.id),
                               subtitle: Text(
-                                  documentSnapshot['puntosTotal'].toString() +
+                                  'xxx' +
                                       ' xp',
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1),

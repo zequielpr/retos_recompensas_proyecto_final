@@ -13,7 +13,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:retos_proyecto/vista_tutor/TabPages/TaPagesSala.dart';
 import 'package:retos_proyecto/vista_tutorado/Salas/ListaMisiones.dart';
 
-import 'Roll_Data.dart';
+import 'datos/Roll_Data.dart';
 import 'Rutas.dart';
 import 'Servicios/Autenticacion/DatosNewUser.dart';
 import 'Servicios/Autenticacion/EmailPassw/IniciarSessionEmailPassw.dart';
@@ -21,6 +21,7 @@ import 'Servicios/Autenticacion/EmailPassw/RecogerEmail.dart';
 import 'Servicios/Autenticacion/EmailPassw/RecogerPassw.dart';
 import 'Servicios/Autenticacion/login.dart';
 import 'datos/TransferirDatos.dart';
+import 'datos/UsuarioActual.dart';
 import 'main.dart';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -160,6 +161,8 @@ class _MyHomePageState extends State<MyHomePage> {
         Navigator.pushReplacementNamed(context, Login.ROUTE_NAME,
             arguments: datos);
       } else {
+        //Guardar usuario actual
+        CurrentUser.setCurrentUser();
         DocumentReference docUser =
             CollecionUsuarios.doc(FirebaseAuth.instance.currentUser?.uid);
         await docUser.get().then((value) {
