@@ -11,8 +11,10 @@ import 'package:retos_proyecto/vista_tutor/TabPages/TaPagesSala.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:retos_proyecto/vista_tutor/TabPages/pages/Misiones.dart';
 import 'package:retos_proyecto/vista_tutorado/AdminCuenta.dart';
+import 'package:retos_proyecto/vista_tutorado/Inicio/InicioTutorado.dart';
 import 'package:retos_proyecto/vista_tutorado/Salas/ListaMisiones.dart';
 import 'package:retos_proyecto/vista_tutorado/Salas/ListaSalas.dart';
+import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 
 import 'Servicios/Notificaciones/notificaciones_bandeja.dart';
 import 'Servicios/Autenticacion/login.dart';
@@ -32,7 +34,8 @@ class Inicio extends StatefulWidget {
 
 //Clase donde se probara to el proceso de crear una misión
 class _InicioState extends State<Inicio> {
-
+  List<int> _badgeCounts = List<int>.generate(5, (index) => index);
+  List<bool> _badgeShows = List<bool>.generate(5, (index) => true);
   void initState() {
     super.initState();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -208,6 +211,7 @@ class _InicioState extends State<Inicio> {
     TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
     if(isTutorado){
       _widgetOptions.addAll(<Widget>[
+        InicioTutorado(collectionReferenceUsers: CollecionUsuarios,),
         bandejaNotificaciones.getBandejaNotificaciones(CollecionUsuarios, context),
         //Misiones.vistaCrearMisiones,
         //MenuOpcionesSala.getVistaSala,
@@ -217,14 +221,13 @@ class _InicioState extends State<Inicio> {
 
         AdminCuenta.getPerfilTutorado(context),
 
-        Text("hola")
       ]);
     }else{
       _widgetOptions.addAll(<Widget>[
-        bandejaNotificaciones.getBandejaNotificaciones(CollecionUsuarios, context),
+        InicioTutorado(collectionReferenceUsers: CollecionUsuarios,),
         //Misiones.vistaCrearMisiones,
         //MenuOpcionesSala.getVistaSala,
-
+        bandejaNotificaciones.getBandejaNotificaciones(CollecionUsuarios, context),
         //Tarjeta de las salas---------------------------------------------------
         ListaSalas.getInstance(context, CollecionUsuarios),
 
@@ -250,26 +253,42 @@ class _InicioState extends State<Inicio> {
           alignment: Alignment.topCenter,
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
+        bottomNavigationBar: CustomNavigationBar(
+          iconSize: 30.0,
+          selectedColor: Color(0xff040307),
+          strokeColor: Color(0x30040307),
+          unSelectedColor: Color(0xffacacac),
+          backgroundColor: Colors.white,
+          items: [
+            CustomNavigationBarItem(
+              icon: Icon(Icons.home),
+              badgeCount: _badgeCounts[0],
+              showBadge: _badgeShows[0],
+            ),
+            CustomNavigationBarItem(
               icon: Icon(Icons.notifications),
-              label: 'Notificaciones',
+              badgeCount: _badgeCounts[1],
+              showBadge: _badgeShows[1],
             ),
-            BottomNavigationBarItem(
+            CustomNavigationBarItem(
               icon: Icon(Icons.meeting_room),
-              label: 'Salas',
+              badgeCount: _badgeCounts[2],
+              showBadge: _badgeShows[2],
             ),
-            BottomNavigationBarItem(
+            CustomNavigationBarItem(
               icon: Icon(Icons.account_circle_rounded),
-              label: 'Perfil',
+              badgeCount: _badgeCounts[3],
+              showBadge: _badgeShows[3],
             ),
+
           ],
-          currentIndex: _selectedIndex > 2
-              ? _nab_var_index_actual
-              : _selectedIndex, //Evita que se salga del rango del tabvar
-          selectedItemColor: Colors.amber[800],
-          onTap: _onItemTapped,
+          currentIndex: _selectedIndex,
+          onTap: (index) {
+            setState(() {
+              _selectedIndex = index;
+              _badgeShows[index] = false;
+            });
+          },
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => _createOrUpdate(),

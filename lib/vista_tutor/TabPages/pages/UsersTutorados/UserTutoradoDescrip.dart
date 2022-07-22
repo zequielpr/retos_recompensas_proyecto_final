@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -54,7 +55,7 @@ class _UserTotoradoDescrip extends State<UserTutoradoDescrip> {
                           ),
                           Expanded(
                             flex: 6,
-                            child: getIndicadoAvance(args.snap)
+                            child: DatosPersonales.getIndicadoAvance(args.snap.reference.id, colecTodosLosUsuarios, FirebaseAuth.instance.currentUser?.uid as String)
                           ),
                           Expanded(flex: 1, child: Text(''))
                         ],
@@ -92,7 +93,7 @@ class _UserTotoradoDescrip extends State<UserTutoradoDescrip> {
           ),
           body: TabBarView(
             children: [
-              _getListaMisiones(args, puntos),
+              _getListaMisiones(colecTodosLosUsuarios, args, puntos),
               Icon(Icons.directions_transit),
             ],
           ),
@@ -100,50 +101,12 @@ class _UserTotoradoDescrip extends State<UserTutoradoDescrip> {
   }
 
   ///Devuelve el indicador de los puntos del usuarrio tutorado en tiempo real
-  Widget getIndicadoAvance(DocumentSnapshot snap){
-    return StreamBuilder(
-        stream: snap.reference.snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Text("Loading");
-          }
-          var userDocument = snapshot.data as DocumentSnapshot;
-          puntos = userDocument['puntosTotal'];
-          print('punto $puntos');
-          return LinearPercentIndicator(
-            linearGradient: const LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment(0.8, 1),
-              colors: <Color>[
-                Color(0xff1f005c),
-                Color(0xff5b0060),
-                Color(0xff870160),
-                Color(0xffac255e),
-                Color(0xffca485c),
-                Color(0xffe16b5c),
-                Color(0xfff39060),
-                Color(0xffffb56b),
-              ], // Gradient from https://learnui.design/tools/gradient-generator.html
-            ),
 
 
-            animation: true,
-            lineHeight: 20.0,
-            animateFromLastPercent: true,
-            animationDuration: 1500,
-            percent: userDocument['puntosTotal']/200,
-            center: Text(userDocument['puntosTotal'].toString()),
-            barRadius: Radius.circular(10),
-            //progressColor: Colors.amber,
-          );
-        }
-    );
-  }
-
-  static Widget _getListaMisiones(TransfDatosUserTutorado args, dynamic puntos) {
+  static Widget _getListaMisiones( collectionReferenceUsers, TransfDatosUserTutorado args, dynamic puntos) {
     //Toma los puntos totales en tiempo real, sin necedidad de reiniciar el widget
    return StreamBuilder(
-        stream: args.snap.reference.snapshots(),
+        stream: collectionReferenceUsers.doc(args.snap.reference.id).collection('rolTutorado').doc(FirebaseAuth.instance.currentUser?.uid).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Text("Loading");

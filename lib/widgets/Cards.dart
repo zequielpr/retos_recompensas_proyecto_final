@@ -236,9 +236,9 @@ class Cards {
                           'completada_por': FieldValue.arrayUnion([userId])
                         }).then((value) async {
                           //Debe actualizar con el dato en tiempo real
-                          await docMision.parent.parent
-                              ?.collection('usersTutorados')
-                              .doc(userId)
+                          await docMision.parent.parent?.parent.parent?.parent.doc(userId)
+                              ?.collection('rolTutorado')
+                              .doc(FirebaseAuth.instance.currentUser?.uid.trim())
                               .update({
                             'puntosTotal': puntos_total_de_usuario + recompensa
                           });

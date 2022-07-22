@@ -18,14 +18,17 @@ class Solicitudes {
         .collection('rolTutorado')
         .doc(id_emisor.trim())
         .get()
-        .then((value) => {
-              value.exists
-                  ? value.reference.update({
-                      'salas_id': FieldValue.arrayUnion([id_sala])
-                    })
-                  : value.reference.set({
-                      'salas_id': FieldValue.arrayUnion([id_sala])
-                    })
+        .then((value) async{
+          if(value.exists){
+           await  value.reference.update({
+              'salas_id': FieldValue.arrayUnion([id_sala])
+            });
+            return;
+          }
+          await value.reference.set({
+            'salas_id': FieldValue.arrayUnion([id_sala]),
+            'puntosTotal': 0
+          });
             })
         .then((value) async => {
               await collectionReferenceUers
