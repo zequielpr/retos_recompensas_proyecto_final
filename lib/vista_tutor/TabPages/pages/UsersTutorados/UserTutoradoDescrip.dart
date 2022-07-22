@@ -16,7 +16,7 @@ class UserTutoradoDescrip extends StatefulWidget {
 
 class _UserTotoradoDescrip extends State<UserTutoradoDescrip> {
   double _currentSliderValue = 15;
-  static var antiguo;
+  static var puntos;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +92,7 @@ class _UserTotoradoDescrip extends State<UserTutoradoDescrip> {
           ),
           body: TabBarView(
             children: [
-              _getListaMisiones(args),
+              _getListaMisiones(args, puntos),
               Icon(Icons.directions_transit),
             ],
           ),
@@ -108,6 +108,8 @@ class _UserTotoradoDescrip extends State<UserTutoradoDescrip> {
             return const Text("Loading");
           }
           var userDocument = snapshot.data as DocumentSnapshot;
+          puntos = userDocument['puntosTotal'];
+          print('punto $puntos');
           return LinearPercentIndicator(
             linearGradient: const LinearGradient(
               begin: Alignment.centerLeft,
@@ -138,31 +140,45 @@ class _UserTotoradoDescrip extends State<UserTutoradoDescrip> {
     );
   }
 
-  Widget _getListaMisiones(TransfDatosUserTutorado args) {
-    return StreamBuilder(
-      stream: args.collectionReferenceMisiones.snapshots(),
-      builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-        if (streamSnapshot.hasData) {
-          return ListView.builder(
-            itemCount: streamSnapshot.data!.docs.length,
-            itemBuilder: (context, index) {
-              final DocumentSnapshot documentSnapshot =
-                  streamSnapshot.data!.docs[index];
-              return Cards.getCardMision(
-                  documentSnapshot['nombreMision'],
-                  documentSnapshot['objetivoMision'],
-                  documentSnapshot['completada_por'],
-                  documentSnapshot['solicitu_confirmacion'], args.snap.id.trim(), context, documentSnapshot.reference,
-                  documentSnapshot['recompensaMision'], args.snap['puntosTotal']
+  static Widget _getListaMisiones(TransfDatosUserTutorado args, dynamic puntos) {
+    //Toma los puntos totales en tiempo real, sin necedidad de reiniciar el widget
+   return StreamBuilder(
+        stream: args.snap.reference.snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Text("Loading");
+          }
+          var userDocument = snapshot.data as DocumentSnapshot;
+          puntos = userDocument['puntosTotal'];
+          print('punto $puntos');
+          return StreamBuilder(
+            stream: args.collectionReferenceMisiones.snapshots(),
+            builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+              if (streamSnapshot.hasData) {
+                return ListView.builder(
+                  itemCount: streamSnapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    final DocumentSnapshot documentSnapshot =
+                    streamSnapshot.data!.docs[index];
+                    return Cards.getCardMision(
+                        documentSnapshot['nombreMision'],
+                        documentSnapshot['objetivoMision'],
+                        documentSnapshot['completada_por'],
+                        documentSnapshot['solicitu_confirmacion'], args.snap.id.trim(), context, documentSnapshot.reference,
+                        documentSnapshot['recompensaMision'],userDocument['puntosTotal']
+                    );
+                  },
+                );
+              }
+              return const Center(
+                child: CircularProgressIndicator(),
               );
             },
-          );
+          );;
         }
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
     );
+
+
   }
 }
 
