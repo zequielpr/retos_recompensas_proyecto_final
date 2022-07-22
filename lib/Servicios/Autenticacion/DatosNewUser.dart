@@ -208,7 +208,7 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
     var datos;
     var tipoDato = args.oaUthCredential.runtimeType;
     print('dato: $tipoDato');
-    if (args.oaUthCredential.runtimeType != OAuthCredential && args.oaUthCredential.runtimeType != FacebookAuthCredential) {
+    if (args.oaUthCredential.runtimeType != GoogleAuthCredential && args.oaUthCredential.runtimeType != FacebookAuthCredential) {
       //En este caso el el atributo oaUthCredebtial continiene un hash map con la clave y la contrasela para realizar el registro
       //Registrarse con email y contreña
       await Autenticar.registrarConEmailPassw(args.oaUthCredential)
@@ -244,7 +244,8 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
                       "nombre_usuario": userNameController.text.trim(),
                       "rol_tutorado":
                           args.dropdownValue == "Tutor" ? false : true,
-                      'nombre': FirebaseAuth.instance.currentUser?.displayName
+                      'nombre': FirebaseAuth.instance.currentUser?.displayName,
+                      'imgPerfil': currentUser?.photoURL
                     }),
                     Token.guardarToken(),
 

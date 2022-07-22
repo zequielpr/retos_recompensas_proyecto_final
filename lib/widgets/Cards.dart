@@ -116,7 +116,8 @@ class Cards {
       String userId,
       BuildContext context,
       DocumentReference docMision,
-      double Recompensa, PuntosActualUser) {
+      double Recompensa,
+      dynamic puntos_total_de_usuario) {
     return Padding(
       padding: EdgeInsets.only(top: 10, bottom: 10),
       child: FlatButton(
@@ -160,16 +161,15 @@ class Cards {
                             : solicitudeConf.contains(userId)
                                 ? Icon(Icons.info)
                                 : Icon(Icons.hourglass_top_rounded),
-                        onPressed: !Roll_Data.ROLL_USER_IS_TUTORADO
-                            ? () => mostrarDialog(
-                                context,
-                                completada_por,
-                                solicitudeConf,
-                                userId,
-                                nombreMision,
-                                docMision,
-                                Recompensa, PuntosActualUser)
-                            : () {}),
+                        onPressed: () => mostrarDialog(
+                            context,
+                            completada_por,
+                            solicitudeConf,
+                            userId,
+                            nombreMision,
+                            docMision,
+                            Recompensa,
+                            puntos_total_de_usuario)),
                     // Press this button to edit a single product
                     // This icon button is used to delete a single product
                   ],
@@ -180,9 +180,6 @@ class Cards {
     );
   }
 
-
-
-
   //Acciones para el usuario tutor
   static mostrarDialog(
       BuildContext context,
@@ -191,7 +188,8 @@ class Cards {
       String userId,
       String nombreMisoin,
       DocumentReference docMision,
-      double recompensa, puntosActualUser) {
+      double recompensa,
+      dynamic puntos_total_de_usuario) {
     if (completada_por.contains(userId)) {
       showDialog<String>(
         context: context,
@@ -211,34 +209,73 @@ class Cards {
         context: context,
         builder: (BuildContext context) => AlertDialog(
           title: Text(nombreMisoin),
-          content: Text(
-              '¿La tarea ha sido completada?. \ No será posible deshacer el cambio'),
+          content: Text(!Roll_Data.ROLL_USER_IS_TUTORADO
+              ? '¿La tarea ha sido completada?. \ No será posible deshacer el cambio'
+              : 'Recibirás la recompensa de esta mision cuando tu tutor confirme que has realizado la tarea'),
           actions: <Widget>[
-            TextButton(
-              onPressed: () async {
-                await docMision.update({
-                  'solicitu_confirmacion': FieldValue.arrayRemove([userId])
-                }).then((value) async {
-                  await docMision.update({
-                    'completada_por': FieldValue.arrayUnion([userId])
-                  }).then((value) async {
-                    await docMision.parent.parent?.collection('usersTutorados').doc(userId).update(
-                    {'puntosTotal': puntosActualUser + recompensa});
-                  });
-                });
-
-                Navigator.pop(context, 'OK');
-              },
-              child: const Text('si'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, 'OK'),
-              child: const Text('no'),
-            )
+            !Roll_Data.ROLL_USER_IS_TUTORADO
+                ? TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text('no'),
+                  )
+                : TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text('ok'),
+                  ),
+            !Roll_Data.ROLL_USER_IS_TUTORADO
+                ? TextButton(
+                    onPressed: () async {
+                      await docMision.update({
+                        'solicitu_confirmacion':
+                            FieldValue.arrayRemove([userId])
+                      }).then((value) async {
+                        await docMision.update({
+                          'completada_por': FieldValue.arrayUnion([userId])
+                        }).then((value) async {
+                          //Debe actualizar con el dato en tiempo real
+                          await docMision.parent.parent
+                              ?.collection('usersTutorados')
+                              .doc(userId)
+                              .update({
+                            'puntosTotal': puntos_total_de_usuario + recompensa
+                          });
+                        });
+                      });
+                      Navigator.pop(context, 'OK');
+                    },
+                    child: const Text('si'),
+                  )
+                : Text(''),
           ],
         ),
       );
     } else {
+      if (Roll_Data.ROLL_USER_IS_TUTORADO) {
+        //Solicitar confirmacion de mision
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: Text(nombreMisoin),
+            content: const Text(
+                'Si has terminado esta tarea, envía una solicitud de verificacion, para recibir su recompensa'),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: const Text('Cancelar')),
+              TextButton(
+                onPressed: () async {
+                  await docMision.update({
+                    'solicitu_confirmacion': FieldValue.arrayUnion([userId])
+                  });
+                  Navigator.pop(context, 'OK');
+                },
+                child: const Text('Enviar solicitud'),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
       showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
