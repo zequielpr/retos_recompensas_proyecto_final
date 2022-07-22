@@ -37,7 +37,7 @@ class Solicitudes {
                   .doc(id_sala)
                   .collection('usersTutorados')
                   .doc(idCurrentUser)
-                  .set({'puntosTotal': 0}).then((value) async => {
+                  .set({'xxx': 0}).then((value) async => {
                         await eliminarNotificacion(
                             id_sala,
                             collectionReferenceUers,

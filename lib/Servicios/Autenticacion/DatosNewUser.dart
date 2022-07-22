@@ -12,6 +12,7 @@ import 'package:retos_proyecto/datos/ValidarDatos.dart';
 
 import '../../Rutas.dart';
 import '../../datos/TransferirDatos.dart';
+import '../../datos/UsuarioActual.dart';
 import '../../main.dart';
 import '../../splashScreen.dart';
 import '../../vista_tutor/TabPages/TaPagesSala.dart';
@@ -216,6 +217,7 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
                 currentUser = userCredential?.user,
                 if (currentUser != null)
                   {
+                    CurrentUser.setCurrentUser(),
                     await args.collectionReferenceUsers
                         .doc(currentUser?.uid)
                         .set({
@@ -238,6 +240,7 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
                 currentUser = userCredential?.user,
                 if (currentUser != null)
                   {
+                    CurrentUser.setCurrentUser(),
                     await args.collectionReferenceUsers
                         .doc(currentUser?.uid)
                         .set({

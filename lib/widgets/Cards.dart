@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:readmore/readmore.dart';
 
-import '../Roll_Data.dart';
+import '../datos/Roll_Data.dart';
 import '../Servicios/Solicitudes/AdminSolicitudes.dart';
 import '../datos/SalaDatos.dart';
 import '../datos/TransferirDatos.dart';
+import '../datos/UsuarioActual.dart';
 import '../vista_tutor/TabPages/TaPagesSala.dart';
 import '../vista_tutorado/Salas/ListaMisiones.dart';
 
@@ -238,7 +239,7 @@ class Cards {
                           //Debe actualizar con el dato en tiempo real
                           await docMision.parent.parent?.parent.parent?.parent.doc(userId)
                               ?.collection('rolTutorado')
-                              .doc(FirebaseAuth.instance.currentUser?.uid.trim())
+                              .doc(CurrentUser.getIdCurrentUser())
                               .update({
                             'puntosTotal': puntos_total_de_usuario + recompensa
                           });

@@ -6,6 +6,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../../../../datos/DatosPersonalUser.dart';
 import '../../../../datos/SalaDatos.dart';
 import '../../../../datos/TransferirDatos.dart';
+import '../../../../datos/UsuarioActual.dart';
 import '../../../../widgets/Cards.dart';
 
 class UserTutoradoDescrip extends StatefulWidget {
@@ -25,7 +26,6 @@ class _UserTotoradoDescrip extends State<UserTutoradoDescrip> {
         ModalRoute.of(context)!.settings.arguments as TransfDatosUserTutorado;
     final colecTodosLosUsuarios = args.snap.reference.parent.parent?.parent
         .parent?.parent; //navega hacia la coleccion de todos los usuarios
-    var puntoTotal = args.snap['puntosTotal'].toDouble();
 
     return DefaultTabController(
         length: 2,
@@ -50,12 +50,12 @@ class _UserTotoradoDescrip extends State<UserTutoradoDescrip> {
                           Expanded(
                             flex: 4,
                             child: Center(
-                              child: DatosPersonales.getAvatar(colecTodosLosUsuarios, args.snap.id, 40),
+                              child: DatosPersonales.getAvatar(colecTodosLosUsuarios, args.snap.id.trim(), 40),
                             ),
                           ),
                           Expanded(
                             flex: 6,
-                            child: DatosPersonales.getIndicadoAvance(args.snap.reference.id, colecTodosLosUsuarios, FirebaseAuth.instance.currentUser?.uid as String)
+                            child: DatosPersonales.getIndicadoAvance(args.snap.reference.id, colecTodosLosUsuarios, CurrentUser.getIdCurrentUser())
                           ),
                           Expanded(flex: 1, child: Text(''))
                         ],
@@ -65,7 +65,7 @@ class _UserTotoradoDescrip extends State<UserTutoradoDescrip> {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(left: 20, top: 10),
-                          child: DatosPersonales.getDato(colecTodosLosUsuarios, args.snap.id, 'nombre'),
+                          child: DatosPersonales.getDato(colecTodosLosUsuarios, args.snap.id.trim(), 'nombre'),
                         )
                       ],
                     ),
@@ -106,14 +106,12 @@ class _UserTotoradoDescrip extends State<UserTutoradoDescrip> {
   static Widget _getListaMisiones( collectionReferenceUsers, TransfDatosUserTutorado args, dynamic puntos) {
     //Toma los puntos totales en tiempo real, sin necedidad de reiniciar el widget
    return StreamBuilder(
-        stream: collectionReferenceUsers.doc(args.snap.reference.id).collection('rolTutorado').doc(FirebaseAuth.instance.currentUser?.uid).snapshots(),
+        stream: collectionReferenceUsers.doc(args.snap.reference.id.trim()).collection('rolTutorado').doc(CurrentUser.getIdCurrentUser()).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Text("Loading");
           }
           var userDocument = snapshot.data as DocumentSnapshot;
-          puntos = userDocument['puntosTotal'];
-          print('punto $puntos');
           return StreamBuilder(
             stream: args.collectionReferenceMisiones.snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
