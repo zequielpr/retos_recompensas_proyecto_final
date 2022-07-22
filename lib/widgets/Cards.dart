@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:readmore/readmore.dart';
 
 import '../Roll_Data.dart';
 import '../Servicios/Solicitudes/AdminSolicitudes.dart';
@@ -118,65 +120,66 @@ class Cards {
       DocumentReference docMision,
       double Recompensa,
       dynamic puntos_total_de_usuario) {
-    return Padding(
-      padding: EdgeInsets.only(top: 10, bottom: 10),
-      child: FlatButton(
-          color: Colors.transparent,
-          splashColor: Colors.black26,
-          onPressed: () {
-            /* Navigator.pushNamed(
-                        context,
-                        MenuSala.routeName,
-                        arguments: TransferirDatos(
-                          Text(documentSnapshot['NombreSala']).data.toString(),
-                          collecionUsuarios.doc(documentSnapshot.id),
-                        ),
-                      );
-*/
-            //this.titulo = 'holaaa';
-
-            //Navigator.push(context, MaterialPageRoute(builder: (context)=>MenuSala()) );
-          },
-          child: Card(
-            margin: const EdgeInsets.all(10),
-            child: ListTile(
-              /*leading: CircleAvatar(
+    return Card(
+      elevation: 0,
+      child: ListTile(
+        visualDensity: VisualDensity.comfortable,
+        dense: true,
+        onTap: () => print('object'),
+        //horizontalTitleGap: -4,
+        contentPadding: EdgeInsets.only(left: 15, top: 0, bottom: 10),
+        /*leading: CircleAvatar(
                   backgroundImage: NetworkImage(
                       "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1581413287870&di=35491998b94817cbcf04d9f9f3d2d4b3&imgtype=jpg&src=http%3A%2F%2Fimg0.imgtn.bdimg.com%2Fit%2Fu%3D2464547320%2C3316604757%26fm%3D214%26gp%3D0.jpg"),
                 ),*/
-              title: Text(nombreMision),
-              subtitle: Text(Text(objetivoMision).data.toString(),
-                  overflow: TextOverflow.ellipsis, maxLines: 1),
-              trailing: SizedBox(
-                width: 60,
-                child: Row(
-                  children: [
-                    IconButton(
-                        icon: completada_por.contains(userId)
-                            ? const Icon(
-                                Icons.done,
-                                size: 20,
-                                color: Colors.green,
-                              )
-                            : solicitudeConf.contains(userId)
-                                ? Icon(Icons.info)
-                                : Icon(Icons.hourglass_top_rounded),
-                        onPressed: () => mostrarDialog(
-                            context,
-                            completada_por,
-                            solicitudeConf,
-                            userId,
-                            nombreMision,
-                            docMision,
-                            Recompensa,
-                            puntos_total_de_usuario)),
-                    // Press this button to edit a single product
-                    // This icon button is used to delete a single product
-                  ],
-                ),
-              ),
-            ),
-          )),
+        title: Padding(
+          padding: EdgeInsets.only(bottom: 5),
+          child: Row(children: [
+            Text(nombreMision + ' ', style: GoogleFonts.roboto(fontSize: 20),),
+            Icon(Icons.circle, size: 6,),
+            Text(' ' + Recompensa.toString() + 'XP', style: GoogleFonts.roboto(color: Colors.amber, fontSize: 15))
+
+          ],)
+
+        ),
+        subtitle: ReadMoreText(
+          style: GoogleFonts.roboto(fontSize: 16),
+          Text(
+            objetivoMision,
+            overflow: TextOverflow.ellipsis,
+          ).data.toString(),
+          trimLines: 1,
+          colorClickableText: Colors.pink,
+          trimMode: TrimMode.Line,
+          lessStyle:
+              GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
+          trimCollapsedText: 'ver más',
+          trimExpandedText: 'ver menos',
+          moreStyle: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
+        ),
+        trailing: SizedBox(
+          width: 60,
+          child: IconButton(
+              icon: completada_por.contains(userId)
+                  ? const Icon(
+                      Icons.done,
+                      size: 20,
+                      color: Colors.green,
+                    )
+                  : solicitudeConf.contains(userId)
+                      ? Icon(Icons.info)
+                      : Icon(Icons.hourglass_top_rounded),
+              onPressed: () => mostrarDialog(
+                  context,
+                  completada_por,
+                  solicitudeConf,
+                  userId,
+                  nombreMision,
+                  docMision,
+                  Recompensa,
+                  puntos_total_de_usuario)),
+        ),
+      ),
     );
   }
 
@@ -291,6 +294,95 @@ class Cards {
       );
     }
   }
+
+  static Widget getCardMisionInicio(DocumentSnapshot documentSnapshot){
+    return
+      Card(
+
+        elevation: 0,
+        child: ListTile(
+          contentPadding: const EdgeInsets.only(left: 15, top: 0, bottom: 10),
+          visualDensity: VisualDensity.comfortable,
+          dense: true,
+          onTap: () => print('object'),
+          horizontalTitleGap: -4,
+          /*leading: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                      "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1581413287870&di=35491998b94817cbcf04d9f9f3d2d4b3&imgtype=jpg&src=http%3A%2F%2Fimg0.imgtn.bdimg.com%2Fit%2Fu%3D2464547320%2C3316604757%26fm%3D214%26gp%3D0.jpg"),
+                ),*/
+          title:
+          Padding(
+              padding: EdgeInsets.only(bottom: 5),
+              child: Row(children: [
+                Text(documentSnapshot['nombreMision'] + ' ', style: GoogleFonts.roboto(fontSize: 20),),
+                Icon(Icons.circle, size: 6,),
+                Text(' ' + documentSnapshot['recompensaMision'].toString() + 'XP', style: GoogleFonts.roboto(color: Colors.amber, fontSize: 15))
+
+              ],)
+
+          ),
+          subtitle: ReadMoreText(
+            Text(
+              documentSnapshot['objetivoMision'],
+              overflow: TextOverflow.ellipsis,
+            ).data.toString(),
+            style: GoogleFonts.roboto(fontSize: 16),
+            trimLines: 1,
+            colorClickableText: Colors.pink,
+            trimMode: TrimMode.Line,
+            lessStyle:
+            GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
+            trimCollapsedText: 'ver más',
+            trimExpandedText: 'ver menos',
+            moreStyle: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
+          ),
+          trailing: SizedBox(
+            width: 60,
+            height: 26,
+            child: IconButton(icon: Icon(Icons.more_vert,),
+                onPressed: (){}),
+          ),
+        ),
+      );
+
+      Card(
+
+      margin: const EdgeInsets.all(10),
+      child: ListTile(
+        contentPadding: EdgeInsets.only(left: 15, top: 10, bottom: 10),
+        //contentPadding: EdgeInsets.only(left: 15, top: 10, bottom: 10),
+        /*leading: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                      "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1581413287870&di=35491998b94817cbcf04d9f9f3d2d4b3&imgtype=jpg&src=http%3A%2F%2Fimg0.imgtn.bdimg.com%2Fit%2Fu%3D2464547320%2C3316604757%26fm%3D214%26gp%3D0.jpg"),
+                ),*/
+        title: Text(Text(documentSnapshot['nombreMision'])
+            .data
+            .toString()),
+        subtitle: ReadMoreText(
+          Text(
+            documentSnapshot['objetivoMision'],
+            textAlign: TextAlign.justify,
+          ).data.toString(),
+          trimLines: 1,
+          colorClickableText: Colors.pink,
+          trimMode: TrimMode.Line,
+          lessStyle: GoogleFonts.roboto(
+              fontSize: 14, fontWeight: FontWeight.bold),
+          trimCollapsedText: 'ver más',
+          trimExpandedText: 'ver menos',
+          moreStyle: GoogleFonts.roboto(
+              fontSize: 14, fontWeight: FontWeight.bold),
+        ),
+        trailing: SizedBox(
+          width: 30,
+          child: IconButton(
+              icon: const Icon(Icons.more_vert, size: 20),
+              onPressed: () {}),
+        ),
+      ),
+    );
+  }
+
 
   //Aspecto que tendrán las salas para los usuario tutorados
   static Widget CardSalaVistaTutorado(

@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:readmore/readmore.dart';
 
+import '../../../widgets/Cards.dart';
 import '../../../widgets/Fields.dart';
 import '../TaPagesSala.dart';
 
@@ -25,60 +28,7 @@ class Misiones extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final DocumentSnapshot documentSnapshot =
                       streamSnapshot.data!.docs[index];
-                  return Padding(
-                    padding: EdgeInsets.only(top: 10, bottom: 10),
-                    child: FlatButton(
-                        color: Colors.transparent,
-                        splashColor: Colors.black26,
-                        onPressed: () {
-                          /* Navigator.pushNamed(
-                        context,
-                        MenuSala.routeName,
-                        arguments: TransferirDatos(
-                          Text(documentSnapshot['NombreSala']).data.toString(),
-                          collecionUsuarios.doc(documentSnapshot.id),
-                        ),
-                      );
-*/
-                          //this.titulo = 'holaaa';
-
-                          //Navigator.push(context, MaterialPageRoute(builder: (context)=>MenuSala()) );
-                        },
-                        child: Card(
-                          margin: const EdgeInsets.all(10),
-                          child: ListTile(
-                            /*leading: CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1581413287870&di=35491998b94817cbcf04d9f9f3d2d4b3&imgtype=jpg&src=http%3A%2F%2Fimg0.imgtn.bdimg.com%2Fit%2Fu%3D2464547320%2C3316604757%26fm%3D214%26gp%3D0.jpg"),
-                ),*/
-                            title: Text(Text(documentSnapshot['nombreMision'])
-                                .data
-                                .toString()),
-                            subtitle: Text(
-                                Text(documentSnapshot['objetivoMision'])
-                                    .data
-                                    .toString(),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1),
-                            trailing: SizedBox(
-                              width: 100,
-                              child: Row(
-                                children: [
-                                  IconButton(
-                                      icon: const Icon(Icons.visibility,
-                                          size: 20),
-                                      onPressed: () {}),
-                                  // Press this button to edit a single product
-                                  IconButton(
-                                      icon: const Icon(Icons.edit, size: 20),
-                                      onPressed: () {}),
-                                  // This icon button is used to delete a single product
-                                ],
-                              ),
-                            ),
-                          ),
-                        )),
-                  );
+                  return Cards.getCardMisionInicio(documentSnapshot);
                 },
               );
             }
