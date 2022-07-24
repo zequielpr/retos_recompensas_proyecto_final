@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:retos_proyecto/datos/TransferirDatos.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
+import 'package:retos_proyecto/vista_tutorado/Inicio/Cartera.dart';
 
 import '../../MediaQuery.dart';
 import '../../datos/DatosPersonalUser.dart';
@@ -26,7 +28,7 @@ class _InicioTutorado extends State<InicioTutorado> {
       body: Column(
         children: [
           _showCajaRecompensa(collectionReferenceUsers),
-          getBilleteraRecomensas()
+          getBilleteraRecomensas(collectionReferenceUsers, context)
         ],
       ),
     );
@@ -104,14 +106,20 @@ class _InicioTutorado extends State<InicioTutorado> {
                                       .update({'puntosTotal': 0}).whenComplete(
                                           () async {
                                     //Reclama la recompensa a cambio de los 200 puntos
-                                    await docTutor.update({
-                                      'billetera_recompensa':
-                                          FieldValue.arrayUnion(
-                                              [snapshot['recompensa_x_200']])
-                                    }).whenComplete(() async {
+                                    snapshot['recompensa_x_200']
+                                        .forEach((key, value) async {
                                       await docTutor
-                                          .update({'recompensa_x_200': {}});
+                                          .collection('billeteraRecompensas')
+                                          .doc()
+                                          .set({
+                                        'titulo': key,
+                                        'contenido': value,
+                                        'fehca_reclamo': DateTime.now()
+                                      });
                                     });
+                                    //Eliminar la recompensa reclamada
+                                    await docTutor
+                                        .update({'recompensa_x_200': {}});
 
                                     //Mostrar la recompensa obtenida
                                     recompensa.forEach((key, value) {
@@ -159,13 +167,15 @@ class _InicioTutorado extends State<InicioTutorado> {
                   });*/
                                 }
                               : () {
-                        showDialog<void>(
+                                  showDialog<void>(
                                     context: context,
                                     // false = user must tap button, true = tap outside dialog
                                     builder: (BuildContext dialogContext) {
                                       return AlertDialog(
-                                        title: Text('Remcompensa no disponible'),
-                                        content: Text('Pongase en contacto con su tutor'),
+                                        title:
+                                            Text('Remcompensa no disponible'),
+                                        content: Text(
+                                            'Pongase en contacto con su tutor'),
                                         actions: <Widget>[
                                           TextButton(
                                             child: Text('ok'),
@@ -194,9 +204,12 @@ class _InicioTutorado extends State<InicioTutorado> {
   }
 
   //Billetera de recompensas
-  Widget getBilleteraRecomensas() {
+  Widget getBilleteraRecomensas(CollectionReference collectionReferenceUsers, BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () {
+        var datos = HelperCartera(collectionReferenceUsers);
+        Navigator.pushNamed(context, Cartera.ROUTE_NAME, arguments: datos);
+      },
       child: Text('Foto de billetera o bolsa'),
     );
   }

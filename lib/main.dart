@@ -212,6 +212,7 @@ class _InicioState extends State<Inicio> {
     if(isTutorado){
       _widgetOptions.addAll(<Widget>[
         InicioTutorado(collectionReferenceUsers: CollecionUsuarios,),
+
         bandejaNotificaciones.getBandejaNotificaciones(CollecionUsuarios, context),
         //Misiones.vistaCrearMisiones,
         //MenuOpcionesSala.getVistaSala,
