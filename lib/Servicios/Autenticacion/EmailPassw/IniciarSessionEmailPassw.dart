@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/Servicios/Autenticacion/DatosNewUser.dart';
 import 'package:retos_proyecto/datos/TransferirDatos.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -13,14 +15,11 @@ import '../../../datos/ValidarDatos.dart';
 import '../Autenticacion.dart';
 
 class IniSesionEmailPassword extends StatelessWidget {
+  final TransDatosInicioSesion args;
   static const ROUTE_NAME = 'iniciarSesionEmailPassw';
-  const IniSesionEmailPassword({Key? key}) : super(key: key);
+  const IniSesionEmailPassword({Key? key, required this.args}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-
-    final args =
-        ModalRoute.of(context)!.settings.arguments as TransDatosInicioSesion;
-
     return StateIniSesionEmailPassword(
       args: args,
     );
@@ -86,7 +85,7 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
 
   void _ActionCrearUnaCuenta(TransDatosInicioSesion arg) {
     var datos = TranferirDatosRoll('x', arg.collectionReferenceUsers);
-    Navigator.pushNamed(context, Roll.ROUTE_NAME, arguments: datos);
+    context.router.push(RollRouter(args: datos));
   }
 
   void _mostrarPassw() {

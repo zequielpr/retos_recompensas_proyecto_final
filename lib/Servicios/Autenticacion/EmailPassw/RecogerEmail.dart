@@ -1,6 +1,8 @@
 //Registrarse con email y contrase
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:retos_proyecto/Rutas.gr.dart';
 
 import '../../../datos/TransferirDatos.dart';
 import '../../../datos/ValidarDatos.dart';
@@ -9,13 +11,16 @@ import 'IniciarSessionEmailPassw.dart';
 import 'RecogerPassw.dart';
 
 class RecogerEmail extends StatefulWidget {
+  final TrasnferirDatosNombreUser args;
   static const ROUTE_NAME = 'RecogerEmail';
-  const RecogerEmail({Key? key}) : super(key: key);
+  const RecogerEmail({Key? key, required this.args}) : super(key: key);
   @override
-  State<StatefulWidget> createState() => _RecogerEmail();
+  State<StatefulWidget> createState() => _RecogerEmail(args);
 }
 
 class _RecogerEmail extends State<RecogerEmail> {
+  final TrasnferirDatosNombreUser args;
+  _RecogerEmail(this.args);
   var emailController = TextEditingController();
   var colorWarning = Colors.transparent;
   var colorSubfix = Colors.transparent;
@@ -29,8 +34,6 @@ class _RecogerEmail extends State<RecogerEmail> {
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as TrasnferirDatosNombreUser;
     return Scaffold(
       appBar: AppBar(
         title: Text('Registrarse'),
@@ -129,15 +132,14 @@ class _RecogerEmail extends State<RecogerEmail> {
         FocusScope.of(context).requestFocus(FocusNode());
         await Future.delayed(const Duration(milliseconds: 70));
         if (!mounted) return;
-        Navigator.pushNamed(context, IniSesionEmailPassword.ROUTE_NAME,
-            arguments: datos);
+        context.router.push(IniSesionEmailPasswordRouter(args: datos));
         return;
       }
 
       args.setValor('email',
           email); //Añede el correo al objeto map creado en la ruta tutorado
       if (!mounted) return;
-      Navigator.pushNamed(context, RecogerPassw.ROUTE_NAME, arguments: args);
+      context.router.push(RecogerPasswRouter(args: args));
 
       _cambiarColor(Colors.transparent, Colors.transparent);
       return;
