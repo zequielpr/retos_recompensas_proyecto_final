@@ -5,7 +5,7 @@ import '../../widgets/Cards.dart';
 import '../Solicitudes/AdminSolicitudes.dart';
 
 //Nueva bandeja de notificaciones---------------------------------------------------------------------------------
-class bandejaNotificaciones {
+class BandejaNotificaciones {
   static FirebaseAuth auth = FirebaseAuth.instance;
   static User? currentUser = auth.currentUser;
   static String? idCurrentUser = currentUser?.uid;

@@ -1,29 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
-import '../../../../datos/DatosPersonalUser.dart';
-import '../../../../datos/SalaDatos.dart';
-import '../../../../datos/TransferirDatos.dart';
-import '../../../../datos/UsuarioActual.dart';
-import '../../../../widgets/Cards.dart';
+import '../../../../../../datos/DatosPersonalUser.dart';
+import '../../../../../../datos/TransferirDatos.dart';
+import '../../../../../../datos/UsuarioActual.dart';
+import '../../../../../../widgets/Cards.dart';
 
-class UserTutoradoDescrip extends StatefulWidget {
-  static const ROUTE_NAME = '/UserTutoradoDescrip';
-  const UserTutoradoDescrip({Key? key}) : super(key: key);
+class UserTutorado extends StatefulWidget {
+  final TransfDatosUserTutorado args;
+  const UserTutorado({Key? key, required this.args}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() => _UserTotoradoDescrip();
+  State<UserTutorado> createState() => _UserTutoradoState(args);
 }
 
-class _UserTotoradoDescrip extends State<UserTutoradoDescrip> {
+class _UserTutoradoState extends State<UserTutorado > {
+  final TransfDatosUserTutorado args;
+  _UserTutoradoState(this.args);
   double _currentSliderValue = 15;
   static var puntos;
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as TransfDatosUserTutorado;
     final colecTodosLosUsuarios = args.snap.reference.parent.parent?.parent
         .parent?.parent; //navega hacia la coleccion de todos los usuarios
 
@@ -54,8 +52,8 @@ class _UserTotoradoDescrip extends State<UserTutoradoDescrip> {
                             ),
                           ),
                           Expanded(
-                            flex: 6,
-                            child: DatosPersonales.getIndicadoAvance(args.snap.reference.id, colecTodosLosUsuarios, CurrentUser.getIdCurrentUser())
+                              flex: 6,
+                              child: DatosPersonales.getIndicadoAvance(args.snap.reference.id, colecTodosLosUsuarios, CurrentUser.getIdCurrentUser())
                           ),
                           Expanded(flex: 1, child: Text(''))
                         ],
@@ -105,7 +103,7 @@ class _UserTotoradoDescrip extends State<UserTutoradoDescrip> {
 
   static Widget _getListaMisiones( collectionReferenceUsers, TransfDatosUserTutorado args, dynamic puntos) {
     //Toma los puntos totales en tiempo real, sin necedidad de reiniciar el widget
-   return StreamBuilder(
+    return StreamBuilder(
         stream: collectionReferenceUsers.doc(args.snap.reference.id.trim()).collection('rolTutorado').doc(CurrentUser.getIdCurrentUser()).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -154,48 +152,3 @@ class MyClip extends CustomClipper<Rect> {
     return false;
   }
 }
-/*
-Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Expanded(
-                      flex: 4,
-                      child: Center(
-                        child: ClipOval(
-                          clipper: MyClip(),
-                          child: Image.network(
-                              'https://lh3.googleusercontent.com/a-/AFdZucqG-OoiZpmpl7-MotCx9riNufTDF71pHPUGlDwG=s96-c',
-                              fit: BoxFit.fill),
-                        ),
-                      ),
-                    ),
-                    Expanded(flex: 6, child: LinearPercentIndicator(
-                      animation: true,
-                      lineHeight: 20.0,
-                      animateFromLastPercent: true,
-                      animationDuration: 1000,
-                      percent: 0.9,
-                      center: Text("90XP"),
-                      barRadius: Radius.circular(10),
-                      progressColor: Colors.amber,
-                    ),),
-                    Expanded(flex: 1, child: Text(''))
-                  ],
-                ),
-              ),
-              Row(children: [Padding(padding: EdgeInsets.only(left: 20, top: 10), child: Text('Maikel'),)],),
-
-              const TabBar(
-                tabs: [
-                  Tab(icon: Icon(Icons.directions_car)),
-                  Tab(icon: Icon(Icons.directions_transit)),
-                  Tab(icon: Icon(Icons.directions_bike)),
-                ],
-              ),
-            ],
-          )
- */

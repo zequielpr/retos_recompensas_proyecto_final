@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
@@ -9,6 +10,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
+import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/Servicios/Autenticacion/EmailPassw/IniciarSessionEmailPassw.dart';
 
 import '../../datos/TransferirDatos.dart';
@@ -19,14 +21,18 @@ import 'DatosNewUser.dart';
 
 class Login extends StatefulWidget {
   static const ROUTE_NAME = 'Login';
-  const Login({Key? key}) : super(key: key);
+  final TransferirCollecion args;
+  const Login({Key? key, required this.args}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState();
+  State<Login> createState() => _LoginState(args);
 }
 
 class _LoginState extends State<Login> {
+  final TransferirCollecion args;
   bool _loading = false;
+
+  _LoginState(this.args);
 
   void _onLoading() {
     setState(() {
@@ -55,8 +61,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as TransferirCollecion;
+
     collecUsuarios = args.collectionReferenceUser;
 
     /*FlutterStatusbarcolor.setStatusBarWhiteForeground(
@@ -125,8 +130,7 @@ class _LoginState extends State<Login> {
               onPressed: () {
                 var datos =
                     TransDatosInicioSesion('', true, false, '', collecUsuarios);
-                Navigator.pushNamed(context, IniSesionEmailPassword.ROUTE_NAME,
-                    arguments: datos);
+                context.router.push(IniSesionEmailPasswordRouter(args: datos));
 
                 /*Autenticar.comprobarNewOrOld(collecUsuarios, context)*/
               },
@@ -454,6 +458,6 @@ class _LoginState extends State<Login> {
   }
 
   void _irRollPage(TranferirDatosRoll datos) {
-    Navigator.pushNamed(context, Roll.ROUTE_NAME, arguments: datos);
+    context.router.push(RollRouter(args: datos));
   }
 }

@@ -2,12 +2,14 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:math';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth_platform_interface/src/providers/oauth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/ValidarDatos.dart';
 
 import '../../Rutas.dart';
@@ -15,8 +17,6 @@ import '../../datos/TransferirDatos.dart';
 import '../../datos/UsuarioActual.dart';
 import '../../main.dart';
 import '../../splashScreen.dart';
-import '../../vista_tutor/TabPages/TaPagesSala.dart';
-import '../../vista_tutorado/Salas/ListaMisiones.dart';
 import '../Notificaciones/AdministrarTokens.dart';
 import 'Autenticacion.dart';
 import 'EmailPassw/IniciarSessionEmailPassw.dart';
@@ -25,13 +25,11 @@ import 'EmailPassw/RecogerPassw.dart';
 import 'login.dart';
 
 class NombreUsuario extends StatelessWidget {
-  const NombreUsuario({Key? key}) : super(key: key);
+  final TrasnferirDatosNombreUser args;
+  const NombreUsuario({Key? key, required this.args}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as TrasnferirDatosNombreUser;
-
     return StateNombreUsuario(
       args: args,
     );
@@ -228,10 +226,7 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
                       'imgPerfil': currentUser?.photoURL
                     }),
                     Token.guardarToken(),
-                    datos = TransferirDatosInicio(
-                        args.dropdownValue == "Tutor" ? false : true),
-                    Navigator.pushReplacementNamed(context, Inicio.ROUTE_NAME,
-                        arguments: datos)
+                    context.router.replace(MainRouter())
                   }
               });
     } else {
@@ -255,8 +250,7 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
                     datos = TransferirDatosInicio(
                         args.dropdownValue == "Tutor" ? false : true),
                     //Dirigirse a la pantalla principal
-                    Navigator.pushReplacementNamed(context, Inicio.ROUTE_NAME,
-                        arguments: datos)
+                    context.router.replace(MainRouter())
                   }
               });
     }
@@ -275,15 +269,18 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
 //Introducir roll -------------------------------------------------------------------------------------------------------
 class Roll extends StatefulWidget {
   static const ROUTE_NAME = 'Roll';
+  final TranferirDatosRoll args;
 
-  const Roll({Key? key}) : super(key: key);
+  const Roll({Key? key, required this.args}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _StateRoll();
+  State<StatefulWidget> createState() => _StateRoll(args);
 }
 
 class _StateRoll extends State<Roll> {
   String dropdownValue = 'Tutorado';
+  final TranferirDatosRoll args;
+  _StateRoll(this.args);
   @override
   Widget build(BuildContext context) {
     /*
@@ -292,8 +289,6 @@ class _StateRoll extends State<Roll> {
     FlutterStatusbarcolor.setStatusBarColor(Colors.white,
         animate: true); //Color de la barra superior
      */
-    final args =
-        ModalRoute.of(context)!.settings.arguments as TranferirDatosRoll;
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.black,
@@ -443,13 +438,12 @@ class _StateRoll extends State<Roll> {
       var datos = TrasnferirDatosNombreUser({'email': '', 'passw': ''},
           dropdownValue, userName, args.collectionReferenceUsers);
       if (!mounted) return;
-      Navigator.pushNamed(context, RecogerEmail.ROUTE_NAME, arguments: datos);
+      context.router.push(RecogerEmailRouter(args: datos));
     } else {
       var datos = TrasnferirDatosNombreUser(args.oaUthCredential, dropdownValue,
           userName, args.collectionReferenceUsers);
       if (!mounted) return;
-      Navigator.pushNamed(context, StateNombreUsuario.ROUTE_NAME,
-          arguments: datos);
+      context.router.push(NombreUsuarioRouter(args: datos));
     }
   }
 

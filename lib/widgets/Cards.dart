@@ -1,16 +1,17 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:readmore/readmore.dart';
+import 'package:retos_proyecto/Rutas.gr.dart';
 
 import '../datos/Roll_Data.dart';
 import '../Servicios/Solicitudes/AdminSolicitudes.dart';
 import '../datos/SalaDatos.dart';
 import '../datos/TransferirDatos.dart';
 import '../datos/UsuarioActual.dart';
-import '../vista_tutor/TabPages/TaPagesSala.dart';
-import '../vista_tutorado/Salas/ListaMisiones.dart';
+
 
 class Cards {
   static Widget getCardSolicitud(
@@ -401,16 +402,14 @@ class Cards {
           //Crea un objeto con la sala pulzada para posteriormente obtener su contenido midiante geters en la siguiente ventana
           SalaDatos sala = SalaDatos(documentSnapshot.reference);
 
-          Navigator.pushNamed(
-            context,
-            ListaMisiones.ROUTE_NAME,
-            arguments: TransferirDatos(
-                Text(documentSnapshot['NombreSala'])
-                    .data
-                    .toString(), //Nombre de la sala pulsada
-                sala,
-                collecionUsuarios),
-          );
+          var datos = TransferirDatos(
+              Text(documentSnapshot['NombreSala'])
+                  .data
+                  .toString(), //Nombre de la sala pulsada
+              sala,
+              collecionUsuarios);
+
+            context.router.push(ListMisionesTutorado(args: datos));
 
           //this.titulo = 'holaaa';
 
@@ -520,17 +519,15 @@ class Cards {
           //Crea un objeto con la sala pulzada para posteriormente obtener su contenido midiante geters en la siguiente ventana
           SalaDatos sala = SalaDatos(documentSnapshot.reference);
 
-          Navigator.pushNamed(
-            context,
-            TabPagesSala.ROUTE_NAME,
-            arguments: TransferirDatos(
-                Text(documentSnapshot['NombreSala'])
-                    .data
-                    .toString(), //Nombre de la sala pulsada
-                sala,
-                collecionUsuarios),
-          );
+          var datos = TransferirDatos(
+              Text(documentSnapshot['NombreSala'])
+                  .data
+                  .toString(), //Nombre de la sala pulsada
+              sala,
+              collecionUsuarios);
 
+
+          context.router.push(SalaContVistaTutor(args: datos));
           //this.titulo = 'holaaa';
 
           //Navigator.push(context, MaterialPageRoute(builder: (context)=>MenuSala()) );
