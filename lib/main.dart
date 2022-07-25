@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
+import 'package:retos_proyecto/Servicios/Notificaciones/Badge.dart';
 import 'package:retos_proyecto/datos/Roll_Data.dart';
 import 'package:retos_proyecto/splashScreen.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
@@ -15,24 +16,38 @@ import 'Servicios/Notificaciones/notificaciones_bandeja.dart';
 import 'Servicios/Autenticacion/login.dart';
 import 'datos/TransferirDatos.dart';
 
-
-
-
-
 class Main extends StatefulWidget {
-
   const Main({Key? key}) : super(key: key);
 
   @override
-  State<Main> createState() => _MainState();
+  State<Main> createState() => MainState();
 }
 
 //Clase donde se probara to el proceso de crear una misión
-class _MainState extends State<Main> {
+class MainState extends State<Main> {
   List<int> _badgeCounts = List<int>.generate(5, (index) => index);
-  List<bool> _badgeShows = List<bool>.generate(5, (index) => true);
+  List<bool> _badgeShows = List<bool>.generate(5, (index) => false);
+  var count_notificaciones;
   void initState() {
+    _badgeShows[1] = false;
     super.initState();
+    //Mostrar el badge
+    mostrarBadge(bool mostrar, cantidad) {
+      setState(() {
+        _badgeShows[1] = mostrar;
+        _badgeCounts[1] = cantidad;
+      });
+    }
+
+    //CallBack que actualiza el widget y muestra cuantas notificaciones hay
+    Badge.isNewNotifications(mostrarBadge);
+
+
+    //Actualizar widget de nitificaciion
+    void actualizarWidgetNitificaciones(actualizar){
+      actualizar();
+    }
+
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('se ha recibido una nueva notificacion');
       RemoteNotification? notification = message.notification;
@@ -78,21 +93,16 @@ class _MainState extends State<Main> {
             });
       }
     });
-
   }
-
 
   final CollectionReference CollecionUsuarios = FirebaseFirestore.instance
       .collection('usuarios'); //Coleccion en la que se guardarán los usuarios
-
-
 
   void _onItemTapped(int index) {
     setState(() {
       routes.setActiveIndex(index);
     });
   }
-
 
   late TabsRouter routes;
 
@@ -118,7 +128,6 @@ class _MainState extends State<Main> {
             items: [
               CustomNavigationBarItem(
                 icon: Icon(Icons.home),
-
               ),
               CustomNavigationBarItem(
                 icon: Icon(Icons.notifications),
@@ -127,27 +136,22 @@ class _MainState extends State<Main> {
               ),
               CustomNavigationBarItem(
                 icon: Icon(Icons.meeting_room),
-
-
               ),
               CustomNavigationBarItem(
                 icon: Icon(Icons.account_circle_rounded),
-
-
               ),
-
             ],
             currentIndex: routes.activeIndex,
             onTap: (index) {
               routes.setActiveIndex(index);
               if (routes.canPopSelfOrChildren) {
-                switch(routes.activeIndex){
+                switch (routes.activeIndex) {
                   case 0:
                     routes.navigate(HomeRouter());
                     return;
                   case 1:
                     routes.navigate(NotificacionesRouter());
-                      return;
+                    return;
                   case 2:
                     routes.navigate(SalasRouter());
                     return;
@@ -157,12 +161,9 @@ class _MainState extends State<Main> {
                   default:
                     return;
                 }
-                routes.navigate(HomeRouter());
               }
-              //print(routes.)
-              setState(() {
-                _badgeShows[index] = false;
-              });
+
+
             },
           );
         },
@@ -170,10 +171,9 @@ class _MainState extends State<Main> {
     );
   }
 
-
   //Metodo que evitará que la aplicacion se salga sin preguntar
   Future<bool> _onWillPop() async {
-    if (routes.activeIndex> 0) {
+    if (routes.activeIndex > 0) {
       _onItemTapped(0);
       return false;
     }

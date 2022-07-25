@@ -7,13 +7,25 @@ class Notificaciones extends StatefulWidget {
   const Notificaciones({Key? key}) : super(key: key);
 
   @override
-  State<Notificaciones> createState() => _NotificacionesState();
+  State<Notificaciones> createState() => NotificacionesState();
 }
 
-class _NotificacionesState extends State<Notificaciones> {
+class NotificacionesState extends State<Notificaciones> {
+
+  void actualizar(){
+    setState((){});
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return BandejaNotificaciones.getBandejaNotificaciones(CollecUser.COLECCION_USUARIOS, context)
+    print('holaaa');
+    return Scaffold(
+        appBar: AppBar(
+          title: Align(alignment: Alignment.center, child: Text('Notificaciones'),),
+        ),
+        body: BandejaNotificaciones.getBandejaNotificaciones(
+            CollecUser.COLECCION_USUARIOS, context));
     ;
   }
 }

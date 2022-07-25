@@ -7,7 +7,6 @@ import '../../../../../../Rutas.gr.dart';
 import '../../../../../../datos/DatosPersonalUser.dart';
 import '../../../../../../datos/SalaDatos.dart';
 import '../../../../../../datos/TransferirDatos.dart';
-import 'UserTutoradoDescrip.dart';
 
 class ListUsuarios extends StatelessWidget {
   final CollectionReference collectionReferenceUsuariosTutorados;

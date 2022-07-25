@@ -22,6 +22,7 @@ class _HomeState extends State<Home> {
           child: Text('Home'),
         ),
         leading: IconButton(
+          tooltip: 'Ajustes',
           onPressed: () {},
           icon: Icon(Icons.settings),
         ),
@@ -29,6 +30,7 @@ class _HomeState extends State<Home> {
           Padding(
             padding: EdgeInsets.only(right: 5),
             child: IconButton(
+              tooltip: 'Historial',
               onPressed: () => context.router.pushNamed('Historial'),
               icon: Icon(Icons.history),
             ),

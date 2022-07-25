@@ -11,7 +11,6 @@ import 'MenuNavigatioBar/Notificaciones.dart';
 import 'MenuNavigatioBar/Salas/Salas.dart';
 import 'MenuNavigatioBar/Salas/Tutor/TabPages/SalaVistaTutor.dart';
 import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/UserTutorado.dart';
-import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/UserTutoradoDescrip.dart';
 import 'MenuNavigatioBar/Salas/Tutorado/ListMisiones.dart';
 import 'Servicios/Autenticacion/DatosNewUser.dart';
 import 'Servicios/Autenticacion/EmailPassw/IniciarSessionEmailPassw.dart';

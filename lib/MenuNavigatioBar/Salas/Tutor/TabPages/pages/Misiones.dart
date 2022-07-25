@@ -242,6 +242,7 @@ class MyStatefulWidgetState extends State<MyStatefulWidget> {
                     'completada_por': FieldValue.arrayUnion([]),
                     'solicitu_confirmacion': FieldValue.arrayUnion([])
                   }).then((value) {
+
                     Navigator.pop(
                         contextSala); //Regresa al contextxo de la sala
                     ScaffoldMessenger.of(contextSala).showSnackBar(

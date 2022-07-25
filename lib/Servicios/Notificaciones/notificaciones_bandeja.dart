@@ -72,14 +72,15 @@ class BandejaNotificaciones {
   //Obtener las misiones recibidas------------------------------------------------------------------
   static Widget getMisiones(CollectionReference collectionReference) {
 
+
     CollectionReference notificacionesRecibidas = collectionReference
         .doc(idCurrentUser)
         .collection('notificaciones')
         .doc(idCurrentUser)
         .collection('misiones_recibidas');
 
-    return StreamBuilder(
-      stream: notificacionesRecibidas.snapshots(),
+    return FutureBuilder<QuerySnapshot>(
+      future: notificacionesRecibidas.get(),
       builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
         if (streamSnapshot.hasData) {
           return ListView.builder(
