@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -5,15 +6,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:retos_proyecto/Rutas.gr.dart';
+import 'package:retos_proyecto/datos/Roll_Data.dart';
 import 'package:retos_proyecto/splashScreen.dart';
-import 'package:retos_proyecto/vista_tutor/ListaSalas.dart';
-import 'package:retos_proyecto/vista_tutor/TabPages/TaPagesSala.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:retos_proyecto/vista_tutor/TabPages/pages/Misiones.dart';
-import 'package:retos_proyecto/vista_tutorado/AdminCuenta.dart';
-import 'package:retos_proyecto/vista_tutorado/Inicio/InicioTutorado.dart';
-import 'package:retos_proyecto/vista_tutorado/Salas/ListaMisiones.dart';
-import 'package:retos_proyecto/vista_tutorado/Salas/ListaSalas.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 
 import 'Servicios/Notificaciones/notificaciones_bandeja.dart';
@@ -24,16 +19,16 @@ import 'datos/TransferirDatos.dart';
 
 
 
-class Inicio extends StatefulWidget {
-  static const ROUTE_NAME = 'Inicio';
-  const Inicio({Key? key}) : super(key: key);
+class Main extends StatefulWidget {
+
+  const Main({Key? key}) : super(key: key);
 
   @override
-  State<Inicio> createState() => _InicioState();
+  State<Main> createState() => _MainState();
 }
 
 //Clase donde se probara to el proceso de crear una misión
-class _InicioState extends State<Inicio> {
+class _MainState extends State<Main> {
   List<int> _badgeCounts = List<int>.generate(5, (index) => index);
   List<bool> _badgeShows = List<bool>.generate(5, (index) => true);
   void initState() {
@@ -86,315 +81,99 @@ class _InicioState extends State<Inicio> {
 
   }
 
-  int _nab_var_index_actual = 0;
-  int _selectedIndex = 0;
-  int _Puntuacion = 1;
 
   final CollectionReference CollecionUsuarios = FirebaseFirestore.instance
       .collection('usuarios'); //Coleccion en la que se guardarán los usuarios
-
-  //Constroladores de texto para extraer el contenido de los textFields
-  final TextEditingController _tituloController = TextEditingController();
-
-  String tituloModalBottomSheet = "";
-  Future<void> _createOrUpdate([DocumentSnapshot? documentSnapshot]) async {
-
-    String action = 'Guardar';
-    tituloModalBottomSheet = "Añadir Sala";
-    if (documentSnapshot != null) {
-      tituloModalBottomSheet = "Actualizar libro";
-      action = 'Modificar';
-      _tituloController.text = documentSnapshot['NombreSala'];
-    }
-
-    await showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (BuildContext ctx) {
-          return Padding(
-            padding: EdgeInsets.only(
-                top: 20,
-                left: 20,
-                right: 20,
-                // prevent the soft keyboard from covering text fields
-                bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ListTile(
-                    contentPadding: EdgeInsets.fromLTRB(0, 0, 50, 0),
-                    leading: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Icon(Icons.arrow_back) // the arrow back icon
-                          ),
-                    ),
-                    title: Center(
-                      child: Text(
-                        tituloModalBottomSheet,
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ), // Your desired title
-                    )),
-                TextField(
-                  controller: _tituloController,
-                  decoration: const InputDecoration(labelText: 'Título'),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                  child: Text(action == 'Guardar' ? 'Guardar' : 'Modificar'),
-                  onPressed: () async {
-                    final String? name = _tituloController.text;
-
-                    if (name != null) {
-                      if (action == 'Guardar') {
-                        // Persist a new product to Firestore
-                        await CollecionUsuarios.doc(
-                                FirebaseAuth.instance.currentUser?.uid)
-                            .collection('rolTutor')
-                            .add({
-                          "NombreSala": name,
-                          'numMisiones': 0,
-                          'numTutorados': 0
-                        });
-                      }
-
-                      if (action == 'Modificar') {
-                        // Update the product
-                        await CollecionUsuarios.doc(documentSnapshot!.id)
-                            .update({
-                          "NombreSala": name,
-                        });
-                      }
-
-                      // Clear the text fields
-                      _tituloController.text = '';
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text(
-                              'Rellene todos los campos. El precio debe ser un número entero')));
-                    }
-
-                    // Hide the bottom sheet
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            ),
-          );
-        });
-  }
-
-  final List<Widget> _widgetOptions = <Widget>[];
-
 
 
 
   void _onItemTapped(int index) {
     setState(() {
-      _nab_var_index_actual = _selectedIndex;
-      _selectedIndex = index;
+      routes.setActiveIndex(index);
     });
   }
 
 
-  //Esta coleccion contien las vista que se mostrará dependiendo del menu seleccionado
-  iniciarColeccion(BuildContext context, bool isTutorado){
-    _widgetOptions.clear();
-    const TextStyle optionStyle =
-    TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-    if(isTutorado){
-      _widgetOptions.addAll(<Widget>[
-        InicioTutorado(collectionReferenceUsers: CollecionUsuarios,),
-        bandejaNotificaciones.getBandejaNotificaciones(CollecionUsuarios, context),
-        //Misiones.vistaCrearMisiones,
-        //MenuOpcionesSala.getVistaSala,
-
-        //tarjeta de las misiones---------------------------------------------------
-        ListaSala_v_Tutorado.listar(context, CollecionUsuarios),
-
-        AdminCuenta.getPerfilTutorado(context),
-
-      ]);
-    }else{
-      _widgetOptions.addAll(<Widget>[
-        InicioTutorado(collectionReferenceUsers: CollecionUsuarios,),
-        //Misiones.vistaCrearMisiones,
-        //MenuOpcionesSala.getVistaSala,
-        bandejaNotificaciones.getBandejaNotificaciones(CollecionUsuarios, context),
-        //Tarjeta de las salas---------------------------------------------------
-        ListaSalas.getInstance(context, CollecionUsuarios),
-
-        //Solo de prueba
-        AdminCuenta.getPerfilTutorado(context),
-
-        //Notificacion_Bandeja.getBodyAppVarBandejaNotifi(CollecionUsuarios)
-      ]);
-    }
-  }
+  late TabsRouter routes;
 
   @override
   Widget build(BuildContext context) {
-    final args =
-    ModalRoute.of(context)!.settings.arguments as TransferirDatosInicio;
-    iniciarColeccion(context, args.isTutorado);
-
     return WillPopScope(
       onWillPop: _onWillPop,
-      child: Scaffold(
-        appBar: iniciarAppVar(),
-        body: Container(
-          alignment: Alignment.topCenter,
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: CustomNavigationBar(
-          iconSize: 30.0,
-          selectedColor: Color(0xff040307),
-          strokeColor: Color(0x30040307),
-          unSelectedColor: Color(0xffacacac),
-          backgroundColor: Colors.white,
-          items: [
-            CustomNavigationBarItem(
-              icon: Icon(Icons.home),
-              badgeCount: _badgeCounts[0],
-              showBadge: _badgeShows[0],
-            ),
-            CustomNavigationBarItem(
-              icon: Icon(Icons.notifications),
-              badgeCount: _badgeCounts[1],
-              showBadge: _badgeShows[1],
-            ),
-            CustomNavigationBarItem(
-              icon: Icon(Icons.meeting_room),
-              badgeCount: _badgeCounts[2],
-              showBadge: _badgeShows[2],
-            ),
-            CustomNavigationBarItem(
-              icon: Icon(Icons.account_circle_rounded),
-              badgeCount: _badgeCounts[3],
-              showBadge: _badgeShows[3],
-            ),
+      child: AutoTabsScaffold(
+        routes: const [
+          HomeRouter(),
+          NotificacionesRouter(),
+          SalasRouter(),
+          AdminPerfilUserRouter()
+        ],
+        bottomNavigationBuilder: (_, tabsRouter) {
+          routes = tabsRouter;
+          return CustomNavigationBar(
+            iconSize: 30.0,
+            selectedColor: Color(0xff040307),
+            strokeColor: Color(0x30040307),
+            unSelectedColor: Color(0xffacacac),
+            backgroundColor: Colors.white,
+            items: [
+              CustomNavigationBarItem(
+                icon: Icon(Icons.home),
 
-          ],
-          currentIndex: _selectedIndex,
-          onTap: (index) {
-            setState(() {
-              _selectedIndex = index;
-              _badgeShows[index] = false;
-            });
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => _createOrUpdate(),
-          child: const Icon(Icons.add),
-        ),
+              ),
+              CustomNavigationBarItem(
+                icon: Icon(Icons.notifications),
+                badgeCount: _badgeCounts[1],
+                showBadge: _badgeShows[1],
+              ),
+              CustomNavigationBarItem(
+                icon: Icon(Icons.meeting_room),
+
+
+              ),
+              CustomNavigationBarItem(
+                icon: Icon(Icons.account_circle_rounded),
+
+
+              ),
+
+            ],
+            currentIndex: routes.activeIndex,
+            onTap: (index) {
+              routes.setActiveIndex(index);
+              if (routes.canPopSelfOrChildren) {
+                switch(routes.activeIndex){
+                  case 0:
+                    routes.navigate(HomeRouter());
+                    return;
+                  case 1:
+                    routes.navigate(NotificacionesRouter());
+                      return;
+                  case 2:
+                    routes.navigate(SalasRouter());
+                    return;
+                  case 3:
+                    routes.navigate(AdminPerfilUserRouter());
+                    return;
+                  default:
+                    return;
+                }
+                routes.navigate(HomeRouter());
+              }
+              //print(routes.)
+              setState(() {
+                _badgeShows[index] = false;
+              });
+            },
+          );
+        },
       ),
     );
   }
 
 
-
-
-  Color colorBotonMisiones = Colors.white;
-  Color colorBotonSolicitudes = Colors.red;
-  List<bool> isSelected = [true, false];
-  static const Color colorTextoToggle = Colors.black;
-  //Metodos
-  PreferredSizeWidget iniciarAppVar() {
-    if (_selectedIndex != 3) {
-      return AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            IconButton(
-                onPressed: () {
-                  _onItemTapped(3);
-                },
-                icon: const Icon(Icons.settings))
-          ],
-        ),
-        // title: const Text('BottomNavigationBar Sample'),
-      );
-    }
-    return AppBar(
-        title: Row(
-          children: [
-            IconButton(
-                onPressed: () {
-                  _onItemTapped(_nab_var_index_actual);
-                },
-                icon: Icon(Icons.arrow_back)),
-            const Padding(
-                padding: EdgeInsets.only(left: 5),
-                child: Text(
-                  "Notificaciones",
-                  style: TextStyle(fontSize: 25),
-                )),
-          ],
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50),
-          child: Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: 30, right: 10, bottom: 10),
-                child: ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(colorBotonMisiones),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide(color: Colors.red)))),
-                    onPressed: () {
-                      setState(() {
-                        colorBotonMisiones = Colors.red;
-                        colorBotonSolicitudes = Colors.white;
-                      });
-                    },
-                    child: const Text(
-                      "Misiones",
-                      style: TextStyle(color: Colors.black, fontSize: 12),
-                    )),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10),
-                child: ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(colorBotonSolicitudes),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide(color: Colors.red)))),
-                    onPressed: () {
-                      setState(() {
-                        colorBotonSolicitudes = Colors.red;
-                        colorBotonMisiones = Colors.white;
-                      });
-                    },
-                    child: const Text(
-                      "Solicitudes",
-                      style: TextStyle(color: Colors.black, fontSize: 12),
-                    )),
-              )
-            ],
-          ),
-        ));
-  }
-
   //Metodo que evitará que la aplicacion se salga sin preguntar
   Future<bool> _onWillPop() async {
-    if (_selectedIndex > 0) {
-      print("Index" + _selectedIndex.toString());
+    if (routes.activeIndex> 0) {
       _onItemTapped(0);
       return false;
     }

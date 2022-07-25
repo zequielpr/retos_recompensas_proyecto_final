@@ -10,9 +10,9 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:retos_proyecto/vista_tutor/TabPages/TaPagesSala.dart';
-import 'package:retos_proyecto/vista_tutorado/Salas/ListaMisiones.dart';
+import 'package:auto_route/auto_route.dart';
 
+import 'Rutas.gr.dart';
 import 'datos/Roll_Data.dart';
 import 'Rutas.dart';
 import 'Servicios/Autenticacion/DatosNewUser.dart';
@@ -59,13 +59,14 @@ Future<void> main() async {
 }
 
 class splashScreen extends StatelessWidget {
+  final _appRouter = AppRouter();
   @override
   Widget build(BuildContext context) {
     //Color de la barra inferior
 
-    return MaterialApp(
-      initialRoute: '/',
-      routes: Rutas.getRutas(),
+    return MaterialApp.router(
+      routerDelegate: _appRouter.delegate(),
+      routeInformationParser: _appRouter.defaultRouteParser(),
       theme: ThemeData(
           textTheme: const TextTheme(
               bodyText2: TextStyle(color: Colors.black, fontSize: 17),
@@ -158,8 +159,8 @@ class _MyHomePageState extends State<MyHomePage> {
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user == null) {
         var datos = TransferirCollecion(CollecionUsuarios);
-        Navigator.pushReplacementNamed(context, Login.ROUTE_NAME,
-            arguments: datos);
+        context.router.replace(LoginRouter(args: datos));
+
       } else {
         //Guardar usuario actual
         CurrentUser.setCurrentUser();
@@ -167,11 +168,8 @@ class _MyHomePageState extends State<MyHomePage> {
             CollecionUsuarios.doc(FirebaseAuth.instance.currentUser?.uid);
         await docUser.get().then((value) {
           Roll_Data.ROLL_USER_IS_TUTORADO = value['rol_tutorado'];
-          datos = TransferirDatosInicio(value['rol_tutorado']);
-
           if (!mounted) return;
-          Navigator.pushReplacementNamed(context, Inicio.ROUTE_NAME,
-              arguments: datos);
+          context.router.replace(MainRouter());
         });
       }
     });

@@ -1,16 +1,16 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:readmore/readmore.dart';
+import 'package:retos_proyecto/Rutas.gr.dart';
 
 import '../datos/Roll_Data.dart';
 import '../Servicios/Solicitudes/AdminSolicitudes.dart';
 import '../datos/SalaDatos.dart';
 import '../datos/TransferirDatos.dart';
 import '../datos/UsuarioActual.dart';
-import '../vista_tutor/TabPages/TaPagesSala.dart';
-import '../vista_tutorado/Salas/ListaMisiones.dart';
 
 class Cards {
   static Widget getCardSolicitud(
@@ -134,15 +134,22 @@ class Cards {
                       "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1581413287870&di=35491998b94817cbcf04d9f9f3d2d4b3&imgtype=jpg&src=http%3A%2F%2Fimg0.imgtn.bdimg.com%2Fit%2Fu%3D2464547320%2C3316604757%26fm%3D214%26gp%3D0.jpg"),
                 ),*/
         title: Padding(
-          padding: EdgeInsets.only(bottom: 5),
-          child: Row(children: [
-            Text(nombreMision + ' ', style: GoogleFonts.roboto(fontSize: 20),),
-            Icon(Icons.circle, size: 6,),
-            Text(' ' + Recompensa.toString() + 'XP', style: GoogleFonts.roboto(color: Colors.amber, fontSize: 15))
-
-          ],)
-
-        ),
+            padding: EdgeInsets.only(bottom: 5),
+            child: Row(
+              children: [
+                Text(
+                  nombreMision + ' ',
+                  style: GoogleFonts.roboto(fontSize: 20),
+                ),
+                Icon(
+                  Icons.circle,
+                  size: 6,
+                ),
+                Text(' ' + Recompensa.toString() + 'XP',
+                    style:
+                        GoogleFonts.roboto(color: Colors.amber, fontSize: 15))
+              ],
+            )),
         subtitle: ReadMoreText(
           style: GoogleFonts.roboto(fontSize: 16),
           Text(
@@ -156,7 +163,8 @@ class Cards {
               GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
           trimCollapsedText: 'ver más',
           trimExpandedText: 'ver menos',
-          moreStyle: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
+          moreStyle:
+              GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
         ),
         trailing: SizedBox(
           width: 60,
@@ -237,12 +245,25 @@ class Cards {
                           'completada_por': FieldValue.arrayUnion([userId])
                         }).then((value) async {
                           //Debe actualizar con el dato en tiempo real
-                          await docMision.parent.parent?.parent.parent?.parent.doc(userId)
+                          if (puntos_total_de_usuario >= 200) {
+                            await docMision.parent.parent?.parent.parent?.parent
+                                .doc(userId)
+                                ?.collection('rolTutorado')
+                                .doc(CurrentUser.getIdCurrentUser())
+                                .update({
+                              'puntos_acumulados': FieldValue.increment(recompensa)
+                            });
+                            return;
+                          }
+
+                          await docMision.parent.parent?.parent.parent?.parent
+                              .doc(userId)
                               ?.collection('rolTutorado')
                               .doc(CurrentUser.getIdCurrentUser())
                               .update({
-                            'puntosTotal': puntos_total_de_usuario + recompensa
+                            'puntosTotal':  FieldValue.increment(recompensa)
                           });
+                          return;
                         });
                       });
                       Navigator.pop(context, 'OK');
@@ -296,58 +317,68 @@ class Cards {
     }
   }
 
-  static Widget getCardMisionInicio(DocumentSnapshot documentSnapshot){
-    return
-      Card(
-
-        elevation: 0,
-        child: ListTile(
-          contentPadding: const EdgeInsets.only(left: 15, top: 0, bottom: 10),
-          visualDensity: VisualDensity.comfortable,
-          dense: true,
-          onTap: () => print('object'),
-          horizontalTitleGap: -4,
-          /*leading: CircleAvatar(
+  static Widget getCardMisionInicio(DocumentSnapshot documentSnapshot) {
+    return Card(
+      elevation: 0,
+      child: ListTile(
+        contentPadding: const EdgeInsets.only(left: 15, top: 0, bottom: 10),
+        visualDensity: VisualDensity.comfortable,
+        dense: true,
+        onTap: () => print('object'),
+        horizontalTitleGap: -4,
+        /*leading: CircleAvatar(
                   backgroundImage: NetworkImage(
                       "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1581413287870&di=35491998b94817cbcf04d9f9f3d2d4b3&imgtype=jpg&src=http%3A%2F%2Fimg0.imgtn.bdimg.com%2Fit%2Fu%3D2464547320%2C3316604757%26fm%3D214%26gp%3D0.jpg"),
                 ),*/
-          title:
-          Padding(
-              padding: EdgeInsets.only(bottom: 5),
-              child: Row(children: [
-                Text(documentSnapshot['nombreMision'] + ' ', style: GoogleFonts.roboto(fontSize: 20),),
-                Icon(Icons.circle, size: 6,),
-                Text(' ' + documentSnapshot['recompensaMision'].toString() + 'XP', style: GoogleFonts.roboto(color: Colors.amber, fontSize: 15))
-
-              ],)
-
-          ),
-          subtitle: ReadMoreText(
-            Text(
-              documentSnapshot['objetivoMision'],
-              overflow: TextOverflow.ellipsis,
-            ).data.toString(),
-            style: GoogleFonts.roboto(fontSize: 16),
-            trimLines: 1,
-            colorClickableText: Colors.pink,
-            trimMode: TrimMode.Line,
-            lessStyle:
-            GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
-            trimCollapsedText: 'ver más',
-            trimExpandedText: 'ver menos',
-            moreStyle: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
-          ),
-          trailing: SizedBox(
-            width: 60,
-            height: 26,
-            child: IconButton(icon: Icon(Icons.more_vert,),
-                onPressed: (){}),
-          ),
+        title: Padding(
+            padding: EdgeInsets.only(bottom: 5),
+            child: Row(
+              children: [
+                Text(
+                  documentSnapshot['nombreMision'] + ' ',
+                  style: GoogleFonts.roboto(fontSize: 20),
+                ),
+                Icon(
+                  Icons.circle,
+                  size: 6,
+                ),
+                Text(
+                    ' ' +
+                        documentSnapshot['recompensaMision'].toString() +
+                        'XP',
+                    style:
+                        GoogleFonts.roboto(color: Colors.amber, fontSize: 15))
+              ],
+            )),
+        subtitle: ReadMoreText(
+          Text(
+            documentSnapshot['objetivoMision'],
+            overflow: TextOverflow.ellipsis,
+          ).data.toString(),
+          style: GoogleFonts.roboto(fontSize: 16),
+          trimLines: 1,
+          colorClickableText: Colors.pink,
+          trimMode: TrimMode.Line,
+          lessStyle:
+              GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
+          trimCollapsedText: 'ver más',
+          trimExpandedText: 'ver menos',
+          moreStyle:
+              GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
         ),
-      );
+        trailing: SizedBox(
+          width: 60,
+          height: 26,
+          child: IconButton(
+              icon: Icon(
+                Icons.more_vert,
+              ),
+              onPressed: () {}),
+        ),
+      ),
+    );
 
-      Card(
-
+    Card(
       margin: const EdgeInsets.all(10),
       child: ListTile(
         contentPadding: EdgeInsets.only(left: 15, top: 10, bottom: 10),
@@ -356,9 +387,7 @@ class Cards {
                   backgroundImage: NetworkImage(
                       "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1581413287870&di=35491998b94817cbcf04d9f9f3d2d4b3&imgtype=jpg&src=http%3A%2F%2Fimg0.imgtn.bdimg.com%2Fit%2Fu%3D2464547320%2C3316604757%26fm%3D214%26gp%3D0.jpg"),
                 ),*/
-        title: Text(Text(documentSnapshot['nombreMision'])
-            .data
-            .toString()),
+        title: Text(Text(documentSnapshot['nombreMision']).data.toString()),
         subtitle: ReadMoreText(
           Text(
             documentSnapshot['objetivoMision'],
@@ -367,23 +396,21 @@ class Cards {
           trimLines: 1,
           colorClickableText: Colors.pink,
           trimMode: TrimMode.Line,
-          lessStyle: GoogleFonts.roboto(
-              fontSize: 14, fontWeight: FontWeight.bold),
+          lessStyle:
+              GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
           trimCollapsedText: 'ver más',
           trimExpandedText: 'ver menos',
-          moreStyle: GoogleFonts.roboto(
-              fontSize: 14, fontWeight: FontWeight.bold),
+          moreStyle:
+              GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
         ),
         trailing: SizedBox(
           width: 30,
           child: IconButton(
-              icon: const Icon(Icons.more_vert, size: 20),
-              onPressed: () {}),
+              icon: const Icon(Icons.more_vert, size: 20), onPressed: () {}),
         ),
       ),
     );
   }
-
 
   //Aspecto que tendrán las salas para los usuario tutorados
   static Widget CardSalaVistaTutorado(
@@ -401,16 +428,14 @@ class Cards {
           //Crea un objeto con la sala pulzada para posteriormente obtener su contenido midiante geters en la siguiente ventana
           SalaDatos sala = SalaDatos(documentSnapshot.reference);
 
-          Navigator.pushNamed(
-            context,
-            ListaMisiones.ROUTE_NAME,
-            arguments: TransferirDatos(
-                Text(documentSnapshot['NombreSala'])
-                    .data
-                    .toString(), //Nombre de la sala pulsada
-                sala,
-                collecionUsuarios),
-          );
+          var datos = TransferirDatos(
+              Text(documentSnapshot['NombreSala'])
+                  .data
+                  .toString(), //Nombre de la sala pulsada
+              sala,
+              collecionUsuarios);
+
+          context.router.push(ListMisionesTutorado(args: datos));
 
           //this.titulo = 'holaaa';
 
@@ -520,17 +545,14 @@ class Cards {
           //Crea un objeto con la sala pulzada para posteriormente obtener su contenido midiante geters en la siguiente ventana
           SalaDatos sala = SalaDatos(documentSnapshot.reference);
 
-          Navigator.pushNamed(
-            context,
-            TabPagesSala.ROUTE_NAME,
-            arguments: TransferirDatos(
-                Text(documentSnapshot['NombreSala'])
-                    .data
-                    .toString(), //Nombre de la sala pulsada
-                sala,
-                collecionUsuarios),
-          );
+          var datos = TransferirDatos(
+              Text(documentSnapshot['NombreSala'])
+                  .data
+                  .toString(), //Nombre de la sala pulsada
+              sala,
+              collecionUsuarios);
 
+          context.router.push(SalaContVistaTutor(args: datos));
           //this.titulo = 'holaaa';
 
           //Navigator.push(context, MaterialPageRoute(builder: (context)=>MenuSala()) );

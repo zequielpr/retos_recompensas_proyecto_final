@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:readmore/readmore.dart';
 
-import '../../../widgets/Cards.dart';
-import '../../../widgets/Fields.dart';
-import '../TaPagesSala.dart';
+import '../../../../../widgets/Cards.dart';
+import '../../../../../widgets/Fields.dart';
 
 class Misiones extends StatelessWidget {
   final CollectionReference collectionMisiones;

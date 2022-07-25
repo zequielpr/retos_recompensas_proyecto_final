@@ -1,6 +1,8 @@
 //Recoger contraseña
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/Servicios/Autenticacion/DatosNewUser.dart';
 import 'package:retos_proyecto/datos/ValidarDatos.dart';
 
@@ -8,12 +10,15 @@ import '../../../datos/TransferirDatos.dart';
 
 class RecogerPassw extends StatefulWidget {
   static const ROUTE_NAME = 'RecogerPassw';
-  const RecogerPassw({Key? key}) : super(key: key);
+  final TrasnferirDatosNombreUser args;
+  const RecogerPassw({Key? key, required this.args}) : super(key: key);
   @override
-  State<StatefulWidget> createState() => _RecogerPassw();
+  State<StatefulWidget> createState() => _RecogerPassw(args);
 }
 
 class _RecogerPassw extends State<RecogerPassw> {
+  final TrasnferirDatosNombreUser args;
+  _RecogerPassw(this.args);
   var passwController = TextEditingController();
   var botoActivado = false;
   var cumpleLongitud = false;
@@ -36,8 +41,6 @@ class _RecogerPassw extends State<RecogerPassw> {
   );
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as TrasnferirDatosNombreUser;
     return Scaffold(
       appBar: AppBar(
         title: Text('Registrarse'),
@@ -195,7 +198,6 @@ class _RecogerPassw extends State<RecogerPassw> {
 
   void _continuar(TrasnferirDatosNombreUser args, passw) {
     args.setValor('passw', passw);
-    Navigator.pushNamed(context, StateNombreUsuario.ROUTE_NAME,
-        arguments: args);
+    context.router.push(NombreUsuarioRouter(args: args));
   }
 }

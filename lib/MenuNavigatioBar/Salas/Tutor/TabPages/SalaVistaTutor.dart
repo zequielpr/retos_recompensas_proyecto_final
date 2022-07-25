@@ -1,30 +1,25 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
+
 import 'package:flutter/material.dart';
+import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/Misiones.dart';
+import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/Ruleta.dart';
+import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/ListUsuariosTutorados.dart';
 
-import '../../datos/TransferirDatos.dart';
-import 'pages/Misiones.dart';
-import 'pages/Ruleta.dart';
-import 'pages/UsersTutorados/ListUsuariosTutorados.dart';
-
-//Store this globally
+import '../../../../datos/TransferirDatos.dart';
 final GlobalKey<NavigatorState> _navKey = GlobalKey<NavigatorState>();
-
-class TabPagesSala extends StatefulWidget {
-  const TabPagesSala({Key? key}) : super(key: key);
-
-  static const ROUTE_NAME = '/extractArguments';
-
-  print(text) {
-    // TODO: implement print
-    throw UnimplementedError();
-  }
+class SalaContVistaTutor extends StatefulWidget {
+  final TransferirDatos args;
+  const SalaContVistaTutor({Key? key, required this.args}) : super(key: key);
 
   @override
-  _TabPagesSalaState createState() => _TabPagesSalaState();
+  State<SalaContVistaTutor> createState() => _SalaContVistaTutorState(args);
 }
 
-class _TabPagesSalaState extends State<TabPagesSala>
+//_SalaContVistaTutorState
+class _SalaContVistaTutorState extends State<SalaContVistaTutor>
     with SingleTickerProviderStateMixin {
+  final TransferirDatos args;
+  _SalaContVistaTutorState(this.args);
   late final TabController _tabController;
   @override
   void initState() {
@@ -34,7 +29,6 @@ class _TabPagesSalaState extends State<TabPagesSala>
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as TransferirDatos;
     return Scaffold(
       appBar: AppBar(
         title: Text(args.nombreSala),
@@ -73,9 +67,9 @@ class _TabPagesSalaState extends State<TabPagesSala>
                   contextSala: context),
               ListUsuarios(
                   collectionReferenceUsuariosTutorados:
-                      args.sala.getColecUsuariosTutorados,
+                  args.sala.getColecUsuariosTutorados,
                   collectionReferenceUsuariosDocPersonal:
-                      args.collecionUsuarios, contextSala: context, collectionReferenceMisiones: args.sala.getColecMisiones),
+                  args.collecionUsuarios, contextSala: context, collectionReferenceMisiones: args.sala.getColecMisiones),
               Ruleta(collectionReferenceRuleta: args.sala.getColecRuletas),
             ],
           ),

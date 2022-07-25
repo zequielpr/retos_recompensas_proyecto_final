@@ -67,10 +67,12 @@ class TrasnferirDatosNombreUser {
   }
 }
 
-
-
 class TransferirDatosInicio{
   final bool isTutorado;
   TransferirDatosInicio(this.isTutorado);
 }
+
+
+
+//Comenzando a llamar a las clases auxiliares como herlpers
 
