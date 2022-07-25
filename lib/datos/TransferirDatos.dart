@@ -75,9 +75,4 @@ class TransferirDatosInicio{
 
 
 //Comenzando a llamar a las clases auxiliares como herlpers
-class HelperCartera {
-  final CollectionReference collectionReferenceUser;
-
-  HelperCartera(this.collectionReferenceUser);
-}
 

@@ -5,7 +5,8 @@ import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 
-import 'MenuNavigatioBar/Inicio.dart';
+import 'MenuNavigatioBar/Inicio/Inicio.dart';
+import 'MenuNavigatioBar/Inicio/Tutorado/Historial.dart';
 import 'MenuNavigatioBar/Notificaciones.dart';
 import 'MenuNavigatioBar/Salas/Salas.dart';
 import 'MenuNavigatioBar/Salas/Tutor/TabPages/SalaVistaTutor.dart';
@@ -24,19 +25,13 @@ import 'main.dart';
   routes: <AutoRoute>[
     //Ruta splash screen
     AutoRoute(page: MyHomePage, name: 'SplashScreenRouter', initial: true, path: '/EsplashScreen'),
-
-    //Ruta login
     AutoRoute(page: Login, name: 'LoginRouter', path: '/Login'),
-
-    //Iniccio de sesion con contraseña
     AutoRoute(page: IniSesionEmailPassword, name: 'IniSesionEmailPasswordRouter', path: '/IniSesionEmailPassword'),
-
-    //Recoger roll
     AutoRoute(page: Roll, name: 'RollRouter', path: '/Roll'),
-
     AutoRoute(page: RecogerEmail, name: 'RecogerEmailRouter', path: '/RecogerEmail'),
     AutoRoute(page: NombreUsuario, name: 'NombreUsuarioRouter', path: '/NombreUsuario'),
     AutoRoute(page: RecogerPassw, name: 'RecogerPasswRouter', path: '/RecogerPassw'),
+
 
 
 
@@ -54,6 +49,7 @@ import 'main.dart';
           page: EmptyRouterPage,
           children: [
             AutoRoute(path: '', page: Home),
+            AutoRoute( path: 'Historial', page: Historial),
             //AutoRoute(path: ':bookId', page: BookDetailsPage),
             //RedirectRoute(path: '*', redirectTo: ''),
           ],

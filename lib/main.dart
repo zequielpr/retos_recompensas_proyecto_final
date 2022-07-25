@@ -118,8 +118,7 @@ class _MainState extends State<Main> {
             items: [
               CustomNavigationBarItem(
                 icon: Icon(Icons.home),
-                badgeCount: _badgeCounts[0],
-                showBadge: _badgeShows[0],
+
               ),
               CustomNavigationBarItem(
                 icon: Icon(Icons.notifications),
@@ -128,13 +127,13 @@ class _MainState extends State<Main> {
               ),
               CustomNavigationBarItem(
                 icon: Icon(Icons.meeting_room),
-                badgeCount: _badgeCounts[2],
-                showBadge: _badgeShows[2],
+
+
               ),
               CustomNavigationBarItem(
                 icon: Icon(Icons.account_circle_rounded),
-                badgeCount: _badgeCounts[3],
-                showBadge: _badgeShows[3],
+
+
               ),
 
             ],
