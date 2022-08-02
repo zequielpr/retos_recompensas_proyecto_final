@@ -7,19 +7,18 @@ class Notificaciones extends StatefulWidget {
   const Notificaciones({Key? key}) : super(key: key);
 
   @override
-  State<Notificaciones> createState() => NotificacionesState();
+  State<Notificaciones> createState() => _NotificacionesState();
 }
 
-class NotificacionesState extends State<Notificaciones> {
+class _NotificacionesState extends State<Notificaciones> {
 
-  void actualizar(){
-    setState((){});
-  }
-
+ void initState(){
+   super.initState();
+   setState((){});
+ }
 
   @override
   Widget build(BuildContext context) {
-    print('holaaa');
     return Scaffold(
         appBar: AppBar(
           title: Align(alignment: Alignment.center, child: Text('Notificaciones'),),

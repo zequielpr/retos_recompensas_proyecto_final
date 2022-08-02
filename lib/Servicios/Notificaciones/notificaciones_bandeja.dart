@@ -79,8 +79,8 @@ class BandejaNotificaciones {
         .doc(idCurrentUser)
         .collection('misiones_recibidas');
 
-    return FutureBuilder<QuerySnapshot>(
-      future: notificacionesRecibidas.get(),
+    return StreamBuilder(
+      stream: notificacionesRecibidas.snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
         if (streamSnapshot.hasData) {
           return ListView.builder(

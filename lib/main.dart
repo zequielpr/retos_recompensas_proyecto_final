@@ -147,22 +147,25 @@ class MainState extends State<Main> {
               if (routes.canPopSelfOrChildren) {
                 switch (routes.activeIndex) {
                   case 0:
-                    routes.navigate(HomeRouter());
+                    routes.navigate(const HomeRouter());
                     return;
                   case 1:
-                    routes.navigate(NotificacionesRouter());
+                    routes.navigate(const NotificacionesRouter());
                     return;
                   case 2:
-                    routes.navigate(SalasRouter());
+                    routes.navigate(const SalasRouter());
                     return;
                   case 3:
-                    routes.navigate(AdminPerfilUserRouter());
+                    routes.navigate(const AdminPerfilUserRouter());
                     return;
                   default:
                     return;
                 }
               }
 
+              if(index == 1){
+                Badge.setStatusNewMision();
+              }
 
             },
           );
