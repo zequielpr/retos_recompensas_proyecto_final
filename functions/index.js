@@ -112,6 +112,23 @@ exports.notificarNuevaMision = functions.firestore
       return;
     }
 
+    var nombreTutor;
+    var nombreSala;
+
+    await usuariosRef
+      .doc(tutorId)
+      .get()
+      .then((snap) => {
+        nombreTutor = snap.data()["nombre"];
+      });
+
+    await usuariosRef
+      .doc(tutorId)
+      .collection("rolTutor")
+      .doc(idSala)
+      .get()
+      .then((snap) => {nombreSala = snap.data()['NombreSala']});
+
     var docUsuario = "";
     var post = "";
     var respuesta = "";
@@ -121,7 +138,7 @@ exports.notificarNuevaMision = functions.firestore
     const payload = {
       notification: {
         title: "Nueva misión",
-        body: "Leer",
+        body: nombreTutor + "ha añadido una nueva mision",
         icon: "https://imborrable.com/wp-content/uploads/2021/04/fotos-gratis-de-stock-1.jpg",
       },
     };
@@ -129,6 +146,28 @@ exports.notificarNuevaMision = functions.firestore
     //El bucle forEach debe ser asíncrono ya que debe esperar a que la consulta se realice y continuar con la ejecución
     snapshot.forEach(async (doc) => {
       docUsuario = usuariosRef.doc(doc.id.trim());
+      await docUsuario
+        .collection("notificaciones")
+        .doc(doc.id.trim())
+        .update({ nueva_mision: true }); //Actualizar numero de notificaciones misiones
+      await docUsuario
+        .collection("notificaciones")
+        .doc(doc.id.trim())
+        .update({ numb_misiones: admin.firestore.FieldValue.increment(1) }); //Actualizar numero de notificaciones misiones
+
+      //Eccribir la notificación en el buzón del usuario
+      await docUsuario
+        .collection("notificaciones")
+        .doc(doc.id.trim())
+        .collection("misiones_recibidas")
+        .add({
+          id_emisor: tutorId,
+          id_sala: idSala,
+          nombre_tutor: nombreTutor,
+          nombre_sala: nombreSala,
+          isNew:true
+        });
+
       snapShotUsuariosTutorados = await docUsuario.get();
       console.log("Id de usuario encontrado:*", doc.id, "*");
       post = snapShotUsuariosTutorados.data();
@@ -178,6 +217,15 @@ exports.notificarSolicitudesRecibidas = functions.firestore
 
     //Obtener documento de usuaro al cual se le ha enviado la solicitud
     var documentUser = db.collection("usuarios").doc(user_id.trim());
+
+    await documentUser
+      .collection("notificaciones")
+      .doc(user_id.trim())
+      .update({ nueva_solicitud: true }); //Actualizar numero de notificaciones solicitudes
+    await documentUser
+      .collection("notificaciones")
+      .doc(user_id.trim())
+      .update({ numb_solicitudes: admin.firestore.FieldValue.increment(1) }); //Actualizar numero de notificaciones solicitudes
 
     //Crea la notificacion
     const payload = {

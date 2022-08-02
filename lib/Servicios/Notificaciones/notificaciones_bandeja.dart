@@ -72,6 +72,7 @@ class BandejaNotificaciones {
   //Obtener las misiones recibidas------------------------------------------------------------------
   static Widget getMisiones(CollectionReference collectionReference) {
 
+
     CollectionReference notificacionesRecibidas = collectionReference
         .doc(idCurrentUser)
         .collection('notificaciones')

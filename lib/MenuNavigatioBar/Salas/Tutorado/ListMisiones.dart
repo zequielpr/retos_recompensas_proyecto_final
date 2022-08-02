@@ -20,18 +20,24 @@ class _ListMisionesTutoradoState extends State<ListMisionesTutorado> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(args.nombreSala),
+          actions: const [
+            IconButton(
+              onPressed: null,
+              icon: Icon(Icons.add_box_outlined, color: Colors.transparent,),
+            ),
+          ],
+          title: Align(
+            alignment: Alignment.center,
+            child: Text(args.nombreSala),
+          ),
         ),
         body: getListMisionesVistTutorado(args.sala.getColecMisiones));
     ;
   }
 
-
-
-
-
   //Metodo para obtener la misiones del usuario actual
-static Widget getListMisionesVistTutorado(CollectionReference collectionReferenceMisiones){
+  static Widget getListMisionesVistTutorado(
+      CollectionReference collectionReferenceMisiones) {
     return StreamBuilder(
       stream: collectionReferenceMisiones.snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
@@ -40,12 +46,17 @@ static Widget getListMisionesVistTutorado(CollectionReference collectionReferenc
             itemCount: streamSnapshot.data!.docs.length,
             itemBuilder: (context, index) {
               final DocumentSnapshot documentSnapshot =
-              streamSnapshot.data!.docs[index];
+                  streamSnapshot.data!.docs[index];
               return Cards.getCardMision(
                   documentSnapshot['nombreMision'],
                   documentSnapshot['objetivoMision'],
                   documentSnapshot['completada_por'],
-                  documentSnapshot['solicitu_confirmacion'], CurrentUser.getIdCurrentUser(), context, documentSnapshot.reference,  documentSnapshot['recompensaMision'], 0);
+                  documentSnapshot['solicitu_confirmacion'],
+                  CurrentUser.getIdCurrentUser(),
+                  context,
+                  documentSnapshot.reference,
+                  documentSnapshot['recompensaMision'],
+                  0);
             },
           );
         }
@@ -54,5 +65,5 @@ static Widget getListMisionesVistTutorado(CollectionReference collectionReferenc
         );
       },
     );
-}
+  }
 }

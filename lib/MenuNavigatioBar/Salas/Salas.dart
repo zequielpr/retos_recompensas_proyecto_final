@@ -18,16 +18,26 @@ class _SalasState extends State<Salas> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Salas'),
+        leading: IconButton(onPressed: (){}, icon: Icon(Icons.person),),
+        title: Align(
+          alignment: Alignment.center,
+          child: Text('Salas'),
+        ),
+        
+        actions: [IconButton(onPressed: (){}, icon: Icon(Icons.add_box_outlined))],
       ),
-      body: Container(child:  Roll_Data.ROLL_USER_IS_TUTORADO?  _listarVistaTutorados(context, CollecUser.COLECCION_USUARIOS):
-      getVistaSalasVistaTutor(context, CollecUser.COLECCION_USUARIOS),),
+      body: Container(
+        child: Roll_Data.ROLL_USER_IS_TUTORADO
+            ? _listarVistaTutorados(context, CollecUser.COLECCION_USUARIOS)
+            : getVistaSalasVistaTutor(context, CollecUser.COLECCION_USUARIOS),
+      ),
     );
     ;
   }
 
   //Vista de las salas para los tutorados
-  _listarVistaTutorados(BuildContext context, CollectionReference collecionUsuarios) {
+  _listarVistaTutorados(
+      BuildContext context, CollectionReference collecionUsuarios) {
     String tutorActual = 'hr44Bc4CRqWJjFfDYMCBmu707Qq1';
     List<dynamic> listaIdasSalas;
 
@@ -73,11 +83,8 @@ class _SalasState extends State<Salas> {
         });
   }
 
-
-
   static Widget getVistaSalasVistaTutor(
       BuildContext context, CollectionReference collecionUsuarios) {
-
     //lista todas las salas que ha creado el usuario actual
     return StreamBuilder(
       stream: collecionUsuarios
@@ -90,8 +97,9 @@ class _SalasState extends State<Salas> {
             itemCount: streamSnapshot.data!.docs.length,
             itemBuilder: (context, index) {
               final DocumentSnapshot documentSnapshot =
-              streamSnapshot.data!.docs[index];
-              return Cards.vistaTutor(context, collecionUsuarios, documentSnapshot);//Devuele la vista de la sala
+                  streamSnapshot.data!.docs[index];
+              return Cards.vistaTutor(context, collecionUsuarios,
+                  documentSnapshot); //Devuele la vista de la sala
             },
           );
         }
