@@ -18,13 +18,17 @@ class _SalasState extends State<Salas> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: (){}, icon: Icon(Icons.person),),
+        leading: IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.person),
+        ),
         title: Align(
           alignment: Alignment.center,
           child: Text('Salas'),
         ),
-        
-        actions: [IconButton(onPressed: (){}, icon: Icon(Icons.add_box_outlined))],
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.add_box_outlined))
+        ],
       ),
       body: Container(
         child: Roll_Data.ROLL_USER_IS_TUTORADO
@@ -49,7 +53,9 @@ class _SalasState extends State<Salas> {
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const Text("Loading");
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
           var documentSnapShot = snapshot.data as DocumentSnapshot;
 
@@ -68,7 +74,6 @@ class _SalasState extends State<Salas> {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return const Text('Cargando');
                     }
                     var documentSnapShot = snapshot.data as DocumentSnapshot;
                     return Cards.CardSalaVistaTutorado(
@@ -79,6 +84,10 @@ class _SalasState extends State<Salas> {
             shrinkWrap: true,
             padding: EdgeInsets.all(5),
             scrollDirection: Axis.vertical,
+          );
+
+          return const Center(
+            child: CircularProgressIndicator(),
           );
         });
   }
