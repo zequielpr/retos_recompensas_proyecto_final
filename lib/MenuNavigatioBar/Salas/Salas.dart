@@ -1,5 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 import 'package:retos_proyecto/datos/Roll_Data.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
@@ -27,7 +29,9 @@ class _SalasState extends State<Salas> {
           child: Text('Salas'),
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.add_box_outlined))
+          IconButton(
+              onPressed: () async => crearSala(),
+              icon: Icon(Icons.add_box_outlined))
         ],
       ),
       body: Container(
@@ -73,8 +77,7 @@ class _SalasState extends State<Salas> {
                       .doc(listaIdasSalas[index])
                       .snapshots(),
                   builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                    }
+                    if (!snapshot.hasData) {}
                     var documentSnapShot = snapshot.data as DocumentSnapshot;
                     return Cards.CardSalaVistaTutorado(
                         context, collecionUsuarios, documentSnapShot);
@@ -119,5 +122,99 @@ class _SalasState extends State<Salas> {
         );
       },
     );
+  }
+
+  //Funcion para crear nuevas salas
+  Future<void> crearSala() async {
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10), topRight: Radius.circular(10))),
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext ctx) {
+          return Padding(
+            padding: EdgeInsets.only(
+                top: 10,
+                left: 20,
+                right: 20,
+                // prevent the soft keyboard from covering text fields
+                bottom: MediaQuery.of(ctx).viewInsets.bottom + 30),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                /*  Row(children: [
+                  IconButton(onPressed: (){}, icon: Icon(Icons.cancel_outlined))
+                ],),*/
+
+                Row(
+                  //mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Crear una nueva sala",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: Pantalla.getPorcentPanntalla(29, context, "x")),
+                      child: IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          icon: const Icon(Icons.close)),
+                    )
+                  ],
+                ),
+                /*const ListTile(
+                    leading: Material(
+                      color: Colors.transparent,
+                    ),
+                    title: Text(
+                      "Enviar solicitud a usuario",
+                      style: TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                ),*/
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextField(
+                    decoration:
+                        InputDecoration(labelText: 'Nombre de sala'),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+
+                //Boton de enviar solicitud
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: ElevatedButton(
+                      onPressed: () async {
+/*                      var resultadoFinal = await Solicitudes.enviarSolicitud(
+                          _userNameController.text,
+                          collectionReferenceUser,
+                          idSala);
+
+                      var colorSnackBar =
+                          resultadoFinal == true ? Colors.green : Colors.red;
+                      var mensaje = resultadoFinal == true
+                          ? 'Solicitud enviada correctamente'
+                          : 'Error al enviar solicitud, el usuario no existe';
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: colorSnackBar,
+                          content: Text(mensaje)));
+                      Navigator.of(context).pop();*/
+                      },
+                      child: Text('Enviar solicitud')),
+                )
+              ],
+            ),
+          );
+        });
   }
 }
