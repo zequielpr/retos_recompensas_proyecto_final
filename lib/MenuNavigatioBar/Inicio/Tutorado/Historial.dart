@@ -9,7 +9,6 @@ import '../../../datos/TransferirDatos.dart';
 import '../../../datos/UsuarioActual.dart';
 
 class Historial extends StatefulWidget {
-  static const ROUTE_NAME = 'cartera';
 
   const Historial({
     Key? key,
@@ -93,7 +92,26 @@ class _HistorialState extends State<Historial> {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   side: BorderSide(color: Colors.black26, width: 3)),
             )),
-        onPressed: () {},
+        onPressed: () {
+          showDialog<void>(
+            context: context,
+            // false = user must tap button, true = tap outside dialog
+            builder: (BuildContext dialogContext) {
+              return AlertDialog(
+                title: Text(titulo),
+                content: Text(contenido),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text('ok'),
+                    onPressed: () {
+                      Navigator.of(dialogContext).pop(); // Dismiss alert dialog
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        },
         child: Container(
           width: 100,
           height: 100,

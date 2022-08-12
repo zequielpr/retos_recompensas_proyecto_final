@@ -47,24 +47,10 @@ class InicioVistaTutorado {
                   ],
                 ),
 
-                //Barra de avance
-                Row(
-                  children: [
-                    Expanded(
-                        flex: 6,
-                        child: DatosPersonales.getIndicadoAvance(
-                            CurrentUser.getIdCurrentUser(),
-                            collectionReferenceUsers,
-                            idTutorActual)),
-                    Expanded(flex: 1, child: Icon(Icons.flag)),
-                    Expanded(flex: 1, child: Text('200'))
-                  ],
-                ),
-
                 Container(
                   margin: EdgeInsets.only(
                       top: Pantalla.getPorcentPanntalla(15, context, 'y'),
-                      bottom: Pantalla.getPorcentPanntalla(6, context, 'y')),
+                      bottom: Pantalla.getPorcentPanntalla(3, context, 'y')),
                   height: Pantalla.getPorcentPanntalla(29, context, 'y'),
                   width: Pantalla.getPorcentPanntalla(80, context, 'x'),
                   child: ElevatedButton(
@@ -117,7 +103,7 @@ class InicioVistaTutorado {
                                                   Navigator.of(dialogContext)
                                                       .pop(); //
                                                   context.router
-                                                      .pushNamed('Cartera');
+                                                      .pushNamed('Historial');
                                                   // Dismiss alert dialog
                                                 },
                                               ),
@@ -177,6 +163,10 @@ class InicioVistaTutorado {
                           : null,
                       child: Text('Foto de algo')),
                 ),
+                DatosPersonales.getIndicadoAvance(
+                    CurrentUser.getIdCurrentUser(),
+                    collectionReferenceUsers,
+                    idTutorActual)
 
               ],
             ),

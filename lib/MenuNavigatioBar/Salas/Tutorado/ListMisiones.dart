@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import '../../../datos/TransferirDatos.dart';
@@ -20,10 +21,13 @@ class _ListMisionesTutoradoState extends State<ListMisionesTutorado> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          actions: const [
+          actions: [
             IconButton(
-              onPressed: null,
-              icon: Icon(Icons.add_box_outlined, color: Colors.transparent,),
+              onPressed: (){},
+              icon: Icon(
+                Icons.filter_alt_outlined,
+                color: Colors.black,
+              ),
             ),
           ],
           title: Align(
