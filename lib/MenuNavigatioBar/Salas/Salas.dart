@@ -6,6 +6,7 @@ import 'package:retos_proyecto/datos/CollecUsers.dart';
 import 'package:retos_proyecto/datos/Roll_Data.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
+import '../../datos/CollecUsers.dart';
 import '../../widgets/Cards.dart';
 
 class Salas extends StatefulWidget {
@@ -46,7 +47,7 @@ class _SalasState extends State<Salas> {
   //Vista de las salas para los tutorados
   _listarVistaTutorados(
       BuildContext context, CollectionReference collecionUsuarios) {
-    String tutorActual = 'hr44Bc4CRqWJjFfDYMCBmu707Qq1';
+    String tutorActual = 'VLq2hHV2ZbdrabyEAI7RTs9ZfGB3';
     List<dynamic> listaIdasSalas;
 
     return StreamBuilder(
@@ -126,6 +127,7 @@ class _SalasState extends State<Salas> {
 
   //Funcion para crear nuevas salas
   Future<void> crearSala() async {
+    var nombreSala = TextEditingController();
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -179,11 +181,12 @@ class _SalasState extends State<Salas> {
                           fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                 ),*/
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: TextField(
+                    controller: nombreSala,
                     decoration:
-                        InputDecoration(labelText: 'Nombre de sala'),
+                        const InputDecoration(labelText: 'Nombre de sala'),
                   ),
                 ),
                 const SizedBox(
@@ -194,23 +197,38 @@ class _SalasState extends State<Salas> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: ElevatedButton(
-                      onPressed: () async {
-/*                      var resultadoFinal = await Solicitudes.enviarSolicitud(
-                          _userNameController.text,
-                          collectionReferenceUser,
-                          idSala);
+                    child: Text('Crear sala'),
+                    onPressed: () async {
 
-                      var colorSnackBar =
-                          resultadoFinal == true ? Colors.green : Colors.red;
-                      var mensaje = resultadoFinal == true
-                          ? 'Solicitud enviada correctamente'
-                          : 'Error al enviar solicitud, el usuario no existe';
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          backgroundColor: colorSnackBar,
-                          content: Text(mensaje)));
-                      Navigator.of(context).pop();*/
-                      },
-                      child: Text('Enviar solicitud')),
+                      final String name = nombreSala.text;
+
+                      if (name.isNotEmpty) {
+
+                        // Persist a new product to Firestore
+                        await CollecUser.COLECCION_USUARIOS.doc(
+                            CurrentUser.getIdCurrentUser())
+                            .collection('rolTutor')
+                            .add({
+                          "NombreSala": name,
+                          'numMisiones': 0,
+                          'numTutorados': 0
+                        }).whenComplete(() => {
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text(
+                        'Sala creada correctamente')))
+                        });
+                        nombreSala.text = '';
+
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text(
+                                'Escriba en nombre de la sala. Debe tener al menos dos letras')));
+                      }
+
+                      // Hide the bottom sheet
+                      Navigator.of(context).pop();
+                    },
+                  ),
                 )
               ],
             ),
