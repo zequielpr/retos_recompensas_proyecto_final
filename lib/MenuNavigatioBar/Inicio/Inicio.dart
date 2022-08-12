@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
       body: Column(children: <Widget>[
         Roll_Data.ROLL_USER_IS_TUTORADO
             ? InicioVistaTutorado.showCajaRecompensa(
-                CollecUser.COLECCION_USUARIOS, 'VLq2hHV2ZbdrabyEAI7RTs9ZfGB3')
+                CollecUser.COLECCION_USUARIOS, 'CGWDtkvBpPSFfsziW0T3x1zfEAt1')
             : Text('inicio para el tutor'),
       ]),
     );
