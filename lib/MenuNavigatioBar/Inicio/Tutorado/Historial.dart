@@ -28,7 +28,7 @@ class _HistorialState extends State<Historial> {
           title: Text('Recompensas recibidas'),
         ),
         body: _getTidasRecompensas(
-            CollecUser.COLECCION_USUARIOS, 'hr44Bc4CRqWJjFfDYMCBmu707Qq1')
+            CollecUser.COLECCION_USUARIOS, 'CGWDtkvBpPSFfsziW0T3x1zfEAt1')
         //_getTidasRecompensas(
         //                 CollecUser.COLECCION_USUARIOS, 'hr44Bc4CRqWJjFfDYMCBmu707Qq1')
         );

@@ -47,7 +47,7 @@ class _SalasState extends State<Salas> {
   //Vista de las salas para los tutorados
   _listarVistaTutorados(
       BuildContext context, CollectionReference collecionUsuarios) {
-    String tutorActual = 'VLq2hHV2ZbdrabyEAI7RTs9ZfGB3';
+    String tutorActual = 'CGWDtkvBpPSFfsziW0T3x1zfEAt1';
     List<dynamic> listaIdasSalas;
 
     return StreamBuilder(

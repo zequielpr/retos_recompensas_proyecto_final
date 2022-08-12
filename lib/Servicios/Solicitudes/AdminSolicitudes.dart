@@ -27,7 +27,9 @@ class Solicitudes {
           }
           await value.reference.set({
             'salas_id': FieldValue.arrayUnion([id_sala]),
-            'puntosTotal': 0
+            'puntosTotal': 0,
+            'recompensa_x_200': {},
+            'puntos_acumulados': 0
           });
             })
         .then((value) async => {
