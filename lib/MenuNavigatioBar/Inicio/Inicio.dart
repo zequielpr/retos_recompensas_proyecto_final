@@ -37,10 +37,11 @@ class _HomeState extends State<Home> {
           )
         ],
       ),
+
       body: Column(children: <Widget>[
         Roll_Data.ROLL_USER_IS_TUTORADO
             ? InicioVistaTutorado.showCajaRecompensa(
-                CollecUser.COLECCION_USUARIOS, 'hr44Bc4CRqWJjFfDYMCBmu707Qq1')
+                CollecUser.COLECCION_USUARIOS, 'VLq2hHV2ZbdrabyEAI7RTs9ZfGB3')
             : Text('inicio para el tutor'),
       ]),
     );

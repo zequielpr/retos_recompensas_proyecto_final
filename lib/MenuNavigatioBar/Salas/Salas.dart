@@ -1,9 +1,12 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 import 'package:retos_proyecto/datos/Roll_Data.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
+import '../../datos/CollecUsers.dart';
 import '../../widgets/Cards.dart';
 
 class Salas extends StatefulWidget {
@@ -27,7 +30,9 @@ class _SalasState extends State<Salas> {
           child: Text('Salas'),
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.add_box_outlined))
+          IconButton(
+              onPressed: () async => crearSala(),
+              icon: Icon(Icons.add_box_outlined))
         ],
       ),
       body: Container(
@@ -42,7 +47,7 @@ class _SalasState extends State<Salas> {
   //Vista de las salas para los tutorados
   _listarVistaTutorados(
       BuildContext context, CollectionReference collecionUsuarios) {
-    String tutorActual = 'hr44Bc4CRqWJjFfDYMCBmu707Qq1';
+    String tutorActual = 'VLq2hHV2ZbdrabyEAI7RTs9ZfGB3';
     List<dynamic> listaIdasSalas;
 
     return StreamBuilder(
@@ -73,8 +78,7 @@ class _SalasState extends State<Salas> {
                       .doc(listaIdasSalas[index])
                       .snapshots(),
                   builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                    }
+                    if (!snapshot.hasData) {}
                     var documentSnapShot = snapshot.data as DocumentSnapshot;
                     return Cards.CardSalaVistaTutorado(
                         context, collecionUsuarios, documentSnapShot);
@@ -119,5 +123,116 @@ class _SalasState extends State<Salas> {
         );
       },
     );
+  }
+
+  //Funcion para crear nuevas salas
+  Future<void> crearSala() async {
+    var nombreSala = TextEditingController();
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10), topRight: Radius.circular(10))),
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext ctx) {
+          return Padding(
+            padding: EdgeInsets.only(
+                top: 10,
+                left: 20,
+                right: 20,
+                // prevent the soft keyboard from covering text fields
+                bottom: MediaQuery.of(ctx).viewInsets.bottom + 30),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                /*  Row(children: [
+                  IconButton(onPressed: (){}, icon: Icon(Icons.cancel_outlined))
+                ],),*/
+
+                Row(
+                  //mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Crear una nueva sala",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: Pantalla.getPorcentPanntalla(29, context, "x")),
+                      child: IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          icon: const Icon(Icons.close)),
+                    )
+                  ],
+                ),
+                /*const ListTile(
+                    leading: Material(
+                      color: Colors.transparent,
+                    ),
+                    title: Text(
+                      "Enviar solicitud a usuario",
+                      style: TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                ),*/
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextField(
+                    controller: nombreSala,
+                    decoration:
+                        const InputDecoration(labelText: 'Nombre de sala'),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+
+                //Boton de enviar solicitud
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: ElevatedButton(
+                    child: Text('Crear sala'),
+                    onPressed: () async {
+
+                      final String name = nombreSala.text;
+
+                      if (name.isNotEmpty) {
+
+                        // Persist a new product to Firestore
+                        await CollecUser.COLECCION_USUARIOS.doc(
+                            CurrentUser.getIdCurrentUser())
+                            .collection('rolTutor')
+                            .add({
+                          "NombreSala": name,
+                          'numMisiones': 0,
+                          'numTutorados': 0
+                        }).whenComplete(() => {
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text(
+                        'Sala creada correctamente')))
+                        });
+                        nombreSala.text = '';
+
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text(
+                                'Escriba en nombre de la sala. Debe tener al menos dos letras')));
+                      }
+
+                      // Hide the bottom sheet
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                )
+              ],
+            ),
+          );
+        });
   }
 }
