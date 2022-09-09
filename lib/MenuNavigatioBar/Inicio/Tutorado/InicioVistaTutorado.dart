@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +10,8 @@ import '../../../datos/DatosPersonalUser.dart';
 import '../../../datos/UsuarioActual.dart';
 
 class InicioVistaTutorado {
-  static Widget showCajaRecompensa(
-      CollectionReference collectionReferenceUsers, String idTutorActual) {
+  static Widget showCajaRecompensa(CollectionReference collectionReferenceUsers,
+      String idTutorActual, changeImg, cofre) {
     DocumentReference docTutor = collectionReferenceUsers
         .doc(CurrentUser.getIdCurrentUser())
         .collection('rolTutorado')
@@ -46,7 +48,6 @@ class InicioVistaTutorado {
                     )
                   ],
                 ),
-
                 Container(
                   margin: EdgeInsets.only(
                       top: Pantalla.getPorcentPanntalla(15, context, 'y'),
@@ -55,14 +56,9 @@ class InicioVistaTutorado {
                   width: Pantalla.getPorcentPanntalla(80, context, 'x'),
                   child: ElevatedButton(
                       style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.amber),
-                          shape: MaterialStateProperty.all(
-                              const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                  side: BorderSide(
-                                      color: Colors.black26, width: 2)))),
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.blueGrey),
+                      ),
                       onPressed: snapshot['puntosTotal'] == 200
                           ? snapshot['recompensa_x_200'].isNotEmpty
                               ? () async {
@@ -87,30 +83,45 @@ class InicioVistaTutorado {
                                     await docTutor
                                         .update({'recompensa_x_200': {}});
 
-                                    //Mostrar la recompensa obtenida
-                                    recompensa.forEach((key, value) {
-                                      showDialog<void>(
-                                        context: context,
-                                        // false = user must tap button, true = tap outside dialog
-                                        builder: (BuildContext dialogContext) {
-                                          return AlertDialog(
-                                            title: Text('Recompensa'),
-                                            content: Text(key + ': ' + value),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                child: Text('ver billetera?'),
-                                                onPressed: () {
-                                                  Navigator.of(dialogContext)
-                                                      .pop(); //
-                                                  context.router
-                                                      .pushNamed('Historial');
-                                                  // Dismiss alert dialog
-                                                },
-                                              ),
-                                            ],
+                                    //Cambiar img cofre
+                                    changeImg();
+
+                                    var count = 0;
+                                    Timer.periodic(Duration(seconds: 1),
+                                        (timer) {
+                                      count++;
+                                      if (count == 2) {
+                                        //Mostrar la recompensa obtenida
+                                        recompensa.forEach((key, value) {
+                                          showDialog<void>(
+                                            context: context,
+                                            // false = user must tap button, true = tap outside dialog
+                                            builder:
+                                                (BuildContext dialogContext) {
+                                              return AlertDialog(
+                                                title: Text('Recompensa'),
+                                                content:
+                                                    Text(key + ': ' + value),
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    child:
+                                                        Text('ver billetera?'),
+                                                    onPressed: () {
+                                                      Navigator.of(
+                                                              dialogContext)
+                                                          .pop(); //
+                                                      context.router.pushNamed(
+                                                          'Historial');
+                                                      // Dismiss alert dialog
+                                                    },
+                                                  ),
+                                                ],
+                                              );
+                                            },
                                           );
-                                        },
-                                      );
+                                        });
+                                        timer.cancel();
+                                      }
                                     });
 
                                     if (snapshot['puntos_acumulados'] > 200) {
@@ -161,13 +172,12 @@ class InicioVistaTutorado {
                                       'Actualmente no hay recompensas para reclamar, pongase en contacto con su tutor');
                                 }
                           : null,
-                      child: Text('Foto de algo')),
+                      child: Image.asset("lib/imgs/cofre/cofre.png")),
                 ),
                 DatosPersonales.getIndicadoAvance(
                     CurrentUser.getIdCurrentUser(),
                     collectionReferenceUsers,
                     idTutorActual)
-
               ],
             ),
           );

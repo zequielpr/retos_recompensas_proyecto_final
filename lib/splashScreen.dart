@@ -11,6 +11,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:retos_proyecto/MediaQuery.dart';
 
 import 'Rutas.gr.dart';
 import 'datos/Roll_Data.dart';
@@ -71,9 +72,8 @@ class splashScreen extends StatelessWidget {
           textTheme: const TextTheme(
               bodyText2: TextStyle(color: Colors.black, fontSize: 17),
               button: TextStyle(color: Colors.black)),
-          inputDecorationTheme: const InputDecorationTheme(
+          inputDecorationTheme: InputDecorationTheme(
               contentPadding: EdgeInsets.only(left: 10),
-              constraints: BoxConstraints.expand(height: 48, width: 300),
               border: OutlineInputBorder(
                 borderSide: BorderSide(
                   style: BorderStyle.solid,

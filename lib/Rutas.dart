@@ -10,6 +10,7 @@ import 'MenuNavigatioBar/Inicio/Tutorado/Historial.dart';
 import 'MenuNavigatioBar/Notificaciones.dart';
 import 'MenuNavigatioBar/Salas/Salas.dart';
 import 'MenuNavigatioBar/Salas/Tutor/TabPages/SalaVistaTutor.dart';
+import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/AddRewardUser.dart';
 import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/UserTutorado.dart';
 import 'MenuNavigatioBar/Salas/Tutorado/ListMisiones.dart';
 import 'Servicios/Autenticacion/DatosNewUser.dart';
@@ -77,6 +78,7 @@ import 'main.dart';
             AutoRoute(path: 'SalaContVistaTutor', page: SalaContVistaTutor),
             AutoRoute(path: 'UserTutoradoDescrip', page: UserTutorado),
             AutoRoute(path: 'ListaMisionesTutorado', page: ListMisionesTutorado),
+            AutoRoute(path: 'AddReward', page: AddReward, name: 'AddRewardRouter'),
             RedirectRoute(path: '*', redirectTo: ''),
 
           ],

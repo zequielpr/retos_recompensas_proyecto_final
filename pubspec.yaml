@@ -86,6 +86,12 @@ flutter:
      - lib/imgs/img_facebook.png
      - lib/imgs/img_apple.png
      - lib/imgs/img_logo_provicional.png
+     - lib/imgs/cofre/cofre_1.png
+     - lib/imgs/cofre/cofre_2.png
+     - lib/imgs/cofre/cofre_3.png
+     - lib/imgs/cofre/cofre_4.png
+     - lib/imgs/cofre/cofre_5.png
+     - lib/imgs/cofre/cofre.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
