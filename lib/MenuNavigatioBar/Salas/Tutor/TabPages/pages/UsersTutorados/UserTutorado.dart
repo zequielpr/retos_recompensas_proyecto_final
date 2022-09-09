@@ -1,5 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/AddRewardUser.dart';
+import 'package:retos_proyecto/Rutas.gr.dart';
+import 'package:retos_proyecto/datos/CollecUsers.dart';
 
 import '../../../../../../datos/DatosPersonalUser.dart';
 import '../../../../../../datos/TransferirDatos.dart';
@@ -14,7 +18,7 @@ class UserTutorado extends StatefulWidget {
   State<UserTutorado> createState() => _UserTutoradoState(args);
 }
 
-class _UserTutoradoState extends State<UserTutorado > {
+class _UserTutoradoState extends State<UserTutorado> {
   final TransfDatosUserTutorado args;
   _UserTutoradoState(this.args);
   double _currentSliderValue = 15;
@@ -29,9 +33,10 @@ class _UserTutoradoState extends State<UserTutorado > {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: DatosPersonales.getDato(colecTodosLosUsuarios!, args.snap.id, 'nombre_usuario'),
+            title: DatosPersonales.getDato(
+                colecTodosLosUsuarios!, args.snap.id, 'nombre_usuario'),
             actions: [
-              IconButton(onPressed: () {}, icon: Icon(Icons.more_vert))
+              IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
             ],
             backgroundColor: Colors.white,
             foregroundColor: Colors.black,
@@ -48,13 +53,18 @@ class _UserTutoradoState extends State<UserTutorado > {
                           Expanded(
                             flex: 4,
                             child: Center(
-                              child: DatosPersonales.getAvatar(colecTodosLosUsuarios, args.snap.id.trim(), 40),
+                              child: DatosPersonales.getAvatar(
+                                  colecTodosLosUsuarios,
+                                  args.snap.id.trim(),
+                                  40),
                             ),
                           ),
                           Expanded(
                               flex: 6,
-                              child: DatosPersonales.getIndicadoAvance(args.snap.reference.id, colecTodosLosUsuarios, CurrentUser.getIdCurrentUser())
-                          ),
+                              child: DatosPersonales.getIndicadoAvance(
+                                  args.snap.reference.id,
+                                  colecTodosLosUsuarios,
+                                  CurrentUser.getIdCurrentUser())),
                           Expanded(flex: 1, child: Text(''))
                         ],
                       ),
@@ -63,7 +73,8 @@ class _UserTutoradoState extends State<UserTutorado > {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(left: 20, top: 10),
-                          child: DatosPersonales.getDato(colecTodosLosUsuarios, args.snap.id.trim(), 'nombre'),
+                          child: DatosPersonales.getDato(colecTodosLosUsuarios,
+                              args.snap.id.trim(), 'nombre'),
                         )
                       ],
                     ),
@@ -82,7 +93,7 @@ class _UserTutoradoState extends State<UserTutorado > {
                             Icons.apps,
                             color: Colors.black,
                           ),
-                          text: 'apps',
+                          text: 'Recompensa',
                         ),
                       ],
                     ),
@@ -92,7 +103,9 @@ class _UserTutoradoState extends State<UserTutorado > {
           body: TabBarView(
             children: [
               _getListaMisiones(colecTodosLosUsuarios, args, puntos),
-              Icon(Icons.directions_transit),
+              Center(
+                child: getRecompensaForUser(),
+              ),
             ],
           ),
         ));
@@ -100,11 +113,15 @@ class _UserTutoradoState extends State<UserTutorado > {
 
   ///Devuelve el indicador de los puntos del usuarrio tutorado en tiempo real
 
-
-  static Widget _getListaMisiones( collectionReferenceUsers, TransfDatosUserTutorado args, dynamic puntos) {
+  static Widget _getListaMisiones(
+      collectionReferenceUsers, TransfDatosUserTutorado args, dynamic puntos) {
     //Toma los puntos totales en tiempo real, sin necedidad de reiniciar el widget
     return StreamBuilder(
-        stream: collectionReferenceUsers.doc(args.snap.reference.id.trim()).collection('rolTutorado').doc(CurrentUser.getIdCurrentUser()).snapshots(),
+        stream: collectionReferenceUsers
+            .doc(args.snap.reference.id.trim())
+            .collection('rolTutorado')
+            .doc(CurrentUser.getIdCurrentUser())
+            .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Text("Loading");
@@ -118,14 +135,17 @@ class _UserTutoradoState extends State<UserTutorado > {
                   itemCount: streamSnapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     final DocumentSnapshot documentSnapshot =
-                    streamSnapshot.data!.docs[index];
+                        streamSnapshot.data!.docs[index];
                     return Cards.getCardMision(
                         documentSnapshot['nombreMision'],
                         documentSnapshot['objetivoMision'],
                         documentSnapshot['completada_por'],
-                        documentSnapshot['solicitu_confirmacion'], args.snap.id.trim(), context, documentSnapshot.reference,
-                        documentSnapshot['recompensaMision'],userDocument['puntosTotal']
-                    );
+                        documentSnapshot['solicitu_confirmacion'],
+                        args.snap.id.trim(),
+                        context,
+                        documentSnapshot.reference,
+                        documentSnapshot['recompensaMision'],
+                        userDocument['puntosTotal']);
                   },
                 );
               }
@@ -133,11 +153,81 @@ class _UserTutoradoState extends State<UserTutorado > {
                 child: CircularProgressIndicator(),
               );
             },
-          );;
+          );
+          ;
+        });
+  }
+
+  //Recompensa que obtendrá el usuario
+  Widget getRecompensaForUser() {
+    return StreamBuilder<DocumentSnapshot>(
+      stream: CollecUser.COLECCION_USUARIOS
+          .doc(args.snap.reference.id.trim())
+          .collection("rolTutorado")
+          .doc(CurrentUser.getIdCurrentUser())
+          .snapshots(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return Text('Something went wrong');
         }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Text("Loading");
+        }
+
+        if (snapshot.hasData) {
+          var snap = snapshot.data as DocumentSnapshot;
+
+          if (snap['recompensa_x_200'].isEmpty) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                IconButton(
+                  onPressed: () {
+                    context.router.push(
+                        AddRewardRouter(userId: args.snap.reference.id.trim()));
+                  },
+                  icon: const Icon(
+                    Icons.add,
+                    size: 40,
+                  ),
+                ),
+                Text('Añadir recompensa')
+              ],
+            );
+          }
+
+          var k;
+          var contenido;
+
+          snap['recompensa_x_200'].forEach((key, value) {
+            k = key;
+            contenido = value;
+          });
+          return Card(
+            child: ListTile(
+              title: Text(k),
+              subtitle: Text(contenido),
+            ),
+          );
+        }
+
+        return IconButton(
+            onPressed: () async => addReward(), icon: Icon(Icons.add));
+      },
     );
+  }
 
-
+//Añdir recompensa al usuario tutorado
+  Future<void> addReward() async {
+    await CollecUser.COLECCION_USUARIOS
+        .doc(args.snap.reference.id.trim())
+        .collection("rolTutorado")
+        .doc(CurrentUser.getIdCurrentUser())
+        .update({
+      "recompensa_x_200": {'hola': 'hola'}
+    });
   }
 }
 

@@ -127,7 +127,7 @@ exports.notificarNuevaMision = functions.firestore
       .collection("rolTutor")
       .doc(idSala)
       .get()
-      .then((snap) => {nombreSala = snap.data()['NombreSala']});
+      .then((snap) => { nombreSala = snap.data()['NombreSala'] });
 
     var docUsuario = "";
     var post = "";
@@ -146,14 +146,16 @@ exports.notificarNuevaMision = functions.firestore
     //El bucle forEach debe ser asíncrono ya que debe esperar a que la consulta se realice y continuar con la ejecución
     snapshot.forEach(async (doc) => {
       docUsuario = usuariosRef.doc(doc.id.trim());
-      await docUsuario
+
+
+      //Comprobar si el buzon existe
+      if (docUsuario
         .collection("notificaciones")
-        .doc(doc.id.trim())
-        .update({ nueva_mision: true }); //Actualizar numero de notificaciones misiones
-      await docUsuario
-        .collection("notificaciones")
-        .doc(doc.id.trim())
-        .update({ numb_misiones: admin.firestore.FieldValue.increment(1) }); //Actualizar numero de notificaciones misiones
+        .doc(doc.id.trim()).empty) {
+        docUsuario
+          .collection("notificaciones")
+          .doc(doc.id.trim()).add({ nueva_mision: true, numb_misiones: 0 })
+      }
 
       //Eccribir la notificación en el buzón del usuario
       await docUsuario
@@ -165,8 +167,19 @@ exports.notificarNuevaMision = functions.firestore
           id_sala: idSala,
           nombre_tutor: nombreTutor,
           nombre_sala: nombreSala,
-          isNew:true
+          isNew: true
         });
+
+      await docUsuario
+        .collection("notificaciones")
+        .doc(doc.id.trim())
+        .update({ nueva_mision: true }); //Actualizar numero de notificaciones misiones
+      await docUsuario
+        .collection("notificaciones")
+        .doc(doc.id.trim())
+        .update({ numb_misiones: admin.firestore.FieldValue.increment(1) }); //Actualizar numero de notificaciones misiones
+
+
 
       snapShotUsuariosTutorados = await docUsuario.get();
       console.log("Id de usuario encontrado:*", doc.id, "*");
