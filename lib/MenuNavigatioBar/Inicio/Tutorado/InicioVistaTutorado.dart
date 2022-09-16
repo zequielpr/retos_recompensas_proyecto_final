@@ -12,6 +12,26 @@ import '../../../datos/UsuarioActual.dart';
 class InicioVistaTutorado {
   static Widget showCajaRecompensa(CollectionReference collectionReferenceUsers,
       String idTutorActual, changeImg, cofre) {
+    //Mensaje para cuendo no se encuentra ninguna recompensa disponible
+    var mensajeNonRecomp = const Text(
+      "Recompensa no disponible,  pongase en contacto con su tutor",
+      style: TextStyle(fontSize: 20.0, color: Colors.black),
+      textAlign: TextAlign.center,
+    );
+
+    var tituloNoRecompensa = Text(
+      'Recompensa no disponible',
+      style: const TextStyle(
+          fontSize: 20.0, color: Colors.black, fontWeight: FontWeight.w500),
+    );
+
+    //Action
+    var actionOk = const Text(
+      "OK",
+      style: TextStyle(color: Colors.blue, fontSize: 25.0),
+      textAlign: TextAlign.center,
+    );
+
     DocumentReference docTutor = collectionReferenceUsers
         .doc(CurrentUser.getIdCurrentUser())
         .collection('rolTutorado')
@@ -87,7 +107,7 @@ class InicioVistaTutorado {
                                     changeImg();
 
                                     var count = 0;
-                                    Timer.periodic(Duration(seconds: 1),
+                                    Timer.periodic(const Duration(seconds: 1),
                                         (timer) {
                                       count++;
                                       if (count == 2) {
@@ -98,24 +118,35 @@ class InicioVistaTutorado {
                                             // false = user must tap button, true = tap outside dialog
                                             builder:
                                                 (BuildContext dialogContext) {
-                                              return AlertDialog(
-                                                title: Text('Recompensa'),
-                                                content:
-                                                    Text(key + ': ' + value),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    child:
-                                                        Text('ver billetera?'),
-                                                    onPressed: () {
-                                                      Navigator.of(
-                                                              dialogContext)
-                                                          .pop(); //
-                                                      context.router.pushNamed(
-                                                          'Historial');
-                                                      // Dismiss alert dialog
-                                                    },
-                                                  ),
-                                                ],
+                                              return Dialog(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            16.0)),
+                                                elevation: 0.0,
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                child: dialogPulCofre(
+                                                    context,
+                                                    Text(
+                                                      value,
+                                                      style: TextStyle(
+                                                          fontSize: 30.0,
+                                                          color: Colors.black),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                    actionOk,
+                                                    Text(
+                                                      key,
+                                                      style: TextStyle(
+                                                          fontSize: 20.0,
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    )),
                                               );
                                             },
                                           );
@@ -151,20 +182,17 @@ class InicioVistaTutorado {
                                     context: context,
                                     // false = user must tap button, true = tap outside dialog
                                     builder: (BuildContext dialogContext) {
-                                      return AlertDialog(
-                                        title:
-                                            Text('Remcompensa no disponible'),
-                                        content: Text(
-                                            'Pongase en contacto con su tutor'),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            child: Text('ok'),
-                                            onPressed: () {
-                                              Navigator.of(dialogContext)
-                                                  .pop(); // Dismiss alert dialog
-                                            },
-                                          ),
-                                        ],
+                                      return Dialog(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(16.0)),
+                                        elevation: 0.0,
+                                        backgroundColor: Colors.transparent,
+                                        child: dialogPulCofre(
+                                            context,
+                                            mensajeNonRecomp,
+                                            actionOk,
+                                            tituloNoRecompensa),
                                       );
                                     },
                                   );
@@ -184,6 +212,99 @@ class InicioVistaTutorado {
         }
         return Text('hola');
       },
+    );
+  }
+
+  //Metodo para mostrar recompensa
+  static Widget dialogPulCofre(
+      BuildContext context, Widget mensaje, Widget action, title) {
+    return Container(
+      margin: EdgeInsets.only(left: 0.0, right: 0.0),
+      child: Stack(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(),
+            margin: EdgeInsets.only(top: 13.0, right: 8.0),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(16.0),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 0.0,
+                    offset: Offset(0.0, 0.0),
+                  ),
+                ]),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                const SizedBox(
+                  height: 15.0,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  child: Container(
+                    height: 20,
+                    child: title,
+                  ),
+                ),
+                const Divider(indent: 10, endIndent: 10, color: Colors.black),
+                const SizedBox(
+                  height: 5.0,
+                ),
+                Center(
+                    child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: mensaje,
+                ) //
+                    ),
+                SizedBox(height: 24.0),
+                InkWell(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(16.0),
+                          bottomRight: Radius.circular(16.0)),
+                    ),
+                    child: TextButton(
+                      onPressed: () {
+                        context.router.pop();
+                      },
+                      child: const Text(
+                        "OK",
+                        style: TextStyle(color: Colors.blue, fontSize: 25.0),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            top: 13.0,
+            right: 8.5,
+            child: Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                icon: Icon(
+                  Icons.close,
+                  size: 25,
+                ),
+                onPressed: () {
+                  context.router.pop();
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
