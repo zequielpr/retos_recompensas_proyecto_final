@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:readmore/readmore.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
+import 'package:retos_proyecto/datos/CollecUsers.dart';
 
+import '../datos/DatosPersonalUser.dart';
 import '../datos/Roll_Data.dart';
 import '../Servicios/Solicitudes/AdminSolicitudes.dart';
 import '../datos/SalaDatos.dart';
@@ -30,7 +32,8 @@ class Cards {
                     leading: const CircleAvatar(
                       maxRadius: 20,
                       backgroundImage: NetworkImage(
-                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4U5WnC1MCC0IFVbJPePBA2H0oEep5aDR_xS_FbNx3wlqqORv2QRsf5L5fbwOZBeqMdl4&usqp=CAU", scale: 50),
+                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4U5WnC1MCC0IFVbJPePBA2H0oEep5aDR_xS_FbNx3wlqqORv2QRsf5L5fbwOZBeqMdl4&usqp=CAU",
+                          scale: 50),
                     ),
                     title: Text(documentSnapshot['nombre_emisor'].toString()),
                     subtitle: Text(
@@ -78,14 +81,14 @@ class Cards {
   //Cuerpo de las notificaciones sobre las misiones_________________________________________________________________
   static Widget cardNotificacionMisiones(DocumentSnapshot documentSnapshot) {
     return Card(
-
       color: Colors.transparent,
       elevation: 0,
       child: SizedBox(
         child: Column(
           children: [
             ListTile(
-              contentPadding: EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
+              contentPadding:
+                  EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
               onTap: () {},
               /*
                                 leading: const CircleAvatar(
@@ -100,7 +103,7 @@ class Cards {
                   TextSpan(
                       text: documentSnapshot['nombre_tutor'],
                       style: TextStyle(fontWeight: FontWeight.w500)),
-                  TextSpan(text: ' Ha asignado una nueva tarea en la sala '),
+                  TextSpan(text: ' Ha asignado una nueva tarea en la sala ', style: TextStyle(fontWeight: FontWeight.w500)),
                   TextSpan(
                     text: documentSnapshot['nombre_sala'].toString() + ': ',
                     style: TextStyle(fontWeight: FontWeight.w500),
@@ -111,11 +114,8 @@ class Cards {
                   )
                 ], style: TextStyle(color: Colors.black)),
               ),
-              leading: CircleAvatar(
-              maxRadius: 20,
-              backgroundImage: NetworkImage(
-                  documentSnapshot['fotoTutor']),
-            ),
+              leading: DatosPersonales.getAvatar(CollecUser.COLECCION_USUARIOS,
+                  documentSnapshot['id_emisor'], 20),
             ),
           ],
         ),

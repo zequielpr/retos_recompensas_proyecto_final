@@ -115,14 +115,12 @@ exports.notificarNuevaMision = functions.firestore
 
     var nombreTutor;
     var nombreSala;
-    var fotoTutor;
 
     await usuariosRef
       .doc(tutorId)
       .get()
       .then((snap) => {
         nombreTutor = snap.data()["nombre"];
-        fotoTutor = snap.data()['imgPerfil'];
       });
 
     await usuariosRef
@@ -168,8 +166,7 @@ exports.notificarNuevaMision = functions.firestore
           nombre_tutor: nombreTutor,
           nombre_sala: nombreSala,
           isNew: true,
-          objetivo: objetivo,
-          fotoTutor: fotoTutor
+          objetivo: objetivo
         });
 
       await docUsuario
