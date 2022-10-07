@@ -28,8 +28,9 @@ class Cards {
                 children: [
                   ListTile(
                     leading: const CircleAvatar(
+                      maxRadius: 20,
                       backgroundImage: NetworkImage(
-                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4U5WnC1MCC0IFVbJPePBA2H0oEep5aDR_xS_FbNx3wlqqORv2QRsf5L5fbwOZBeqMdl4&usqp=CAU"),
+                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4U5WnC1MCC0IFVbJPePBA2H0oEep5aDR_xS_FbNx3wlqqORv2QRsf5L5fbwOZBeqMdl4&usqp=CAU", scale: 50),
                     ),
                     title: Text(documentSnapshot['nombre_emisor'].toString()),
                     subtitle: Text(
@@ -76,38 +77,50 @@ class Cards {
 
   //Cuerpo de las notificaciones sobre las misiones_________________________________________________________________
   static Widget cardNotificacionMisiones(DocumentSnapshot documentSnapshot) {
-    return Padding(
-        padding: EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 5),
-        child: ElevatedButton(
-          style: ButtonStyle(
-              elevation: MaterialStateProperty.all(0),
-              backgroundColor: MaterialStateProperty.all(Colors.transparent),
-              foregroundColor: MaterialStateProperty.all(Colors.transparent)),
-          onPressed: () {
-            print("se ha pulsado la misión");
-          },
-          child: Card(
-              elevation: 1,
-              child: SizedBox(
-                child: Column(
-                  children: [
-                    ListTile(
-                      /*
+    return Card(
+
+      color: Colors.transparent,
+      elevation: 0,
+      child: SizedBox(
+        child: Column(
+          children: [
+            ListTile(
+              contentPadding: EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
+              onTap: () {},
+              /*
                                 leading: const CircleAvatar(
                                   backgroundImage: NetworkImage(
                                       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4U5WnC1MCC0IFVbJPePBA2H0oEep5aDR_xS_FbNx3wlqqORv2QRsf5L5fbwOZBeqMdl4&usqp=CAU"),
                                 ),
                                  */
-                      title: Text(documentSnapshot['nombre_sala'].toString()),
-                      subtitle: Text(
-                          documentSnapshot['nombre_tutor'].toString() +
-                              " ha asignado una nueva misión"),
-                      trailing: Icon(Icons.ac_unit),
-                    ),
-                  ],
-                ),
-              )),
-        ));
+              title: RichText(
+                overflow: TextOverflow.ellipsis,
+                maxLines: 3,
+                text: TextSpan(children: [
+                  TextSpan(
+                      text: documentSnapshot['nombre_tutor'],
+                      style: TextStyle(fontWeight: FontWeight.w500)),
+                  TextSpan(text: ' Ha asignado una nueva tarea en la sala '),
+                  TextSpan(
+                    text: documentSnapshot['nombre_sala'].toString() + ': ',
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  TextSpan(
+                    text: documentSnapshot['objetivo'].toString() + ': ',
+                    style: TextStyle(),
+                  )
+                ], style: TextStyle(color: Colors.black)),
+              ),
+              leading: CircleAvatar(
+              maxRadius: 20,
+              backgroundImage: NetworkImage(
+                  documentSnapshot['fotoTutor']),
+            ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   //Terjeta de misiones
@@ -251,7 +264,8 @@ class Cards {
                                 ?.collection('rolTutorado')
                                 .doc(CurrentUser.getIdCurrentUser())
                                 .update({
-                              'puntos_acumulados': FieldValue.increment(recompensa)
+                              'puntos_acumulados':
+                                  FieldValue.increment(recompensa)
                             });
                             return;
                           }
@@ -261,7 +275,7 @@ class Cards {
                               ?.collection('rolTutorado')
                               .doc(CurrentUser.getIdCurrentUser())
                               .update({
-                            'puntosTotal':  FieldValue.increment(recompensa)
+                            'puntosTotal': FieldValue.increment(recompensa)
                           });
                           return;
                         });

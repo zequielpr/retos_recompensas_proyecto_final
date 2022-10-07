@@ -14,8 +14,8 @@ class Badge {
         .snapshots()
         .listen((event) {
           if(event.data()!['nueva_mision'] || event.data()!['nueva_solicitud']){
-            var numb_solicitudes = event.data()!['numb_misiones'] + event.data()!['numb_solicitudes'];
-            mostrarBadge(true, numb_solicitudes);
+            var numb_notificaciones = event.data()!['numb_misiones'] + event.data()!['numb_solicitudes'];
+            mostrarBadge(true, numb_notificaciones);
           }else{
             mostrarBadge(false, 0);
           }
