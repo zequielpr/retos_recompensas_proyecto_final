@@ -36,7 +36,6 @@ class NombreUsuario extends StatelessWidget {
   }
 }
 
-
 class StateNombreUsuario extends StatefulWidget {
   static const ROUTE_NAME = 'NombreUsuario';
   final TrasnferirDatosNombreUser args;
@@ -140,7 +139,6 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
                       suffixIcon: estadoUsuario),
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: SizedBox(
@@ -207,7 +205,8 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
     var datos;
     var tipoDato = args.oaUthCredential.runtimeType;
     print('dato: $tipoDato');
-    if (args.oaUthCredential.runtimeType != GoogleAuthCredential && args.oaUthCredential.runtimeType != FacebookAuthCredential) {
+    if (args.oaUthCredential.runtimeType != GoogleAuthCredential &&
+        args.oaUthCredential.runtimeType != FacebookAuthCredential) {
       //En este caso el el atributo oaUthCredebtial continiene un hash map con la clave y la contrasela para realizar el registro
       //Registrarse con email y contreña
       await Autenticar.registrarConEmailPassw(args.oaUthCredential)
@@ -225,7 +224,20 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
                       'nombre': args.userName,
                       'imgPerfil': currentUser?.photoURL
                     }),
+
+                    await args.collectionReferenceUsers
+                        .doc(currentUser?.uid)
+                        .collection('notificaciones')
+                        .doc(currentUser?.uid)
+                        .set({
+                      'nueva_mision': false,
+                      'nueva_solicitud': false,
+                      'numb_misiones': 0,
+                      'numb_solicitudes': 0
+                    }),
+
                     Token.guardarToken(),
+
                     context.router.replace(MainRouter())
                   }
               });
@@ -244,6 +256,16 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
                           args.dropdownValue == "Tutor" ? false : true,
                       'nombre': FirebaseAuth.instance.currentUser?.displayName,
                       'imgPerfil': currentUser?.photoURL
+                    }),
+                    await args.collectionReferenceUsers
+                        .doc(currentUser?.uid)
+                        .collection('notificaciones')
+                        .doc(currentUser?.uid)
+                        .set({
+                      'nueva_mision': false,
+                      'nueva_solicitud': false,
+                      'numb_misiones': 0,
+                      'numb_solicitudes': 0
                     }),
                     Token.guardarToken(),
 

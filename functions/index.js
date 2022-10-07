@@ -99,6 +99,7 @@ exports.notificarNuevaMision = functions.firestore
   .onCreate(async (snap, context) => {
     const tutorId = context.params.tutorId;
     const idSala = context.params.idSala;
+    const objetivo = snap.data()['objetivoMision'];
 
     const usuariosRef = db.collection("usuarios");
     const snapshot = await usuariosRef
@@ -150,11 +151,8 @@ exports.notificarNuevaMision = functions.firestore
 
       //Comprobar si el buzon existe
       if (docUsuario
-        .collection("notificaciones")
-        .doc(doc.id.trim()).empty) {
-        docUsuario
-          .collection("notificaciones")
-          .doc(doc.id.trim()).add({ nueva_mision: true, numb_misiones: 0 })
+        .collection("notificaciones")) {
+        
       }
 
       //Eccribir la notificación en el buzón del usuario
@@ -167,7 +165,8 @@ exports.notificarNuevaMision = functions.firestore
           id_sala: idSala,
           nombre_tutor: nombreTutor,
           nombre_sala: nombreSala,
-          isNew: true
+          isNew: true,
+          objetivo: objetivo
         });
 
       await docUsuario
