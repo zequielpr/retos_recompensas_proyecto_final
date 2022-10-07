@@ -23,18 +23,14 @@ class Cards {
     return Padding(
         padding: EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 5),
         child: Card(
-            elevation: 1,
+          color: Colors.transparent,
+            elevation: 0,
             child: SizedBox(
               height: 120,
               child: Column(
                 children: [
                   ListTile(
-                    leading: const CircleAvatar(
-                      maxRadius: 20,
-                      backgroundImage: NetworkImage(
-                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4U5WnC1MCC0IFVbJPePBA2H0oEep5aDR_xS_FbNx3wlqqORv2QRsf5L5fbwOZBeqMdl4&usqp=CAU",
-                          scale: 50),
-                    ),
+                    leading: DatosPersonales.getAvatar(CollecUser.COLECCION_USUARIOS, documentSnapshot['id_emisor'], 25),
                     title: Text(documentSnapshot['nombre_emisor'].toString()),
                     subtitle: Text(
                         documentSnapshot['nombre_emisor'].toString() +
