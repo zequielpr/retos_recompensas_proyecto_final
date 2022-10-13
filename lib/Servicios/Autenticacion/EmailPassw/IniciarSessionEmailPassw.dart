@@ -232,7 +232,7 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
 
   Widget _getBtnOlvPassw() {
     return TextButton(
-        onPressed: () {}, child: Text('¿Has olvidado tu contraseña'));
+        onPressed: () {context.router.push(RecoveryPassw());}, child: Text('¿Has olvidado tu contraseña'));
   }
 
   Widget _getBtnIniciarSesion() {
