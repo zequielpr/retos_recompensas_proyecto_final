@@ -1,4 +1,5 @@
 import 'package:retos_proyecto/MenuNavigatioBar/AdminPerfilUser.dart';
+import 'package:retos_proyecto/Servicios/Autenticacion/EmailPassw/RecoverPassw.dart';
 import 'package:retos_proyecto/datos/Roll_Data.dart';
 import 'package:retos_proyecto/splashScreen.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
@@ -31,6 +32,7 @@ import 'main.dart';
     AutoRoute(page: RecogerEmail, name: 'RecogerEmailRouter', path: '/RecogerEmail'),
     AutoRoute(page: NombreUsuario, name: 'NombreUsuarioRouter', path: '/NombreUsuario'),
     AutoRoute(page: RecogerPassw, name: 'RecogerPasswRouter', path: '/RecogerPassw'),
+    AutoRoute(page: RecoveryPassw, name: 'RecoveryPassw', path: '/RecoveryPassw'),
 
 
 

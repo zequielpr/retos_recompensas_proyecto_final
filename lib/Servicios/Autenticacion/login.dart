@@ -82,8 +82,8 @@ class _LoginState extends State<Login> {
           _getSizedBox(15),
           getOptionLoggin('p', context),
           getOptionLoggin('g', context),
-          getOptionLoggin('a', context),
-          getOptionLoggin('f', context),
+          //getOptionLoggin('a', context),
+          //getOptionLoggin('f', context),
           _getSizedBox(10),
           getTerms()
         ],
@@ -161,7 +161,7 @@ class _LoginState extends State<Login> {
             width: Pantalla.getPorcentPanntalla(70, context, 'x'),
             child: Text(
               'Inicia sesion en <<App name>>, tutorea'
-              'o se tutoreado empleando nuestros servicios',
+              ' o se tutoreado empleando nuestros servicios',
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 15.5,
@@ -297,6 +297,8 @@ class _LoginState extends State<Login> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Divider(indent: 1, endIndent: 1, color: Colors.black),
+
           ElevatedButton(
               style: ButtonStyle(
                   elevation: MaterialStateProperty.all(0),

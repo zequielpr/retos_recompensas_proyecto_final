@@ -10,195 +10,202 @@
 //
 // ignore_for_file: type=lint
 
-import 'package:auto_route/auto_route.dart' as _i8;
-import 'package:flutter/material.dart' as _i18;
+// ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:auto_route/auto_route.dart' as _i9;
+import 'package:flutter/material.dart' as _i19;
 
-import 'datos/TransferirDatos.dart' as _i19;
-import 'main.dart' as _i7;
-import 'MenuNavigatioBar/AdminPerfilUser.dart' as _i17;
-import 'MenuNavigatioBar/Inicio/Inicio.dart' as _i9;
-import 'MenuNavigatioBar/Inicio/Tutorado/Historial.dart' as _i10;
-import 'MenuNavigatioBar/Notificaciones.dart' as _i11;
-import 'MenuNavigatioBar/Salas/Salas.dart' as _i12;
+import 'datos/TransferirDatos.dart' as _i20;
+import 'main.dart' as _i8;
+import 'MenuNavigatioBar/AdminPerfilUser.dart' as _i18;
+import 'MenuNavigatioBar/Inicio/Inicio.dart' as _i10;
+import 'MenuNavigatioBar/Inicio/Tutorado/Historial.dart' as _i11;
+import 'MenuNavigatioBar/Notificaciones.dart' as _i12;
+import 'MenuNavigatioBar/Salas/Salas.dart' as _i13;
 import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/AddRewardUser.dart'
-    as _i16;
+    as _i17;
 import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/UserTutorado.dart'
-    as _i14;
-import 'MenuNavigatioBar/Salas/Tutor/TabPages/SalaVistaTutor.dart' as _i13;
-import 'MenuNavigatioBar/Salas/Tutorado/ListMisiones.dart' as _i15;
+    as _i15;
+import 'MenuNavigatioBar/Salas/Tutor/TabPages/SalaVistaTutor.dart' as _i14;
+import 'MenuNavigatioBar/Salas/Tutorado/ListMisiones.dart' as _i16;
 import 'Servicios/Autenticacion/DatosNewUser.dart' as _i4;
 import 'Servicios/Autenticacion/EmailPassw/IniciarSessionEmailPassw.dart'
     as _i3;
 import 'Servicios/Autenticacion/EmailPassw/RecogerEmail.dart' as _i5;
 import 'Servicios/Autenticacion/EmailPassw/RecogerPassw.dart' as _i6;
+import 'Servicios/Autenticacion/EmailPassw/RecoverPassw.dart' as _i7;
 import 'Servicios/Autenticacion/login.dart' as _i2;
 import 'splashScreen.dart' as _i1;
 
-class AppRouter extends _i8.RootStackRouter {
-  AppRouter([_i18.GlobalKey<_i18.NavigatorState>? navigatorKey])
+class AppRouter extends _i9.RootStackRouter {
+  AppRouter([_i19.GlobalKey<_i19.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
-  final Map<String, _i8.PageFactory> pagesMap = {
+  final Map<String, _i9.PageFactory> pagesMap = {
     SplashScreenRouter.name: (routeData) {
-      return _i8.MaterialPageX<dynamic>(
+      return _i9.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i1.MyHomePage());
     },
     LoginRouter.name: (routeData) {
       final args = routeData.argsAs<LoginRouterArgs>();
-      return _i8.MaterialPageX<dynamic>(
+      return _i9.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i2.Login(key: args.key, args: args.args));
     },
     IniSesionEmailPasswordRouter.name: (routeData) {
       final args = routeData.argsAs<IniSesionEmailPasswordRouterArgs>();
-      return _i8.MaterialPageX<dynamic>(
+      return _i9.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i3.IniSesionEmailPassword(key: args.key, args: args.args));
     },
     RollRouter.name: (routeData) {
       final args = routeData.argsAs<RollRouterArgs>();
-      return _i8.MaterialPageX<dynamic>(
+      return _i9.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i4.Roll(key: args.key, args: args.args));
     },
     RecogerEmailRouter.name: (routeData) {
       final args = routeData.argsAs<RecogerEmailRouterArgs>();
-      return _i8.MaterialPageX<dynamic>(
+      return _i9.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i5.RecogerEmail(key: args.key, args: args.args));
     },
     NombreUsuarioRouter.name: (routeData) {
       final args = routeData.argsAs<NombreUsuarioRouterArgs>();
-      return _i8.MaterialPageX<dynamic>(
+      return _i9.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i4.NombreUsuario(key: args.key, args: args.args));
     },
     RecogerPasswRouter.name: (routeData) {
       final args = routeData.argsAs<RecogerPasswRouterArgs>();
-      return _i8.MaterialPageX<dynamic>(
+      return _i9.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i6.RecogerPassw(key: args.key, args: args.args));
     },
+    RecoveryPassw.name: (routeData) {
+      return _i9.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i7.RecoveryPassw());
+    },
     MainRouter.name: (routeData) {
-      return _i8.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i7.Main());
+      return _i9.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i8.Main());
     },
     HomeRouter.name: (routeData) {
-      return _i8.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i8.EmptyRouterPage());
+      return _i9.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i9.EmptyRouterPage());
     },
     NotificacionesRouter.name: (routeData) {
-      return _i8.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i8.EmptyRouterPage());
+      return _i9.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i9.EmptyRouterPage());
     },
     SalasRouter.name: (routeData) {
-      return _i8.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i8.EmptyRouterPage());
+      return _i9.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i9.EmptyRouterPage());
     },
     AdminPerfilUserRouter.name: (routeData) {
-      return _i8.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i8.EmptyRouterPage());
+      return _i9.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i9.EmptyRouterPage());
     },
     Home.name: (routeData) {
-      return _i8.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i9.Home());
+      return _i9.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i10.Home());
     },
     Historial.name: (routeData) {
-      return _i8.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i10.Historial());
+      return _i9.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i11.Historial());
     },
     Notificaciones.name: (routeData) {
-      return _i8.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i11.Notificaciones());
+      return _i9.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i12.Notificaciones());
     },
     Salas.name: (routeData) {
-      return _i8.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i12.Salas());
+      return _i9.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i13.Salas());
     },
     SalaContVistaTutor.name: (routeData) {
       final args = routeData.argsAs<SalaContVistaTutorArgs>();
-      return _i8.MaterialPageX<dynamic>(
+      return _i9.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i13.SalaContVistaTutor(key: args.key, args: args.args));
+          child: _i14.SalaContVistaTutor(key: args.key, args: args.args));
     },
     UserTutorado.name: (routeData) {
       final args = routeData.argsAs<UserTutoradoArgs>();
-      return _i8.MaterialPageX<dynamic>(
+      return _i9.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i14.UserTutorado(key: args.key, args: args.args));
+          child: _i15.UserTutorado(key: args.key, args: args.args));
     },
     ListMisionesTutorado.name: (routeData) {
       final args = routeData.argsAs<ListMisionesTutoradoArgs>();
-      return _i8.MaterialPageX<dynamic>(
+      return _i9.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i15.ListMisionesTutorado(key: args.key, args: args.args));
+          child: _i16.ListMisionesTutorado(key: args.key, args: args.args));
     },
     AddRewardRouter.name: (routeData) {
       final args = routeData.argsAs<AddRewardRouterArgs>(
           orElse: () => const AddRewardRouterArgs());
-      return _i8.MaterialPageX<dynamic>(
+      return _i9.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i16.AddReward(key: args.key, userId: args.userId));
+          child: _i17.AddReward(key: args.key, userId: args.userId));
     },
     AdminPerfilUser.name: (routeData) {
-      return _i8.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i17.AdminPerfilUser());
+      return _i9.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i18.AdminPerfilUser());
     }
   };
 
   @override
-  List<_i8.RouteConfig> get routes => [
-        _i8.RouteConfig('/#redirect',
+  List<_i9.RouteConfig> get routes => [
+        _i9.RouteConfig('/#redirect',
             path: '/', redirectTo: '/EsplashScreen', fullMatch: true),
-        _i8.RouteConfig(SplashScreenRouter.name, path: '/EsplashScreen'),
-        _i8.RouteConfig(LoginRouter.name, path: '/Login'),
-        _i8.RouteConfig(IniSesionEmailPasswordRouter.name,
+        _i9.RouteConfig(SplashScreenRouter.name, path: '/EsplashScreen'),
+        _i9.RouteConfig(LoginRouter.name, path: '/Login'),
+        _i9.RouteConfig(IniSesionEmailPasswordRouter.name,
             path: '/IniSesionEmailPassword'),
-        _i8.RouteConfig(RollRouter.name, path: '/Roll'),
-        _i8.RouteConfig(RecogerEmailRouter.name, path: '/RecogerEmail'),
-        _i8.RouteConfig(NombreUsuarioRouter.name, path: '/NombreUsuario'),
-        _i8.RouteConfig(RecogerPasswRouter.name, path: '/RecogerPassw'),
-        _i8.RouteConfig(MainRouter.name, path: '/Main', children: [
-          _i8.RouteConfig(HomeRouter.name,
+        _i9.RouteConfig(RollRouter.name, path: '/Roll'),
+        _i9.RouteConfig(RecogerEmailRouter.name, path: '/RecogerEmail'),
+        _i9.RouteConfig(NombreUsuarioRouter.name, path: '/NombreUsuario'),
+        _i9.RouteConfig(RecogerPasswRouter.name, path: '/RecogerPassw'),
+        _i9.RouteConfig(RecoveryPassw.name, path: '/RecoveryPassw'),
+        _i9.RouteConfig(MainRouter.name, path: '/Main', children: [
+          _i9.RouteConfig(HomeRouter.name,
               path: 'Home',
               parent: MainRouter.name,
               children: [
-                _i8.RouteConfig(Home.name, path: '', parent: HomeRouter.name),
-                _i8.RouteConfig(Historial.name,
+                _i9.RouteConfig(Home.name, path: '', parent: HomeRouter.name),
+                _i9.RouteConfig(Historial.name,
                     path: 'Historial', parent: HomeRouter.name)
               ]),
-          _i8.RouteConfig(NotificacionesRouter.name,
+          _i9.RouteConfig(NotificacionesRouter.name,
               path: 'Notificaciones',
               parent: MainRouter.name,
               children: [
-                _i8.RouteConfig(Notificaciones.name,
+                _i9.RouteConfig(Notificaciones.name,
                     path: '', parent: NotificacionesRouter.name)
               ]),
-          _i8.RouteConfig(SalasRouter.name,
+          _i9.RouteConfig(SalasRouter.name,
               path: 'Salas',
               parent: MainRouter.name,
               children: [
-                _i8.RouteConfig(Salas.name, path: '', parent: SalasRouter.name),
-                _i8.RouteConfig(SalaContVistaTutor.name,
+                _i9.RouteConfig(Salas.name, path: '', parent: SalasRouter.name),
+                _i9.RouteConfig(SalaContVistaTutor.name,
                     path: 'SalaContVistaTutor', parent: SalasRouter.name),
-                _i8.RouteConfig(UserTutorado.name,
+                _i9.RouteConfig(UserTutorado.name,
                     path: 'UserTutoradoDescrip', parent: SalasRouter.name),
-                _i8.RouteConfig(ListMisionesTutorado.name,
+                _i9.RouteConfig(ListMisionesTutorado.name,
                     path: 'ListaMisionesTutorado', parent: SalasRouter.name),
-                _i8.RouteConfig(AddRewardRouter.name,
+                _i9.RouteConfig(AddRewardRouter.name,
                     path: 'AddReward', parent: SalasRouter.name),
-                _i8.RouteConfig('*#redirect',
+                _i9.RouteConfig('*#redirect',
                     path: '*',
                     parent: SalasRouter.name,
                     redirectTo: '',
                     fullMatch: true)
               ]),
-          _i8.RouteConfig(AdminPerfilUserRouter.name,
+          _i9.RouteConfig(AdminPerfilUserRouter.name,
               path: 'AdminPerfilUser',
               parent: MainRouter.name,
               children: [
-                _i8.RouteConfig(AdminPerfilUser.name,
+                _i9.RouteConfig(AdminPerfilUser.name,
                     path: '', parent: AdminPerfilUserRouter.name)
               ])
         ])
@@ -207,7 +214,7 @@ class AppRouter extends _i8.RootStackRouter {
 
 /// generated route for
 /// [_i1.MyHomePage]
-class SplashScreenRouter extends _i8.PageRouteInfo<void> {
+class SplashScreenRouter extends _i9.PageRouteInfo<void> {
   const SplashScreenRouter()
       : super(SplashScreenRouter.name, path: '/EsplashScreen');
 
@@ -216,8 +223,8 @@ class SplashScreenRouter extends _i8.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.Login]
-class LoginRouter extends _i8.PageRouteInfo<LoginRouterArgs> {
-  LoginRouter({_i18.Key? key, required _i19.TransferirCollecion args})
+class LoginRouter extends _i9.PageRouteInfo<LoginRouterArgs> {
+  LoginRouter({_i19.Key? key, required _i20.TransferirCollecion args})
       : super(LoginRouter.name,
             path: '/Login', args: LoginRouterArgs(key: key, args: args));
 
@@ -227,9 +234,9 @@ class LoginRouter extends _i8.PageRouteInfo<LoginRouterArgs> {
 class LoginRouterArgs {
   const LoginRouterArgs({this.key, required this.args});
 
-  final _i18.Key? key;
+  final _i19.Key? key;
 
-  final _i19.TransferirCollecion args;
+  final _i20.TransferirCollecion args;
 
   @override
   String toString() {
@@ -240,9 +247,9 @@ class LoginRouterArgs {
 /// generated route for
 /// [_i3.IniSesionEmailPassword]
 class IniSesionEmailPasswordRouter
-    extends _i8.PageRouteInfo<IniSesionEmailPasswordRouterArgs> {
+    extends _i9.PageRouteInfo<IniSesionEmailPasswordRouterArgs> {
   IniSesionEmailPasswordRouter(
-      {_i18.Key? key, required _i19.TransDatosInicioSesion args})
+      {_i19.Key? key, required _i20.TransDatosInicioSesion args})
       : super(IniSesionEmailPasswordRouter.name,
             path: '/IniSesionEmailPassword',
             args: IniSesionEmailPasswordRouterArgs(key: key, args: args));
@@ -253,9 +260,9 @@ class IniSesionEmailPasswordRouter
 class IniSesionEmailPasswordRouterArgs {
   const IniSesionEmailPasswordRouterArgs({this.key, required this.args});
 
-  final _i18.Key? key;
+  final _i19.Key? key;
 
-  final _i19.TransDatosInicioSesion args;
+  final _i20.TransDatosInicioSesion args;
 
   @override
   String toString() {
@@ -265,8 +272,8 @@ class IniSesionEmailPasswordRouterArgs {
 
 /// generated route for
 /// [_i4.Roll]
-class RollRouter extends _i8.PageRouteInfo<RollRouterArgs> {
-  RollRouter({_i18.Key? key, required _i19.TranferirDatosRoll args})
+class RollRouter extends _i9.PageRouteInfo<RollRouterArgs> {
+  RollRouter({_i19.Key? key, required _i20.TranferirDatosRoll args})
       : super(RollRouter.name,
             path: '/Roll', args: RollRouterArgs(key: key, args: args));
 
@@ -276,9 +283,9 @@ class RollRouter extends _i8.PageRouteInfo<RollRouterArgs> {
 class RollRouterArgs {
   const RollRouterArgs({this.key, required this.args});
 
-  final _i18.Key? key;
+  final _i19.Key? key;
 
-  final _i19.TranferirDatosRoll args;
+  final _i20.TranferirDatosRoll args;
 
   @override
   String toString() {
@@ -288,9 +295,9 @@ class RollRouterArgs {
 
 /// generated route for
 /// [_i5.RecogerEmail]
-class RecogerEmailRouter extends _i8.PageRouteInfo<RecogerEmailRouterArgs> {
+class RecogerEmailRouter extends _i9.PageRouteInfo<RecogerEmailRouterArgs> {
   RecogerEmailRouter(
-      {_i18.Key? key, required _i19.TrasnferirDatosNombreUser args})
+      {_i19.Key? key, required _i20.TrasnferirDatosNombreUser args})
       : super(RecogerEmailRouter.name,
             path: '/RecogerEmail',
             args: RecogerEmailRouterArgs(key: key, args: args));
@@ -301,9 +308,9 @@ class RecogerEmailRouter extends _i8.PageRouteInfo<RecogerEmailRouterArgs> {
 class RecogerEmailRouterArgs {
   const RecogerEmailRouterArgs({this.key, required this.args});
 
-  final _i18.Key? key;
+  final _i19.Key? key;
 
-  final _i19.TrasnferirDatosNombreUser args;
+  final _i20.TrasnferirDatosNombreUser args;
 
   @override
   String toString() {
@@ -313,9 +320,9 @@ class RecogerEmailRouterArgs {
 
 /// generated route for
 /// [_i4.NombreUsuario]
-class NombreUsuarioRouter extends _i8.PageRouteInfo<NombreUsuarioRouterArgs> {
+class NombreUsuarioRouter extends _i9.PageRouteInfo<NombreUsuarioRouterArgs> {
   NombreUsuarioRouter(
-      {_i18.Key? key, required _i19.TrasnferirDatosNombreUser args})
+      {_i19.Key? key, required _i20.TrasnferirDatosNombreUser args})
       : super(NombreUsuarioRouter.name,
             path: '/NombreUsuario',
             args: NombreUsuarioRouterArgs(key: key, args: args));
@@ -326,9 +333,9 @@ class NombreUsuarioRouter extends _i8.PageRouteInfo<NombreUsuarioRouterArgs> {
 class NombreUsuarioRouterArgs {
   const NombreUsuarioRouterArgs({this.key, required this.args});
 
-  final _i18.Key? key;
+  final _i19.Key? key;
 
-  final _i19.TrasnferirDatosNombreUser args;
+  final _i20.TrasnferirDatosNombreUser args;
 
   @override
   String toString() {
@@ -338,9 +345,9 @@ class NombreUsuarioRouterArgs {
 
 /// generated route for
 /// [_i6.RecogerPassw]
-class RecogerPasswRouter extends _i8.PageRouteInfo<RecogerPasswRouterArgs> {
+class RecogerPasswRouter extends _i9.PageRouteInfo<RecogerPasswRouterArgs> {
   RecogerPasswRouter(
-      {_i18.Key? key, required _i19.TrasnferirDatosNombreUser args})
+      {_i19.Key? key, required _i20.TrasnferirDatosNombreUser args})
       : super(RecogerPasswRouter.name,
             path: '/RecogerPassw',
             args: RecogerPasswRouterArgs(key: key, args: args));
@@ -351,9 +358,9 @@ class RecogerPasswRouter extends _i8.PageRouteInfo<RecogerPasswRouterArgs> {
 class RecogerPasswRouterArgs {
   const RecogerPasswRouterArgs({this.key, required this.args});
 
-  final _i18.Key? key;
+  final _i19.Key? key;
 
-  final _i19.TrasnferirDatosNombreUser args;
+  final _i20.TrasnferirDatosNombreUser args;
 
   @override
   String toString() {
@@ -362,27 +369,35 @@ class RecogerPasswRouterArgs {
 }
 
 /// generated route for
-/// [_i7.Main]
-class MainRouter extends _i8.PageRouteInfo<void> {
-  const MainRouter({List<_i8.PageRouteInfo>? children})
+/// [_i7.RecoveryPassw]
+class RecoveryPassw extends _i9.PageRouteInfo<void> {
+  const RecoveryPassw() : super(RecoveryPassw.name, path: '/RecoveryPassw');
+
+  static const String name = 'RecoveryPassw';
+}
+
+/// generated route for
+/// [_i8.Main]
+class MainRouter extends _i9.PageRouteInfo<void> {
+  const MainRouter({List<_i9.PageRouteInfo>? children})
       : super(MainRouter.name, path: '/Main', initialChildren: children);
 
   static const String name = 'MainRouter';
 }
 
 /// generated route for
-/// [_i8.EmptyRouterPage]
-class HomeRouter extends _i8.PageRouteInfo<void> {
-  const HomeRouter({List<_i8.PageRouteInfo>? children})
+/// [_i9.EmptyRouterPage]
+class HomeRouter extends _i9.PageRouteInfo<void> {
+  const HomeRouter({List<_i9.PageRouteInfo>? children})
       : super(HomeRouter.name, path: 'Home', initialChildren: children);
 
   static const String name = 'HomeRouter';
 }
 
 /// generated route for
-/// [_i8.EmptyRouterPage]
-class NotificacionesRouter extends _i8.PageRouteInfo<void> {
-  const NotificacionesRouter({List<_i8.PageRouteInfo>? children})
+/// [_i9.EmptyRouterPage]
+class NotificacionesRouter extends _i9.PageRouteInfo<void> {
+  const NotificacionesRouter({List<_i9.PageRouteInfo>? children})
       : super(NotificacionesRouter.name,
             path: 'Notificaciones', initialChildren: children);
 
@@ -390,18 +405,18 @@ class NotificacionesRouter extends _i8.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i8.EmptyRouterPage]
-class SalasRouter extends _i8.PageRouteInfo<void> {
-  const SalasRouter({List<_i8.PageRouteInfo>? children})
+/// [_i9.EmptyRouterPage]
+class SalasRouter extends _i9.PageRouteInfo<void> {
+  const SalasRouter({List<_i9.PageRouteInfo>? children})
       : super(SalasRouter.name, path: 'Salas', initialChildren: children);
 
   static const String name = 'SalasRouter';
 }
 
 /// generated route for
-/// [_i8.EmptyRouterPage]
-class AdminPerfilUserRouter extends _i8.PageRouteInfo<void> {
-  const AdminPerfilUserRouter({List<_i8.PageRouteInfo>? children})
+/// [_i9.EmptyRouterPage]
+class AdminPerfilUserRouter extends _i9.PageRouteInfo<void> {
+  const AdminPerfilUserRouter({List<_i9.PageRouteInfo>? children})
       : super(AdminPerfilUserRouter.name,
             path: 'AdminPerfilUser', initialChildren: children);
 
@@ -409,41 +424,41 @@ class AdminPerfilUserRouter extends _i8.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i9.Home]
-class Home extends _i8.PageRouteInfo<void> {
+/// [_i10.Home]
+class Home extends _i9.PageRouteInfo<void> {
   const Home() : super(Home.name, path: '');
 
   static const String name = 'Home';
 }
 
 /// generated route for
-/// [_i10.Historial]
-class Historial extends _i8.PageRouteInfo<void> {
+/// [_i11.Historial]
+class Historial extends _i9.PageRouteInfo<void> {
   const Historial() : super(Historial.name, path: 'Historial');
 
   static const String name = 'Historial';
 }
 
 /// generated route for
-/// [_i11.Notificaciones]
-class Notificaciones extends _i8.PageRouteInfo<void> {
+/// [_i12.Notificaciones]
+class Notificaciones extends _i9.PageRouteInfo<void> {
   const Notificaciones() : super(Notificaciones.name, path: '');
 
   static const String name = 'Notificaciones';
 }
 
 /// generated route for
-/// [_i12.Salas]
-class Salas extends _i8.PageRouteInfo<void> {
+/// [_i13.Salas]
+class Salas extends _i9.PageRouteInfo<void> {
   const Salas() : super(Salas.name, path: '');
 
   static const String name = 'Salas';
 }
 
 /// generated route for
-/// [_i13.SalaContVistaTutor]
-class SalaContVistaTutor extends _i8.PageRouteInfo<SalaContVistaTutorArgs> {
-  SalaContVistaTutor({_i18.Key? key, required _i19.TransferirDatos args})
+/// [_i14.SalaContVistaTutor]
+class SalaContVistaTutor extends _i9.PageRouteInfo<SalaContVistaTutorArgs> {
+  SalaContVistaTutor({_i19.Key? key, required _i20.TransferirDatos args})
       : super(SalaContVistaTutor.name,
             path: 'SalaContVistaTutor',
             args: SalaContVistaTutorArgs(key: key, args: args));
@@ -454,9 +469,9 @@ class SalaContVistaTutor extends _i8.PageRouteInfo<SalaContVistaTutorArgs> {
 class SalaContVistaTutorArgs {
   const SalaContVistaTutorArgs({this.key, required this.args});
 
-  final _i18.Key? key;
+  final _i19.Key? key;
 
-  final _i19.TransferirDatos args;
+  final _i20.TransferirDatos args;
 
   @override
   String toString() {
@@ -465,9 +480,9 @@ class SalaContVistaTutorArgs {
 }
 
 /// generated route for
-/// [_i14.UserTutorado]
-class UserTutorado extends _i8.PageRouteInfo<UserTutoradoArgs> {
-  UserTutorado({_i18.Key? key, required _i19.TransfDatosUserTutorado args})
+/// [_i15.UserTutorado]
+class UserTutorado extends _i9.PageRouteInfo<UserTutoradoArgs> {
+  UserTutorado({_i19.Key? key, required _i20.TransfDatosUserTutorado args})
       : super(UserTutorado.name,
             path: 'UserTutoradoDescrip',
             args: UserTutoradoArgs(key: key, args: args));
@@ -478,9 +493,9 @@ class UserTutorado extends _i8.PageRouteInfo<UserTutoradoArgs> {
 class UserTutoradoArgs {
   const UserTutoradoArgs({this.key, required this.args});
 
-  final _i18.Key? key;
+  final _i19.Key? key;
 
-  final _i19.TransfDatosUserTutorado args;
+  final _i20.TransfDatosUserTutorado args;
 
   @override
   String toString() {
@@ -489,9 +504,9 @@ class UserTutoradoArgs {
 }
 
 /// generated route for
-/// [_i15.ListMisionesTutorado]
-class ListMisionesTutorado extends _i8.PageRouteInfo<ListMisionesTutoradoArgs> {
-  ListMisionesTutorado({_i18.Key? key, required _i19.TransferirDatos args})
+/// [_i16.ListMisionesTutorado]
+class ListMisionesTutorado extends _i9.PageRouteInfo<ListMisionesTutoradoArgs> {
+  ListMisionesTutorado({_i19.Key? key, required _i20.TransferirDatos args})
       : super(ListMisionesTutorado.name,
             path: 'ListaMisionesTutorado',
             args: ListMisionesTutoradoArgs(key: key, args: args));
@@ -502,9 +517,9 @@ class ListMisionesTutorado extends _i8.PageRouteInfo<ListMisionesTutoradoArgs> {
 class ListMisionesTutoradoArgs {
   const ListMisionesTutoradoArgs({this.key, required this.args});
 
-  final _i18.Key? key;
+  final _i19.Key? key;
 
-  final _i19.TransferirDatos args;
+  final _i20.TransferirDatos args;
 
   @override
   String toString() {
@@ -513,9 +528,9 @@ class ListMisionesTutoradoArgs {
 }
 
 /// generated route for
-/// [_i16.AddReward]
-class AddRewardRouter extends _i8.PageRouteInfo<AddRewardRouterArgs> {
-  AddRewardRouter({_i18.Key? key, dynamic userId})
+/// [_i17.AddReward]
+class AddRewardRouter extends _i9.PageRouteInfo<AddRewardRouterArgs> {
+  AddRewardRouter({_i19.Key? key, dynamic userId})
       : super(AddRewardRouter.name,
             path: 'AddReward',
             args: AddRewardRouterArgs(key: key, userId: userId));
@@ -526,7 +541,7 @@ class AddRewardRouter extends _i8.PageRouteInfo<AddRewardRouterArgs> {
 class AddRewardRouterArgs {
   const AddRewardRouterArgs({this.key, this.userId});
 
-  final _i18.Key? key;
+  final _i19.Key? key;
 
   final dynamic userId;
 
@@ -537,8 +552,8 @@ class AddRewardRouterArgs {
 }
 
 /// generated route for
-/// [_i17.AdminPerfilUser]
-class AdminPerfilUser extends _i8.PageRouteInfo<void> {
+/// [_i18.AdminPerfilUser]
+class AdminPerfilUser extends _i9.PageRouteInfo<void> {
   const AdminPerfilUser() : super(AdminPerfilUser.name, path: '');
 
   static const String name = 'AdminPerfilUser';
