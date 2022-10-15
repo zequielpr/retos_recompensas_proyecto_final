@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:readmore/readmore.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
-import 'package:roundcheckbox/roundcheckbox.dart';
 
 import '../../../datos/TransferirDatos.dart';
 import '../../../datos/UsuarioActual.dart';
