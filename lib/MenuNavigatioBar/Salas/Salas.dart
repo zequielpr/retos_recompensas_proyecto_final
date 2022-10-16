@@ -21,14 +21,8 @@ class _SalasState extends State<Salas> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.person),
-        ),
-        title: Align(
-          alignment: Alignment.center,
-          child: Text('Salas'),
-        ),
+        centerTitle: true,
+        title: Text('Salas'),
         actions: [
           IconButton(
               onPressed: () async => crearSala(),
@@ -78,7 +72,11 @@ class _SalasState extends State<Salas> {
                       .doc(listaIdasSalas[index])
                       .snapshots(),
                   builder: (context, snapshot) {
-                    if (!snapshot.hasData) {}
+                    if (!snapshot.hasData) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
                     var documentSnapShot = snapshot.data as DocumentSnapshot;
                     return Cards.CardSalaVistaTutorado(
                         context, collecionUsuarios, documentSnapShot);
@@ -199,26 +197,24 @@ class _SalasState extends State<Salas> {
                   child: ElevatedButton(
                     child: Text('Crear sala'),
                     onPressed: () async {
-
                       final String name = nombreSala.text;
 
                       if (name.isNotEmpty) {
-
                         // Persist a new product to Firestore
-                        await CollecUser.COLECCION_USUARIOS.doc(
-                            CurrentUser.getIdCurrentUser())
+                        await CollecUser.COLECCION_USUARIOS
+                            .doc(CurrentUser.getIdCurrentUser())
                             .collection('rolTutor')
                             .add({
                           "NombreSala": name,
                           'numMisiones': 0,
                           'numTutorados': 0
                         }).whenComplete(() => {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text(
-                        'Sala creada correctamente')))
-                        });
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'Sala creada correctamente')))
+                                });
                         nombreSala.text = '';
-
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                             content: Text(
