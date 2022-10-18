@@ -9,6 +9,7 @@ import 'package:auto_route/auto_route.dart';
 import 'MenuNavigatioBar/Inicio/Inicio.dart';
 import 'MenuNavigatioBar/Inicio/Tutorado/Historial.dart';
 import 'MenuNavigatioBar/Notificaciones.dart';
+import 'MenuNavigatioBar/Salas/Mision.dart';
 import 'MenuNavigatioBar/Salas/Salas.dart';
 import 'MenuNavigatioBar/Salas/Tutor/TabPages/SalaVistaTutor.dart';
 import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/AddRewardUser.dart';
@@ -25,18 +26,27 @@ import 'main.dart';
   replaceInRouteName: 'Page,Route',
   routes: <AutoRoute>[
     //Ruta splash screen
-    AutoRoute(page: MyHomePage, name: 'SplashScreenRouter', initial: true, path: '/EsplashScreen'),
+    AutoRoute(
+        page: MyHomePage,
+        name: 'SplashScreenRouter',
+        initial: true,
+        path: '/EsplashScreen'),
     AutoRoute(page: Login, name: 'LoginRouter', path: '/Login'),
-    AutoRoute(page: IniSesionEmailPassword, name: 'IniSesionEmailPasswordRouter', path: '/IniSesionEmailPassword'),
+    AutoRoute(
+        page: IniSesionEmailPassword,
+        name: 'IniSesionEmailPasswordRouter',
+        path: '/IniSesionEmailPassword'),
     AutoRoute(page: Roll, name: 'RollRouter', path: '/Roll'),
-    AutoRoute(page: RecogerEmail, name: 'RecogerEmailRouter', path: '/RecogerEmail'),
-    AutoRoute(page: NombreUsuario, name: 'NombreUsuarioRouter', path: '/NombreUsuario'),
-    AutoRoute(page: RecogerPassw, name: 'RecogerPasswRouter', path: '/RecogerPassw'),
-    AutoRoute(page: RecoveryPassw, name: 'RecoveryPassw', path: '/RecoveryPassw'),
-
-
-
-
+    AutoRoute(
+        page: RecogerEmail, name: 'RecogerEmailRouter', path: '/RecogerEmail'),
+    AutoRoute(
+        page: NombreUsuario,
+        name: 'NombreUsuarioRouter',
+        path: '/NombreUsuario'),
+    AutoRoute(
+        page: RecogerPassw, name: 'RecogerPasswRouter', path: '/RecogerPassw'),
+    AutoRoute(
+        page: RecoveryPassw, name: 'RecoveryPassw', path: '/RecoveryPassw'),
 
     //Ruta de main_principal
     AutoRoute(
@@ -51,7 +61,7 @@ import 'main.dart';
           page: EmptyRouterPage,
           children: [
             AutoRoute(path: '', page: Home),
-            AutoRoute( path: 'Historial', page: Historial),
+            AutoRoute(path: 'Historial', page: Historial),
             //AutoRoute(path: ':bookId', page: BookDetailsPage),
             //RedirectRoute(path: '*', redirectTo: ''),
           ],
@@ -65,6 +75,7 @@ import 'main.dart';
           page: EmptyRouterPage,
           children: [
             AutoRoute(path: '', page: Notificaciones),
+            AutoRoute(page: Mision, path: 'Mision')
             //AutoRoute(path: 'details', page: AccountDetailsPage),
             //RedirectRoute(path: '*', redirectTo: ''),
           ],
@@ -79,13 +90,13 @@ import 'main.dart';
             AutoRoute(path: '', page: Salas),
             AutoRoute(path: 'SalaContVistaTutor', page: SalaContVistaTutor),
             AutoRoute(path: 'UserTutoradoDescrip', page: UserTutorado),
-            AutoRoute(path: 'ListaMisionesTutorado', page: ListMisionesTutorado),
-            AutoRoute(path: 'AddReward', page: AddReward, name: 'AddRewardRouter'),
+            AutoRoute(
+                path: 'ListaMisionesTutorado', page: ListMisionesTutorado),
+            AutoRoute(
+                path: 'AddReward', page: AddReward, name: 'AddRewardRouter'),
             RedirectRoute(path: '*', redirectTo: ''),
-
           ],
         ),
-
 
         //Rutas de administracioin de perfil
         AutoRoute(

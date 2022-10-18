@@ -75,7 +75,7 @@ class Cards {
   }
 
   //Cuerpo de las notificaciones sobre las misiones_________________________________________________________________
-  static Widget cardNotificacionMisiones(DocumentSnapshot documentSnapshot) {
+  static Widget cardNotificacionMisiones(DocumentSnapshot documentSnapshot, BuildContext context) {
     return Card(
       color: Colors.transparent,
       elevation: 0,
@@ -85,7 +85,7 @@ class Cards {
             ListTile(
               contentPadding:
                   EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
-              onTap: () {},
+              onTap: () {context.router.push(Mision(snap: documentSnapshot));},
               /*
                                 leading: const CircleAvatar(
                                   backgroundImage: NetworkImage(
@@ -105,7 +105,7 @@ class Cards {
                     style: TextStyle(fontWeight: FontWeight.w500),
                   ),
                   TextSpan(
-                    text: documentSnapshot['objetivo'].toString() + ': ',
+                    text: documentSnapshot['nombre_mision'].toString(),
                     style: TextStyle(),
                   )
                 ], style: TextStyle(color: Colors.black)),
@@ -135,7 +135,6 @@ class Cards {
       child: ListTile(
         visualDensity: VisualDensity.comfortable,
         dense: true,
-        onTap: () => print('object'),
         //horizontalTitleGap: -4,
         contentPadding: EdgeInsets.only(left: 15, top: 0, bottom: 10),
         /*leading: CircleAvatar(
