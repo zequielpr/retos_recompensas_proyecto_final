@@ -88,7 +88,7 @@ class BandejaNotificaciones {
             itemBuilder: (context, index) {
               final DocumentSnapshot documentSnapshot =
                   streamSnapshot.data!.docs[index];
-              return Cards.cardNotificacionMisiones(documentSnapshot);
+              return Cards.cardNotificacionMisiones(documentSnapshot, context);
             },
           );
         }

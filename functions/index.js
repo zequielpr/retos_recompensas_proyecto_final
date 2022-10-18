@@ -99,8 +99,9 @@ exports.notificarNuevaMision = functions.firestore
   .onCreate(async (snap, context) => {
     const tutorId = context.params.tutorId;
     const idSala = context.params.idSala;
-    const objetivo = snap.data()['objetivoMision'];
-
+    const nombreMision = snap.data()['nombreMision'];
+    const idMision = context.params.idMision;
+    
     const usuariosRef = db.collection("usuarios");
     const snapshot = await usuariosRef
       .doc(tutorId)
@@ -155,7 +156,7 @@ exports.notificarNuevaMision = functions.firestore
         
       }
 
-      //Eccribir la notificación en el buzón del usuario
+      //Ecribir la notificación en el buzón del usuario
       await docUsuario
         .collection("notificaciones")
         .doc(doc.id.trim())
@@ -166,7 +167,8 @@ exports.notificarNuevaMision = functions.firestore
           nombre_tutor: nombreTutor,
           nombre_sala: nombreSala,
           isNew: true,
-          objetivo: objetivo
+          idMision: idMision,
+          nombre_mision: nombreMision,
         });
 
       await docUsuario
