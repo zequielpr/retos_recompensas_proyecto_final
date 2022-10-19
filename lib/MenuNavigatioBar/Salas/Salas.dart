@@ -24,6 +24,7 @@ class _SalasState extends State<Salas> {
         centerTitle: true,
         title: Text('Salas'),
         actions: [
+          Roll_Data.ROLL_USER_IS_TUTORADO ? Text(''):
           IconButton(
               onPressed: () async => crearSala(),
               icon: Icon(Icons.add_box_outlined))
