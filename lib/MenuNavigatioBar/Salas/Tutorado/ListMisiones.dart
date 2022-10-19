@@ -21,19 +21,8 @@ class _ListMisionesTutoradoState extends State<ListMisionesTutorado> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          actions: [
-            IconButton(
-              onPressed: (){},
-              icon: Icon(
-                Icons.filter_alt_outlined,
-                color: Colors.black,
-              ),
-            ),
-          ],
-          title: Align(
-            alignment: Alignment.center,
-            child: Text(args.nombreSala),
-          ),
+          centerTitle: true,
+          title: Text(args.nombreSala),
         ),
         body: getListMisionesVistTutorado(args.sala.getColecMisiones));
     ;
