@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:readmore/readmore.dart';
+import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 
@@ -206,115 +207,30 @@ class Cards {
       List completada_por,
       List solicitudeConf,
       String userId,
-      String nombreMisoin,
+      String nombreMision,
       DocumentReference docMision,
       double recompensa,
       dynamic puntos_total_de_usuario) {
     if (completada_por.contains(userId)) {
-      showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: Text(nombreMisoin),
-          content: Text('Esta misión ha sido realizada'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context, 'OK'),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
-    } else if (solicitudeConf.contains(userId)) {
-      showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: Text(nombreMisoin),
-          content: Text(!Roll_Data.ROLL_USER_IS_TUTORADO
-              ? '¿La tarea ha sido completada?. \ No será posible deshacer el cambio'
-              : 'Recibirás la recompensa de esta mision cuando tu tutor confirme que has realizado la tarea'),
-          actions: <Widget>[
-            !Roll_Data.ROLL_USER_IS_TUTORADO
-                ? TextButton(
-                    onPressed: () => Navigator.pop(context, 'OK'),
-                    child: const Text('no'),
-                  )
-                : TextButton(
-                    onPressed: () => Navigator.pop(context, 'OK'),
-                    child: const Text('ok'),
-                  ),
-            !Roll_Data.ROLL_USER_IS_TUTORADO
-                ? TextButton(
-                    onPressed: () async {
-                      await docMision.update({
-                        'solicitu_confirmacion':
-                            FieldValue.arrayRemove([userId])
-                      }).then((value) async {
-                        await docMision.update({
-                          'completada_por': FieldValue.arrayUnion([userId])
-                        }).then((value) async {
-                          //Debe actualizar con el dato en tiempo real
-                          if (puntos_total_de_usuario >= 200) {
-                            await docMision.parent.parent?.parent.parent?.parent
-                                .doc(userId)
-                                ?.collection('rolTutorado')
-                                .doc(CurrentUser.getIdCurrentUser())
-                                .update({
-                              'puntos_acumulados':
-                                  FieldValue.increment(recompensa)
-                            });
-                            return;
-                          }
+      getDialogMisionRealizada(context, nombreMision);
 
-                          await docMision.parent.parent?.parent.parent?.parent
-                              .doc(userId)
-                              ?.collection('rolTutorado')
-                              .doc(CurrentUser.getIdCurrentUser())
-                              .update({
-                            'puntosTotal': FieldValue.increment(recompensa)
-                          });
-                          return;
-                        });
-                      });
-                      Navigator.pop(context, 'OK');
-                    },
-                    child: const Text('si'),
-                  )
-                : Text(''),
-          ],
-        ),
-      );
+    } else if (solicitudeConf.contains(userId)) {
+      getDialogPendienteConfirmacion(context, nombreMision, docMision, userId, puntos_total_de_usuario, recompensa);
     } else {
       if (Roll_Data.ROLL_USER_IS_TUTORADO) {
         //Solicitar confirmacion de mision11
-        showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: Text(nombreMisoin),
-            content: const Text(
-                'Si has terminado esta tarea, envía una solicitud de verificacion, para recibir su recompensa'),
-            actions: <Widget>[
-              TextButton(
-                  onPressed: () => Navigator.pop(context, 'OK'),
-                  child: const Text('Cancelar')),
-              TextButton(
-                onPressed: () async {
-                  await docMision.update({
-                    'solicitu_confirmacion': FieldValue.arrayUnion([userId])
-                  });
-                  Navigator.pop(context, 'OK');
-                },
-                child: const Text('Enviar solicitud'),
-              ),
-            ],
-          ),
-        );
+        getDialogSolicitud(context, nombreMision, docMision, userId);
         return;
       }
       showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-          title: Text(nombreMisoin),
-          content: const Text('Misión pendiente de realizar'),
+          title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text(nombreMision)],),
+          titlePadding: EdgeInsets.only(top: Pantalla.getPorcentPanntalla(2, context, 'y'), bottom: Pantalla.getPorcentPanntalla(1, context, 'y')),
+          contentPadding: EdgeInsets.all(0),
+          actionsPadding: EdgeInsets.all(0),
+          actionsAlignment: MainAxisAlignment.center,
+          content: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text('Misión pendiente de realizar')],),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, 'OK'),
@@ -324,6 +240,121 @@ class Cards {
         ),
       );
     }
+  }
+
+  //Dialogs_____________________________________________________-
+  static void getDialogMisionRealizada( BuildContext context, nombreMision){
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        actionsAlignment:MainAxisAlignment.center ,
+        title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text(nombreMision)],),
+        titlePadding: EdgeInsets.only(top: Pantalla.getPorcentPanntalla(2, context, 'y'), bottom: Pantalla.getPorcentPanntalla(1, context, 'y')),
+        contentPadding: EdgeInsets.all(0),
+        actionsPadding: EdgeInsets.all(0),
+        content: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text('Esta misión ha sido realizada')],),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static void getDialogPendienteConfirmacion(context, nombreMision, docMision, userId, puntos_total_de_usuario, recompensa){
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        actionsAlignment:MainAxisAlignment.center ,
+        title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text(nombreMision)],),
+        titlePadding: EdgeInsets.only(top: Pantalla.getPorcentPanntalla(2, context, 'y'), bottom: Pantalla.getPorcentPanntalla(1, context, 'y')),
+        contentPadding: EdgeInsets.all(0),
+        actionsPadding: EdgeInsets.all(0),
+        content: Row( mainAxisAlignment: MainAxisAlignment.center, children: [Text(!Roll_Data.ROLL_USER_IS_TUTORADO
+            ? '¿La tarea ha sido completada?'
+            : 'Confirmacion pendiente')],),
+        actions: <Widget>[
+          !Roll_Data.ROLL_USER_IS_TUTORADO
+              ? TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: const Text('no'),
+          )
+              : TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: const Text('ok'),
+          ),
+          !Roll_Data.ROLL_USER_IS_TUTORADO
+              ? TextButton(
+            onPressed: () async {
+              await docMision.update({
+                'solicitu_confirmacion':
+                FieldValue.arrayRemove([userId])
+              }).then((value) async {
+                await docMision.update({
+                  'completada_por': FieldValue.arrayUnion([userId])
+                }).then((value) async {
+                  //Debe actualizar con el dato en tiempo real
+                  if (puntos_total_de_usuario >= 200) {
+                    await docMision.parent.parent?.parent.parent?.parent
+                        .doc(userId)
+                        ?.collection('rolTutorado')
+                        .doc(CurrentUser.getIdCurrentUser())
+                        .update({
+                      'puntos_acumulados':
+                      FieldValue.increment(recompensa)
+                    });
+                    return;
+                  }
+
+                  await docMision.parent.parent?.parent.parent?.parent
+                      .doc(userId)
+                      ?.collection('rolTutorado')
+                      .doc(CurrentUser.getIdCurrentUser())
+                      .update({
+                    'puntosTotal': FieldValue.increment(recompensa)
+                  });
+                  return;
+                });
+              });
+              Navigator.pop(context, 'OK');
+            },
+            child: const Text('si'),
+          )
+              : Text(''),
+        ],
+      ),
+    );
+  }
+
+
+  static void getDialogSolicitud(context, nombreMision, docMision, userId){
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        actionsAlignment:MainAxisAlignment.center ,
+        title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text(nombreMision)],),
+        titlePadding: EdgeInsets.only(top: Pantalla.getPorcentPanntalla(2, context, 'y'), bottom: Pantalla.getPorcentPanntalla(1, context, 'y')),
+        contentPadding: EdgeInsets.all(0),
+        actionsPadding: EdgeInsets.all(0),
+        content:Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text('¿Enviar un solicitud de confirmacion?')],),
+        actions: <Widget>[
+          TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('Cancelar')),
+          TextButton(
+            onPressed: () async {
+              await docMision.update({
+                'solicitu_confirmacion': FieldValue.arrayUnion([userId])
+              });
+              Navigator.pop(context, 'OK');
+            },
+            child: const Text('Enviar solicitud'),
+          ),
+        ],
+      ),
+    );
   }
 
   static Widget getCardMisionInicio(DocumentSnapshot documentSnapshot) {
