@@ -1,10 +1,14 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import '../../../MediaQuery.dart';
+import '../../../Rutas.gr.dart';
 import '../../../datos/DatosPersonalUser.dart';
+import '../../../datos/SalaDatos.dart';
+import '../../../datos/TransferirDatos.dart';
 
 class InicioTutor extends StatefulWidget {
   const InicioTutor({Key? key}) : super(key: key);
@@ -19,8 +23,8 @@ class _InicioTutorState extends State<InicioTutor> {
     return Container(
       child: getSalas(),
       padding: EdgeInsets.only(
-          left: Pantalla.getPorcentPanntalla(4, context, 'x'),
-          ),
+        left: Pantalla.getPorcentPanntalla(4, context, 'x'),
+      ),
     );
     ;
   }
@@ -41,7 +45,8 @@ class _InicioTutorState extends State<InicioTutor> {
         }
 
         return ListView(
-          padding: EdgeInsets.only(top: Pantalla.getPorcentPanntalla(6, context, 'y')),
+          padding: EdgeInsets.only(
+              top: Pantalla.getPorcentPanntalla(6, context, 'y')),
           children: snapshot.data!.docs
               .map((DocumentSnapshot document) {
                 Map<String, dynamic> data =
@@ -123,6 +128,13 @@ class _InicioTutorState extends State<InicioTutor> {
                           bottom:
                               Pantalla.getPorcentPanntalla(2.2, context, 'y')),
                       child: ListTile(
+                        onTap: () {
+                          var sala = SalaDatos(documentReference);
+                          TransfDatosUserTutorado datosUser =
+                              TransfDatosUserTutorado(
+                                  sala.getColecMisiones, document);
+                          context.router.push(UserTutorado(args: datosUser));
+                        },
                         style: ListTileStyle.drawer,
                         contentPadding: EdgeInsets.all(0),
                         dense: true,
@@ -144,9 +156,10 @@ class _InicioTutorState extends State<InicioTutor> {
                         ),
                         trailing: Padding(
                           padding: EdgeInsets.only(
-                              bottom: Pantalla.getPorcentPanntalla(
-                                  2, context, 'y'), right: Pantalla.getPorcentPanntalla(
-                              2, context, 'y')),
+                              bottom:
+                                  Pantalla.getPorcentPanntalla(2, context, 'y'),
+                              right: Pantalla.getPorcentPanntalla(
+                                  2, context, 'y')),
                           child: comprobarRecompensa(document.id),
                         ),
                       ));

@@ -62,6 +62,7 @@ import 'main.dart';
           children: [
             AutoRoute(path: '', page: Home),
             AutoRoute(path: 'Historial', page: Historial),
+            AutoRoute(path: 'UserTutoradoDescrip', page: UserTutorado),
             //AutoRoute(path: ':bookId', page: BookDetailsPage),
             //RedirectRoute(path: '*', redirectTo: ''),
           ],
