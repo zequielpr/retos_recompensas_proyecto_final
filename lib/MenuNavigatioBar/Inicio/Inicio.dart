@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:retos_proyecto/datos/Roll_Data.dart';
 
 import '../../datos/CollecUsers.dart';
+import 'Tutor/VistaInicioTutor.dart';
 import 'Tutorado/InicioVistaTutorado.dart';
 
 class Home extends StatefulWidget {
@@ -62,16 +63,15 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Align(
-          alignment: Alignment.center,
-          child: Text('Home'),
-        ),
+        centerTitle: true,
+        title: Text('Home'),
         leading: IconButton(
           tooltip: 'Ajustes',
           onPressed: () {},
           icon: Icon(Icons.settings),
         ),
         actions: [
+          Roll_Data.ROLL_USER_IS_TUTORADO?
           Padding(
             padding: EdgeInsets.only(right: 5),
             child: IconButton(
@@ -79,18 +79,14 @@ class _HomeState extends State<Home> {
               onPressed: () => context.router.pushNamed('Historial'),
               icon: Icon(Icons.history),
             ),
-          )
+          ):Text('')
         ],
       ),
-      body: Column(children: <Widget>[
-        Roll_Data.ROLL_USER_IS_TUTORADO
-            ? InicioVistaTutorado.showCajaRecompensa(
-                CollecUser.COLECCION_USUARIOS,
-                'CGWDtkvBpPSFfsziW0T3x1zfEAt1',
-                changeImage,
-                cofre)
-            : Text('inicio para el tutor'),
-      ]),
+      body: Roll_Data.ROLL_USER_IS_TUTORADO ? InicioVistaTutorado.showCajaRecompensa(
+          CollecUser.COLECCION_USUARIOS,
+          'CGWDtkvBpPSFfsziW0T3x1zfEAt1',
+          changeImage,
+          cofre):InicioTutor(),
     );
     ;
   }
