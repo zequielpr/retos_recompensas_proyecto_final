@@ -20,15 +20,15 @@ import 'main.dart' as _i8;
 import 'MenuNavigatioBar/AdminPerfilUser.dart' as _i19;
 import 'MenuNavigatioBar/Inicio/Inicio.dart' as _i10;
 import 'MenuNavigatioBar/Inicio/Tutorado/Historial.dart' as _i11;
-import 'MenuNavigatioBar/Notificaciones.dart' as _i12;
-import 'MenuNavigatioBar/Salas/Mision.dart' as _i13;
-import 'MenuNavigatioBar/Salas/Salas.dart' as _i14;
+import 'MenuNavigatioBar/Notificaciones.dart' as _i14;
+import 'MenuNavigatioBar/Salas/Mision.dart' as _i15;
+import 'MenuNavigatioBar/Salas/Salas.dart' as _i16;
 import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/AddRewardUser.dart'
-    as _i18;
+    as _i13;
 import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/UserTutorado.dart'
-    as _i16;
-import 'MenuNavigatioBar/Salas/Tutor/TabPages/SalaVistaTutor.dart' as _i15;
-import 'MenuNavigatioBar/Salas/Tutorado/ListMisiones.dart' as _i17;
+    as _i12;
+import 'MenuNavigatioBar/Salas/Tutor/TabPages/SalaVistaTutor.dart' as _i17;
+import 'MenuNavigatioBar/Salas/Tutorado/ListMisiones.dart' as _i18;
 import 'Servicios/Autenticacion/DatosNewUser.dart' as _i4;
 import 'Servicios/Autenticacion/EmailPassw/IniciarSessionEmailPassw.dart'
     as _i3;
@@ -158,53 +158,11 @@ class AppRouter extends _i9.RootStackRouter {
         child: const _i11.Historial(),
       );
     },
-    Notificaciones.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
-        routeData: routeData,
-        child: const _i12.Notificaciones(),
-      );
-    },
-    Mision.name: (routeData) {
-      final args = routeData.argsAs<MisionArgs>();
-      return _i9.MaterialPageX<dynamic>(
-        routeData: routeData,
-        child: _i13.Mision(
-          key: args.key,
-          snap: args.snap,
-        ),
-      );
-    },
-    Salas.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
-        routeData: routeData,
-        child: const _i14.Salas(),
-      );
-    },
-    SalaContVistaTutor.name: (routeData) {
-      final args = routeData.argsAs<SalaContVistaTutorArgs>();
-      return _i9.MaterialPageX<dynamic>(
-        routeData: routeData,
-        child: _i15.SalaContVistaTutor(
-          key: args.key,
-          args: args.args,
-        ),
-      );
-    },
     UserTutorado.name: (routeData) {
       final args = routeData.argsAs<UserTutoradoArgs>();
       return _i9.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i16.UserTutorado(
-          key: args.key,
-          args: args.args,
-        ),
-      );
-    },
-    ListMisionesTutorado.name: (routeData) {
-      final args = routeData.argsAs<ListMisionesTutoradoArgs>();
-      return _i9.MaterialPageX<dynamic>(
-        routeData: routeData,
-        child: _i17.ListMisionesTutorado(
+        child: _i12.UserTutorado(
           key: args.key,
           args: args.args,
         ),
@@ -215,9 +173,51 @@ class AppRouter extends _i9.RootStackRouter {
           orElse: () => const AddRewardRouterArgs());
       return _i9.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i18.AddReward(
+        child: _i13.AddReward(
           key: args.key,
           userId: args.userId,
+        ),
+      );
+    },
+    Notificaciones.name: (routeData) {
+      return _i9.MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const _i14.Notificaciones(),
+      );
+    },
+    Mision.name: (routeData) {
+      final args = routeData.argsAs<MisionArgs>();
+      return _i9.MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: _i15.Mision(
+          key: args.key,
+          snap: args.snap,
+        ),
+      );
+    },
+    Salas.name: (routeData) {
+      return _i9.MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const _i16.Salas(),
+      );
+    },
+    SalaContVistaTutor.name: (routeData) {
+      final args = routeData.argsAs<SalaContVistaTutorArgs>();
+      return _i9.MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: _i17.SalaContVistaTutor(
+          key: args.key,
+          args: args.args,
+        ),
+      );
+    },
+    ListMisionesTutorado.name: (routeData) {
+      final args = routeData.argsAs<ListMisionesTutoradoArgs>();
+      return _i9.MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: _i18.ListMisionesTutorado(
+          key: args.key,
+          args: args.args,
         ),
       );
     },
@@ -286,6 +286,16 @@ class AppRouter extends _i9.RootStackRouter {
                 _i9.RouteConfig(
                   Historial.name,
                   path: 'Historial',
+                  parent: HomeRouter.name,
+                ),
+                _i9.RouteConfig(
+                  UserTutorado.name,
+                  path: 'UserTutoradoDescrip',
+                  parent: HomeRouter.name,
+                ),
+                _i9.RouteConfig(
+                  AddRewardRouter.name,
+                  path: 'AddReward',
                   parent: HomeRouter.name,
                 ),
               ],
@@ -682,99 +692,7 @@ class Historial extends _i9.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i12.Notificaciones]
-class Notificaciones extends _i9.PageRouteInfo<void> {
-  const Notificaciones()
-      : super(
-          Notificaciones.name,
-          path: '',
-        );
-
-  static const String name = 'Notificaciones';
-}
-
-/// generated route for
-/// [_i13.Mision]
-class Mision extends _i9.PageRouteInfo<MisionArgs> {
-  Mision({
-    _i20.Key? key,
-    required _i22.DocumentSnapshot<Object?> snap,
-  }) : super(
-          Mision.name,
-          path: 'Mision',
-          args: MisionArgs(
-            key: key,
-            snap: snap,
-          ),
-        );
-
-  static const String name = 'Mision';
-}
-
-class MisionArgs {
-  const MisionArgs({
-    this.key,
-    required this.snap,
-  });
-
-  final _i20.Key? key;
-
-  final _i22.DocumentSnapshot<Object?> snap;
-
-  @override
-  String toString() {
-    return 'MisionArgs{key: $key, snap: $snap}';
-  }
-}
-
-/// generated route for
-/// [_i14.Salas]
-class Salas extends _i9.PageRouteInfo<void> {
-  const Salas()
-      : super(
-          Salas.name,
-          path: '',
-        );
-
-  static const String name = 'Salas';
-}
-
-/// generated route for
-/// [_i15.SalaContVistaTutor]
-class SalaContVistaTutor extends _i9.PageRouteInfo<SalaContVistaTutorArgs> {
-  SalaContVistaTutor({
-    _i20.Key? key,
-    required _i21.TransferirDatos args,
-  }) : super(
-          SalaContVistaTutor.name,
-          path: 'SalaContVistaTutor',
-          args: SalaContVistaTutorArgs(
-            key: key,
-            args: args,
-          ),
-        );
-
-  static const String name = 'SalaContVistaTutor';
-}
-
-class SalaContVistaTutorArgs {
-  const SalaContVistaTutorArgs({
-    this.key,
-    required this.args,
-  });
-
-  final _i20.Key? key;
-
-  final _i21.TransferirDatos args;
-
-  @override
-  String toString() {
-    return 'SalaContVistaTutorArgs{key: $key, args: $args}';
-  }
-}
-
-/// generated route for
-/// [_i16.UserTutorado]
+/// [_i12.UserTutorado]
 class UserTutorado extends _i9.PageRouteInfo<UserTutoradoArgs> {
   UserTutorado({
     _i20.Key? key,
@@ -808,41 +726,7 @@ class UserTutoradoArgs {
 }
 
 /// generated route for
-/// [_i17.ListMisionesTutorado]
-class ListMisionesTutorado extends _i9.PageRouteInfo<ListMisionesTutoradoArgs> {
-  ListMisionesTutorado({
-    _i20.Key? key,
-    required _i21.TransferirDatos args,
-  }) : super(
-          ListMisionesTutorado.name,
-          path: 'ListaMisionesTutorado',
-          args: ListMisionesTutoradoArgs(
-            key: key,
-            args: args,
-          ),
-        );
-
-  static const String name = 'ListMisionesTutorado';
-}
-
-class ListMisionesTutoradoArgs {
-  const ListMisionesTutoradoArgs({
-    this.key,
-    required this.args,
-  });
-
-  final _i20.Key? key;
-
-  final _i21.TransferirDatos args;
-
-  @override
-  String toString() {
-    return 'ListMisionesTutoradoArgs{key: $key, args: $args}';
-  }
-}
-
-/// generated route for
-/// [_i18.AddReward]
+/// [_i13.AddReward]
 class AddRewardRouter extends _i9.PageRouteInfo<AddRewardRouterArgs> {
   AddRewardRouter({
     _i20.Key? key,
@@ -872,6 +756,132 @@ class AddRewardRouterArgs {
   @override
   String toString() {
     return 'AddRewardRouterArgs{key: $key, userId: $userId}';
+  }
+}
+
+/// generated route for
+/// [_i14.Notificaciones]
+class Notificaciones extends _i9.PageRouteInfo<void> {
+  const Notificaciones()
+      : super(
+          Notificaciones.name,
+          path: '',
+        );
+
+  static const String name = 'Notificaciones';
+}
+
+/// generated route for
+/// [_i15.Mision]
+class Mision extends _i9.PageRouteInfo<MisionArgs> {
+  Mision({
+    _i20.Key? key,
+    required _i22.DocumentSnapshot<Object?> snap,
+  }) : super(
+          Mision.name,
+          path: 'Mision',
+          args: MisionArgs(
+            key: key,
+            snap: snap,
+          ),
+        );
+
+  static const String name = 'Mision';
+}
+
+class MisionArgs {
+  const MisionArgs({
+    this.key,
+    required this.snap,
+  });
+
+  final _i20.Key? key;
+
+  final _i22.DocumentSnapshot<Object?> snap;
+
+  @override
+  String toString() {
+    return 'MisionArgs{key: $key, snap: $snap}';
+  }
+}
+
+/// generated route for
+/// [_i16.Salas]
+class Salas extends _i9.PageRouteInfo<void> {
+  const Salas()
+      : super(
+          Salas.name,
+          path: '',
+        );
+
+  static const String name = 'Salas';
+}
+
+/// generated route for
+/// [_i17.SalaContVistaTutor]
+class SalaContVistaTutor extends _i9.PageRouteInfo<SalaContVistaTutorArgs> {
+  SalaContVistaTutor({
+    _i20.Key? key,
+    required _i21.TransferirDatos args,
+  }) : super(
+          SalaContVistaTutor.name,
+          path: 'SalaContVistaTutor',
+          args: SalaContVistaTutorArgs(
+            key: key,
+            args: args,
+          ),
+        );
+
+  static const String name = 'SalaContVistaTutor';
+}
+
+class SalaContVistaTutorArgs {
+  const SalaContVistaTutorArgs({
+    this.key,
+    required this.args,
+  });
+
+  final _i20.Key? key;
+
+  final _i21.TransferirDatos args;
+
+  @override
+  String toString() {
+    return 'SalaContVistaTutorArgs{key: $key, args: $args}';
+  }
+}
+
+/// generated route for
+/// [_i18.ListMisionesTutorado]
+class ListMisionesTutorado extends _i9.PageRouteInfo<ListMisionesTutoradoArgs> {
+  ListMisionesTutorado({
+    _i20.Key? key,
+    required _i21.TransferirDatos args,
+  }) : super(
+          ListMisionesTutorado.name,
+          path: 'ListaMisionesTutorado',
+          args: ListMisionesTutoradoArgs(
+            key: key,
+            args: args,
+          ),
+        );
+
+  static const String name = 'ListMisionesTutorado';
+}
+
+class ListMisionesTutoradoArgs {
+  const ListMisionesTutoradoArgs({
+    this.key,
+    required this.args,
+  });
+
+  final _i20.Key? key;
+
+  final _i21.TransferirDatos args;
+
+  @override
+  String toString() {
+    return 'ListMisionesTutoradoArgs{key: $key, args: $args}';
   }
 }
 
