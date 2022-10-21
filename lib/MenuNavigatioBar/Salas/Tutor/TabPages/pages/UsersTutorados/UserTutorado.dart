@@ -185,6 +185,7 @@ class _UserTutoradoState extends State<UserTutorado> {
               children: <Widget>[
                 IconButton(
                   onPressed: () {
+                    print('ID: ${args.snap.reference.id.trim()}');
                     context.router.push(
                         AddRewardRouter(userId: args.snap.reference.id.trim()));
                   },

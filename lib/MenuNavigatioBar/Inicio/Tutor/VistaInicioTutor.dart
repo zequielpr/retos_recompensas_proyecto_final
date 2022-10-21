@@ -46,7 +46,7 @@ class _InicioTutorState extends State<InicioTutor> {
 
         return ListView(
           padding: EdgeInsets.only(
-              top: Pantalla.getPorcentPanntalla(6, context, 'y')),
+              top: Pantalla.getPorcentPanntalla(2, context, 'y')),
           children: snapshot.data!.docs
               .map((DocumentSnapshot document) {
                 Map<String, dynamic> data =
