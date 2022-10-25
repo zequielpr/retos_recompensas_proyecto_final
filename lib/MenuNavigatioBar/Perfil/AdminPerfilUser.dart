@@ -66,83 +66,96 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [guardarEmail ?IconButton(onPressed: ()=> ocultarTextField(), icon: Icon(Icons.close)):Text('')],
         title: Text('adminPerfil'),
       ),
-      body: Column(children: <Widget>[
-        ListTile(
-          leading: DatosPersonales.getAvatar(CollecUser.COLECCION_USUARIOS,
-              CurrentUser.getIdCurrentUser(), 30),
-          title: DatosPersonales.getDato(CollecUser.COLECCION_USUARIOS,
-              CurrentUser.getIdCurrentUser(), 'nombre'),
-          subtitle: DatosPersonales.getDato(CollecUser.COLECCION_USUARIOS,
-              CurrentUser.getIdCurrentUser(), 'nombre_usuario'),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 20, top: 10),
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: AdminRoll.getRoll(context),
+      body: SingleChildScrollView(
+        child: Column(children: <Widget>[
+          ListTile(
+            leading: DatosPersonales.getAvatar(CollecUser.COLECCION_USUARIOS,
+                CurrentUser.getIdCurrentUser(), 30),
+            title: DatosPersonales.getDato(CollecUser.COLECCION_USUARIOS,
+                CurrentUser.getIdCurrentUser(), 'nombre'),
+            subtitle: DatosPersonales.getDato(CollecUser.COLECCION_USUARIOS,
+                CurrentUser.getIdCurrentUser(), 'nombre_usuario'),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 20),
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: Row(
-              children: [
-                guardarEmail ? fieldNewEmail : TextActualEmail,
-                Padding(
-                    padding: EdgeInsets.only(
-                        left: Pantalla.getPorcentPanntalla(5, context, 'x'))),
-                guardarEmail ? butonGuardar(context) : iconButonEdit
-              ],
+          Padding(
+            padding: EdgeInsets.only(left: 20, top: 10),
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: AdminRoll.getRoll(context),
             ),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(
-            left: 20,
-          ),
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: TextButton(
-              style: ButtonStyle(
-                  padding: MaterialStateProperty.all(const EdgeInsets.only(left: 0))),
-              onPressed: () {context.router.pushWidget(ChangePasswd(contextPerfil: context));},
-              child: const Text(
-                'Cambiar Contraseña',
-                style: TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.normal),
+          Padding(
+            padding: EdgeInsets.only(left: 20),
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Row(
+                children: [
+                  guardarEmail ? fieldNewEmail : TextActualEmail,
+                  Padding(
+                      padding: EdgeInsets.only(
+                          left: Pantalla.getPorcentPanntalla(5, context, 'x'))),
+                  guardarEmail ? butonGuardar(context) : iconButonEdit
+                ],
               ),
             ),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 20, top: 10),
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: ElevatedButton(
-                onPressed: () async {
-                  //print(FirebaseAuth.instance.currentUser?.providerData);
-
-                  await FirebaseAuth.instance.signOut().then((value) async => {
-                        await _p(),
-                        context.router.replace(SplashScreenRouter())
-                      });
+          Padding(
+            padding: EdgeInsets.only(
+              left: 20,
+            ),
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: TextButton(
+                style: ButtonStyle(
+                    padding: MaterialStateProperty.all(
+                        const EdgeInsets.only(left: 0))),
+                onPressed: () {
+                  context.router
+                      .pushWidget(ChangePasswd(contextPerfil: context));
                 },
-                child: Text("Cerrar sesión")),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 20, top: 24),
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              'Eliminar cuenta',
-              style: TextStyle(fontSize: 20),
+                child: const Text(
+                  'Cambiar Contraseña',
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal),
+                ),
+              ),
             ),
           ),
-        )
-      ]),
+          Padding(
+            padding: EdgeInsets.only(left: 20,),
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: TextButton(
+                style: ButtonStyle(
+                    padding: MaterialStateProperty.all(
+                        const EdgeInsets.only(left: 0))),
+                onPressed: () =>  cerrarCession(context) ,
+                child: Text(
+                  "Cerrar sesión",
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 20, top: 24),
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                'Eliminar cuenta',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+          )
+        ]),
+      ),
     );
     ;
   }
@@ -179,8 +192,6 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
 
   changeEmail(String newEmail) {
     print('email:  $newEmail');
-    var message;
-    var title;
     var actions = <Widget>[
       TextButton(
         onPressed: () => context.router.pop(),
@@ -221,5 +232,31 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
     try {
       await GoogleSignIn().disconnect();
     } catch (e) {}
+  }
+
+
+  static Future<void> cerrarCession(BuildContext context)async {
+    var actions = <Widget>[
+      TextButton(
+        onPressed: () => context.router.pop(),
+        child: Text('Cancelar'),
+      ),
+      TextButton(
+        onPressed: ()async{await FirebaseAuth.instance.signOut().then((value) async => {
+          await _p(),
+          context.router.replace(SplashScreenRouter())
+        });},
+        child: Text('Cerrar sesión'),
+      )
+    ];
+
+    var title = const Text('Cerrar sesión', textAlign: TextAlign.center);
+    var message = const Text(
+      '¿Desea cerrar sesión?',
+      textAlign: TextAlign.center,
+    );
+
+    AdminRoll.showMessaje(actions, title, message, context);
+    //print(FirebaseAuth.instance.currentUser?.providerData);
   }
 }
