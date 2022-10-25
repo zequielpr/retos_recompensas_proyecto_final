@@ -8,12 +8,10 @@ import '../../datos/CollecUsers.dart';
 import '../../datos/Roll_Data.dart';
 
 class AdminRoll {
-
-
   static Widget getRoll(BuildContext context) {
-    var dropdownValue = Roll_Data.ROLL_USER_IS_TUTORADO? 'Tutorado': 'Tutor';
+    var dropdownValue = Roll_Data.ROLL_USER_IS_TUTORADO ? 'Tutorado' : 'Tutor';
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-      const Text('Roll seleccionado ', style: TextStyle(fontSize: 20)),
+      const Text('El rol actual es ', style: TextStyle(fontSize: 20)),
       DropdownButton<String>(
         value: dropdownValue,
         icon: const Padding(
@@ -24,8 +22,7 @@ class AdminRoll {
         style: const TextStyle(
             color: Colors.black, fontWeight: FontWeight.w600, fontSize: 18),
         underline: Container(
-          height: 2,
-          color: Colors.green,
+          height: 0,
         ),
         onChanged: (newValor) {
           changeRoll(newValor, context);
@@ -42,6 +39,33 @@ class AdminRoll {
   }
 
   static Future<void> changeRoll(rol_tutorado, BuildContext context) async {
+    var actions = <Widget>[
+      TextButton(
+        onPressed: () {
+          context.router.pop();
+        },
+        child: const Text('No'),
+      ),
+      TextButton(
+        onPressed: () async {
+          var rol = rol_tutorado == 'Tutorado' ? true : false;
+          await CollecUser.COLECCION_USUARIOS
+              .doc(CurrentUser.getIdCurrentUser())
+              .update({'rol_tutorado': rol});
+          SystemNavigator.pop(animated: true);
+        },
+        child: Text('Ok'),
+      ),
+    ];
+    var titulo = const Text('Cambiar Rol', textAlign: TextAlign.center);
+    var message = const Text(
+      'Desea cambiar de rol? \n al cambiar de rol se reiniciara la aplicación',
+      textAlign: TextAlign.center,
+    );
+    showMessaje(actions, titulo, message, context);
+  }
+
+  static showMessaje(actions, titulo, mensaje, BuildContext context) {
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -57,24 +81,11 @@ class AdminRoll {
         contentPadding: EdgeInsets.only(
             left: Pantalla.getPorcentPanntalla(3, context, 'x'),
             right: Pantalla.getPorcentPanntalla(3, context, 'x')),
-        title: const Text('Cambiar Rol', textAlign: TextAlign.center),
-        content: const Text(
-          'Desea cambiar de rol? \n al cambiar de rol se reiniciara la aplicación',
-          textAlign: TextAlign.center,
-        ),
-        actions: <Widget>[
-          TextButton(onPressed: (){context.router.pop();}, child: const Text('No'),),
-          TextButton(
-              onPressed: () async {
-                var rol = rol_tutorado == 'Tutorado' ? true : false;
-                await CollecUser.COLECCION_USUARIOS
-                    .doc(CurrentUser.getIdCurrentUser())
-                    .update({'rol_tutorado': rol});
-                SystemNavigator.pop(animated: true);
-              },
-              child: Text('Ok'),),
-        ],
+        title: titulo,
+        content: mensaje,
+        actions: actions,
       ),
     );
   }
+
 }
