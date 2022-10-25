@@ -131,7 +131,8 @@ class _MyHomePageState extends State<MyHomePage> {
     FlutterStatusbarcolor.setStatusBarColor(Colors.transparent, animate: true);
     FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
 
-    FlutterStatusbarcolor.setNavigationBarWhiteForeground(true); //Colores de los iconos de la barra inferior
+    FlutterStatusbarcolor.setNavigationBarWhiteForeground(
+        true); //Colores de los iconos de la barra inferior
     FlutterStatusbarcolor.setNavigationBarColor(Colors.transparent);
     /*
     FlutterStatusbarcolor.setStatusBarWhiteForeground(
@@ -160,7 +161,6 @@ class _MyHomePageState extends State<MyHomePage> {
       if (user == null) {
         var datos = TransferirCollecion(CollecionUsuarios);
         context.router.replace(LoginRouter(args: datos));
-
       } else {
         //Guardar usuario actual
         CurrentUser.setCurrentUser();

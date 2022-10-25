@@ -1,4 +1,4 @@
-import 'package:retos_proyecto/MenuNavigatioBar/AdminPerfilUser.dart';
+import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminPerfilUser.dart';
 import 'package:retos_proyecto/Servicios/Autenticacion/EmailPassw/RecoverPassw.dart';
 import 'package:retos_proyecto/datos/Roll_Data.dart';
 import 'package:retos_proyecto/splashScreen.dart';

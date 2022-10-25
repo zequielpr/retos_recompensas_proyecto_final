@@ -17,7 +17,7 @@ import 'package:flutter/material.dart' as _i20;
 
 import 'datos/TransferirDatos.dart' as _i21;
 import 'main.dart' as _i8;
-import 'MenuNavigatioBar/AdminPerfilUser.dart' as _i19;
+import 'MenuNavigatioBar/Perfil/AdminPerfilUser.dart' as _i19;
 import 'MenuNavigatioBar/Inicio/Inicio.dart' as _i10;
 import 'MenuNavigatioBar/Inicio/Tutorado/Historial.dart' as _i11;
 import 'MenuNavigatioBar/Notificaciones.dart' as _i14;
