@@ -48,86 +48,90 @@ class _RecogerPassw extends State<RecogerPassw> {
       body: Container(
         child: Padding(
           padding: EdgeInsets.only(top: 40, left: 30, right: 30),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+          child: getTextFieldPasswd(),
+        ),
+      ),
+    );
+  }
+
+  Widget getTextFieldPasswd(){
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 25),
+            child: Text(
+              'Establece una contraseña',
+              style: GoogleFonts.roboto(
+                  fontSize: 25, fontWeight: FontWeight.w400),
+            ),
+          ),
+        ),
+        TextField(
+          keyboardType: TextInputType.visiblePassword,
+          onChanged: (passw) {
+            passw.length >= 8?
+            passw.length <=16? _checkLongitud(true):_checkLongitud(false)
+                : _checkLongitud(false);
+            Validar.validarPassw(passw) == true
+                ? _checkLetrasNumb(true)
+                : _checkLetrasNumb(false);
+          },
+          obscureText: passwOculta,
+          autofocus: true,
+          controller: passwController,
+          decoration: InputDecoration(
+              suffixIcon: IconButton(
+                onPressed: () => passwOculta == true
+                    ? _mostrarPassw()
+                    : _ocultarPassw(),
+                icon: iconPassw,
+              ),
+              border: OutlineInputBorder(),
+              labelText: 'Contraseña'),
+        ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Row(
             children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 25),
-                  child: Text(
-                    'Establece una contraseña',
-                    style: GoogleFonts.roboto(
-                        fontSize: 25, fontWeight: FontWeight.w400),
-                  ),
-                ),
-              ),
-              TextField(
-                keyboardType: TextInputType.visiblePassword,
-                onChanged: (passw) {
-                  passw.length >= 8?
-                      passw.length <=16? _checkLongitud(true):_checkLongitud(false)
-                      : _checkLongitud(false);
-                  Validar.validarPassw(passw) == true
-                      ? _checkLetrasNumb(true)
-                      : _checkLetrasNumb(false);
-                },
-                obscureText: passwOculta,
-                autofocus: true,
-                controller: passwController,
-                decoration: InputDecoration(
-                    suffixIcon: IconButton(
-                      onPressed: () => passwOculta == true
-                          ? _mostrarPassw()
-                          : _ocultarPassw(),
-                      icon: iconPassw,
-                    ),
-                    border: OutlineInputBorder(),
-                    labelText: 'Contraseña'),
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  children: [
-                    iconoLogitud,
-                    Text(
-                      'Entre 8 y 16 caracteres',
-                      style: GoogleFonts.roboto(fontSize: 15),
-                    )
-                  ],
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  children: [
-                    iconoLetrasN,
-                    Text('Letras, numeros y caracteres especiales',
-                        style: GoogleFonts.roboto(fontSize: 15))
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: SizedBox(
-                    width: 200,
-                    height: 42,
-                    child: ElevatedButton(
-                        style: ButtonStyle(
-                            elevation: MaterialStateProperty.all(0)),
-                        onPressed: botoActivado
-                            ? () => _continuar(args, passwController.text)
-                            : null,
-                        child: Text(
-                          'Continuar',
-                          style: GoogleFonts.roboto(
-                              fontSize: 17, fontWeight: FontWeight.w600),
-                        ))),
-              ),
+              iconoLogitud,
+              Text(
+                'Entre 8 y 16 caracteres',
+                style: GoogleFonts.roboto(fontSize: 15),
+              )
             ],
           ),
         ),
-      ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              iconoLetrasN,
+              Text('Letras, numeros y caracteres especiales',
+                  style: GoogleFonts.roboto(fontSize: 15))
+            ],
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: 20),
+          child: SizedBox(
+              width: 200,
+              height: 42,
+              child: ElevatedButton(
+                  style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(0)),
+                  onPressed: botoActivado
+                      ? () => _continuar(args, passwController.text)
+                      : null,
+                  child: Text(
+                    'Continuar',
+                    style: GoogleFonts.roboto(
+                        fontSize: 17, fontWeight: FontWeight.w600),
+                  ))),
+        ),
+      ],
     );
   }
 

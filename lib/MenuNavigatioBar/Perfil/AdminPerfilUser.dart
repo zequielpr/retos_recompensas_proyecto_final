@@ -3,9 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
+import 'package:retos_proyecto/MenuNavigatioBar/Perfil/ChangePasswd.dart';
+import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 import 'package:retos_proyecto/datos/DatosPersonalUser.dart';
-import 'package:retos_proyecto/datos/Roll_Data.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import 'AdminRoles.dart';
@@ -99,12 +100,19 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(left: 20, top: 24),
+          padding: EdgeInsets.only(
+            left: 20,
+          ),
           child: Align(
             alignment: Alignment.topLeft,
-            child: Text(
-              'Cambiar Contraseña',
-              style: TextStyle(fontSize: 20),
+            child: TextButton(
+              style: ButtonStyle(
+                  padding: MaterialStateProperty.all(const EdgeInsets.only(left: 0))),
+              onPressed: () {context.router.pushWidget(ChangePasswd(contextPerfil: context));},
+              child: const Text(
+                'Cambiar Contraseña',
+                style: TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.normal),
+              ),
             ),
           ),
         ),
@@ -118,7 +126,7 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
 
                   await FirebaseAuth.instance.signOut().then((value) async => {
                         await _p(),
-                        context.router.replaceNamed('/EsplashScreen')
+                        context.router.replace(SplashScreenRouter())
                       });
                 },
                 child: Text("Cerrar sesión")),
@@ -170,9 +178,42 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
   }
 
   changeEmail(String newEmail) {
-    CurrentUser.currentUser?.updateEmail(newEmail).whenComplete(() {
-      ocultarTextField();
-      context.router.pop();
+    print('email:  $newEmail');
+    var message;
+    var title;
+    var actions = <Widget>[
+      TextButton(
+        onPressed: () => context.router.pop(),
+        child: Text('Ok'),
+      ),
+    ];
+    (CurrentUser.currentUser?.updateEmail(newEmail))?.catchError((onError) {
+      var e = onError.toString();
+      print('error: $e');
+      if (e.contains('invalid-email')) {
+        var title = const Text('Email no válido', textAlign: TextAlign.center);
+        var message = const Text(
+          'Introduzca un email válido. Ejemplo@gmail.com',
+          textAlign: TextAlign.center,
+        );
+        AdminRoll.showMessaje(actions, title, message, context);
+      } else if (e.contains('firebase_auth/unknown')) {
+        var title =
+            const Text('Introduzca un email', textAlign: TextAlign.center);
+        var message = const Text(
+          'Introduzca un nuevo email',
+          textAlign: TextAlign.center,
+        );
+        AdminRoll.showMessaje(actions, title, message, context);
+      } else if (e.contains('requires-recent-login')) {
+        var title = const Text('Acción necesaria', textAlign: TextAlign.center);
+        var message = const Text(
+          'Cierre e inicie sesion para poder realizar esta acción',
+          textAlign: TextAlign.center,
+        );
+        AdminRoll.showMessaje(actions, title, message, context);
+      }
+      print('error: $onError');
     });
   }
 
