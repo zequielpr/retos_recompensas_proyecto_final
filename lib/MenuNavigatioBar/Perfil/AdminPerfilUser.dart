@@ -3,10 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
+import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminTutores.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Perfil/ChangePasswd.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 import 'package:retos_proyecto/datos/DatosPersonalUser.dart';
+import 'package:retos_proyecto/datos/Roll_Data.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import 'AdminRoles.dart';
@@ -82,6 +84,10 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
         });
       };
 
+      void actualizarVista(){
+        setState((){});
+      }
+
       var actualEmail = CurrentUser.currentUser?.email as String;
       late IconButton iconButonEdit = IconButton(
         tooltip: 'Editar',
@@ -127,6 +133,7 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
       return Column(
         children: [
           verRoll(),
+          Roll_Data.ROLL_USER_IS_TUTORADO? adminTutores(actualizarVista):Text('data', style: TextStyle(fontSize: 0),),
           adminEmail(
               fieldNewEmail, TextActualEmail, butonGuardar, iconButonEdit),
           adminPassw(),
@@ -253,6 +260,19 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
       child: Align(
         alignment: Alignment.topLeft,
         child: AdminRoll.getRoll(context),
+      ),
+    );
+  }
+
+  //Admin tutores
+  Widget adminTutores( actiualizarVista){
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 20,
+      ),
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: AdminTutores.listTutores(context, actiualizarVista),
       ),
     );
   }
