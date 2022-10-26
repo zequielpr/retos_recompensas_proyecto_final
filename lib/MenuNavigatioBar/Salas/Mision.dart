@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminTutores.dart';
 
 import '../../datos/CollecUsers.dart';
 
@@ -29,7 +30,7 @@ class _MisionState extends State<Mision> {
 
 
   Widget getDatosMision( DocumentSnapshot documentSnapshot){
-    String idTutorActual = 'CGWDtkvBpPSFfsziW0T3x1zfEAt1';
+    String idTutorActual = AdminTutores.dropdownValue;
     return StreamBuilder(
       stream: CollecUser.COLECCION_USUARIOS
         .doc(idTutorActual)

@@ -24,14 +24,17 @@ class Cards {
     return Padding(
         padding: EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 5),
         child: Card(
-          color: Colors.transparent,
+            color: Colors.transparent,
             elevation: 0,
             child: SizedBox(
               height: 120,
               child: Column(
                 children: [
                   ListTile(
-                    leading: DatosPersonales.getAvatar(CollecUser.COLECCION_USUARIOS, documentSnapshot['id_emisor'], 25),
+                    leading: DatosPersonales.getAvatar(
+                        CollecUser.COLECCION_USUARIOS,
+                        documentSnapshot['id_emisor'],
+                        25),
                     title: Text(documentSnapshot['nombre_emisor'].toString()),
                     subtitle: Text(
                         documentSnapshot['nombre_emisor'].toString() +
@@ -76,7 +79,8 @@ class Cards {
   }
 
   //Cuerpo de las notificaciones sobre las misiones_________________________________________________________________
-  static Widget cardNotificacionMisiones(DocumentSnapshot documentSnapshot, BuildContext context) {
+  static Widget cardNotificacionMisiones(
+      DocumentSnapshot documentSnapshot, BuildContext context) {
     return Card(
       color: Colors.transparent,
       elevation: 0,
@@ -86,7 +90,9 @@ class Cards {
             ListTile(
               contentPadding:
                   EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
-              onTap: () {context.router.push(Mision(snap: documentSnapshot));},
+              onTap: () {
+                context.router.push(Mision(snap: documentSnapshot));
+              },
               /*
                                 leading: const CircleAvatar(
                                   backgroundImage: NetworkImage(
@@ -100,7 +106,9 @@ class Cards {
                   TextSpan(
                       text: documentSnapshot['nombre_tutor'],
                       style: TextStyle(fontWeight: FontWeight.w500)),
-                  TextSpan(text: ' Ha asignado una nueva tarea en la sala ', style: TextStyle(fontWeight: FontWeight.w500)),
+                  TextSpan(
+                      text: ' Ha asignado una nueva tarea en la sala ',
+                      style: TextStyle(fontWeight: FontWeight.w500)),
                   TextSpan(
                     text: documentSnapshot['nombre_sala'].toString() + ': ',
                     style: TextStyle(fontWeight: FontWeight.w500),
@@ -213,9 +221,9 @@ class Cards {
       dynamic puntos_total_de_usuario) {
     if (completada_por.contains(userId)) {
       getDialogMisionRealizada(context, nombreMision);
-
     } else if (solicitudeConf.contains(userId)) {
-      getDialogPendienteConfirmacion(context, nombreMision, docMision, userId, puntos_total_de_usuario, recompensa);
+      getDialogPendienteConfirmacion(context, nombreMision, docMision, userId,
+          puntos_total_de_usuario, recompensa);
     } else {
       if (Roll_Data.ROLL_USER_IS_TUTORADO) {
         //Solicitar confirmacion de mision11
@@ -225,12 +233,20 @@ class Cards {
       showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-          title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text(nombreMision)],),
-          titlePadding: EdgeInsets.only(top: Pantalla.getPorcentPanntalla(2, context, 'y'), bottom: Pantalla.getPorcentPanntalla(1, context, 'y')),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [Text(nombreMision)],
+          ),
+          titlePadding: EdgeInsets.only(
+              top: Pantalla.getPorcentPanntalla(2, context, 'y'),
+              bottom: Pantalla.getPorcentPanntalla(1, context, 'y')),
           contentPadding: EdgeInsets.all(0),
           actionsPadding: EdgeInsets.all(0),
           actionsAlignment: MainAxisAlignment.center,
-          content: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text('Misión pendiente de realizar')],),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [Text('Misión pendiente de realizar')],
+          ),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, 'OK'),
@@ -243,16 +259,24 @@ class Cards {
   }
 
   //Dialogs_____________________________________________________-
-  static void getDialogMisionRealizada( BuildContext context, nombreMision){
+  static void getDialogMisionRealizada(BuildContext context, nombreMision) {
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        actionsAlignment:MainAxisAlignment.center ,
-        title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text(nombreMision)],),
-        titlePadding: EdgeInsets.only(top: Pantalla.getPorcentPanntalla(2, context, 'y'), bottom: Pantalla.getPorcentPanntalla(1, context, 'y')),
+        actionsAlignment: MainAxisAlignment.center,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [Text(nombreMision)],
+        ),
+        titlePadding: EdgeInsets.only(
+            top: Pantalla.getPorcentPanntalla(2, context, 'y'),
+            bottom: Pantalla.getPorcentPanntalla(1, context, 'y')),
         contentPadding: EdgeInsets.all(0),
         actionsPadding: EdgeInsets.all(0),
-        content: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text('Esta misión ha sido realizada')],),
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [Text('Esta misión ha sido realizada')],
+        ),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'OK'),
@@ -263,82 +287,116 @@ class Cards {
     );
   }
 
-  static void getDialogPendienteConfirmacion(context, nombreMision, docMision, userId, puntos_total_de_usuario, recompensa){
+  static void getDialogPendienteConfirmacion(context, nombreMision, docMision,
+      userId, puntos_total_de_usuario, recompensa) {
+    //Añadir recompensa sobrante
+    GuardarRecompensaSobrante(recompensa) async {
+      await docMision.parent.parent?.parent.parent?.parent
+          .doc(userId)
+          ?.collection('rolTutorado')
+          .doc(CurrentUser.getIdCurrentUser())
+          .update({'puntos_acumulados': FieldValue.increment(recompensa)});
+      return;
+    }
+
+    addRecompensa(recompensa) async {
+      await docMision.parent.parent?.parent.parent?.parent
+          .doc(userId)
+          ?.collection('rolTutorado')
+          .doc(CurrentUser.getIdCurrentUser())
+          .update({'puntosTotal': FieldValue.increment(recompensa)});
+      return;
+    }
+
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        actionsAlignment:MainAxisAlignment.center ,
-        title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text(nombreMision)],),
-        titlePadding: EdgeInsets.only(top: Pantalla.getPorcentPanntalla(2, context, 'y'), bottom: Pantalla.getPorcentPanntalla(1, context, 'y')),
+        actionsAlignment: MainAxisAlignment.center,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [Text(nombreMision)],
+        ),
+        titlePadding: EdgeInsets.only(
+            top: Pantalla.getPorcentPanntalla(2, context, 'y'),
+            bottom: Pantalla.getPorcentPanntalla(1, context, 'y')),
         contentPadding: EdgeInsets.all(0),
         actionsPadding: EdgeInsets.all(0),
-        content: Row( mainAxisAlignment: MainAxisAlignment.center, children: [Text(!Roll_Data.ROLL_USER_IS_TUTORADO
-            ? '¿La tarea ha sido completada?'
-            : 'Confirmacion pendiente')],),
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(!Roll_Data.ROLL_USER_IS_TUTORADO
+                ? '¿La tarea ha sido completada?'
+                : 'Confirmacion pendiente')
+          ],
+        ),
         actions: <Widget>[
           !Roll_Data.ROLL_USER_IS_TUTORADO
               ? TextButton(
-            onPressed: () => Navigator.pop(context, 'OK'),
-            child: const Text('no'),
-          )
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: const Text('no'),
+                )
               : TextButton(
-            onPressed: () => Navigator.pop(context, 'OK'),
-            child: const Text('ok'),
-          ),
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: const Text('ok'),
+                ),
           !Roll_Data.ROLL_USER_IS_TUTORADO
               ? TextButton(
-            onPressed: () async {
-              await docMision.update({
-                'solicitu_confirmacion':
-                FieldValue.arrayRemove([userId])
-              }).then((value) async {
-                await docMision.update({
-                  'completada_por': FieldValue.arrayUnion([userId])
-                }).then((value) async {
-                  //Debe actualizar con el dato en tiempo real
-                  if (puntos_total_de_usuario >= 200) {
-                    await docMision.parent.parent?.parent.parent?.parent
-                        .doc(userId)
-                        ?.collection('rolTutorado')
-                        .doc(CurrentUser.getIdCurrentUser())
-                        .update({
-                      'puntos_acumulados':
-                      FieldValue.increment(recompensa)
-                    });
-                    return;
-                  }
+                  onPressed: () async {
+                    await docMision.update({
+                      'solicitu_confirmacion': FieldValue.arrayRemove([userId])
+                    }).then((value) async {
+                      await docMision.update({
+                        'completada_por': FieldValue.arrayUnion([userId])
+                      }).then((value) async {
+                        //Debe actualizar con el dato en tiempo real
+                        if (puntos_total_de_usuario + recompensa <= 200) {
+                          addRecompensa(recompensa);
+                          return;
+                        } else if (puntos_total_de_usuario == 200) {
+                          GuardarRecompensaSobrante(recompensa);
+                          return;
+                        }
+                        var recompensaMaxima = 200;
+                        //Puntos sobrantes de la recompensa maxima
+                        var sobrante = (puntos_total_de_usuario + recompensa) -
+                            recompensaMaxima;
+                        print('Sobrante $sobrante');
+                        //Añade los puntos necesarios para la recompensa maxima
+                        addRecompensa(recompensa - sobrante);
+                        //Guarda la recompensa sobrante
+                        GuardarRecompensaSobrante(sobrante);
 
-                  await docMision.parent.parent?.parent.parent?.parent
-                      .doc(userId)
-                      ?.collection('rolTutorado')
-                      .doc(CurrentUser.getIdCurrentUser())
-                      .update({
-                    'puntosTotal': FieldValue.increment(recompensa)
-                  });
-                  return;
-                });
-              });
-              Navigator.pop(context, 'OK');
-            },
-            child: const Text('si'),
-          )
+                        return;
+                      });
+                    });
+                    Navigator.pop(context, 'OK');
+                  },
+                  child: const Text('si'),
+                )
               : Text(''),
         ],
       ),
     );
   }
 
-
-  static void getDialogSolicitud(context, nombreMision, docMision, userId){
+  static void getDialogSolicitud(context, nombreMision, docMision, userId) {
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        actionsAlignment:MainAxisAlignment.center ,
-        title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text(nombreMision)],),
-        titlePadding: EdgeInsets.only(top: Pantalla.getPorcentPanntalla(2, context, 'y'), bottom: Pantalla.getPorcentPanntalla(1, context, 'y')),
+        actionsAlignment: MainAxisAlignment.center,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [Text(nombreMision)],
+        ),
+        titlePadding: EdgeInsets.only(
+            top: Pantalla.getPorcentPanntalla(2, context, 'y'),
+            bottom: Pantalla.getPorcentPanntalla(1, context, 'y')),
         contentPadding: EdgeInsets.all(0),
         actionsPadding: EdgeInsets.all(0),
-        content:Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text('¿Enviar un solicitud de confirmacion?')],),
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [Text('¿Enviar un solicitud de confirmacion?')],
+        ),
         actions: <Widget>[
           TextButton(
               onPressed: () => Navigator.pop(context, 'OK'),
@@ -481,7 +539,7 @@ class Cards {
 
           //Navigator.push(context, MaterialPageRoute(builder: (context)=>MenuSala()) );
         },
-        child:  vistaCardSala(context, documentSnapshot['NombreSala']),
+        child: vistaCardSala(context, documentSnapshot['NombreSala']),
       ),
     );
   }
@@ -492,33 +550,31 @@ class Cards {
     return Padding(
       padding: EdgeInsets.only(top: 10, bottom: 10),
       child: FlatButton(
-        color: Colors.transparent,
-        splashColor: Colors.black26,
+          color: Colors.transparent,
+          splashColor: Colors.black26,
 
-        //pasar datos de la sala pulzada a la siguiente ventana
-        onPressed: () {
-          //Crea un objeto con la sala pulzada para posteriormente obtener su contenido midiante geters en la siguiente ventana
-          SalaDatos sala = SalaDatos(documentSnapshot.reference);
+          //pasar datos de la sala pulzada a la siguiente ventana
+          onPressed: () {
+            //Crea un objeto con la sala pulzada para posteriormente obtener su contenido midiante geters en la siguiente ventana
+            SalaDatos sala = SalaDatos(documentSnapshot.reference);
 
-          var datos = TransferirDatos(
-              Text(documentSnapshot['NombreSala'])
-                  .data
-                  .toString(), //Nombre de la sala pulsada
-              sala,
-              collecionUsuarios);
+            var datos = TransferirDatos(
+                Text(documentSnapshot['NombreSala'])
+                    .data
+                    .toString(), //Nombre de la sala pulsada
+                sala,
+                collecionUsuarios);
 
-          context.router.push(SalaContVistaTutor(args: datos));
-          //this.titulo = 'holaaa';
+            context.router.push(SalaContVistaTutor(args: datos));
+            //this.titulo = 'holaaa';
 
-          //Navigator.push(context, MaterialPageRoute(builder: (context)=>MenuSala()) );
-        },
-        child: vistaCardSala(context, documentSnapshot['NombreSala'])
-      ),
+            //Navigator.push(context, MaterialPageRoute(builder: (context)=>MenuSala()) );
+          },
+          child: vistaCardSala(context, documentSnapshot['NombreSala'])),
     );
   }
 
-
-  static Widget vistaCardSala(BuildContext context, String nombreSala){
+  static Widget vistaCardSala(BuildContext context, String nombreSala) {
     return Card(
       color: Colors.orange,
       elevation: 0,
@@ -531,7 +587,11 @@ class Cards {
       child: SizedBox(
         width: 300,
         height: 100,
-        child: Center(child: Text(nombreSala, style: TextStyle(fontSize: 35),)),
+        child: Center(
+            child: Text(
+          nombreSala,
+          style: TextStyle(fontSize: 35),
+        )),
       ),
     );
   }
