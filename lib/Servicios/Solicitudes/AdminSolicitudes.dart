@@ -25,6 +25,9 @@ class Solicitudes {
             });
             return;
           }
+          //Si el usuario aun no esta bajo su tutoría
+          await collectionReferenceUers
+              .doc(idCurrentUser).update({'current_tutor': id_emisor.trim()});
           await value.reference.set({
             'salas_id': FieldValue.arrayUnion([id_sala]),
             'puntosTotal': 0,

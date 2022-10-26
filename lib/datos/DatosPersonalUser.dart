@@ -30,6 +30,7 @@ class DatosPersonales{
   }
 
 
+
   ///Devuelve el avatar del usuario con el id especificado. El tamaño del avatar será el pasado por parámetro
   static Widget getAvatar(CollectionReference collectionReferenceUser, String idUser, double size){
     return FutureBuilder<DocumentSnapshot>(

@@ -8,6 +8,7 @@ import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import '../../datos/CollecUsers.dart';
 import '../../widgets/Cards.dart';
+import '../Perfil/AdminTutores.dart';
 
 class Salas extends StatefulWidget {
   const Salas({Key? key}) : super(key: key);
@@ -17,6 +18,22 @@ class Salas extends StatefulWidget {
 }
 
 class _SalasState extends State<Salas> {
+  var currentTutor;
+
+  void initCurrentTutor(currentTutor) {
+    setState(() {
+      this.currentTutor = currentTutor;
+    });
+  }
+
+  void initState() {
+    var initCurrentTutor = this.initCurrentTutor;
+    if (Roll_Data.ROLL_USER_IS_TUTORADO) {
+      AdminTutores.setCurrentUser(initCurrentTutor);
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,25 +41,33 @@ class _SalasState extends State<Salas> {
         centerTitle: true,
         title: Text('Salas'),
         actions: [
-          Roll_Data.ROLL_USER_IS_TUTORADO ? Text(''):
-          IconButton(
-              onPressed: () async => crearSala(),
-              icon: Icon(Icons.add_box_outlined))
+          Roll_Data.ROLL_USER_IS_TUTORADO
+              ? Text('')
+              : IconButton(
+                  onPressed: () async => crearSala(),
+                  icon: Icon(Icons.add_box_outlined))
         ],
       ),
       body: Container(
         child: Roll_Data.ROLL_USER_IS_TUTORADO
-            ? _listarVistaTutorados(context, CollecUser.COLECCION_USUARIOS)
+            ? contenido()
             : getVistaSalasVistaTutor(context, CollecUser.COLECCION_USUARIOS),
       ),
     );
     ;
   }
 
+  Widget contenido() {
+    return currentTutor != null
+        ? _listarVistaTutorados(context, CollecUser.COLECCION_USUARIOS, currentTutor)
+        : Center(
+            child: Text('Aun no tienes un tutor'),
+          );
+  }
+
   //Vista de las salas para los tutorados
   _listarVistaTutorados(
-      BuildContext context, CollectionReference collecionUsuarios) {
-    String tutorActual = 'CGWDtkvBpPSFfsziW0T3x1zfEAt1';
+      BuildContext context, CollectionReference collecionUsuarios, tutorActual) {
     List<dynamic> listaIdasSalas;
 
     return StreamBuilder(

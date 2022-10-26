@@ -6,6 +6,7 @@ import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/datos/Roll_Data.dart';
 
 import '../../datos/CollecUsers.dart';
+import '../Perfil/AdminTutores.dart';
 import 'Tutor/VistaInicioTutor.dart';
 import 'Tutorado/InicioVistaTutorado.dart';
 
@@ -17,10 +18,22 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  var currentTutor;
+
+  void initCurrentTutor(currentTutor){
+    setState(() {
+      this.currentTutor = currentTutor;
+    });
+  }
   @override
 
   var cofre_6;
+  @override
   void initState(){
+    var initCurrentTutor = this.initCurrentTutor;
+    if(Roll_Data.ROLL_USER_IS_TUTORADO){
+      AdminTutores.setCurrentUser(initCurrentTutor);
+    }
     super.initState();
     cofre_6 = Image.asset("lib/imgs/cofre/cofre_6.png");
   }
@@ -83,12 +96,16 @@ class _HomeState extends State<Home> {
           ):Text('')
         ],
       ),
-      body: Roll_Data.ROLL_USER_IS_TUTORADO ? InicioVistaTutorado.showCajaRecompensa(
-          CollecUser.COLECCION_USUARIOS,
-          'CGWDtkvBpPSFfsziW0T3x1zfEAt1',
-          changeImage,
-          cofre):InicioTutor(),
+      body: Roll_Data.ROLL_USER_IS_TUTORADO ? getInicioCurrentTutor():InicioTutor(),
     );
     ;
+  }
+
+  Widget getInicioCurrentTutor(){
+    return currentTutor != null? InicioVistaTutorado.showCajaRecompensa(
+        CollecUser.COLECCION_USUARIOS,
+        currentTutor,
+        changeImage,
+        cofre): Center(child: Text('Aun no tienes una tutoría'),);
   }
 }

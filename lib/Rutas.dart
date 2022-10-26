@@ -1,4 +1,4 @@
-import 'package:retos_proyecto/MenuNavigatioBar/AdminPerfilUser.dart';
+import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminPerfilUser.dart';
 import 'package:retos_proyecto/Servicios/Autenticacion/EmailPassw/RecoverPassw.dart';
 import 'package:retos_proyecto/datos/Roll_Data.dart';
 import 'package:retos_proyecto/splashScreen.dart';
@@ -9,6 +9,7 @@ import 'package:auto_route/auto_route.dart';
 import 'MenuNavigatioBar/Inicio/Inicio.dart';
 import 'MenuNavigatioBar/Inicio/Tutorado/Historial.dart';
 import 'MenuNavigatioBar/Notificaciones.dart';
+import 'MenuNavigatioBar/Perfil/ChangePasswd.dart';
 import 'MenuNavigatioBar/Salas/Mision.dart';
 import 'MenuNavigatioBar/Salas/Salas.dart';
 import 'MenuNavigatioBar/Salas/Tutor/TabPages/SalaVistaTutor.dart';
@@ -108,8 +109,10 @@ import 'main.dart';
           page: EmptyRouterPage,
           children: [
             AutoRoute(path: '', page: AdminPerfilUser),
+            AutoRoute(
+                path: 'ChangePasswd', page: ChangePasswd, name: 'ChangePasswdRouter'),
             //AutoRoute(path: 'details', page: AccountDetailsPage),
-            //RedirectRoute(path: '*', redirectTo: ''),
+            RedirectRoute(path: '*', redirectTo: ''),
           ],
         ),
       ],
