@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
+import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminRoles.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 import 'package:retos_proyecto/datos/Roll_Data.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
@@ -59,15 +60,16 @@ class _SalasState extends State<Salas> {
 
   Widget contenido() {
     return currentTutor != null
-        ? _listarVistaTutorados(context, CollecUser.COLECCION_USUARIOS, currentTutor)
+        ? _listarVistaTutorados(
+            context, CollecUser.COLECCION_USUARIOS, currentTutor)
         : Center(
             child: Text('Aun no tienes un tutor'),
           );
   }
 
   //Vista de las salas para los tutorados
-  _listarVistaTutorados(
-      BuildContext context, CollectionReference collecionUsuarios, tutorActual) {
+  _listarVistaTutorados(BuildContext context,
+      CollectionReference collecionUsuarios, tutorActual) {
     List<dynamic> listaIdasSalas;
 
     return StreamBuilder(
@@ -149,8 +151,36 @@ class _SalasState extends State<Salas> {
     );
   }
 
+  //Contar numero de salas creadas
+  Future<int> getNumerosalas() async {
+    return await CollecUser.COLECCION_USUARIOS
+        .doc(CurrentUser.getIdCurrentUser())
+        .collection('rolTutor')
+        .get()
+        .then((value) => value.size);
+  }
+
   //Funcion para crear nuevas salas
   Future<void> crearSala() async {
+    var actions = <Widget>[
+      TextButton(
+        onPressed: () => context.router.pop(),
+        child: Text('Ok'),
+      )
+    ];
+
+    var title = const Text('Numero maximo de salas', textAlign: TextAlign.center);
+    var message = const Text(
+      'Numero maximo de salas alcanzado, debe eliminar una o más salas si desea crear una sala',
+      textAlign: TextAlign.center,
+    );
+    var numeroDeSalas = await getNumerosalas();
+    numeroDeSalas <=3?showModalCrearSala():AdminRoll.showMessaje(actions, title, message, context);
+
+
+  }
+
+  Future<void> showModalCrearSala() async{
     var nombreSala = TextEditingController();
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
@@ -210,7 +240,7 @@ class _SalasState extends State<Salas> {
                   child: TextField(
                     controller: nombreSala,
                     decoration:
-                        const InputDecoration(labelText: 'Nombre de sala'),
+                    const InputDecoration(labelText: 'Nombre de sala'),
                   ),
                 ),
                 const SizedBox(
@@ -235,11 +265,11 @@ class _SalasState extends State<Salas> {
                           'numMisiones': 0,
                           'numTutorados': 0
                         }).whenComplete(() => {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text(
-                                              'Sala creada correctamente')))
-                                });
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      'Sala creada correctamente')))
+                        });
                         nombreSala.text = '';
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
