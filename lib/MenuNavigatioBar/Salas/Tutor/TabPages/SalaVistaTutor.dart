@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/AdminSala.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/Misiones.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/Ruleta.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/ListUsuariosTutorados.dart';
@@ -18,7 +19,8 @@ class SalaContVistaTutor extends StatefulWidget {
   State<SalaContVistaTutor> createState() => _SalaContVistaTutorState(args);
 }
 
-enum Menu { AddMision, AddUsuario, EliminarSala}
+enum Menu { AddMision, AddUsuario, EliminarSala }
+
 //_SalaContVistaTutorState
 class _SalaContVistaTutorState extends State<SalaContVistaTutor>
     with SingleTickerProviderStateMixin {
@@ -34,7 +36,7 @@ class _SalaContVistaTutorState extends State<SalaContVistaTutor>
   String _selectedMenu = '';
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext contextSala) {
     return Scaffold(
       appBar: AppBar(
         title: Text(args.nombreSala),
@@ -42,32 +44,44 @@ class _SalaContVistaTutorState extends State<SalaContVistaTutor>
           IconButton(
             onPressed: () {
               enviarSolicitudeUsuario.InterfaceEnviarSolicitud(
-                  context, args.collecionUsuarios, args.sala.getIdSala);
+                  contextSala, args.collecionUsuarios, args.sala.getIdSala);
             },
             icon: Icon(Icons.person_add),
           ),
+          IconButton(
+            onPressed: () {
+              context.router.push(AddMisionRouter(
+                  collectionReferenceMisiones: CollecUser.COLECCION_USUARIOS,
+                  contextSala: context));
+            },
+            icon: Icon(Icons.add),
+          ),
           PopupMenuButton<Menu>(
-            // Callback that sets the selected popup menu item.
+              // Callback that sets the selected popup menu item.
               onSelected: (Menu item) {
                 setState(() {
                   _selectedMenu = item.name;
                 });
               },
               itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
-                PopupMenuItem<Menu>(
-                  value: Menu.AddMision,
-                  onTap: (){context.router.push(AddMisionRouter(collectionReferenceMisiones: CollecUser.COLECCION_USUARIOS, contextSala: context));},
-                  child: Text('Añadir misión'),
-                ),
-                const PopupMenuItem<Menu>(
-                  value: Menu.AddUsuario,
-                  child: Text('Añadir usuario'),
-                ),
-                const PopupMenuItem<Menu>(
-                  value: Menu.EliminarSala,
-                  child: Text('Eliminar sala'),
-                )
-              ]),
+                    PopupMenuItem<Menu>(
+                      value: Menu.AddMision,
+                      onTap: () {
+                        context.router.push(AddMisionRouter(
+                            collectionReferenceMisiones:
+                                CollecUser.COLECCION_USUARIOS,
+                            contextSala: context));
+                      },
+                      child: Text('Añadir misión'),
+                    ),
+                    PopupMenuItem<Menu>(
+                      value: Menu.EliminarSala,
+                      child: Text('Eliminar sala'),
+                      onTap: () async {
+                        await AdminSala.eliminarSala(args.sala.getIdSala, contextSala, context);
+                      },
+                    )
+                  ]),
         ],
         bottom: TabBar(
           controller: _tabController,
@@ -89,13 +103,13 @@ class _SalaContVistaTutorState extends State<SalaContVistaTutor>
             children: [
               Misiones(
                   collectionMisiones: args.sala.getColecMisiones,
-                  contextSala: context),
+                  contextSala: contextSala),
               ListUsuarios(
                   collectionReferenceUsuariosTutorados:
                       args.sala.getColecUsuariosTutorados,
                   collectionReferenceUsuariosDocPersonal:
                       args.collecionUsuarios,
-                  contextSala: context,
+                  contextSala: contextSala,
                   collectionReferenceMisiones: args.sala.getColecMisiones),
             ],
           ),

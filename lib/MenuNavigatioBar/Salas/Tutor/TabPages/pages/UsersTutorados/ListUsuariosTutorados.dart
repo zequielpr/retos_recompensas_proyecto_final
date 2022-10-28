@@ -132,10 +132,10 @@ class ListUsuarios extends StatelessWidget {
 //Enviar solici
 
 class enviarSolicitudeUsuario {
-  static Future<Text> InterfaceEnviarSolicitud(BuildContext context,
-      CollectionReference collectionReferenceUser, String idSala) async {
+  static InterfaceEnviarSolicitud(BuildContext context,
+      CollectionReference collectionReferenceUser, String idSala) {
     var _userNameController = TextEditingController();
-    return await showModalBottomSheet(
+    return  showModalBottomSheet(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         isScrollControlled: true,
         context: context,
