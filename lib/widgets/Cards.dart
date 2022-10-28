@@ -549,9 +549,11 @@ class Cards {
       CollectionReference collecionUsuarios, documentSnapshot) {
     return Padding(
       padding: EdgeInsets.only(top: 10, bottom: 10),
-      child: FlatButton(
-          color: Colors.transparent,
-          splashColor: Colors.black26,
+      child: ElevatedButton(
+          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.transparent)),
+
+          //Long press para seleccionar
+          onLongPress: (){},
 
           //pasar datos de la sala pulzada a la siguiente ventana
           onPressed: () {
