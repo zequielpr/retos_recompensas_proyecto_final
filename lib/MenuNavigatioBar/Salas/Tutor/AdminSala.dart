@@ -84,4 +84,23 @@ class AdminSala {
           .delete());
     });
   }
+
+
+
+  static Future<int> comprobarNumMisiones(String? idSala)async{
+    int numeroMisiones = 0;
+    await CollecUser.COLECCION_USUARIOS
+        .doc(CurrentUser.getIdCurrentUser())
+        .collection('rolTutor')
+        .doc(idSala)
+        .collection('misiones')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+       numeroMisiones++;
+      });
+    });
+
+    return numeroMisiones;
+  }
 }
