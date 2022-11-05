@@ -13,6 +13,7 @@ import 'MenuNavigatioBar/Perfil/ChangePasswd.dart';
 import 'MenuNavigatioBar/Salas/Mision.dart';
 import 'MenuNavigatioBar/Salas/Salas.dart';
 import 'MenuNavigatioBar/Salas/Tutor/TabPages/SalaVistaTutor.dart';
+import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/Misiones.dart';
 import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/AddRewardUser.dart';
 import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/UserTutorado.dart';
 import 'MenuNavigatioBar/Salas/Tutorado/ListMisiones.dart';
@@ -94,6 +95,7 @@ import 'main.dart';
             AutoRoute(path: '', page: Salas),
             AutoRoute(path: 'SalaContVistaTutor', page: SalaContVistaTutor),
             AutoRoute(path: 'UserTutoradoDescrip', page: UserTutorado),
+            AutoRoute(path: 'AddMision', page: AddMision, name: 'AddMisionRouter'),
             AutoRoute(
                 path: 'ListaMisionesTutorado', page: ListMisionesTutorado),
             AutoRoute(

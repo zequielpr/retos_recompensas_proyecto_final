@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
@@ -49,9 +50,11 @@ class AdminRoll {
       TextButton(
         onPressed: () async {
           var rol = rol_tutorado == 'Tutorado' ? true : false;
-          await CollecUser.COLECCION_USUARIOS
-              .doc(CurrentUser.getIdCurrentUser())
-              .update({'rol_tutorado': rol});
+          await (CollecUser.COLECCION_USUARIOS
+                  .doc(CurrentUser.getIdCurrentUser())
+                  .update({'rol_tutorado': rol}))
+              .catchError((onError) {})
+              .then((value) {});
           SystemNavigator.pop(animated: true);
         },
         child: Text('Ok'),
@@ -87,5 +90,6 @@ class AdminRoll {
       ),
     );
   }
+
 
 }

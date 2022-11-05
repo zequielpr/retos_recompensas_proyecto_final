@@ -36,36 +36,7 @@ class Misiones extends StatelessWidget {
             );
           },
         )),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: SizedBox(
-            width: 400,
-            height: 50,
-            child: Container(
-              color: Colors.green,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: FloatingActionButton(
-                      backgroundColor: Colors.green,
-                      onPressed: () {
-                        Navigator.of(contextSala).push(MaterialPageRoute(
-                            builder: (context) => AddMision(
-                                  collectionReferenceMisiones:
-                                      collectionMisiones,
-                                  contextSala: contextSala,
-                                )));
-                      },
-                      child: const Icon(
-                        Icons.add,
-                        color: Colors.black,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            )));
+        );
     ;
   }
 }

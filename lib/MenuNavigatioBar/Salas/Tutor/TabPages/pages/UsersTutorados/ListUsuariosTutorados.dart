@@ -40,7 +40,8 @@ class ListUsuarios extends StatelessWidget {
                           color: Colors.transparent,
                           splashColor: Colors.black26,
                           onPressed: () {
-                            var datos = TransfDatosUserTutorado(collectionReferenceMisiones, documentSnapshot);
+                            var datos = TransfDatosUserTutorado(
+                                collectionReferenceMisiones, documentSnapshot);
                             contextSala.router.push(UserTutorado(args: datos));
                             /* Navigator.pushNamed(
                         context,
@@ -59,15 +60,15 @@ class ListUsuarios extends StatelessWidget {
                             margin: const EdgeInsets.all(10),
                             elevation: 1,
                             child: ListTile(
-                              leading: DatosPersonales.getAvatar(collectionReferenceUsuariosDocPersonal, documentSnapshot.id, 20),
+                              leading: DatosPersonales.getAvatar(
+                                  collectionReferenceUsuariosDocPersonal,
+                                  documentSnapshot.id,
+                                  20),
                               title: SalaDatos.getNombreUsuario(
                                   collectionReferenceUsuariosDocPersonal,
                                   documentSnapshot.id),
-                              subtitle: Text(
-                                  'xxx' +
-                                      ' xp',
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1),
+                              subtitle: Text('xxx' + ' xp',
+                                  overflow: TextOverflow.ellipsis, maxLines: 1),
                               trailing: SizedBox(
                                 width: 50,
                                 child: Row(
@@ -132,11 +133,13 @@ class ListUsuarios extends StatelessWidget {
 //Enviar solici
 
 class enviarSolicitudeUsuario {
-  static Future<Text> InterfaceEnviarSolicitud(BuildContext context,
-      CollectionReference collectionReferenceUser, String idSala) async {
+  static InterfaceEnviarSolicitud(BuildContext context,
+      CollectionReference collectionReferenceUser, String idSala) {
     var _userNameController = TextEditingController();
-    return await showModalBottomSheet(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    return showModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10), topRight: Radius.circular(10))),
         isScrollControlled: true,
         context: context,
         builder: (BuildContext ctx) {
