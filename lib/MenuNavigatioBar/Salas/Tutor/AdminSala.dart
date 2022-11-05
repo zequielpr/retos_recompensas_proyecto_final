@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminRoles.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
@@ -48,11 +49,7 @@ class AdminSala {
           ),
           TextButton(
             onPressed: () async {
-              await CollecUser.COLECCION_USUARIOS
-                  .doc(CurrentUser.getIdCurrentUser())
-                  .collection('rolTutor')
-                  .doc(idSala)
-                  .delete();
+              await eliminarSalasDeUsuarios(idSala);
               context.router.pop();
               contextSala.router.pop();
             },
@@ -61,5 +58,30 @@ class AdminSala {
         ],
       ),
     );
+  }
+
+  //Eliminar sala de usuarios tutorados
+  static Future<void> eliminarSalasDeUsuarios(String idSala) async {
+    (CollecUser.COLECCION_USUARIOS
+        .doc(CurrentUser.getIdCurrentUser())
+        .collection('rolTutor')
+        .doc(idSala)
+        .collection('usersTutorados')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        CollecUser.COLECCION_USUARIOS
+            .doc(element.id)
+            .collection('rolTutorado')
+            .doc(CurrentUser.getIdCurrentUser())
+            .update({'salas_id': FieldValue.arrayRemove([idSala])});
+      });
+    })).catchError((onError){}).then((value) {
+      (CollecUser.COLECCION_USUARIOS
+          .doc(CurrentUser.getIdCurrentUser())
+          .collection('rolTutor')
+          .doc(idSala)
+          .delete());
+    });
   }
 }
