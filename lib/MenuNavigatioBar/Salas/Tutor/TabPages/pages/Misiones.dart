@@ -30,7 +30,7 @@ class Misiones extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final DocumentSnapshot documentSnapshot =
                       streamSnapshot.data!.docs[index];
-                  return Cards.getCardMisionInicio(documentSnapshot);
+                  return Cards.getCardMisionInicio(documentSnapshot, context);
                 },
               );
             }

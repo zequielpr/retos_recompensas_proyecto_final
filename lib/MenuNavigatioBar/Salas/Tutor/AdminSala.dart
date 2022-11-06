@@ -10,7 +10,6 @@ import '../../../MediaQuery.dart';
 class AdminSala {
   static Future<void> eliminarSala(
       String idSala, BuildContext context, BuildContext c) async {
-
     var title = const Text('Eliminar Sala', textAlign: TextAlign.center);
     var message = const Text(
       '¿Deseas eliminar esta sala?',
@@ -19,8 +18,6 @@ class AdminSala {
 
     showMessaje(title, message, context, idSala);
   }
-
-
 
   static showMessaje(titulo, mensaje, BuildContext contextSala, String idSala) {
     showDialog<String>(
@@ -34,16 +31,16 @@ class AdminSala {
         actionsAlignment: MainAxisAlignment.center,
         buttonPadding: EdgeInsets.all(0),
         actionsPadding:
-        EdgeInsets.only(top: Pantalla.getPorcentPanntalla(0, context, 'x')),
+            EdgeInsets.only(top: Pantalla.getPorcentPanntalla(0, context, 'x')),
         contentPadding: EdgeInsets.only(
             left: Pantalla.getPorcentPanntalla(3, context, 'x'),
             right: Pantalla.getPorcentPanntalla(3, context, 'x')),
         title: titulo,
         content: mensaje,
-        actions:  <Widget>[
+        actions: <Widget>[
           TextButton(
             onPressed: () {
-            context.router.pop();
+              context.router.pop();
             },
             child: Text('Cancelar'),
           ),
@@ -74,9 +71,11 @@ class AdminSala {
             .doc(element.id)
             .collection('rolTutorado')
             .doc(CurrentUser.getIdCurrentUser())
-            .update({'salas_id': FieldValue.arrayRemove([idSala])});
+            .update({
+          'salas_id': FieldValue.arrayRemove([idSala])
+        });
       });
-    })).catchError((onError){}).then((value) {
+    })).catchError((onError) {}).then((value) {
       (CollecUser.COLECCION_USUARIOS
           .doc(CurrentUser.getIdCurrentUser())
           .collection('rolTutor')
@@ -85,9 +84,7 @@ class AdminSala {
     });
   }
 
-
-
-  static Future<int> comprobarNumMisiones(String? idSala)async{
+  static Future<int> comprobarNumMisiones(String? idSala) async {
     int numeroMisiones = 0;
     await CollecUser.COLECCION_USUARIOS
         .doc(CurrentUser.getIdCurrentUser())
@@ -97,10 +94,68 @@ class AdminSala {
         .get()
         .then((value) {
       value.docs.forEach((element) {
-       numeroMisiones++;
+        numeroMisiones++;
       });
     });
 
     return numeroMisiones;
   }
+
+  //Eliminar mision
+  static Future<void> eliminarMision(String? idSala, String idMision, BuildContext context) async {
+
+    var title = const Text('Eliminar mision', textAlign: TextAlign.center);
+    var message = const Text(
+      '¿Deseas eliminar esta misión?',
+      textAlign: TextAlign.center,
+    );
+
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        titlePadding: EdgeInsets.only(
+            left: Pantalla.getPorcentPanntalla(3, context, 'x'),
+            top: Pantalla.getPorcentPanntalla(3, context, 'x'),
+            bottom: Pantalla.getPorcentPanntalla(1, context, 'x')),
+        alignment: Alignment.center,
+        actionsAlignment: MainAxisAlignment.center,
+        buttonPadding: EdgeInsets.all(0),
+        actionsPadding:
+        EdgeInsets.only(top: Pantalla.getPorcentPanntalla(0, context, 'x')),
+        contentPadding: EdgeInsets.only(
+            left: Pantalla.getPorcentPanntalla(3, context, 'x'),
+            right: Pantalla.getPorcentPanntalla(3, context, 'x')),
+        title: title,
+        content: message,
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              context.router.pop();
+            },
+            child: Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () async {
+              await CollecUser.COLECCION_USUARIOS
+                  .doc(CurrentUser.getIdCurrentUser())
+                  .collection('rolTutor')
+                  .doc(idSala)
+                  .collection('misiones')
+                  .doc(idMision)
+                  .delete().then((value) =>  context.router.pop());
+            },
+            child: Text('Eliminar'),
+          )
+        ],
+      ),
+    );
+
+
+
+
+    print('id sala: $idSala');
+    print('id mision: $idMision');
+
+  }
+
 }

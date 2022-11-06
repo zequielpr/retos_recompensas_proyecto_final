@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:readmore/readmore.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
+import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/AdminSala.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 
@@ -415,7 +416,10 @@ class Cards {
     );
   }
 
-  static Widget getCardMisionInicio(DocumentSnapshot documentSnapshot) {
+  static Widget getCardMisionInicio(
+      DocumentSnapshot documentSnapshot, BuildContext context) {
+    String? idSala = documentSnapshot.reference.parent.parent?.id;
+    String idMision = documentSnapshot.id;
     return Card(
       elevation: 0,
       child: ListTile(
@@ -466,45 +470,15 @@ class Cards {
         ),
         trailing: SizedBox(
           width: 60,
-          height: 26,
+          height: Pantalla.getPorcentPanntalla(5, context, 'y'),
           child: IconButton(
-              icon: Icon(
-                Icons.more_vert,
-              ),
-              onPressed: () {}),
-        ),
-      ),
-    );
-
-    Card(
-      margin: const EdgeInsets.all(10),
-      child: ListTile(
-        contentPadding: EdgeInsets.only(left: 15, top: 10, bottom: 10),
-        //contentPadding: EdgeInsets.only(left: 15, top: 10, bottom: 10),
-        /*leading: CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1581413287870&di=35491998b94817cbcf04d9f9f3d2d4b3&imgtype=jpg&src=http%3A%2F%2Fimg0.imgtn.bdimg.com%2Fit%2Fu%3D2464547320%2C3316604757%26fm%3D214%26gp%3D0.jpg"),
-                ),*/
-        title: Text(Text(documentSnapshot['nombreMision']).data.toString()),
-        subtitle: ReadMoreText(
-          Text(
-            documentSnapshot['objetivoMision'],
-            textAlign: TextAlign.justify,
-          ).data.toString(),
-          trimLines: 1,
-          colorClickableText: Colors.pink,
-          trimMode: TrimMode.Line,
-          lessStyle:
-              GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
-          trimCollapsedText: 'ver más',
-          trimExpandedText: 'ver menos',
-          moreStyle:
-              GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
-        ),
-        trailing: SizedBox(
-          width: 30,
-          child: IconButton(
-              icon: const Icon(Icons.more_vert, size: 20), onPressed: () {}),
+            tooltip: 'Eliminar',
+            splashRadius: 0.1,
+            icon: const Icon(
+              Icons.delete,
+            ),
+            onPressed: () async => await AdminSala.eliminarMision(idSala, idMision, context), //Eliminar mision
+          ),
         ),
       ),
     );
@@ -550,10 +524,11 @@ class Cards {
     return Padding(
       padding: EdgeInsets.only(top: 10, bottom: 10),
       child: ElevatedButton(
-          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.transparent)),
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.transparent)),
 
           //Long press para seleccionar
-          onLongPress: (){},
+          onLongPress: () {},
 
           //pasar datos de la sala pulzada a la siguiente ventana
           onPressed: () {

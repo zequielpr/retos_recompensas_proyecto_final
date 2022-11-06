@@ -64,12 +64,7 @@ class _SalaContVistaTutorState extends State<SalaContVistaTutor>
               itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
                     PopupMenuItem<Menu>(
                       value: Menu.AddMision,
-                      onTap: () {
-                        context.router.push(AddMisionRouter(
-                            collectionReferenceMisiones:
-                                CollecUser.COLECCION_USUARIOS,
-                            contextSala: context));
-                      },
+                      onTap: () => _crearMision(context),
                       child: Text('Añadir misión'),
                     ),
                     PopupMenuItem<Menu>(
