@@ -1,10 +1,13 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:readmore/readmore.dart';
+import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminRoles.dart';
 
 import '../../../../../widgets/Cards.dart';
 import '../../../../../widgets/Fields.dart';
+import '../../AdminSala.dart';
 
 class Misiones extends StatelessWidget {
   final CollectionReference collectionMisiones;
@@ -27,7 +30,7 @@ class Misiones extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final DocumentSnapshot documentSnapshot =
                       streamSnapshot.data!.docs[index];
-                  return Cards.getCardMisionInicio(documentSnapshot);
+                  return Cards.getCardMisionInicio(documentSnapshot, context);
                 },
               );
             }
@@ -220,66 +223,11 @@ class MyStatefulWidgetState extends State<MyStatefulWidget> {
                         const SnackBar(
                             content: Text('Mision añadida correctamente')));
                   });
+
+
                 },
                 child: Text('Guardar'))),
       ],
     ));
   }
 }
-
-/*
-class AddMision extends StatelessWidget {
-  final CollectionReference collectionMisiones;
-
-  AddMision ( {Key? key, required this.collectionMisiones}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    double pading_left = 10.0;
-    double pading_top = 5.0;
-    double pading_right = 10.0;
-    double pading_bottom = 10.0;
-    String hint = "nombre de misión";
-    bool oculto = false;
-    //Creando los field Para añadir las misiones
-    var nombreMision =  Fields(pading_left, pading_top, pading_right, pading_bottom, hint, oculto);
-    hint = 'Objetivo';
-    var objetivo =  Fields(pading_left, pading_top, pading_right, pading_bottom, hint, oculto);
-    hint = 'Recompensa';
-    var recompensaMision =  Fields(pading_left, pading_top, pading_right, pading_bottom, hint, oculto);
-    hint = 'Tipo';
-    var tipo =  Fields(pading_left, pading_top, pading_right, pading_bottom, hint, oculto);
-    List<String> listaDeOpciones = <String>["A","B","C","D","E","F","G"];
-    String? dropdownValue = 'One';
-    return Scaffold(
-      appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: Colors.black, //change your color here
-          ),
-        shadowColor: Colors.transparent,
-        backgroundColor: Colors.white,
-        title: const Text('crear Misión'),
-      ),
-      body: Center(
-        child: ListView(
-          children: [
-            SizedBox(
-              height: 30,
-            ),
-            nombreMision.getInstance,
-            objetivo.getInstance,
-            Padding(padding: EdgeInsets.only(left: 10, right: 10), child:
-            Row(children: [Text('tipo: '),],),),
-            tipo.getInstance,
-            recompensaMision.getInstance,
-
-           Padding(padding: EdgeInsets.only(left: 70, right: 70), child: ElevatedButton(onPressed: (){}, child: Text('Guardar')),)
-          ],
-        )
-
-      ),
-    );
-    ;
-  }
-}
-*/

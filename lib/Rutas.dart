@@ -12,7 +12,7 @@ import 'MenuNavigatioBar/Notificaciones.dart';
 import 'MenuNavigatioBar/Perfil/ChangePasswd.dart';
 import 'MenuNavigatioBar/Salas/Mision.dart';
 import 'MenuNavigatioBar/Salas/Salas.dart';
-import 'MenuNavigatioBar/Salas/Tutor/TabPages/SalaVistaTutor.dart';
+import 'MenuNavigatioBar/Salas/Tutor/SalaVistaTutor.dart';
 import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/Misiones.dart';
 import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/AddRewardUser.dart';
 import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/UserTutorado.dart';

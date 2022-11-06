@@ -24,26 +24,26 @@ class ListUsuarios extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-          child: StreamBuilder(
-            stream: collectionReferenceUsuariosTutorados.snapshots(),
-            builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-              if (streamSnapshot.hasData) {
-                return ListView.builder(
-                  itemCount: streamSnapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    final DocumentSnapshot documentSnapshot =
-                        streamSnapshot.data!.docs[index];
-                    return Padding(
-                      padding: EdgeInsets.only(top: 10, bottom: 10),
-                      child: FlatButton(
-                          color: Colors.transparent,
-                          splashColor: Colors.black26,
-                          onPressed: () {
-                            var datos = TransfDatosUserTutorado(
-                                collectionReferenceMisiones, documentSnapshot);
-                            contextSala.router.push(UserTutorado(args: datos));
-                            /* Navigator.pushNamed(
+      body: Center(
+        child: StreamBuilder(
+          stream: collectionReferenceUsuariosTutorados.snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+            if (streamSnapshot.hasData) {
+              return ListView.builder(
+                itemCount: streamSnapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  final DocumentSnapshot documentSnapshot =
+                      streamSnapshot.data!.docs[index];
+                  return Padding(
+                    padding: EdgeInsets.only(top: 10, bottom: 10),
+                    child: FlatButton(
+                        color: Colors.transparent,
+                        splashColor: Colors.black26,
+                        onPressed: () {
+                          var datos = TransfDatosUserTutorado(
+                              collectionReferenceMisiones, documentSnapshot);
+                          contextSala.router.push(UserTutorado(args: datos));
+                          /* Navigator.pushNamed(
                         context,
                         MenuSala.routeName,
                         arguments: TransferirDatos(
@@ -52,81 +52,48 @@ class ListUsuarios extends StatelessWidget {
                         ),
                       );
 */
-                            //this.titulo = 'holaaa';
+                          //this.titulo = 'holaaa';
 
-                            //Navigator.push(context, MaterialPageRoute(builder: (context)=>MenuSala()) );
-                          },
-                          child: Card(
-                            margin: const EdgeInsets.all(10),
-                            elevation: 1,
-                            child: ListTile(
-                              leading: DatosPersonales.getAvatar(
-                                  collectionReferenceUsuariosDocPersonal,
-                                  documentSnapshot.id,
-                                  20),
-                              title: SalaDatos.getNombreUsuario(
-                                  collectionReferenceUsuariosDocPersonal,
-                                  documentSnapshot.id),
-                              subtitle: Text('xxx' + ' xp',
-                                  overflow: TextOverflow.ellipsis, maxLines: 1),
-                              trailing: SizedBox(
-                                width: 50,
-                                child: Row(
-                                  children: [
-                                    IconButton(
-                                        icon: const Icon(Icons.more_vert,
-                                            size: 25),
-                                        onPressed: () {}),
-                                    // This icon button is used to delete a single product
-                                  ],
-                                ),
+                          //Navigator.push(context, MaterialPageRoute(builder: (context)=>MenuSala()) );
+                        },
+                        child: Card(
+                          margin: const EdgeInsets.all(10),
+                          elevation: 1,
+                          child: ListTile(
+                            leading: DatosPersonales.getAvatar(
+                                collectionReferenceUsuariosDocPersonal,
+                                documentSnapshot.id,
+                                20),
+                            title: SalaDatos.getNombreUsuario(
+                                collectionReferenceUsuariosDocPersonal,
+                                documentSnapshot.id),
+                            subtitle: Text('xxx' + ' xp',
+                                overflow: TextOverflow.ellipsis, maxLines: 1),
+                            trailing: SizedBox(
+                              width: 50,
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                      icon:
+                                          const Icon(Icons.more_vert, size: 25),
+                                      onPressed: () {}),
+                                  // This icon button is used to delete a single product
+                                ],
                               ),
                             ),
-                          )),
-                    );
-                  },
-                );
-              }
-              return const Center(
-                child: CircularProgressIndicator(),
+                          ),
+                        )),
+                  );
+                },
               );
-            },
-          ),
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          },
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: SizedBox(
-            width: 400,
-            height: 50,
-            child: Container(
-              color: Colors.green,
-              /*
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: FloatingActionButton(
-                      backgroundColor: Colors.green,
-                      onPressed: () {
-                        /*
-                        Navigator.of(contextSala).push(MaterialPageRoute(
-                            builder: (context) => AddMision(
-                              collectionReferenceMisiones:
-                              collectionMisiones,
-                              contextSala: contextSala,
-                            )));
-                         */
-                      },
-                      child: const Icon(
-                        Icons.add,
-                        color: Colors.black,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-               */
-            )));
+      ),
+    );
   }
 }
 

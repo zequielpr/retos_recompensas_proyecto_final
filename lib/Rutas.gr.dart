@@ -29,7 +29,7 @@ import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/AddRewardUser
     as _i13;
 import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/UserTutorado.dart'
     as _i12;
-import 'MenuNavigatioBar/Salas/Tutor/TabPages/SalaVistaTutor.dart' as _i17;
+import 'MenuNavigatioBar/Salas/Tutor/SalaVistaTutor.dart' as _i17;
 import 'MenuNavigatioBar/Salas/Tutorado/ListMisiones.dart' as _i19;
 import 'Servicios/Autenticacion/DatosNewUser.dart' as _i4;
 import 'Servicios/Autenticacion/EmailPassw/IniciarSessionEmailPassw.dart'
