@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 class Solicitudes {
 
@@ -38,11 +40,12 @@ class Solicitudes {
         .then((value) async => {
               await collectionReferenceUers
                   .doc(id_emisor)
-                  .collection('rolTutor')
+                  .collection('rolTutor').doc(id_emisor).collection('salas')
                   .doc(id_sala)
                   .collection('usersTutorados')
                   .doc(idCurrentUser)
                   .set({'xxx': 0}).then((value) async => {
+                    await addUser(id_emisor, CurrentUser.getIdCurrentUser()),
                         await eliminarNotificacion(
                             id_sala,
                             collectionReferenceUers,
@@ -51,6 +54,12 @@ class Solicitudes {
                             'aceptada')
                       })
             });
+  }
+  
+  //Añadir el id del usuario del usuario a la lista de todos los usuarios tutorados
+  static Future<void> addUser(String idTutor, idTutorado) async{
+    CollecUser.COLECCION_USUARIOS.doc(idTutor).collection('rolTutor').doc(idTutor).collection('allUsersTutorados').add(
+        {'idUserTotorado':idTutor});
   }
 
 //Eliminar solicitude------------------------------------------------------------------------------------

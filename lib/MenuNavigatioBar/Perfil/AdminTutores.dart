@@ -56,7 +56,7 @@ class AdminTutores {
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: DatosPersonales.getDato(CollecUser.COLECCION_USUARIOS, value, 'nombre_usuario'),
+                  child: DatosPersonales.getDato(value, 'nombre_usuario'),
                 );
               }).toList(),
             )

@@ -95,7 +95,7 @@ export const createUserEuropean = region('europe-west1')
 //------------------------------------------------------------------------------------------------------
 
 exports.notificarNuevaMision = functions.firestore
-  .document("/usuarios/{tutorId}/rolTutor/{idSala}/misiones/{idMision}")
+  .document("/usuarios/{tutorId}/rolTutor/{tutorId}/{idSala}/salas/misiones/{idMision}")
   .onCreate(async (snap, context) => {
     const tutorId = context.params.tutorId;
     const idSala = context.params.idSala;
