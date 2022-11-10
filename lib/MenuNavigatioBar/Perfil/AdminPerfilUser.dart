@@ -23,9 +23,11 @@ class AdminPerfilUser extends StatefulWidget {
 class _AdminPerfilUserState extends State<AdminPerfilUser> {
   static var editEmailController = TextEditingController();
 
-  static bool guardarEmail = false;
+  static bool editandoAtributos = false;
   static var actualizarAppBar;
   static var cerrarTextField;
+  static var actualizarCuerpo;
+  static var actualizarStateUsername;
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +35,17 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
       appBar: PreferredSize(
         preferredSize:
             Size.fromHeight(Pantalla.getPorcentPanntalla(7.8, context, 'y')),
-        child: getAppBar(),
+        child: AppBar(
+          centerTitle: true,
+          title: Text('Perfil'),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            SizedBox(
+              height: Pantalla.getPorcentPanntalla(2, context, 'y'),
+            ),
             ListTile(
               leading: DatosPersonales.getAvatar(CollecUser.COLECCION_USUARIOS,
                   CurrentUser.getIdCurrentUser(), 30),
@@ -46,110 +54,83 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
               subtitle: DatosPersonales.getDato(CollecUser.COLECCION_USUARIOS,
                   CurrentUser.getIdCurrentUser(), 'nombre_usuario'),
             ),
-            cuerpo()
+            _editarPerfil(),
+            cuerpo(),
+            _email(),
+            adminPassw(),
+            cerrarSesion(),
+            eliminarCuenta()
           ],
         ),
       ),
     );
-    ;
   }
 
-  static Widget getAppBar() {
-    return StatefulBuilder(
-        builder: (BuildContext context, StateSetter setState) {
-      actualizarAppBar = () {
-        setState(() {});
-      };
-      return AppBar(
-        actions: [
-          guardarEmail
-              ? IconButton(
-                  onPressed: () => cerrarTextField(), icon: Icon(Icons.close))
-              : Text('')
-        ],
-        centerTitle: true,
-        title: Text('adminPerfil'),
-      );
-    });
+  Widget _editarPerfil() {
+    return Padding(
+      padding: EdgeInsets.only(left: 20, top: 10),
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: TextButton(
+          style: ButtonStyle(
+              padding:
+              MaterialStateProperty.all(const EdgeInsets.only(left: 0))),
+          child: const Text(
+            'Editar perfil',
+            style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+                fontWeight: FontWeight.normal),
+          ),
+          onPressed: () => context.router.push(const EditarPerfilRouter()),
+        ),
+      ),
+    );
+  }
+
+  Widget _email() {
+    return Padding(
+      padding: EdgeInsets.only(left: 20, top: 10),
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: Text(CurrentUser.currentUser?.email as String,
+            style: const TextStyle(fontSize: 20)),
+      ),
+    );
   }
 
   Widget cuerpo() {
     //________________
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
-      cerrarTextField = () {
-        setState(() {
-          actualizarAppBar();
-          guardarEmail = false;
-        });
-      };
-
-      void actualizarVista(){
-        setState((){});
+      void actualizarVista() {
+        setState(() {});
       }
 
-      var actualEmail = CurrentUser.currentUser?.email as String;
-      late IconButton iconButonEdit = IconButton(
-        tooltip: 'Editar',
-        splashColor: Colors.transparent,
-        visualDensity: VisualDensity.compact,
-        onPressed: () {
-          setState(() {
-            actualizarAppBar();
-            guardarEmail = true;
-            editEmailController.text = actualEmail;
-          });
-        },
-        icon: const Icon(
-          Icons.edit,
-          size: 16,
-        ),
-      );
-      late var butonGuardar = (context) {
-        return ElevatedButton(
-            onPressed: () =>
-                preguntar(editEmailController.text, context, cerrarTextField),
-            child: Text('Guardar'));
-      };
-
-      //TextField para recoger el nuevo email
-      late dynamic fieldNewEmail = SizedBox(
-        width: Pantalla.getPorcentPanntalla(60, context, 'x'),
-        child: TextField(
-          autofocus: true,
-          keyboardType: TextInputType.emailAddress,
-          controller: editEmailController,
-          decoration: const InputDecoration(
-            focusedBorder: UnderlineInputBorder(),
-            border: UnderlineInputBorder(),
-          ),
-        ),
-      );
-
-      var TextActualEmail = Text(CurrentUser.currentUser?.email as String,
-          style: const TextStyle(fontSize: 20));
+      actualizarCuerpo = actualizarVista;
 
       //Contenidos____________________________
       return Column(
         children: [
           verRoll(),
-          Roll_Data.ROLL_USER_IS_TUTORADO? adminTutores(actualizarVista):Text('data', style: TextStyle(fontSize: 0),),
-          adminEmail(
-              fieldNewEmail, TextActualEmail, butonGuardar, iconButonEdit),
-          adminPassw(),
+          Roll_Data.ROLL_USER_IS_TUTORADO
+              ? adminTutores(actualizarVista)
+              : Text(
+                  '',
+                  style: TextStyle(fontSize: 0),
+                ),
           CurrentUser.currentUser?.emailVerified == true
               ? Text(
                   '',
                   style: TextStyle(fontSize: 0),
                 )
               : virificarEmail(),
-          cerrarSesion(),
-          eliminarCuenta()
         ],
       );
     });
   }
 
+  //Preguntar antes de cambiar email_________________________________________
   void preguntar(String newEmail, BuildContext context, ocultarTextField) {
     var actions = <Widget>[
       TextButton(
@@ -174,6 +155,7 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
     AdminRoll.showMessaje(actions, titulo, message, context);
   }
 
+  //Metodo de cambiar email_____________________________________________
   changeEmail(String newEmail) {
     const snackBar = SnackBar(
       content: Text('Email cambiado correctamente'),
@@ -256,7 +238,7 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
 
   Widget verRoll() {
     return Padding(
-      padding: EdgeInsets.only(left: 20, top: 10),
+      padding: EdgeInsets.only(left: 20),
       child: Align(
         alignment: Alignment.topLeft,
         child: AdminRoll.getRoll(context),
@@ -265,7 +247,7 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
   }
 
   //Admin tutores
-  Widget adminTutores( actiualizarVista){
+  Widget adminTutores(actiualizarVista) {
     return Padding(
       padding: EdgeInsets.only(
         left: 20,
@@ -277,31 +259,11 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
     );
   }
 
-  //AdministrarEmail
-  Widget adminEmail(
-      fieldNewEmail, TextActualEmail, butonGuardar, iconButonEdit) {
-    return Padding(
-      padding: EdgeInsets.only(left: 20),
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: Row(
-          children: [
-            guardarEmail ? fieldNewEmail : TextActualEmail,
-            Padding(
-                padding: EdgeInsets.only(
-                    left: Pantalla.getPorcentPanntalla(5, context, 'x'))),
-            guardarEmail ? butonGuardar(context) : iconButonEdit
-          ],
-        ),
-      ),
-    );
-  }
-
   //Administrar contraseña
   Widget adminPassw() {
     return Padding(
       padding: EdgeInsets.only(
-        left: 20,
+        left: 20, top: 10
       ),
       child: Align(
         alignment: Alignment.topLeft,
@@ -374,7 +336,7 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
           style: ButtonStyle(
               padding:
                   MaterialStateProperty.all(const EdgeInsets.only(left: 0))),
-          onPressed: ()=>veificarEmail(),
+          onPressed: () => enviarLinkDevificacion(),
           child: Text(
             "Verificar email",
             style: TextStyle(
@@ -387,8 +349,10 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
     );
   }
 
-  void veificarEmail(){
-    (CurrentUser.currentUser?.sendEmailVerification())?.catchError((onError){}).then((value) {
+  void enviarLinkDevificacion() {
+    (CurrentUser.currentUser?.sendEmailVerification())
+        ?.catchError((onError) {})
+        .then((value) {
       var actions = <Widget>[
         TextButton(
           onPressed: () {
