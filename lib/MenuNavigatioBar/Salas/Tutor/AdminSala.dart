@@ -102,8 +102,8 @@ class AdminSala {
   }
 
   //Eliminar mision
-  static Future<void> eliminarMision(String? idSala, String idMision, BuildContext context) async {
-
+  static Future<void> eliminarMision(
+      String? idSala, String idMision, BuildContext context) async {
     var title = const Text('Eliminar mision', textAlign: TextAlign.center);
     var message = const Text(
       '¿Deseas eliminar esta misión?',
@@ -121,7 +121,7 @@ class AdminSala {
         actionsAlignment: MainAxisAlignment.center,
         buttonPadding: EdgeInsets.all(0),
         actionsPadding:
-        EdgeInsets.only(top: Pantalla.getPorcentPanntalla(0, context, 'x')),
+            EdgeInsets.only(top: Pantalla.getPorcentPanntalla(0, context, 'x')),
         contentPadding: EdgeInsets.only(
             left: Pantalla.getPorcentPanntalla(3, context, 'x'),
             right: Pantalla.getPorcentPanntalla(3, context, 'x')),
@@ -137,12 +137,17 @@ class AdminSala {
           TextButton(
             onPressed: () async {
               await CollecUser.COLECCION_USUARIOS
-                  .doc(CurrentUser.getIdCurrentUser())
+                  .doc(
+                    CurrentUser.getIdCurrentUser(),
+                  )
                   .collection('rolTutor')
                   .doc(idSala)
                   .collection('misiones')
                   .doc(idMision)
-                  .delete().then((value) =>  context.router.pop());
+                  .delete()
+                  .then(
+                    (value) => context.router.pop(),
+                  );
             },
             child: Text('Eliminar'),
           )
@@ -150,12 +155,7 @@ class AdminSala {
       ),
     );
 
-
-
-
     print('id sala: $idSala');
     print('id mision: $idMision');
-
   }
-
 }
