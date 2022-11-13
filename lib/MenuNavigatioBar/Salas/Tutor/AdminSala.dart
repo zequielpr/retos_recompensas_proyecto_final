@@ -16,10 +16,11 @@ class AdminSala {
       textAlign: TextAlign.center,
     );
 
-    showMessaje(title, message, context, idSala);
+    EliminarSalaShowMessaje(title, message, context, idSala);
   }
 
-  static showMessaje(titulo, mensaje, BuildContext contextSala, String idSala) {
+  static EliminarSalaShowMessaje(
+      titulo, mensaje, BuildContext contextSala, String idSala) {
     showDialog<String>(
       context: contextSala,
       builder: (BuildContext context) => AlertDialog(
@@ -59,9 +60,11 @@ class AdminSala {
 
   //Eliminar sala de usuarios tutorados
   static Future<void> eliminarSalasDeUsuarios(String idSala) async {
-    (CollecUser.COLECCION_USUARIOS
+    await (CollecUser.COLECCION_USUARIOS
         .doc(CurrentUser.getIdCurrentUser())
         .collection('rolTutor')
+        .doc(CurrentUser.getIdCurrentUser())
+        .collection('salas')
         .doc(idSala)
         .collection('usersTutorados')
         .get()
@@ -76,12 +79,18 @@ class AdminSala {
         });
       });
     })).catchError((onError) {}).then((value) {
-      (CollecUser.COLECCION_USUARIOS
-          .doc(CurrentUser.getIdCurrentUser())
-          .collection('rolTutor')
-          .doc(idSala)
-          .delete());
+      (_eliminarSala(idSala));
     });
+  }
+
+  static Future<void> _eliminarSala(idSala) async {
+    await CollecUser.COLECCION_USUARIOS
+        .doc(CurrentUser.getIdCurrentUser())
+        .collection('rolTutor')
+        .doc(CurrentUser.getIdCurrentUser())
+        .collection('salas')
+        .doc(idSala)
+        .delete();
   }
 
   static Future<int> comprobarNumMisiones(String? idSala) async {
@@ -141,6 +150,8 @@ class AdminSala {
                     CurrentUser.getIdCurrentUser(),
                   )
                   .collection('rolTutor')
+                  .doc(CurrentUser.getIdCurrentUser())
+                  .collection('salas')
                   .doc(idSala)
                   .collection('misiones')
                   .doc(idMision)

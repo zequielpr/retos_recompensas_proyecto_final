@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:retos_proyecto/datos/CollecUsers.dart';
 
 class DatosPersonales{
   ///Datos personales del usuario con el id pasado por parámetro. Devuelve el valor correspondiente a la key pasada por parámetro
-  static Widget getDato(CollectionReference collectionReferenceUser, String idUser, String key){
+  static Widget getDato( String idUser, String key){
     return FutureBuilder<DocumentSnapshot>(
-      future: collectionReferenceUser.doc(idUser).get(),
+      future: CollecUser.COLECCION_USUARIOS.doc(idUser).get(),
       builder: (BuildContext context,
           AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {

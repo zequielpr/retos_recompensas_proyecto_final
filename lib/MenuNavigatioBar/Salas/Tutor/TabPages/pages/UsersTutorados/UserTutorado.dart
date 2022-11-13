@@ -26,15 +26,13 @@ class _UserTutoradoState extends State<UserTutorado> {
 
   @override
   Widget build(BuildContext context) {
-    final colecTodosLosUsuarios = args.snap.reference.parent.parent?.parent
-        .parent?.parent; //navega hacia la coleccion de todos los usuarios
+    final colecTodosLosUsuarios = CollecUser.COLECCION_USUARIOS; //navega hacia la coleccion de todos los usuarios
 
     return DefaultTabController(
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: DatosPersonales.getDato(
-                colecTodosLosUsuarios!, args.snap.id, 'nombre_usuario'),
+            title: DatosPersonales.getDato( args.snap.id, 'nombre_usuario'),
             actions: [
               IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
             ],
@@ -73,7 +71,7 @@ class _UserTutoradoState extends State<UserTutorado> {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(left: 20, top: 10),
-                          child: DatosPersonales.getDato(colecTodosLosUsuarios,
+                          child: DatosPersonales.getDato(
                               args.snap.id.trim(), 'nombre'),
                         )
                       ],

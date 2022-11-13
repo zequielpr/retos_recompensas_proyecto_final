@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 class Solicitudes {
-
 //Apceptar solicitud-------------------------------------------------------------------------------------
   static aceptarSolicitud(
       String id_emisor,
@@ -11,38 +12,40 @@ class Solicitudes {
       CollectionReference collectionReferenceUers,
       String? idCurrentUser,
       BuildContext context) async {
-
-
     await collectionReferenceUers
         .doc(idCurrentUser)
         .collection('rolTutorado')
         .doc(id_emisor.trim())
         .get()
-        .then((value) async{
-          if(value.exists){
-           await  value.reference.update({
-              'salas_id': FieldValue.arrayUnion([id_sala])
-            });
-            return;
-          }
-          //Si el usuario aun no esta bajo su tutoría
-          await collectionReferenceUers
-              .doc(idCurrentUser).update({'current_tutor': id_emisor.trim()});
-          await value.reference.set({
-            'salas_id': FieldValue.arrayUnion([id_sala]),
-            'puntosTotal': 0,
-            'recompensa_x_200': {},
-            'puntos_acumulados': 0
-          });
-            })
-        .then((value) async => {
+        .then((value) async {
+      if (value.exists) {
+        await value.reference.update({
+          'salas_id': FieldValue.arrayUnion([id_sala])
+        });
+        return;
+      }
+      //Si el usuario aun no esta bajo su tutoría
+      await collectionReferenceUers
+          .doc(idCurrentUser)
+          .update({'current_tutor': id_emisor.trim()});
+      await value.reference.set({
+        'salas_id': FieldValue.arrayUnion([id_sala]),
+        'puntosTotal': 0,
+        'recompensa_x_200': {},
+        'puntos_acumulados': 0
+      });
+    }).then((value) async => {
               await collectionReferenceUers
                   .doc(id_emisor)
                   .collection('rolTutor')
+                  .doc(id_emisor)
+                  .collection('salas')
                   .doc(id_sala)
                   .collection('usersTutorados')
                   .doc(idCurrentUser)
                   .set({'xxx': 0}).then((value) async => {
+                        await addUser(
+                            id_emisor, CurrentUser.getIdCurrentUser()),
                         await eliminarNotificacion(
                             id_sala,
                             collectionReferenceUers,
@@ -53,6 +56,28 @@ class Solicitudes {
             });
   }
 
+  //Añadir el id del usuario del usuario a la lista de todos los usuarios tutorados
+  static Future<void> addUser(String idTutor, idTutorado) async {
+    var documentReference = CollecUser.COLECCION_USUARIOS
+        .doc(idTutor)
+        .collection('rolTutor')
+        .doc(idTutor)
+        .collection('allUsersTutorados')
+        .doc('usuarios_tutorados');
+
+    documentReference.update({
+      'idUserTotorado': FieldValue.arrayUnion([idTutorado])
+    }).catchError((onError){
+      var error = onError.toString();
+
+      if(error.contains('not-found')){
+        documentReference.set({
+          'idUserTotorado': FieldValue.arrayUnion([idTutorado])
+        });
+      };
+    });
+  }
+
 //Eliminar solicitude------------------------------------------------------------------------------------
   static eliminarNotificacion(
       String id_sala,
@@ -60,7 +85,6 @@ class Solicitudes {
       String? idCurrentUser,
       BuildContext context,
       String accion) async {
-
     var colorSnackBar = accion == 'aceptada' ? Colors.green : Colors.red;
 
     await collectionReferenceUers
@@ -80,7 +104,6 @@ class Solicitudes {
   //Enviar solicitud-----------------------------------------------------------------------------------------
   static Future<bool> enviarSolicitud(String userName,
       CollectionReference collectionReferenceUsers, String idSala) async {
-
     var resultadoFinal = false;
 
     User? currentUser = FirebaseAuth.instance.currentUser;

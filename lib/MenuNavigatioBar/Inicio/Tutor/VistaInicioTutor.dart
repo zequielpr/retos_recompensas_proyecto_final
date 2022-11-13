@@ -33,7 +33,7 @@ class _InicioTutorState extends State<InicioTutor> {
     return StreamBuilder<QuerySnapshot>(
       stream: CollecUser.COLECCION_USUARIOS
           .doc(CurrentUser.getIdCurrentUser())
-          .collection('rolTutor')
+          .collection('rolTutor').doc(CurrentUser.getIdCurrentUser()).collection('salas')
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
@@ -150,7 +150,6 @@ class _InicioTutorState extends State<InicioTutor> {
                               left: Pantalla.getPorcentPanntalla(
                                   3, context, 'x')),
                           child: DatosPersonales.getDato(
-                              CollecUser.COLECCION_USUARIOS,
                               document.id,
                               'nombre_usuario'),
                         ),

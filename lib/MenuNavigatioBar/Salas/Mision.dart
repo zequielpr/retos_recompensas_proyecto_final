@@ -35,8 +35,8 @@ class _MisionState extends State<Mision> {
       stream: CollecUser.COLECCION_USUARIOS
         .doc(idTutorActual)
         .collection('rolTutor')
-        .doc(documentSnapshot['id_sala'])
-        .collection('misiones')
+        .doc(idTutorActual)
+        .collection('salas').doc(documentSnapshot['id_sala']).collection('misiones')
         .doc(documentSnapshot['idMision']).snapshots(),
       builder: (context, AsyncSnapshot<DocumentSnapshot> streamSnapshot) {
         if (streamSnapshot.hasData) {

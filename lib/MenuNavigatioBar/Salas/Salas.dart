@@ -45,20 +45,20 @@ class _SalasState extends State<Salas> {
           Roll_Data.ROLL_USER_IS_TUTORADO
               ? Text('')
               : IconButton(
-                  onPressed: () async =>  crearSala(),
+                  onPressed: () async => crearSala(),
                   icon: Icon(Icons.add_box_outlined))
         ],
       ),
       body: Container(
         child: Roll_Data.ROLL_USER_IS_TUTORADO
-            ? contenido()
+            ? listaSalasVistaTutorado()
             : getVistaSalasVistaTutor(context, CollecUser.COLECCION_USUARIOS),
       ),
     );
     ;
   }
 
-  Widget contenido() {
+  Widget listaSalasVistaTutorado() {
     return currentTutor != null
         ? _listarVistaTutorados(
             context, CollecUser.COLECCION_USUARIOS, currentTutor)
@@ -97,6 +97,8 @@ class _SalasState extends State<Salas> {
                   stream: collecionUsuarios
                       .doc(tutorActual)
                       .collection('rolTutor')
+                      .doc(tutorActual)
+                      .collection('salas')
                       .doc(listaIdasSalas[index])
                       .snapshots(),
                   builder: (context, snapshot) {
@@ -129,6 +131,8 @@ class _SalasState extends State<Salas> {
       stream: collecionUsuarios
           .doc(CurrentUser.getIdCurrentUser())
           .collection('rolTutor')
+          .doc(CurrentUser.getIdCurrentUser())
+          .collection('salas')
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
         if (streamSnapshot.hasData) {
@@ -169,18 +173,19 @@ class _SalasState extends State<Salas> {
       )
     ];
 
-    var title = const Text('Numero maximo de salas', textAlign: TextAlign.center);
+    var title =
+        const Text('Numero maximo de salas', textAlign: TextAlign.center);
     var message = const Text(
       'Numero maximo de salas alcanzado, debe eliminar una o más salas si desea crear una sala',
       textAlign: TextAlign.center,
     );
     var numeroDeSalas = await getNumerosalas();
-    numeroDeSalas <=3?showModalCrearSala():AdminRoll.showMessaje(actions, title, message, context);
-
-
+    numeroDeSalas <= 3
+        ? showModalCrearSala()
+        : AdminRoll.showMessaje(actions, title, message, context);
   }
 
-  Future<void> showModalCrearSala() async{
+  Future<void> showModalCrearSala() async {
     var nombreSala = TextEditingController();
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
@@ -240,7 +245,7 @@ class _SalasState extends State<Salas> {
                   child: TextField(
                     controller: nombreSala,
                     decoration:
-                    const InputDecoration(labelText: 'Nombre de sala'),
+                        const InputDecoration(labelText: 'Nombre de sala'),
                   ),
                 ),
                 const SizedBox(
@@ -260,16 +265,18 @@ class _SalasState extends State<Salas> {
                         await CollecUser.COLECCION_USUARIOS
                             .doc(CurrentUser.getIdCurrentUser())
                             .collection('rolTutor')
+                            .doc(CurrentUser.getIdCurrentUser())
+                            .collection('salas')
                             .add({
                           "NombreSala": name,
                           'numMisiones': 0,
                           'numTutorados': 0
                         }).whenComplete(() => {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text(
-                                      'Sala creada correctamente')))
-                        });
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'Sala creada correctamente')))
+                                });
                         nombreSala.text = '';
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

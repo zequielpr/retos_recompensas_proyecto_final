@@ -301,9 +301,9 @@ class Cards {
     }
 
     addRecompensa(recompensa) async {
-      await docMision.parent.parent?.parent.parent?.parent
+      await CollecUser.COLECCION_USUARIOS
           .doc(userId)
-          ?.collection('rolTutorado')
+          .collection('rolTutorado')
           .doc(CurrentUser.getIdCurrentUser())
           .update({'puntosTotal': FieldValue.increment(recompensa)});
       return;

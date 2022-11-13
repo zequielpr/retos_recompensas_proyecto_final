@@ -95,19 +95,19 @@ export const createUserEuropean = region('europe-west1')
 //------------------------------------------------------------------------------------------------------
 
 exports.notificarNuevaMision = functions.firestore
-  .document("/usuarios/{tutorId}/rolTutor/{idSala}/misiones/{idMision}")
+  .document("/usuarios/{tutorId}/rolTutor/{tutorId_contenodor}/salas/{idSala}/misiones/{idMision}")
   .onCreate(async (snap, context) => {
     const tutorId = context.params.tutorId;
     const idSala = context.params.idSala;
     const nombreMision = snap.data()['nombreMision'];
     const idMision = context.params.idMision;
     
+    //Toma todos los usuario que se encuentran en la sala en la cual se ha creado una nueva misión
     const usuariosRef = db.collection("usuarios");
     const snapshot = await usuariosRef
       .doc(tutorId)
-      .collection("rolTutor")
-      .doc(idSala)
-      .collection("usersTutorados")
+      .collection("rolTutor").doc(tutorId)
+      .collection('salas').doc(idSala).collection('usersTutorados')
       .get();
     if (snapshot.empty) {
       console.log("No matching documents.");
@@ -126,7 +126,8 @@ exports.notificarNuevaMision = functions.firestore
 
     await usuariosRef
       .doc(tutorId)
-      .collection("rolTutor")
+      .collection("rolTutor").doc(tutorId)
+      .collection('salas')
       .doc(idSala)
       .get()
       .then((snap) => { nombreSala = snap.data()['NombreSala'] });
