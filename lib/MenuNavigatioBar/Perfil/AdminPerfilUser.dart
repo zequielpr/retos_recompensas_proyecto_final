@@ -12,6 +12,7 @@ import 'package:retos_proyecto/datos/Roll_Data.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import 'AdminRoles.dart';
+import 'admin_usuarios/admin_tutorados.dart';
 
 class AdminPerfilUser extends StatefulWidget {
   const AdminPerfilUser({Key? key}) : super(key: key);
@@ -32,37 +33,33 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(Pantalla.getPorcentPanntalla(7.8, context, 'y')),
-        child: AppBar(
-          centerTitle: true,
-          title: Text('Perfil'),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('Perfil'),
+        bottom: PreferredSize(preferredSize: Size.fromHeight(Pantalla.getPorcentPanntalla(19, context, 'y')),child: Column(
           children: <Widget>[
             SizedBox(
               height: Pantalla.getPorcentPanntalla(2, context, 'y'),
             ),
             ListTile(
-              leading: DatosPersonales.getAvatar(CollecUser.COLECCION_USUARIOS,
+              leading: DatosPersonales.getAvatar(
                   CurrentUser.getIdCurrentUser(), 30),
               title: DatosPersonales.getDato(
                   CurrentUser.getIdCurrentUser(), 'nombre'),
               subtitle: DatosPersonales.getDato(
                   CurrentUser.getIdCurrentUser(), 'nombre_usuario'),
             ),
-            _editarPerfil(),
-            cuerpo(),
-            _email(),
-            adminPassw(),
-            cerrarSesion(),
-            eliminarCuenta()
+            //_editarPerfil(),
+            rolActual(),
+
+            //_email(),
+            //adminPassw(),
+            //cerrarSesion(),
+            //eliminarCuenta()
           ],
-        ),
+        ),),
       ),
+      body: Admin_tutorados.getAllUser(context),
     );
   }
 
@@ -99,7 +96,7 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
     );
   }
 
-  Widget cuerpo() {
+  Widget rolActual() {
     //________________
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {

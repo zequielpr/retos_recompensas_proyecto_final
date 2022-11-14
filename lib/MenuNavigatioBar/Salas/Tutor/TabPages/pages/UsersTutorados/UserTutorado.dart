@@ -52,7 +52,6 @@ class _UserTutoradoState extends State<UserTutorado> {
                             flex: 4,
                             child: Center(
                               child: DatosPersonales.getAvatar(
-                                  colecTodosLosUsuarios,
                                   args.snap.id.trim(),
                                   40),
                             ),

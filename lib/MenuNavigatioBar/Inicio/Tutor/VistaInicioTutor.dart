@@ -139,8 +139,7 @@ class _InicioTutorState extends State<InicioTutor> {
                         contentPadding: EdgeInsets.all(0),
                         dense: true,
                         visualDensity: VisualDensity.comfortable,
-                        leading: DatosPersonales.getAvatar(
-                            CollecUser.COLECCION_USUARIOS, document.id, 26),
+                        leading: DatosPersonales.getAvatar( document.id, 26),
                         title: DatosPersonales.getIndicadoAvance(
                             document.id,
                             CollecUser.COLECCION_USUARIOS,

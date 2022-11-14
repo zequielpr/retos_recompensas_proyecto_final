@@ -33,9 +33,9 @@ class DatosPersonales{
 
 
   ///Devuelve el avatar del usuario con el id especificado. El tamaño del avatar será el pasado por parámetro
-  static Widget getAvatar(CollectionReference collectionReferenceUser, String idUser, double size){
+  static Widget getAvatar(String idUser, double size){
     return FutureBuilder<DocumentSnapshot>(
-      future: collectionReferenceUser.doc(idUser).get(),
+      future: CollecUser.COLECCION_USUARIOS.doc(idUser).get(),
       builder: (BuildContext context,
           AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {

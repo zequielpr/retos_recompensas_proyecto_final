@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Pantalla{
 
-  ///return screen size. (porcentaje, contexto, eje(y: largo, x:ancho))
+  ///return screen size. (porcentaje, contexto, eje(y: alto, x:ancho))
   static double getPorcentPanntalla(double porcentaje, BuildContext context, String eje){
 
     if(eje == 'y'){
