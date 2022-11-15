@@ -12,6 +12,7 @@ import 'package:retos_proyecto/datos/Roll_Data.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import 'AdminRoles.dart';
+import 'admin_usuarios/Admin_tutores.dart';
 import 'admin_usuarios/admin_tutorados.dart';
 import 'menu/menu_admin_perfil.dart';
 
@@ -70,7 +71,7 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
           ),
         ),
       ),
-      body: Admin_tutorados.getAllUser(context),
+      body:  Roll_Data.ROLL_USER_IS_TUTORADO? UsuarioTutores.getAllTutores(): Admin_tutorados.getAllUser(context),
     );
   }
 
@@ -147,12 +148,13 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
       return Column(
         children: [
           verRoll(),
-          Roll_Data.ROLL_USER_IS_TUTORADO
+         /* Roll_Data.ROLL_USER_IS_TUTORADO
               ? adminTutores(actualizarVista)
               : Text(
                   '',
                   style: TextStyle(fontSize: 0),
-                ),
+                ),*/
+
           CurrentUser.currentUser?.emailVerified == true
               ? Text(
                   '',
@@ -239,36 +241,8 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
     });
   }
 
-  static Future<void> _p() async {
-    try {
-      await GoogleSignIn().disconnect();
-    } catch (e) {}
-  }
 
-  static Future<void> cerrarCession(BuildContext context) async {
-    var actions = <Widget>[
-      TextButton(
-        onPressed: () => context.router.pop(),
-        child: Text('Cancelar'),
-      ),
-      TextButton(
-        onPressed: () async {
-          await FirebaseAuth.instance.signOut().then((value) async =>
-              {await _p(), context.router.replace(SplashScreenRouter())});
-        },
-        child: Text('Cerrar sesión'),
-      )
-    ];
 
-    var title = const Text('Cerrar sesión', textAlign: TextAlign.center);
-    var message = const Text(
-      '¿Desea cerrar sesión?',
-      textAlign: TextAlign.center,
-    );
-
-    AdminRoll.showMessaje(actions, title, message, context);
-    //print(FirebaseAuth.instance.currentUser?.providerData);
-  }
 
   Widget verRoll() {
     return Padding(
@@ -319,29 +293,7 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
   }
 
   //Cerrar sesión
-  Widget cerrarSesion() {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: 20,
-      ),
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: TextButton(
-          style: ButtonStyle(
-              padding:
-                  MaterialStateProperty.all(const EdgeInsets.only(left: 0))),
-          onPressed: () => cerrarCession(context),
-          child: Text(
-            "Cerrar sesión",
-            style: TextStyle(
-                fontSize: 20,
-                color: Colors.black,
-                fontWeight: FontWeight.normal),
-          ),
-        ),
-      ),
-    );
-  }
+
 
   //Eliminar cuenta
   Widget eliminarCuenta() {

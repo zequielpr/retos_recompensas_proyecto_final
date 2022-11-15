@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'Sesion.dart';
+
 class AdminCuenta extends StatefulWidget {
   const AdminCuenta({Key? key}) : super(key: key);
 
@@ -70,7 +72,7 @@ class _AdminCuentaState extends State<AdminCuenta> {
               margin: EdgeInsets.all(0),
               child: ListTile(
                 leading: Icon(Icons.logout),
-                onTap: () {},
+                onTap: () => Sesion.dialogCerrarSesion(context),
                 visualDensity: VisualDensity.compact,
                 title: Text('Cerrar sesión'),
                 trailing: Icon(
