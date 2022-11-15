@@ -13,6 +13,7 @@ import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import 'AdminRoles.dart';
 import 'admin_usuarios/admin_tutorados.dart';
+import 'menu/menu_admin_perfil.dart';
 
 class AdminPerfilUser extends StatefulWidget {
   const AdminPerfilUser({Key? key}) : super(key: key);
@@ -35,33 +36,69 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Perfil'),
-        bottom: PreferredSize(preferredSize: Size.fromHeight(Pantalla.getPorcentPanntalla(19, context, 'y')),child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: Pantalla.getPorcentPanntalla(2, context, 'y'),
-            ),
-            ListTile(
-              leading: DatosPersonales.getAvatar(
-                  CurrentUser.getIdCurrentUser(), 30),
-              title: DatosPersonales.getDato(
-                  CurrentUser.getIdCurrentUser(), 'nombre'),
-              subtitle: DatosPersonales.getDato(
-                  CurrentUser.getIdCurrentUser(), 'nombre_usuario'),
-            ),
-            //_editarPerfil(),
-            rolActual(),
+        title: const Text('Perfil'),
+        actions: [
+          IconButton(
+            onPressed: () =>  MenuOption.getMenuOption(context),
+            icon: const Icon(Icons.menu),
+          )
+        ],
+        bottom: PreferredSize(
+          preferredSize:
+              Size.fromHeight(Pantalla.getPorcentPanntalla(19, context, 'y')),
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: Pantalla.getPorcentPanntalla(2, context, 'y'),
+              ),
+              ListTile(
+                leading: DatosPersonales.getAvatar(
+                    CurrentUser.getIdCurrentUser(), 30),
+                title: DatosPersonales.getDato(
+                    CurrentUser.getIdCurrentUser(), 'nombre'),
+                subtitle: DatosPersonales.getDato(
+                    CurrentUser.getIdCurrentUser(), 'nombre_usuario'),
+              ),
+              //_editarPerfil(),
+              rolActual(),
 
-            //_email(),
-            //adminPassw(),
-            //cerrarSesion(),
-            //eliminarCuenta()
-          ],
-        ),),
+              //_email(),
+              //adminPassw(),
+              //cerrarSesion(),
+              //eliminarCuenta()
+            ],
+          ),
+        ),
       ),
       body: Admin_tutorados.getAllUser(context),
     );
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   Widget _editarPerfil() {
     return Padding(
@@ -71,7 +108,7 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
         child: TextButton(
           style: ButtonStyle(
               padding:
-              MaterialStateProperty.all(const EdgeInsets.only(left: 0))),
+                  MaterialStateProperty.all(const EdgeInsets.only(left: 0))),
           child: const Text(
             'Editar perfil',
             style: TextStyle(
@@ -259,9 +296,7 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
   //Administrar contraseña
   Widget adminPassw() {
     return Padding(
-      padding: EdgeInsets.only(
-        left: 20, top: 10
-      ),
+      padding: EdgeInsets.only(left: 20, top: 10),
       child: Align(
         alignment: Alignment.topLeft,
         child: TextButton(

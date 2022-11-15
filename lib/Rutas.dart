@@ -10,6 +10,7 @@ import 'MenuNavigatioBar/Inicio/Inicio.dart';
 import 'MenuNavigatioBar/Inicio/Tutorado/Historial.dart';
 import 'MenuNavigatioBar/Notificaciones.dart';
 import 'MenuNavigatioBar/Perfil/ChangePasswd.dart';
+import 'MenuNavigatioBar/Perfil/admin_cuenta/Admin_cuenta.dart';
 import 'MenuNavigatioBar/Perfil/editar_perfil/Editar_perfil.dart';
 import 'MenuNavigatioBar/Salas/Mision.dart';
 import 'MenuNavigatioBar/Salas/Salas.dart';
@@ -115,6 +116,7 @@ import 'main.dart';
             AutoRoute(
                 path: 'ChangePasswd', page: ChangePasswd, name: 'ChangePasswdRouter'),
             AutoRoute(path:'EditarPerfil', page: EditarPerfil, name: 'EditarPerfilRouter' ),
+            AutoRoute(path: 'AdminCuenta', page: AdminCuenta, name: 'AdminCuentaRoute'),
             //AutoRoute(path: 'details', page: AccountDetailsPage),
             RedirectRoute(path: '*', redirectTo: ''),
           ],

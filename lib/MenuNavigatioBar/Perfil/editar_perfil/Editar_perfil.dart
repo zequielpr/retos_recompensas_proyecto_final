@@ -12,50 +12,49 @@ class _EditarPerfilState extends State<EditarPerfil> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Editar Perfil'),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('Editar Perfil'),
+      ),
+      body: Container(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Card(
+              elevation: 0,
+              margin: EdgeInsets.all(0),
+              child: ListTile(
+                leading: Icon(Icons.edit),
+                onTap: () {},
+                visualDensity: VisualDensity.compact,
+                title: Text('Nombre'),
+                trailing: Icon(
+                  Icons.arrow_forward_ios_sharp,
+                  size: arrowSize,
+                ),
+              ),
+            ),
+            Card(
+              elevation: 0,
+              margin: EdgeInsets.all(0),
+              child: ListTile(
+                leading: Icon(Icons.edit),
+                onTap: () {},
+                visualDensity: VisualDensity.compact,
+                title: Text('Nombre de usuario'),
+                trailing: Icon(
+                  Icons.arrow_forward_ios_sharp,
+                  size: arrowSize,
+                ),
+              ),
+            ),
+          ],
         ),
-        body: Container(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children:  [
-                Card(
-                  elevation: 0,
-                  margin: EdgeInsets.all(0),
-                  child: ListTile(
-                    onTap: (){},
-                    visualDensity: VisualDensity.compact,
-                    title: Text('Email'),
-                    trailing: Icon(Icons.arrow_forward_ios_sharp, size: arrowSize,),
-                  ),
-                ),
-                Card(
-                  elevation: 0,
-                  margin: EdgeInsets.all(0),
-                  child: ListTile(
-                    onTap: (){},
-                    visualDensity: VisualDensity.compact,
-                    title: Text('Nombre de usuario'),
-                    trailing: Icon(Icons.arrow_forward_ios_sharp, size: arrowSize,),
-                  ),
-                ),
-                Card(
-                  elevation: 0,
-                  margin: EdgeInsets.all(0),
-                  child: ListTile(
-                    onTap: (){},
-                    visualDensity: VisualDensity.compact,
-                    title: Text('Nombre'),
-                    trailing: Icon(Icons.arrow_forward_ios_sharp, size: arrowSize,),
-                  ),
-                ),
-              ],
-            )));
+      ),
+    );
   }
-
-
 
   //Editar email
 //Editar nombre de usuario
