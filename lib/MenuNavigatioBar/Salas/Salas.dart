@@ -10,6 +10,7 @@ import 'package:retos_proyecto/datos/UsuarioActual.dart';
 import '../../datos/CollecUsers.dart';
 import '../../widgets/Cards.dart';
 import '../Perfil/AdminTutores.dart';
+import '../Perfil/admin_usuarios/Admin_tutores.dart';
 
 class Salas extends StatefulWidget {
   const Salas({Key? key}) : super(key: key);
@@ -30,7 +31,7 @@ class _SalasState extends State<Salas> {
   void initState() {
     var initCurrentTutor = this.initCurrentTutor;
     if (Roll_Data.ROLL_USER_IS_TUTORADO) {
-      AdminTutores.setCurrentUser(initCurrentTutor);
+      UsuarioTutores.setCurrentUser(initCurrentTutor);
     }
     super.initState();
   }

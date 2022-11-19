@@ -7,6 +7,7 @@ import 'package:retos_proyecto/datos/Roll_Data.dart';
 
 import '../../datos/CollecUsers.dart';
 import '../Perfil/AdminTutores.dart';
+import '../Perfil/admin_usuarios/Admin_tutores.dart';
 import 'Tutor/VistaInicioTutor.dart';
 import 'Tutorado/InicioVistaTutorado.dart';
 
@@ -32,7 +33,7 @@ class _HomeState extends State<Home> {
   void initState(){
     var initCurrentTutor = this.initCurrentTutor;
     if(Roll_Data.ROLL_USER_IS_TUTORADO){
-      AdminTutores.setCurrentUser(initCurrentTutor);
+      UsuarioTutores.setCurrentUser(initCurrentTutor);
     }
     super.initState();
     cofre_6 = Image.asset("lib/imgs/cofre/cofre_6.png");
