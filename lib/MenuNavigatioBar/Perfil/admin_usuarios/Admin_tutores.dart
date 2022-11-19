@@ -100,7 +100,7 @@ class UsuarioTutores {
           itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
                 PopupMenuItem<Menu>(
                   value: Menu.AddMision,
-                  onTap: () => DejarTutoria.eliminarTutor(idTutor),
+                  onTap: () => DejarTutoria.eliminarTutor( context, idTutor),
                   child: Text('Dejar tutoría'),
                 ),
                 PopupMenuItem<Menu>(
