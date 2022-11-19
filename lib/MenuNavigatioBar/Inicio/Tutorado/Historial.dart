@@ -11,6 +11,8 @@ import '../../../datos/TransferirDatos.dart';
 import '../../../datos/UsuarioActual.dart';
 import 'package:intl/intl.dart';
 
+import '../../Perfil/admin_usuarios/Admin_tutores.dart';
+
 class Historial extends StatefulWidget {
   const Historial({
     Key? key,
@@ -46,7 +48,7 @@ class _HistorialState extends State<Historial> {
           title: Text('Recompensas recibidas'),
         ),
         body: _getTodasRecompensas(CollecUser.COLECCION_USUARIOS,
-            AdminTutores.dropdownValue, campo, order)
+            UsuarioTutores.tutorActual, campo, order)
         //_getTidasRecompensas(
         //                 CollecUser.COLECCION_USUARIOS, 'hr44Bc4CRqWJjFfDYMCBmu707Qq1')
         );
