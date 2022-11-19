@@ -60,12 +60,14 @@ class _SalasState extends State<Salas> {
   }
 
   Widget listaSalasVistaTutorado() {
-    return currentTutor != null
-        ? _listarVistaTutorados(
-            context, CollecUser.COLECCION_USUARIOS, currentTutor)
-        : Center(
-            child: Text('Aun no tienes un tutor'),
-          );
+    if (currentTutor != null && currentTutor.length != 0) {
+      return _listarVistaTutorados(
+          context, CollecUser.COLECCION_USUARIOS, currentTutor);
+    } else {
+      return Center(
+        child: Text('Aun no tienes un tutor'),
+      );
+    }
   }
 
   //Vista de las salas para los tutorados
