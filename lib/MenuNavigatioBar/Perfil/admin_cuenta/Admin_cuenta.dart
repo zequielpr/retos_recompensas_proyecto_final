@@ -1,6 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:retos_proyecto/Rutas.gr.dart';
 
+import '../../../datos/UsuarioActual.dart';
 import 'Sesion.dart';
 
 class AdminCuenta extends StatefulWidget {
@@ -30,9 +33,9 @@ class _AdminCuentaState extends State<AdminCuenta> {
               margin: EdgeInsets.all(0),
               child: ListTile(
                 leading: Icon(Icons.email_outlined),
-                onTap: () {},
+                onTap: () => context.router.push(ModificarEmailRouter()),
                 visualDensity: VisualDensity.compact,
-                title: Text('Cambiar email'),
+                title: Text(CurrentUser.currentUser?.email as String),
                 trailing: Icon(
                   Icons.arrow_forward_ios_sharp,
                   size: arrowSize,

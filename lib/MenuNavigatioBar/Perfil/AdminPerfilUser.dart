@@ -170,81 +170,6 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
     });
   }
 
-  //Preguntar antes de cambiar email_________________________________________
-  void preguntar(String newEmail, BuildContext context, ocultarTextField) {
-    var actions = <Widget>[
-      TextButton(
-        onPressed: () {
-          ocultarTextField();
-          context.router.pop();
-        },
-        child: const Text('Cancelar'),
-      ),
-      TextButton(
-        onPressed: () => changeEmail(newEmail),
-        child: Text('Ok'),
-      ),
-    ];
-
-    var titulo = const Text('Cambiar Email', textAlign: TextAlign.center);
-    var message = const Text(
-      '¿Deseas modificar tu email?',
-      textAlign: TextAlign.center,
-    );
-
-    AdminRoll.showMessaje(actions, titulo, message, context);
-  }
-
-  //Metodo de cambiar email_____________________________________________
-  changeEmail(String newEmail) {
-    const snackBar = SnackBar(
-      content: Text('Email cambiado correctamente'),
-    );
-    print('email:  $newEmail');
-    var actions = <Widget>[
-      TextButton(
-        onPressed: () => context.router.pop(),
-        child: Text('Ok'),
-      ),
-    ];
-    (CurrentUser.currentUser?.updateEmail(newEmail))?.catchError((onError) {
-      var e = onError.toString();
-      print('error: $e');
-      if (e.contains('invalid-email')) {
-        var title = const Text('Email no válido', textAlign: TextAlign.center);
-        var message = const Text(
-          'Introduzca un email válido. Ejemplo@gmail.com',
-          textAlign: TextAlign.center,
-        );
-        AdminRoll.showMessaje(actions, title, message, context);
-      } else if (e.contains('firebase_auth/unknown')) {
-        var title =
-            const Text('Introduzca un email', textAlign: TextAlign.center);
-        var message = const Text(
-          'Introduzca un nuevo email',
-          textAlign: TextAlign.center,
-        );
-        AdminRoll.showMessaje(actions, title, message, context);
-      } else if (e.contains('requires-recent-login')) {
-        var title = const Text('Acción necesaria', textAlign: TextAlign.center);
-        var message = const Text(
-          'Cierre e inicie sesion para poder realizar esta acción',
-          textAlign: TextAlign.center,
-        );
-        AdminRoll.showMessaje(actions, title, message, context);
-      }
-      print('error: $onError');
-    }).then((value) {
-      print('holaaa');
-
-      context.router.pop().then((value) {
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        actualizarAppBar();
-        cerrarTextField();
-      });
-    });
-  }
-
 
 
 
@@ -258,18 +183,7 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
     );
   }
 
-  //Admin tutores
-  Widget adminTutores(actiualizarVista) {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: 20,
-      ),
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: AdminTutores.listTutores(context, actiualizarVista),
-      ),
-    );
-  }
+
 
   //Administrar contraseña
   Widget adminPassw() {
