@@ -30,9 +30,7 @@ class _SalasState extends State<Salas> {
 
   void initState() {
     var initCurrentTutor = this.initCurrentTutor;
-    if (Roll_Data.ROLL_USER_IS_TUTORADO) {
-      UsuarioTutores.setCurrentUser(initCurrentTutor);
-    }
+    UsuarioTutores.setCurrentUser(initCurrentTutor);
     super.initState();
   }
 

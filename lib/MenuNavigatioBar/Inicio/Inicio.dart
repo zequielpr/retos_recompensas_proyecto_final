@@ -32,9 +32,7 @@ class _HomeState extends State<Home> {
   @override
   void initState(){
     var initCurrentTutor = this.initCurrentTutor;
-    if(Roll_Data.ROLL_USER_IS_TUTORADO){
-      UsuarioTutores.setCurrentUser(initCurrentTutor);
-    }
+    UsuarioTutores.setCurrentUser(initCurrentTutor);
     super.initState();
     cofre_6 = Image.asset("lib/imgs/cofre/cofre_6.png");
   }

@@ -14,22 +14,21 @@ class TutorActual {
   }
 }
 
-class MostrarTutorActual extends StatefulWidget {
-  const MostrarTutorActual({Key? key}) : super(key: key);
+class MostrarUsuarios extends StatefulWidget {
+  const MostrarUsuarios({Key? key}) : super(key: key);
 
   @override
-  State<MostrarTutorActual> createState() => _MostrarTutorActualState();
+  State<MostrarUsuarios> createState() => _MostrarUsuariosState();
 }
 
-class _MostrarTutorActualState extends State<MostrarTutorActual> {
+class _MostrarUsuariosState extends State<MostrarUsuarios> {
   void initCurrentTutor(currentTutor) {
     setState(() {});
   }
 
+
   void initState() {
-    if (Roll_Data.ROLL_USER_IS_TUTORADO) {
-      UsuarioTutores.setCurrentUser(initCurrentTutor);
-    }
+    UsuarioTutores.setCurrentUser(initCurrentTutor);
     super.initState();
   }
 

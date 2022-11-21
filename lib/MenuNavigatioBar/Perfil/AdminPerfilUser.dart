@@ -75,7 +75,7 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
           ),
         ),
       ),
-      body: MostrarTutorActual()
+      body: MostrarUsuarios()
     );
   }
 

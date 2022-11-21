@@ -1,19 +1,23 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:retos_proyecto/datos/CollecUsers.dart';
-import 'package:retos_proyecto/datos/UsuarioActual.dart';
+import 'package:retos_proyecto/MenuNavigatioBar/Perfil/admin_usuarios/DejarTutoria.dart';
 
 import '../../../MediaQuery.dart';
+import '../../../datos/CollecUsers.dart';
+import '../../../datos/UsuarioActual.dart';
 
-class DejarTutoria {
-  static eliminarTutor(BuildContext context, String idTutor) {
-    dialogDejarTutoria(context, idTutor);
+class EliminarTutorado{
+
+
+  static eliminarUserTutorado(BuildContext context, String idUserTutorado){
+    dialogDejarTutoria(context, idUserTutorado);
   }
 
+
+
   //preguntar antes de dejar la tutoría
-  static dialogDejarTutoria(BuildContext context, String idTutor) {
+  static dialogDejarTutoria(BuildContext context, String idTutorado) {
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -25,11 +29,11 @@ class DejarTutoria {
         actionsAlignment: MainAxisAlignment.center,
         buttonPadding: EdgeInsets.all(0),
         actionsPadding:
-            EdgeInsets.only(top: Pantalla.getPorcentPanntalla(0, context, 'x')),
+        EdgeInsets.only(top: Pantalla.getPorcentPanntalla(0, context, 'x')),
         contentPadding: EdgeInsets.only(
             left: Pantalla.getPorcentPanntalla(3, context, 'x'),
             right: Pantalla.getPorcentPanntalla(3, context, 'x')),
-        title: Text('Dejar tutoría', textAlign: TextAlign.center),
+        title: Text('Eliminar usuario', textAlign: TextAlign.center),
         content: const Text(
           'Los avances obtenidos en esta tutoría serán eliminados y no será posible recuperarlos',
           textAlign: TextAlign.center,
@@ -41,10 +45,10 @@ class DejarTutoria {
           ),
           TextButton(
             onPressed: () async {
-              eliminarDeCurrentTutor(CurrentUser.getIdCurrentUser());
-              eliminarAvance(idTutor);
-              eliminarDeListaAllUsers(idTutor);
-              eliminarDeTodasSalas(idTutor);
+              DejarTutoria.eliminarDeCurrentTutor(idTutorado);
+              eliminarAvance(idTutorado);
+              eliminarDeListaAllUsers(idTutorado);
+              eliminarDeTodasSalas(idTutorado);
               context.router.pop();
             },
             child: Text('ok'),
@@ -55,48 +59,46 @@ class DejarTutoria {
     ;
   }
 
-  //eliminar id el usuario tutor
-  static Future<void> eliminarDeCurrentTutor(String idTutorado) async {
-    await CollecUser.COLECCION_USUARIOS
-        .doc(idTutorado)
-        .update({"current_tutor": ''});
-  }
 
-  //Eliminar avance otenido con el tutor
-  static Future<void> eliminarAvance(idTutor) async {
-    await CollecUser.COLECCION_USUARIOS
-        .doc(CurrentUser.getIdCurrentUser())
-        .collection('rolTutorado')
-        .doc(idTutor)
-        .delete();
-  }
 
-  //Eliminar de la lista de todos los usarios tutorados
-  static Future<void> eliminarDeListaAllUsers(String idTutor) async {
+
+  static var usuarioTutor = CurrentUser.getIdCurrentUser();
+  //Eliminar de la lista de todos los usuarios
+  static Future<void> eliminarDeListaAllUsers(String idTutoro) async {
     await CollecUser.COLECCION_USUARIOS
-        .doc(idTutor)
+        .doc(usuarioTutor)
         .collection('rolTutor')
-        .doc(idTutor)
+        .doc(usuarioTutor)
         .collection('allUsersTutorados')
         .doc('usuarios_tutorados')
         .update({
-      'idUserTotorado': FieldValue.arrayRemove([CurrentUser.getIdCurrentUser()])
+      'idUserTotorado': FieldValue.arrayRemove([idTutoro])
     });
   }
 
-  //Eliminar de todas las salas en las que se encuentre
-  static Future<void> eliminarDeTodasSalas(idTutor) async {
+
+  //Eliminar el avance del usuario
+  static Future<void> eliminarAvance(idTutorado) async {
     await CollecUser.COLECCION_USUARIOS
-        .doc(idTutor)
+        .doc(idTutorado)
+        .collection('rolTutorado')
+        .doc(usuarioTutor)
+        .delete();
+  }
+
+  //Eliminar de todas las salas
+  static Future<void> eliminarDeTodasSalas(idTutoro) async {
+    await CollecUser.COLECCION_USUARIOS
+        .doc(usuarioTutor)
         .collection('rolTutor')
-        .doc(idTutor)
+        .doc(usuarioTutor)
         .collection('salas')
         .get()
         .then((value) {
       value.docs.forEach((element) async {
         await element.reference
             .collection('usersTutorados')
-            .doc(CurrentUser.getIdCurrentUser())
+            .doc(idTutoro)
             .delete();
       });
     });
