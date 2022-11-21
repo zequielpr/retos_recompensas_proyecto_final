@@ -47,7 +47,7 @@ class _AdminCuentaState extends State<AdminCuenta> {
               margin: EdgeInsets.all(0),
               child: ListTile(
                 leading: Icon(Icons.password),
-                onTap: () {},
+                onTap: () => context.router.push(ChangePasswdRouter(contextPerfil: context)),
                 visualDensity: VisualDensity.compact,
                 title: Text('Camiar contraseña'),
                 trailing: Icon(

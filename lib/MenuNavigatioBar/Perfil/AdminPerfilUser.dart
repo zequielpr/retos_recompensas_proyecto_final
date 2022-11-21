@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminTutores.dart';
-import 'package:retos_proyecto/MenuNavigatioBar/Perfil/ChangePasswd.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 import 'package:retos_proyecto/datos/DatosPersonalUser.dart';
@@ -12,6 +11,7 @@ import 'package:retos_proyecto/datos/Roll_Data.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import 'AdminRoles.dart';
+import 'admin_cuenta/change_password.dart';
 import 'admin_usuarios/Admin_tutores.dart';
 import 'admin_usuarios/admin_tutorados.dart';
 import 'cambiar_tutor_actual.dart';
