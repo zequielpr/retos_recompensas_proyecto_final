@@ -14,6 +14,7 @@ import 'package:retos_proyecto/datos/UsuarioActual.dart';
 import 'AdminRoles.dart';
 import 'admin_usuarios/Admin_tutores.dart';
 import 'admin_usuarios/admin_tutorados.dart';
+import 'cambiar_tutor_actual.dart';
 import 'menu/menu_admin_perfil.dart';
 
 class AdminPerfilUser extends StatefulWidget {
@@ -31,6 +32,9 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
   static var cerrarTextField;
   static var actualizarCuerpo;
   static var actualizarStateUsername;
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +75,7 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
           ),
         ),
       ),
-      body:  Roll_Data.ROLL_USER_IS_TUTORADO? UsuarioTutores.getAllTutores(): Admin_tutorados.getAllUser(context),
+      body: MostrarUsuarios()
     );
   }
 

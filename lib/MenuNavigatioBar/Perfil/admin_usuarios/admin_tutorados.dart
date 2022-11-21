@@ -5,17 +5,17 @@ import 'package:retos_proyecto/datos/DatosPersonalUser.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import '../../../MediaQuery.dart';
+import 'eliminar_tutorado.dart';
 
 class Admin_tutorados {
   static getAllUser(BuildContext context) {
-    return FutureBuilder<DocumentSnapshot>(
-      future: CollecUser.COLECCION_USUARIOS
+    return StreamBuilder<DocumentSnapshot>(
+      stream: CollecUser.COLECCION_USUARIOS
           .doc(CurrentUser.getIdCurrentUser())
           .collection('rolTutor')
           .doc(CurrentUser.getIdCurrentUser())
           .collection('allUsersTutorados')
-          .doc('usuarios_tutorados')
-          .get(),
+          .doc('usuarios_tutorados').snapshots(),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
@@ -26,11 +26,12 @@ class Admin_tutorados {
           Text('Aun no tienes usuarios en tu tutoría');
         }
 
-        if (snapshot.connectionState == ConnectionState.done) {
+        if (snapshot.hasData) {
           Map<String, dynamic> data =
               snapshot.data!.data() as Map<String, dynamic>;
 
           var listaUsuariosTutorados = data['idUserTotorado'];
+
 
           return ListView.builder(
             padding: const EdgeInsets.all(8),
@@ -80,7 +81,7 @@ class Admin_tutorados {
                 padding: MaterialStateProperty.all(EdgeInsets.all(0)),
                 textStyle: MaterialStateProperty.all(TextStyle(fontSize: 15))),
             child: Text('Eliminar'),
-            onPressed: () {},
+            onPressed: () => EliminarTutorado.eliminarUserTutorado(context, idUsuario),
           ),
         ),
       ),

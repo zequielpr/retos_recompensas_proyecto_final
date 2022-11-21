@@ -7,6 +7,8 @@ import '../../../datos/CollecUsers.dart';
 import '../../../datos/DatosPersonalUser.dart';
 import '../../../datos/UsuarioActual.dart';
 import '../AdminTutores.dart';
+import '../cambiar_tutor_actual.dart';
+import 'DejarTutoria.dart';
 
 class UsuarioTutores {
   static var tutorActual;
@@ -76,7 +78,7 @@ class UsuarioTutores {
           height: Pantalla.getPorcentPanntalla(5, context, 'y'),
           width: Pantalla.getPorcentPanntalla(20, context, 'x'),
           child: Row(
-            children: [ tutorActual == idUsuario?Icon(Icons.person_pin_rounded, ):Icon(Icons.person_pin_rounded, color: Colors.transparent, ), opciones()],
+            children: [ tutorActual == idUsuario?Icon(Icons.person_pin_rounded, ):Icon(Icons.person_pin_rounded, color: Colors.transparent, ), opciones(idUsuario)],
           ),
         ),
       ),
@@ -84,7 +86,7 @@ class UsuarioTutores {
   }
 
   static String _selectedMenu = '';
-  static Widget opciones() {
+  static Widget opciones(String idTutor) {
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
       return PopupMenuButton<Menu>(
@@ -98,13 +100,13 @@ class UsuarioTutores {
           itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
                 PopupMenuItem<Menu>(
                   value: Menu.AddMision,
-                  onTap: () {},
+                  onTap: () => DejarTutoria.eliminarTutor( context, idTutor),
                   child: Text('Dejar tutoría'),
                 ),
                 PopupMenuItem<Menu>(
                   value: Menu.EliminarSala,
                   child: Text('Seleccionar tutoría'),
-                  onTap: () {},
+                  onTap: ()=> TutorActual.setNewActualTutor(idTutor),
                 )
               ]);
     });
