@@ -77,7 +77,6 @@ class Autenticar {
             });
       } else if (!isNewUser) {
         late DocumentReference docUser;
-        print("El usuario no es nuevo");
         await iniciarSesion(credential!).then((userCredential) async => {
               Token.guardarToken(),
               //El usuario accede su cuenta con las vista correspendiente al roll preestablecido.

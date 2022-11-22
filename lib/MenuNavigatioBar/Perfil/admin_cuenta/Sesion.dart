@@ -36,10 +36,7 @@ class Sesion{
             child: Text('Cancelar'),
           ),
           TextButton(
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut().then((value) async =>
-              {await _p(), context.router.replace(SplashScreenRouter())});
-            },
+            onPressed: ()=> cerrarSesion(context) ,
             child: Text('Cerrar sesión'),
           )
         ],
@@ -47,32 +44,11 @@ class Sesion{
     );;
   }
 
-
-
-  static Future<void> cerrarCession(BuildContext context) async {
-    var actions = <Widget>[
-      TextButton(
-        onPressed: () => context.router.pop(),
-        child: Text('Cancelar'),
-      ),
-      TextButton(
-        onPressed: () async {
-          await FirebaseAuth.instance.signOut().then((value) async =>
-          {await _p(), context.router.replace(SplashScreenRouter())});
-        },
-        child: Text('Cerrar sesión'),
-      )
-    ];
-
-    var title = const Text('Cerrar sesión', textAlign: TextAlign.center);
-    var message = const Text(
-      '¿Desea cerrar sesión?',
-      textAlign: TextAlign.center,
-    );
-
-    AdminRoll.showMessaje(actions, title, message, context);
-    //print(FirebaseAuth.instance.currentUser?.providerData);
+  static Future<void>cerrarSesion(BuildContext context)async {
+    await FirebaseAuth.instance.signOut().then((value) async =>
+    {await _p(), context.router.replace(SplashScreenRouter())});
   }
+
 
   static Future<void> _p() async {
     try {

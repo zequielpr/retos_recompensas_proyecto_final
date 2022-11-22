@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 
 import '../../../datos/UsuarioActual.dart';
+import 'EliminarCuenta.dart';
 import 'Sesion.dart';
 
 class AdminCuenta extends StatefulWidget {
@@ -61,7 +62,7 @@ class _AdminCuentaState extends State<AdminCuenta> {
               margin: EdgeInsets.all(0),
               child: ListTile(
                 leading: Icon(Icons.delete_forever_outlined),
-                onTap: () {},
+                onTap: () => EliminarCuenta.eliminarCuenta(context),
                 visualDensity: VisualDensity.compact,
                 title: Text('Eliminar cuenta'),
                 trailing: Icon(

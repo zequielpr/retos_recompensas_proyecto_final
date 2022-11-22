@@ -204,9 +204,9 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
   Future<void> _registrarUsuario(TrasnferirDatosNombreUser args) async {
     var datos;
     var tipoDato = args.oaUthCredential.runtimeType;
-    print('dato: $tipoDato');
-    if (args.oaUthCredential.runtimeType != GoogleAuthCredential &&
-        args.oaUthCredential.runtimeType != FacebookAuthCredential) {
+
+    //Usuario que no se registran con google
+    if (args.oaUthCredential.runtimeType != GoogleAuthCredential) {
       //En este caso el el atributo oaUthCredebtial continiene un hash map con la clave y la contrasela para realizar el registro
       //Registrarse con email y contreña
       await Autenticar.registrarConEmailPassw(args.oaUthCredential)
@@ -218,6 +218,7 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
                     await args.collectionReferenceUsers
                         .doc(currentUser?.uid)
                         .set({
+                      "current_tutor": '',
                       "nombre_usuario": userNameController.text.trim(),
                       "rol_tutorado":
                           args.dropdownValue == "Tutor" ? false : true,
@@ -251,6 +252,7 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
                     await args.collectionReferenceUsers
                         .doc(currentUser?.uid)
                         .set({
+                      "current_tutor": '',
                       "nombre_usuario": userNameController.text.trim(),
                       "rol_tutorado":
                           args.dropdownValue == "Tutor" ? false : true,
@@ -452,9 +454,7 @@ class _StateRoll extends State<Roll> {
 
   Future<void> _siguiente(TranferirDatosRoll args) async {
     String userName = await generarUserName(args.collectionReferenceUsers);
-    print("Nombre de usuario: ${userName}");
     var creden = args.oaUthCredential;
-    print('tipo de credencial: $creden');
 
     if (args.oaUthCredential.runtimeType == String) {
       var datos = TrasnferirDatosNombreUser({'email': '', 'passw': ''},
