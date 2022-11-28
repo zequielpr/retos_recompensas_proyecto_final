@@ -56,9 +56,9 @@ class DejarTutoria {
   }
 
   //eliminar id el usuario tutor
-  static Future<void> eliminarDeCurrentTutor(String idTutorado) async {
+  static Future<void> eliminarDeCurrentTutor(String idRemoveUser) async {
     await CollecUser.COLECCION_USUARIOS
-        .doc(idTutorado)
+        .doc(idRemoveUser)
         .update({"current_tutor": ''});
   }
 

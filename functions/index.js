@@ -17,6 +17,7 @@
 
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+const { firestore } = require("firebase-admin");
 admin.initializeApp();
 /**
  * Triggers when a user gets a new follower and sends a notification.
@@ -101,7 +102,7 @@ exports.notificarNuevaMision = functions.firestore
     const idSala = context.params.idSala;
     const nombreMision = snap.data()['nombreMision'];
     const idMision = context.params.idMision;
-    
+
     //Toma todos los usuario que se encuentran en la sala en la cual se ha creado una nueva misión
     const usuariosRef = db.collection("usuarios");
     const snapshot = await usuariosRef
@@ -154,7 +155,7 @@ exports.notificarNuevaMision = functions.firestore
       //Comprobar si el buzon existe
       if (docUsuario
         .collection("notificaciones")) {
-        
+
       }
 
       //Ecribir la notificación en el buzón del usuario
@@ -287,3 +288,70 @@ exports.notificarSolicitudesRecibidas = functions.firestore
       return Promise.all(tokensDelete);
     }
   }); //final de metodo
+
+
+//Eliminar usuario_____________________________________--
+exports.eliminarUsuario = functions.firestore.document("usuarios/{UID}").onDelete(async (snap, context) => {
+  console.log('Inicia la funcion para eliminar al tutor');
+  const isTutorado = snap.data()['rol_tutorado'];
+  const idRemoveUser = context.params.UID;
+  var usuarios = db.collection('usuarios');
+
+
+
+  if (isTutorado == true) {
+    await eliminarDatosTutorado();
+  } else {
+    console.log('elimina las relaciones con dicho tutor');
+    await elimiDatosUsuarioTutor();
+  }
+
+
+
+  //Eliminar datos del usuario tutorado___________________________________________________-
+  async function eliminarDatosTutorado() {
+    var idTutor;
+    snap.ref.collection('rolTutorado').get().then(async (snap) => {
+      snap.docs.forEach(async (doc) => {
+        idTutor = doc.id;
+        await eliminarIdUserTutuorado(idTutor);
+        await elimUserDeSalas(idTutor)
+      })
+    });
+  }
+
+  //Eliminar idRemoveUser de usuario tutor
+  async function eliminarIdUserTutuorado(idTutor) {
+    await usuarios.doc(idTutor).collection('rolTutor').doc(idTutor).
+      collection('allUsersTutorados').doc('usuarios_tutorados').
+      update({ 'idUserTotorado': firestore.FieldValue.arrayRemove([idRemoveUser]) })
+  }
+
+  //Eliminar usuario tutorado de todas las salas
+  async function elimUserDeSalas(idTutor) {
+    await usuarios.doc(idTutor).collection('rolTutor').doc(idTutor).
+      collection('salas').get().then((snap) => {
+        snap.docs.forEach(async (doc) => {
+          await doc.ref.collection('usersTutorados').doc(idRemoveUser).delete();
+        })
+      });
+  }
+
+
+  //Eliminar datos del usuario tutor_________________________________________________
+  //Elimina el avance que el usuario tutorado tuvo con el tutor que borra los datos
+  async function elimiDatosUsuarioTutor() {
+    var usuarioTutorado = [];
+
+    await snap.ref.collection('rolTutor').doc(idRemoveUser).
+      collection('allUsersTutorados').doc('usuarios_tutorados').get().then((snap) => {
+        usuarioTutorado = snap.data()['idUserTotorado'];
+      });
+
+
+    usuarioTutorado.forEach(async (idUserTutorado) => {
+      await usuarios.doc(idUserTutorado).collection('rolTutorado').doc(idRemoveUser).delete();
+    });
+  }
+
+});

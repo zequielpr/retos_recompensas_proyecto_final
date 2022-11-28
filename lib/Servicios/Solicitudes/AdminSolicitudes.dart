@@ -57,7 +57,7 @@ class Solicitudes {
   }
 
   //Añadir el id del usuario del usuario a la lista de todos los usuarios tutorados
-  static Future<void> addUser(String idTutor, idTutorado) async {
+  static Future<void> addUser(String idTutor, idRemoveUser) async {
     var documentReference = CollecUser.COLECCION_USUARIOS
         .doc(idTutor)
         .collection('rolTutor')
@@ -66,13 +66,13 @@ class Solicitudes {
         .doc('usuarios_tutorados');
 
     documentReference.update({
-      'idUserTotorado': FieldValue.arrayUnion([idTutorado])
+      'idUserTotorado': FieldValue.arrayUnion([idRemoveUser])
     }).catchError((onError){
       var error = onError.toString();
 
       if(error.contains('not-found')){
         documentReference.set({
-          'idUserTotorado': FieldValue.arrayUnion([idTutorado])
+          'idUserTotorado': FieldValue.arrayUnion([idRemoveUser])
         });
       };
     });

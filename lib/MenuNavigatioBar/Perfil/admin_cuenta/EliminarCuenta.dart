@@ -38,7 +38,13 @@ class EliminarCuenta {
           TextButton(onPressed: ()=>context.router.pop(), child: Text('Cancelar')),
           TextButton(
             onPressed: () async => await CurrentUser.currentUser
-                ?.delete()
+                ?.delete().catchError((onError){
+                  var error = onError.toString();
+
+                  if(error.contains('requires-recent-login')){
+
+                  }
+            })
                 .then((value) => Sesion.cerrarSesion(context)),
             child: Text('Ok'),
           ),
