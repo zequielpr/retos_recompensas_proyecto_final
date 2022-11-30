@@ -1,4 +1,6 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:retos_proyecto/Rutas.gr.dart';
 
 class EditarPerfil extends StatefulWidget {
   const EditarPerfil({Key? key}) : super(key: key);
@@ -27,7 +29,7 @@ class _EditarPerfilState extends State<EditarPerfil> {
               margin: EdgeInsets.all(0),
               child: ListTile(
                 leading: Icon(Icons.edit),
-                onTap: () {},
+                onTap: () => context.router.push(ModificarNombreRouter()),
                 visualDensity: VisualDensity.compact,
                 title: Text('Nombre'),
                 trailing: Icon(
@@ -41,7 +43,7 @@ class _EditarPerfilState extends State<EditarPerfil> {
               margin: EdgeInsets.all(0),
               child: ListTile(
                 leading: Icon(Icons.edit),
-                onTap: () {},
+                onTap: () => context.router.push(ModificarNombreUsuarioRouter()),
                 visualDensity: VisualDensity.compact,
                 title: Text('Nombre de usuario'),
                 trailing: Icon(
