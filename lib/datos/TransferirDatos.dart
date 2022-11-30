@@ -7,7 +7,6 @@ class TransferirCollecion {
   TransferirCollecion(this.collectionReferenceUser);
 }
 
-
 class TransferirDatos {
   final String nombreSala;
   final SalaDatos sala;
@@ -22,7 +21,7 @@ class TransferirDatosMisiones {
   TransferirDatosMisiones(this.collectionReferenceMisiones);
 }
 
-class TransfDatosUserTutorado{
+class TransfDatosUserTutorado {
   final CollectionReference collectionReferenceMisiones;
   final DocumentSnapshot snap;
 
@@ -36,43 +35,38 @@ class TranferirDatosRoll {
   TranferirDatosRoll(this.oaUthCredential, this.collectionReferenceUsers);
 }
 
-class TransDatosInicioSesion{
+class TransDatosInicioSesion {
   final String titulo;
   final bool focusEmail;
   final bool focusPassw;
   final String email;
   final CollectionReference collectionReferenceUsers;
 
-  TransDatosInicioSesion(this.titulo, this.focusEmail, this.focusPassw, this.email, this.collectionReferenceUsers);
+  TransDatosInicioSesion(this.titulo, this.focusEmail, this.focusPassw,
+      this.email, this.collectionReferenceUsers);
 }
 
-
 class TrasnferirDatosNombreUser {
-  late  dynamic oaUthCredential;
-  final String dropdownValue;
-  late  String userName;
-  final CollectionReference collectionReferenceUsers;
+  late String userName;
+  late final CollectionReference collectionReferenceUsers;
+  late dynamic oaUthCredential;
+  late String dropdownValue;
+  TrasnferirDatosNombreUser(this.oaUthCredential, this.dropdownValue, this.userName, this.collectionReferenceUsers);
 
-  TrasnferirDatosNombreUser(this.oaUthCredential, this.dropdownValue,
-      this.userName, this.collectionReferenceUsers);
+  TrasnferirDatosNombreUser.SoloNombre(this.userName);
 
-  setValor(String clave, String valor){
-
+  setValor(String clave, String valor) {
     oaUthCredential[clave] = valor;
-
   }
 
-  setUserName(String userName){
+  setUserName(String userName) {
     this.userName = userName;
   }
 }
 
-class TransferirDatosInicio{
+class TransferirDatosInicio {
   final bool isTutorado;
   TransferirDatosInicio(this.isTutorado);
 }
 
-
-
 //Comenzando a llamar a las clases auxiliares como herlpers
-

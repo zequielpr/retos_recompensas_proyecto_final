@@ -10,6 +10,7 @@ import 'package:retos_proyecto/datos/DatosPersonalUser.dart';
 import 'package:retos_proyecto/datos/Roll_Data.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
+import '../../Servicios/Autenticacion/NombreUsuario.dart';
 import 'AdminRoles.dart';
 import 'admin_cuenta/change_password.dart';
 import 'admin_usuarios/Admin_tutores.dart';
@@ -33,7 +34,11 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
   static var actualizarCuerpo;
   static var actualizarStateUsername;
 
-
+@override
+  void initState() {
+    // TODO: implement initState
+  NombreUsuarioWidget.vistaPerfil = setState;
+  }
 
 
   @override

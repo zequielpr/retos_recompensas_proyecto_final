@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
+import 'package:retos_proyecto/datos/CollecUsers.dart';
 import 'package:retos_proyecto/datos/TransferirDatos.dart';
 
 import '../../main.dart';
@@ -38,10 +39,10 @@ class Autenticar {
   //Metodo para comprobar que el nombre de usuario sea válido
   //Comprobar nombre de usuario:
   static Future<bool> comprUserName(
-      String userName, CollectionReference collectionReferenceUsers) async {
+      String userName) async {
     bool userNameValido = false;
 
-    await collectionReferenceUsers
+    await CollecUser.COLECCION_USUARIOS
         .where("nombre_usuario", isEqualTo: userName)
         .get()
         .then((value) => {

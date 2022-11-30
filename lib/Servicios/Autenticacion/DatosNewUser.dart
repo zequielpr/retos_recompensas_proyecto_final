@@ -22,6 +22,7 @@ import 'Autenticacion.dart';
 import 'EmailPassw/IniciarSessionEmailPassw.dart';
 import 'EmailPassw/RecogerEmail.dart';
 import 'EmailPassw/RecogerPassw.dart';
+import 'NombreUsuario.dart';
 import 'login.dart';
 
 class NombreUsuario extends StatelessWidget {
@@ -51,55 +52,15 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
   //Inicia el text field con el nombre de usuario generado en la ruta roll
   @override
   initState() {
+    textField = NombreUsuarioWidget(setState, context, args, true);
     super.initState();
-    userNameController.selection = TextSelection.fromPosition(
-        TextPosition(offset: userNameController.text.length));
-    _esperar(args.userName, args);
-    userNameController.text = args.userName;
+   /* userNameController.selection = TextSelection.fromPosition(
+        TextPosition(offset: userNameController.text.length));*/
   }
+  late NombreUsuarioWidget textField;
 
-  late User? currentUser;
-  var userNameController = TextEditingController();
-  Timer timer = Timer.periodic(Duration(seconds: 1), (timer) {});
-  late int contador;
-  bool botonActivo = true;
 
-  var estadoUsuario = Transform.scale(
-      scale: 0.9,
-      child: const Icon(
-        Icons.check_circle,
-        color: Colors.green,
-      ));
 
-  var escribiendo = Transform.scale(
-    scale: 0.9,
-    child: Icon(
-      Icons.circle_outlined,
-      color: Colors.transparent,
-    ),
-  );
-
-  var disponible = Transform.scale(
-      scale: 0.9,
-      child: const Icon(
-        Icons.check_circle,
-        color: Colors.green,
-      ));
-
-  var noDisponible = Transform.scale(
-      scale: 0.9,
-      child: const Icon(
-        Icons.cancel,
-        color: Colors.red,
-      ));
-
-  var espera = Transform.scale(
-    scale: 0.3,
-    child: const CircularProgressIndicator(
-      color: Colors.grey,
-      strokeWidth: 5,
-    ),
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -111,183 +72,13 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
         ),
         body: Padding(
           padding: EdgeInsets.only(top: 40, left: 30, right: 30),
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 25),
-                  child: Text(
-                    'Nombre de usuario',
-                    style: GoogleFonts.roboto(
-                        fontSize: 25, fontWeight: FontWeight.w400),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 0),
-                child: TextField(
-                  keyboardType: TextInputType.text,
-                  autofocus: true,
-                  controller: userNameController,
-                  onChanged: (usuario) {
-                    _esperar(usuario.trim(), args);
-                  },
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "Nombre de usuario",
-                      suffixIcon: estadoUsuario),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: SizedBox(
-                  width: 200,
-                  height: 42,
-                  child: ElevatedButton(
-                    style: ButtonStyle(elevation: MaterialStateProperty.all(0)),
-                    onPressed: botonActivo
-                        ? () async => _registrarUsuario(args)
-                        : null,
-                    child: Text("Registrarme",
-                        style: GoogleFonts.roboto(
-                            fontSize: 17, fontWeight: FontWeight.w600)),
-                  ),
-                ),
-              )
-            ],
-          ),
+          child: textField.textFielNombreUsuario(),
         ));
 
     throw UnimplementedError();
   }
 
-  //Solo prueba
-  void _prueba() {}
 
-  //Esperear antes de comprobar
-  void _esperar(String userName, TrasnferirDatosNombreUser args) {
-    cambiarCheck(escribiendo);
-    if (!mounted) return;
-    setState(() {
-      botonActivo = false;
-    });
-
-    args.setUserName(userName);
-    contador = 0;
-    timer.cancel();
-    if (!Validar.validarUserName(userName)) {
-      botonActivo = false;
-      cambiarCheck(noDisponible);
-      return;
-    }
-    timer = Timer.periodic(Duration(milliseconds: 800), (timer) async {
-      contador++;
-      if (contador >= 2) {
-        cambiarCheck(espera);
-        await Autenticar.comprUserName(userName, args.collectionReferenceUsers)
-            .then((resultado) => {
-                  if (resultado)
-                    {botonActivo = true, cambiarCheck(disponible)}
-                  else
-                    {botonActivo = false, cambiarCheck(noDisponible)}
-                });
-
-        contador = 0;
-        timer.cancel();
-        print("Debe comprobarse el nombre de usuario");
-      }
-    });
-  }
-
-  //Registra al usuario con google y guarda sus dato
-  Future<void> _registrarUsuario(TrasnferirDatosNombreUser args) async {
-    var datos;
-    var tipoDato = args.oaUthCredential.runtimeType;
-
-    //Usuario que no se registran con google
-    if (args.oaUthCredential.runtimeType != GoogleAuthCredential) {
-      //En este caso el el atributo oaUthCredebtial continiene un hash map con la clave y la contrasela para realizar el registro
-      //Registrarse con email y contreña
-      await Autenticar.registrarConEmailPassw(args.oaUthCredential)
-          .then((userCredential) async => {
-                currentUser = userCredential?.user,
-                if (currentUser != null)
-                  {
-                    CurrentUser.setCurrentUser(),
-                    await args.collectionReferenceUsers
-                        .doc(currentUser?.uid)
-                        .set({
-                      "current_tutor": '',
-                      "nombre_usuario": userNameController.text.trim(),
-                      "rol_tutorado":
-                          args.dropdownValue == "Tutor" ? false : true,
-                      'nombre': args.userName,
-                      'imgPerfil': currentUser?.photoURL
-                    }),
-
-                    await args.collectionReferenceUsers
-                        .doc(currentUser?.uid)
-                        .collection('notificaciones')
-                        .doc(currentUser?.uid)
-                        .set({
-                      'nueva_mision': false,
-                      'nueva_solicitud': false,
-                      'numb_misiones': 0,
-                      'numb_solicitudes': 0
-                    }),
-
-                    Token.guardarToken(),
-
-                    context.router.replace(MainRouter())
-                  }
-              });
-    } else {
-      await Autenticar.iniciarSesion(args.oaUthCredential)
-          .then((userCredential) async => {
-                currentUser = userCredential?.user,
-                if (currentUser != null)
-                  {
-                    CurrentUser.setCurrentUser(),
-                    await args.collectionReferenceUsers
-                        .doc(currentUser?.uid)
-                        .set({
-                      "current_tutor": '',
-                      "nombre_usuario": userNameController.text.trim(),
-                      "rol_tutorado":
-                          args.dropdownValue == "Tutor" ? false : true,
-                      'nombre': FirebaseAuth.instance.currentUser?.displayName,
-                      'imgPerfil': currentUser?.photoURL
-                    }),
-                    await args.collectionReferenceUsers
-                        .doc(currentUser?.uid)
-                        .collection('notificaciones')
-                        .doc(currentUser?.uid)
-                        .set({
-                      'nueva_mision': false,
-                      'nueva_solicitud': false,
-                      'numb_misiones': 0,
-                      'numb_solicitudes': 0
-                    }),
-                    Token.guardarToken(),
-
-                    datos = TransferirDatosInicio(
-                        args.dropdownValue == "Tutor" ? false : true),
-                    //Dirigirse a la pantalla principal
-                    context.router.replace(MainRouter())
-                  }
-              });
-    }
-  }
-
-  //Cambiar estado del check
-  void cambiarCheck(Transform check) {
-    if (!mounted)
-      return; //verifica que el widget este montado antes de actualizar su estado
-    setState(() {
-      estadoUsuario = check;
-    });
-  }
 }
 
 //Introducir roll -------------------------------------------------------------------------------------------------------
