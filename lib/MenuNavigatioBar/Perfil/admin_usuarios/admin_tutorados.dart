@@ -33,10 +33,6 @@ class Admin_tutorados {
 
             var listaUsuariosTutorados = data['idUserTotorado'];
 
-            if(listaUsuariosTutorados.size == 0){
-              return Center(child: Text('Aun no tienes tutorados'),);
-            }
-
             return ListView.builder(
               padding: const EdgeInsets.all(8),
               itemCount: listaUsuariosTutorados.length,
