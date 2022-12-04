@@ -27,29 +27,37 @@ class Admin_tutorados {
         }
 
         if (snapshot.hasData) {
-          Map<String, dynamic> data =
-              snapshot.data!.data() as Map<String, dynamic>;
+          try{
+            Map<String, dynamic> data =
+            snapshot.data!.data() as Map<String, dynamic>;
 
-          var listaUsuariosTutorados = data['idUserTotorado'];
+            var listaUsuariosTutorados = data['idUserTotorado'];
 
+            if(listaUsuariosTutorados.size == 0){
+              return Center(child: Text('Aun no tienes tutorados'),);
+            }
 
-          return ListView.builder(
-            padding: const EdgeInsets.all(8),
-            itemCount: listaUsuariosTutorados.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                child: Center(
-                  child: getCardUsuarioTutorado(
-                      listaUsuariosTutorados[index], context),
-                ),
-              );
-            },
-          );
-          return Text(
-              "Full Name: ${data['idUserTotorado']} ${data['last_name']}");
+            return ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: listaUsuariosTutorados.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  child: Center(
+                    child: getCardUsuarioTutorado(
+                        listaUsuariosTutorados[index], context),
+                  ),
+                );
+              },
+            );
+          }catch(e, s){
+          }
         }
 
-        return Text("loading");
+        if(snapshot.connectionState == ConnectionState.waiting){
+          return Center(child: Text('Cargando...'),);
+        }
+
+        return Center(child: Text('Aun no tienes tutorados'),);
       },
     );
   }
