@@ -82,10 +82,23 @@ class UsuarioTutores {
           height: Pantalla.getPorcentPanntalla(5, context, 'y'),
           width: Pantalla.getPorcentPanntalla(20, context, 'x'),
           child: Row(
-            children: [ tutorActual == idUsuario?Icon(Icons.person_pin_rounded, ):Icon(Icons.person_pin_rounded, color: Colors.transparent, ), opciones(idUsuario)],
+            children: [ marcarTutorActual(idUsuario), opciones(idUsuario)],
           ),
         ),
       ),
+    );
+  }
+
+ static Widget marcarTutorActual(idUsuario){
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          void initCurrentTutor(currentTutor) {
+            setState(() {});
+          }
+          UsuarioTutores.setCurrentUser(initCurrentTutor);
+
+          return tutorActual == idUsuario?Icon(Icons.person_pin_rounded, ):Icon(Icons.person_pin_rounded, color: Colors.transparent, );
+        }
     );
   }
 
