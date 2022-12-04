@@ -9,6 +9,7 @@ import 'package:retos_proyecto/datos/CollecUsers.dart';
 
 import '../../../MediaQuery.dart';
 import '../../../datos/TransferirDatos.dart';
+import '../../../widgets/Dialogs.dart';
 import '../../Perfil/AdminRoles.dart';
 
 final GlobalKey<NavigatorState> _navKey = GlobalKey<NavigatorState>();
@@ -120,40 +121,21 @@ class _SalaContVistaTutorState extends State<SalaContVistaTutor>
             collectionReferenceMisiones: args.sala.getColecMisiones,
             contextSala: context));
       }else{
-        showMessaje();
+        var titulo = Text('Numero maximo de misiones', textAlign: TextAlign.center);
+        var mensaje = Text('Elimina una misión para crear una nueva', textAlign: TextAlign.center,
+        );
+        action(BuildContext context){
+          return <Widget>[
+            TextButton(
+              onPressed: () => context.router.pop(),
+              child: Text('Ok'),
+            )
+          ];
+        }
+
+        Dialogos.mostrarDialog(action, titulo, mensaje, context);
       }
     });
 
-  }
-
-  showMessaje() {
-    showDialog<String>(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        titlePadding: EdgeInsets.only(
-            left: Pantalla.getPorcentPanntalla(3, context, 'x'),
-            top: Pantalla.getPorcentPanntalla(3, context, 'x'),
-            bottom: Pantalla.getPorcentPanntalla(1, context, 'x')),
-        alignment: Alignment.center,
-        actionsAlignment: MainAxisAlignment.center,
-        buttonPadding: const EdgeInsets.all(0),
-        actionsPadding:
-        EdgeInsets.only(top: Pantalla.getPorcentPanntalla(0, context, 'x')),
-        contentPadding: EdgeInsets.only(
-            left: Pantalla.getPorcentPanntalla(3, context, 'x'),
-            right: Pantalla.getPorcentPanntalla(3, context, 'x')),
-        title: const Text('Numero maximo de misiones', textAlign: TextAlign.center),
-        content: const Text(
-          'Elimina una misión para crear una nueva',
-          textAlign: TextAlign.center,
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => context.router.pop(),
-            child: Text('Ok'),
-          )
-        ],
-      ),
-    );
   }
 }
