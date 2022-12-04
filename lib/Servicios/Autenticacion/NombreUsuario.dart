@@ -245,19 +245,22 @@ class NombreUsuarioWidget {
 
   Future<void> _modificarUserName(String userName) async {
     bool succeful = true;
+    var mensaje = 'Nombre de usuario guardado correctamente';
     await CollecUser.COLECCION_USUARIOS
         .doc(CurrentUser.getIdCurrentUser())
         .update({'nombre_usuario': userName}).catchError((onError) {
-          succeful = false;
+      succeful = false;
+      mensaje = 'El nombre de usuario no se ha guardado correctamente';
     });
 
-    if(succeful){
-      vistaModificarUserName((){});
-      vistaPerfil((){});
-      print('Guardado correctamente');
-      _context.router.pop();
+    if (succeful) {
+      vistaModificarUserName(() {});
+      vistaPerfil(() {});
     }
 
-
+    final snackBar = SnackBar(
+      content: Text(mensaje),
+    );
+    ScaffoldMessenger.of(_context).showSnackBar(snackBar);
   }
 }
