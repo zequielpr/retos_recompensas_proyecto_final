@@ -17,7 +17,7 @@ class EliminarTutorado{
 
 
   //preguntar antes de dejar la tutoría
-  static dialogDejarTutoria(BuildContext context, String idTutorado) {
+  static dialogDejarTutoria(BuildContext context, String idRemoveUser) {
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -45,10 +45,10 @@ class EliminarTutorado{
           ),
           TextButton(
             onPressed: () async {
-              DejarTutoria.eliminarDeCurrentTutor(idTutorado);
-              eliminarAvance(idTutorado);
-              eliminarDeListaAllUsers(idTutorado);
-              eliminarDeTodasSalas(idTutorado);
+              DejarTutoria.eliminarDeCurrentTutor(idRemoveUser);
+              eliminarAvance(idRemoveUser);
+              eliminarDeListaAllUsers(idRemoveUser);
+              eliminarDeTodasSalas(idRemoveUser);
               context.router.pop();
             },
             child: Text('ok'),
@@ -78,9 +78,9 @@ class EliminarTutorado{
 
 
   //Eliminar el avance del usuario
-  static Future<void> eliminarAvance(idTutorado) async {
+  static Future<void> eliminarAvance(idRemoveUser) async {
     await CollecUser.COLECCION_USUARIOS
-        .doc(idTutorado)
+        .doc(idRemoveUser)
         .collection('rolTutorado')
         .doc(usuarioTutor)
         .delete();
