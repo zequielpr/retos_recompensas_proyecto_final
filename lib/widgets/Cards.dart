@@ -291,9 +291,8 @@ class Cards {
       userId, puntos_total_de_usuario, recompensa) {
     //Añadir recompensa sobrante
     GuardarRecompensaSobrante(recompensa) async {
-      await docMision.parent.parent?.parent.parent?.parent
-          .doc(userId)
-          ?.collection('rolTutorado')
+      await CollecUser.COLECCION_USUARIOS
+          .doc(userId).collection('rolTutorado')
           .doc(CurrentUser.getIdCurrentUser())
           .update({'puntos_acumulados': FieldValue.increment(recompensa)});
       return;
@@ -353,7 +352,7 @@ class Cards {
                           addRecompensa(recompensa);
                           return;
                         } else if (puntos_total_de_usuario == 200) {
-                          GuardarRecompensaSobrante(recompensa);
+                          await GuardarRecompensaSobrante(recompensa);
                           return;
                         }
                         var recompensaMaxima = 200;
@@ -364,7 +363,7 @@ class Cards {
                         //Añade los puntos necesarios para la recompensa maxima
                         addRecompensa(recompensa - sobrante);
                         //Guarda la recompensa sobrante
-                        GuardarRecompensaSobrante(sobrante);
+                        await GuardarRecompensaSobrante(sobrante);
 
                         return;
                       });
