@@ -26,6 +26,10 @@ class UsuarioTutores {
 
 
   static getAllTutores() {
+
+    if(tutorActual.length == 0){
+      return Center(child: Text('Aún no tienes un tutor'),);
+    }
     return FutureBuilder<QuerySnapshot>(
       future: CollecUser.COLECCION_USUARIOS
           .doc(CurrentUser.getIdCurrentUser())
