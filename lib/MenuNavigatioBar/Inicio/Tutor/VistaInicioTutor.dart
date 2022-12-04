@@ -123,46 +123,47 @@ class _InicioTutorState extends State<InicioTutor> {
             children: snapshot.data!.docs
                 .map((DocumentSnapshot document) {
                   print('nombre ${document.id}');
-                  return Padding(
-                      padding: EdgeInsets.only(
-                          bottom:
-                              Pantalla.getPorcentPanntalla(2.2, context, 'y')),
-                      child: ListTile(
-                        onTap: () {
-                          var sala = SalaDatos(documentReference);
-                          TransfDatosUserTutorado datosUser =
-                              TransfDatosUserTutorado(
-                                  sala.getColecMisiones, document);
-                          context.router.push(UserTutorado(args: datosUser));
-                        },
-                        style: ListTileStyle.drawer,
-                        contentPadding: EdgeInsets.all(0),
-                        dense: true,
-                        visualDensity: VisualDensity.comfortable,
-                        leading: DatosPersonales.getAvatar(
-                            CollecUser.COLECCION_USUARIOS, document.id, 26),
-                        title: DatosPersonales.getIndicadoAvance(
-                            document.id,
-                            CollecUser.COLECCION_USUARIOS,
-                            CurrentUser.getIdCurrentUser()),
-                        subtitle: Padding(
-                          padding: EdgeInsets.only(
-                              left: Pantalla.getPorcentPanntalla(
-                                  3, context, 'x')),
-                          child: DatosPersonales.getDato(
+                  if(document.id.length > 0){
+                    return Padding(
+                        padding: EdgeInsets.only(
+                            bottom:
+                            Pantalla.getPorcentPanntalla(2.2, context, 'y')),
+                        child: ListTile(
+                          onTap: () {
+                            var sala = SalaDatos(documentReference);
+                            TransfDatosUserTutorado datosUser =
+                            TransfDatosUserTutorado(
+                                sala.getColecMisiones, document);
+                            context.router.push(UserTutorado(args: datosUser));
+                          },
+                          style: ListTileStyle.drawer,
+                          contentPadding: EdgeInsets.all(0),
+                          dense: true,
+                          visualDensity: VisualDensity.comfortable,
+                          leading: DatosPersonales.getAvatar( document.id, 26),
+                          title: DatosPersonales.getIndicadoAvance(
                               document.id,
-                              'nombre_usuario'),
-                        ),
-                        trailing: Padding(
-                          padding: EdgeInsets.only(
-                              bottom:
-                                  Pantalla.getPorcentPanntalla(2, context, 'y'),
-                              right: Pantalla.getPorcentPanntalla(
-                                  2, context, 'y')),
-                          child: comprobarRecompensa(document.id),
-                        ),
-                      ));
-                  Text(
+                              CollecUser.COLECCION_USUARIOS,
+                              CurrentUser.getIdCurrentUser()),
+                          subtitle: Padding(
+                            padding: EdgeInsets.only(
+                                left: Pantalla.getPorcentPanntalla(
+                                    3, context, 'x')),
+                            child: DatosPersonales.getDato(
+                                document.id,
+                                'nombre_usuario'),
+                          ),
+                          trailing: Padding(
+                            padding: EdgeInsets.only(
+                                bottom:
+                                Pantalla.getPorcentPanntalla(2, context, 'y'),
+                                right: Pantalla.getPorcentPanntalla(
+                                    2, context, 'y')),
+                            child: comprobarRecompensa(document.id),
+                          ),
+                        ));
+                  }
+                  return Text(
                     document.id,
                     style: TextStyle(fontSize: 16),
                   );
@@ -177,24 +178,27 @@ class _InicioTutorState extends State<InicioTutor> {
 
   //Comprobar si el usuario tiene una recompensa por reclamar
   static Widget comprobarRecompensa(String idUser) {
-    return StreamBuilder(
-        stream: CollecUser.COLECCION_USUARIOS
-            .doc(idUser)
-            .collection('rolTutorado')
-            .doc(CurrentUser.getIdCurrentUser())
-            .snapshots(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData) {
-            if (!snapshot.data['recompensa_x_200'].isEmpty) {
-              return Icon(Icons.redeem);
+    if(idUser.length > 0) {
+      return StreamBuilder(
+          stream: CollecUser.COLECCION_USUARIOS
+              .doc(idUser)
+              .collection('rolTutorado')
+              .doc(CurrentUser.getIdCurrentUser())
+              .snapshots(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.hasData) {
+              if (!snapshot.data ['recompensa_x_200'].isEmpty) {
+                return Icon(Icons.redeem);
+              } else {
+                return Icon(Icons.check_box_outline_blank);
+              }
+            } else if (snapshot.hasError) {
+              return Icon(Icons.error_outline);
             } else {
-              return Icon(Icons.check_box_outline_blank);
+              return CircularProgressIndicator();
             }
-          } else if (snapshot.hasError) {
-            return Icon(Icons.error_outline);
-          } else {
-            return CircularProgressIndicator();
-          }
-        });
+          });
+    }
+    return Text('');
   }
 }

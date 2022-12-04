@@ -10,6 +10,7 @@ import 'package:retos_proyecto/datos/UsuarioActual.dart';
 import '../../datos/CollecUsers.dart';
 import '../../widgets/Cards.dart';
 import '../Perfil/AdminTutores.dart';
+import '../Perfil/admin_usuarios/Admin_tutores.dart';
 
 class Salas extends StatefulWidget {
   const Salas({Key? key}) : super(key: key);
@@ -29,9 +30,7 @@ class _SalasState extends State<Salas> {
 
   void initState() {
     var initCurrentTutor = this.initCurrentTutor;
-    if (Roll_Data.ROLL_USER_IS_TUTORADO) {
-      AdminTutores.setCurrentUser(initCurrentTutor);
-    }
+    UsuarioTutores.setCurrentUser(initCurrentTutor);
     super.initState();
   }
 
@@ -59,12 +58,14 @@ class _SalasState extends State<Salas> {
   }
 
   Widget listaSalasVistaTutorado() {
-    return currentTutor != null
-        ? _listarVistaTutorados(
-            context, CollecUser.COLECCION_USUARIOS, currentTutor)
-        : Center(
-            child: Text('Aun no tienes un tutor'),
-          );
+    if (currentTutor != null && currentTutor.length != 0) {
+      return _listarVistaTutorados(
+          context, CollecUser.COLECCION_USUARIOS, currentTutor);
+    } else {
+      return Center(
+        child: Text('Aun no tienes un tutor'),
+      );
+    }
   }
 
   //Vista de las salas para los tutorados

@@ -12,7 +12,7 @@ class AdminRoll {
   static Widget getRoll(BuildContext context) {
     var dropdownValue = Roll_Data.ROLL_USER_IS_TUTORADO ? 'Tutorado' : 'Tutor';
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-      const Text('El rol actual es ', style: TextStyle(fontSize: 20)),
+      const Text('', style: TextStyle(fontSize: 20)),
       DropdownButton<String>(
         value: dropdownValue,
         icon: const Padding(

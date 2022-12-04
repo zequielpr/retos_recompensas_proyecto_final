@@ -61,7 +61,6 @@ class ListUsuarios extends StatelessWidget {
                           elevation: 1,
                           child: ListTile(
                             leading: DatosPersonales.getAvatar(
-                                collectionReferenceUsuariosDocPersonal,
                                 documentSnapshot.id,
                                 20),
                             title: SalaDatos.getNombreUsuario(

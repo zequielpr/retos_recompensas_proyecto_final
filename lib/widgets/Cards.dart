@@ -33,7 +33,6 @@ class Cards {
                 children: [
                   ListTile(
                     leading: DatosPersonales.getAvatar(
-                        CollecUser.COLECCION_USUARIOS,
                         documentSnapshot['id_emisor'],
                         25),
                     title: Text(documentSnapshot['nombre_emisor'].toString()),
@@ -120,7 +119,7 @@ class Cards {
                   )
                 ], style: TextStyle(color: Colors.black)),
               ),
-              leading: DatosPersonales.getAvatar(CollecUser.COLECCION_USUARIOS,
+              leading: DatosPersonales.getAvatar(
                   documentSnapshot['id_emisor'], 20),
             ),
           ],

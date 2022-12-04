@@ -4,7 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
-import '../../datos/ValidarDatos.dart';
+import '../../../datos/ValidarDatos.dart';
+
 
 class ChangePasswd extends StatefulWidget {
   final BuildContext contextPerfil;
@@ -131,7 +132,7 @@ class _ChangePasswdState extends State<ChangePasswd> {
             child: Text(
               'Establece una nueva contraseña',
               style:
-                  GoogleFonts.roboto(fontSize: 25, fontWeight: FontWeight.w400),
+              GoogleFonts.roboto(fontSize: 25, fontWeight: FontWeight.w400),
             ),
           ),
         ),
@@ -140,8 +141,8 @@ class _ChangePasswdState extends State<ChangePasswd> {
           onChanged: (passw) {
             passw.length >= 8
                 ? passw.length <= 16
-                    ? _checkLongitud(true)
-                    : _checkLongitud(false)
+                ? _checkLongitud(true)
+                : _checkLongitud(false)
                 : _checkLongitud(false);
             Validar.validarPassw(passw) == true
                 ? _checkLetrasNumb(true)
@@ -153,7 +154,7 @@ class _ChangePasswdState extends State<ChangePasswd> {
           decoration: InputDecoration(
               suffixIcon: IconButton(
                 onPressed: () =>
-                    passwOculta == true ? _mostrarPassw() : _ocultarPassw(),
+                passwOculta == true ? _mostrarPassw() : _ocultarPassw(),
                 icon: iconPassw,
               ),
               border: OutlineInputBorder(),

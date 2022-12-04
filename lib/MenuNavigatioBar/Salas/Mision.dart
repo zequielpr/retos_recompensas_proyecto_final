@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminTutores.dart';
 
 import '../../datos/CollecUsers.dart';
+import '../Perfil/admin_usuarios/Admin_tutores.dart';
 
 class Mision extends StatefulWidget {
   final DocumentSnapshot snap;
@@ -30,7 +31,7 @@ class _MisionState extends State<Mision> {
 
 
   Widget getDatosMision( DocumentSnapshot documentSnapshot){
-    String idTutorActual = AdminTutores.dropdownValue;
+    String idTutorActual = UsuarioTutores.tutorActual;
     return StreamBuilder(
       stream: CollecUser.COLECCION_USUARIOS
         .doc(idTutorActual)
