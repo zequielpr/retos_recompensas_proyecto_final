@@ -78,11 +78,20 @@ class _ModificarNombreState extends State<ModificarNombre> {
   }
 
   void _guardarNombre(String nombre) {
+    var mensaje = 'Nombre actualizado correctamente';
     if (nombre.length <= 30) {
-      CurrentUser.currentUser?.updateDisplayName(nombre);
+      CurrentUser.currentUser?.updateDisplayName(nombre).catchError((onError){
+        mensaje = 'Error al actualizar el nombre';
+      });
       NombreUsuarioWidget.vistaModificarUserName((){});
       NombreUsuarioWidget.vistaPerfil((){});
-      context.router.pop();
+
+      final snackBar = SnackBar(
+        content: Text(mensaje),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+
     }
   }
 }
