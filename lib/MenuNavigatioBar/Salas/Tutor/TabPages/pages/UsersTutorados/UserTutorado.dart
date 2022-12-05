@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/AddRewardUser.dart';
+import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/ExpulsarDeSala.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 
@@ -34,7 +35,7 @@ class _UserTutoradoState extends State<UserTutorado> {
           appBar: AppBar(
             title: DatosPersonales.getDato( args.snap.id, 'nombre_usuario'),
             actions: [
-              IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
+              IconButton(onPressed: () => ExplusarDeSala.ExplusarUsuarioDesala(context, args.collectionReferenceMisiones.parent?.id , args.snap.reference.id), icon: Icon(Icons.output_rounded)),
             ],
             backgroundColor: Colors.white,
             foregroundColor: Colors.black,
