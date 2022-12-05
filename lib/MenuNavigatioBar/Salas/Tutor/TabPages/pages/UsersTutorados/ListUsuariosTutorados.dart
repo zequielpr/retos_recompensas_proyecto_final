@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/Servicios/Solicitudes/AdminSolicitudes.dart';
 import '../../../../../../Rutas.gr.dart';
 import '../../../../../../datos/DatosPersonalUser.dart';
@@ -125,47 +126,31 @@ class enviarSolicitudeUsuario {
                 ],),*/
 
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   //mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Enviar solicitud a usuario",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
+                    SizedBox(
+                      height: Pantalla.getPorcentPanntalla(5, context, 'y'),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 90),
-                      child: IconButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          icon: const Icon(Icons.close)),
-                    )
-                  ],
-                ),
-                /*const ListTile(
-                    leading: Material(
-                      color: Colors.transparent,
-                    ),
-                    title: Text(
+                    Text(
                       "Enviar solicitud a usuario",
                       style: TextStyle(
                           fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                ),*/
+                  ],
+                ),
+
                 TextField(
                   controller: _userNameController,
                   decoration:
                       const InputDecoration(labelText: 'Nombre de usuario'),
                 ),
-                const SizedBox(
-                  height: 20,
+                SizedBox(
+                  height: Pantalla.getPorcentPanntalla(2, context, 'y'),
                 ),
 
                 //Boton de enviar solicitud
-                ElevatedButton(
+                Align(alignment: Alignment.centerLeft, child: ElevatedButton(
                     onPressed: () async {
                       var resultadoFinal = await Solicitudes.enviarSolicitud(
                           _userNameController.text,
@@ -173,7 +158,7 @@ class enviarSolicitudeUsuario {
                           idSala);
 
                       var colorSnackBar =
-                          resultadoFinal == true ? Colors.green : Colors.red;
+                      resultadoFinal == true ? Colors.green : Colors.red;
                       var mensaje = resultadoFinal == true
                           ? 'Solicitud enviada correctamente'
                           : 'Error al enviar solicitud, el usuario no existe';
@@ -182,7 +167,7 @@ class enviarSolicitudeUsuario {
                           content: Text(mensaje)));
                       Navigator.of(context).pop();
                     },
-                    child: Text('Enviar solicitud'))
+                    child: Text('Enviar solicitud')),)
               ],
             ),
           );
