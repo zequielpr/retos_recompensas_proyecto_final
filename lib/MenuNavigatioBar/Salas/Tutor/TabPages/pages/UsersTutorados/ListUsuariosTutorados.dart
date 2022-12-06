@@ -31,6 +31,16 @@ class ListUsuarios extends StatelessWidget {
         child: StreamBuilder(
           stream: collectionReferenceUsuariosTutorados.snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+            if (streamSnapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator(),);
+            }
+
+            if(streamSnapshot.data?.docs.isEmpty == true){
+              return const Center(
+                child: Text('Añade un usuario a tu tutoría'),
+              );
+            }
+
             if (streamSnapshot.hasData) {
               return ListView.builder(
                 itemCount: streamSnapshot.data!.docs.length,
