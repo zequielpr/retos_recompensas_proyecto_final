@@ -81,11 +81,15 @@ class _SalasState extends State<Salas> {
             .doc(tutorActual)
             .snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
+
+          if(snapshot.connectionState == ConnectionState.waiting){
             return const Center(
               child: CircularProgressIndicator(),
             );
           }
+
+
+
           var documentSnapShot = snapshot.data as DocumentSnapshot;
 
           //Tomar las snapshot necesesarias
@@ -119,10 +123,6 @@ class _SalasState extends State<Salas> {
             padding: EdgeInsets.all(5),
             scrollDirection: Axis.vertical,
           );
-
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
         });
   }
 
@@ -137,6 +137,17 @@ class _SalasState extends State<Salas> {
           .collection('salas')
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+
+        if(streamSnapshot.connectionState == ConnectionState.waiting){
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        if(streamSnapshot.data?.docs.isEmpty == true){
+          return const Center(
+            child: Text('Crea una sala'),
+          );
+        }
         if (streamSnapshot.hasData) {
           return ListView.builder(
             itemCount: streamSnapshot.data!.docs.length,
@@ -151,7 +162,7 @@ class _SalasState extends State<Salas> {
 
         //Circulo de carga que espera hasta que se cargue el contenido
         return const Center(
-          child: CircularProgressIndicator(),
+          child: Text(''),
         );
       },
     );

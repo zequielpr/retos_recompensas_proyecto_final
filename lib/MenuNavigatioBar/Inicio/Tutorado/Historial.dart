@@ -247,6 +247,11 @@ class _HistorialState extends State<Historial> {
 
   Widget _getTodasRecompensas(CollectionReference collectionReferenceUser,
       String idTutorActual, campo, orden) {
+
+    if(idTutorActual.isEmpty){
+      return const Center(child: Text('Aún no tienes una tutoría'),);
+    }
+
     return FutureBuilder<QuerySnapshot>(
       future: collectionReferenceUser
           .doc(CurrentUser.getIdCurrentUser())
@@ -256,7 +261,17 @@ class _HistorialState extends State<Historial> {
           .orderBy(campo, descending: order)
           .get(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+
+        if(snapshot.connectionState == ConnectionState.waiting){
+          return const Center(child: CircularProgressIndicator(),);
+        }
+
+        if(snapshot.data?.docs.isEmpty == true){
+          return const Center(child: Text('Historial vacío'),);
+        }
+
         if (snapshot.hasData) {
+          print('object');
           List<Widget> listaRecompensa = [Text('hola')];
 
           snapshot.data!.docs.map((DocumentSnapshot document) {
@@ -290,10 +305,12 @@ class _HistorialState extends State<Historial> {
                 .toList()
                 .cast(),
           );
-          ;
         }
-        return Text("loading");
+
+        return const Text('vacío');
       },
+
+
     );
   }
 
@@ -320,7 +337,7 @@ class _HistorialState extends State<Historial> {
             ),
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
                 padding: EdgeInsets.only(
