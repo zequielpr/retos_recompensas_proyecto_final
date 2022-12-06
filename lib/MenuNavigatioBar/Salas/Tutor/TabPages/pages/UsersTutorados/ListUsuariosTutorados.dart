@@ -2,11 +2,14 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/Servicios/Solicitudes/AdminSolicitudes.dart';
 import '../../../../../../Rutas.gr.dart';
 import '../../../../../../datos/DatosPersonalUser.dart';
 import '../../../../../../datos/SalaDatos.dart';
 import '../../../../../../datos/TransferirDatos.dart';
+import '../../../../../../widgets/Dialogs.dart';
+import 'ExpulsarDeSala.dart';
 
 class ListUsuarios extends StatelessWidget {
   final CollectionReference collectionReferenceUsuariosTutorados;
@@ -34,12 +37,16 @@ class ListUsuarios extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final DocumentSnapshot documentSnapshot =
                       streamSnapshot.data!.docs[index];
+
+                  var idSala = documentSnapshot.reference.parent.parent?.id;
                   return Padding(
                     padding: EdgeInsets.only(top: 10, bottom: 10),
-                    child: FlatButton(
-                        color: Colors.transparent,
-                        splashColor: Colors.black26,
-                        onPressed: () {
+                    child: Card(
+                      color: Colors.transparent,
+                      margin: const EdgeInsets.all(10),
+                      elevation: 0,
+                      child: ListTile(
+                        onTap: () {
                           var datos = TransfDatosUserTutorado(
                               collectionReferenceMisiones, documentSnapshot);
                           contextSala.router.push(UserTutorado(args: datos));
@@ -56,32 +63,26 @@ class ListUsuarios extends StatelessWidget {
 
                           //Navigator.push(context, MaterialPageRoute(builder: (context)=>MenuSala()) );
                         },
-                        child: Card(
-                          margin: const EdgeInsets.all(10),
-                          elevation: 1,
-                          child: ListTile(
-                            leading: DatosPersonales.getAvatar(
-                                documentSnapshot.id,
-                                20),
-                            title: SalaDatos.getNombreUsuario(
-                                collectionReferenceUsuariosDocPersonal,
-                                documentSnapshot.id),
-                            subtitle: Text('xxx' + ' xp',
-                                overflow: TextOverflow.ellipsis, maxLines: 1),
-                            trailing: SizedBox(
-                              width: 50,
-                              child: Row(
-                                children: [
-                                  IconButton(
-                                      icon:
-                                          const Icon(Icons.more_vert, size: 25),
-                                      onPressed: () {}),
-                                  // This icon button is used to delete a single product
-                                ],
-                              ),
-                            ),
+                        leading:
+                            DatosPersonales.getAvatar(documentSnapshot.id, 20),
+                        title: SalaDatos.getNombreUsuario(
+                            collectionReferenceUsuariosDocPersonal,
+                            documentSnapshot.id),
+                        subtitle: DatosPersonales.getDato( documentSnapshot.id, 'nombre_usuario'),
+                        trailing: SizedBox(
+                          width: 50,
+                          child: Row(
+                            children: [
+                              IconButton(
+                                  icon: const Icon(Icons.output_rounded,
+                                      size: 25),
+                                  onPressed: () => ExplusarDeSala.ExplusarUsuarioDesala(context, idSala, documentSnapshot.id)),
+                              // This icon button is used to delete a single product
+                            ],
                           ),
-                        )),
+                        ),
+                      ),
+                    ),
                   );
                 },
               );
@@ -124,55 +125,46 @@ class enviarSolicitudeUsuario {
                 ],),*/
 
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   //mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Enviar solicitud a usuario",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
+                    SizedBox(
+                      height: Pantalla.getPorcentPanntalla(5, context, 'y'),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 90),
-                      child: IconButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          icon: const Icon(Icons.close)),
-                    )
-                  ],
-                ),
-                /*const ListTile(
-                    leading: Material(
-                      color: Colors.transparent,
-                    ),
-                    title: Text(
+                    Text(
                       "Enviar solicitud a usuario",
                       style: TextStyle(
                           fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                ),*/
+                  ],
+                ),
+
                 TextField(
                   controller: _userNameController,
                   decoration:
                       const InputDecoration(labelText: 'Nombre de usuario'),
                 ),
-                const SizedBox(
-                  height: 20,
+                SizedBox(
+                  height: Pantalla.getPorcentPanntalla(2, context, 'y'),
                 ),
 
                 //Boton de enviar solicitud
-                ElevatedButton(
+                Align(alignment: Alignment.centerLeft, child: ElevatedButton(
                     onPressed: () async {
+                      if( _userNameController.text.isEmpty){
+                        mostrarMensaje(context);
+                        return;
+                      }
+
+
+
                       var resultadoFinal = await Solicitudes.enviarSolicitud(
                           _userNameController.text,
                           collectionReferenceUser,
                           idSala);
 
                       var colorSnackBar =
-                          resultadoFinal == true ? Colors.green : Colors.red;
+                      resultadoFinal == true ? Colors.green : Colors.red;
                       var mensaje = resultadoFinal == true
                           ? 'Solicitud enviada correctamente'
                           : 'Error al enviar solicitud, el usuario no existe';
@@ -181,11 +173,33 @@ class enviarSolicitudeUsuario {
                           content: Text(mensaje)));
                       Navigator.of(context).pop();
                     },
-                    child: Text('Enviar solicitud'))
+                    child: Text('Enviar solicitud')),)
               ],
             ),
           );
         });
+  }
+
+   static mostrarMensaje(BuildContext context){
+    actions(BuildContext context){
+      return <Widget>[
+        TextButton(
+          onPressed: () {
+            context.router.pop();
+          },
+          child: const Text('Ok'),
+        ),
+      ];
+    }
+
+    var titulo = const Text('Nombre de usuario vacío', textAlign: TextAlign.center);
+    var message = const Text(
+      'Es necesario escribir un nombre de usuario para enviar una solicitud',
+      textAlign: TextAlign.center,
+    );
+
+    Dialogos.mostrarDialog(actions, titulo, message, context);
+
   }
 
   //Metodo para ennviar solicitud de usuario

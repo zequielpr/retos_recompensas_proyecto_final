@@ -9,6 +9,7 @@ import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import '../../datos/CollecUsers.dart';
 import '../../widgets/Cards.dart';
+import '../../widgets/Dialogs.dart';
 import '../Perfil/AdminTutores.dart';
 import '../Perfil/admin_usuarios/Admin_tutores.dart';
 
@@ -160,19 +161,20 @@ class _SalasState extends State<Salas> {
   Future<int> getNumerosalas() async {
     return await CollecUser.COLECCION_USUARIOS
         .doc(CurrentUser.getIdCurrentUser())
-        .collection('rolTutor')
-        .get()
+        .collection('rolTutor').doc(CurrentUser.getIdCurrentUser()).collection('salas').get()
         .then((value) => value.size);
   }
 
   //Funcion para crear nuevas salas
   Future<void> crearSala() async {
-    var actions = <Widget>[
-      TextButton(
-        onPressed: () => context.router.pop(),
-        child: Text('Ok'),
-      )
-    ];
+    actions(BuildContext context){
+      return <Widget>[
+        TextButton(
+          onPressed: () => context.router.pop(),
+          child: Text('Ok'),
+        )
+      ];
+    };
 
     var title =
         const Text('Numero maximo de salas', textAlign: TextAlign.center);
@@ -183,7 +185,7 @@ class _SalasState extends State<Salas> {
     var numeroDeSalas = await getNumerosalas();
     numeroDeSalas <= 3
         ? showModalCrearSala()
-        : AdminRoll.showMessaje(actions, title, message, context);
+        : Dialogos.mostrarDialog(actions, title, message, context);
   }
 
   Future<void> showModalCrearSala() async {

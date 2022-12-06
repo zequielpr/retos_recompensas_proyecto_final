@@ -97,7 +97,7 @@ class AdminSala {
     int numeroMisiones = 0;
     await CollecUser.COLECCION_USUARIOS
         .doc(CurrentUser.getIdCurrentUser())
-        .collection('rolTutor')
+        .collection('rolTutor').doc(CurrentUser.getIdCurrentUser()).collection('salas')
         .doc(idSala)
         .collection('misiones')
         .get()

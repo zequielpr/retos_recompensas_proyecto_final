@@ -3,7 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:readmore/readmore.dart';
+import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminRoles.dart';
+import 'package:retos_proyecto/widgets/Dialogs.dart';
 
 import '../../../../../widgets/Cards.dart';
 import '../../../../../widgets/Fields.dart';
@@ -19,27 +21,27 @@ class Misiones extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-            //listar misiones
-            child: StreamBuilder(
-          stream: collectionMisiones.snapshots(),
-          builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-            if (streamSnapshot.hasData) {
-              return ListView.builder(
-                itemCount: streamSnapshot.data!.docs.length,
-                itemBuilder: (context, index) {
-                  final DocumentSnapshot documentSnapshot =
-                      streamSnapshot.data!.docs[index];
-                  return Cards.getCardMisionInicio(documentSnapshot, context);
-                },
-              );
-            }
-            return const Center(
-              child: CircularProgressIndicator(),
+      body: Center(
+          //listar misiones
+          child: StreamBuilder(
+        stream: collectionMisiones.snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+          if (streamSnapshot.hasData) {
+            return ListView.builder(
+              itemCount: streamSnapshot.data!.docs.length,
+              itemBuilder: (context, index) {
+                final DocumentSnapshot documentSnapshot =
+                    streamSnapshot.data!.docs[index];
+                return Cards.getCardMisionInicio(documentSnapshot, context);
+              },
             );
-          },
-        )),
-        );
+          }
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      )),
+    );
     ;
   }
 }
@@ -119,40 +121,10 @@ class MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: ListView(
+        child: Column(
       children: <Widget>[
-        const SizedBox(
-          height: 100,
-        ),
-
-        Padding(
-          padding: EdgeInsets.only(
-              left: pading_left, right: pading_right, bottom: 20),
-          child: ToggleButtons(
-            onPressed: (int index) {
-              setState(() {
-                for (int buttonIndex = 0;
-                    buttonIndex < isSelected.length;
-                    buttonIndex++) {
-                  if (buttonIndex == index) {
-                    tipoMissSelect = 'Especial';
-                    isSelected[buttonIndex] = true;
-                  } else {
-                    tipoMissSelect = 'Normal';
-                    isSelected[buttonIndex] = false;
-                  }
-                }
-                print(tipoMissSelect);
-              });
-            },
-            isSelected: isSelected,
-            children: const <Widget>[
-              //Icon(Icons.ac_unit),
-              //Icon(Icons.call),
-              Text('nomal'),
-              Text('Especial')
-            ],
-          ),
+        SizedBox(
+          height: Pantalla.getPorcentPanntalla(4, context, 'y'),
         ),
 
         //Nombre de misión
@@ -161,35 +133,6 @@ class MyStatefulWidgetState extends State<MyStatefulWidget> {
         //Objetivos de mision
         objetivoMision.getInstance,
 
-        /*
-       Padding(padding: EdgeInsets.only(left: pading_left, right: pading_right), child:
-        Row(children: [
-          Text('Puntos de recompensa:'),
-          Padding(padding: EdgeInsets.only(left: 10, right: 10), child:  DropdownButton<String>(
-            value: puntosSeleccionados,
-            elevation: 16,
-            style: const TextStyle(color: Colors.deepPurple),
-            underline: Container(
-              height: 2,
-              color: Colors.transparent,
-            ),
-            onChanged: (String? newValue) {
-              setState(() {
-                puntosSeleccionados = newValue!;
-              });
-            },
-            items: <String>['10', '20', '30']
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-          ),),
-
-        ],),
-       ),
-      */
         Slider(
           value: _currentSliderValue,
           max: 25,
@@ -207,22 +150,43 @@ class MyStatefulWidgetState extends State<MyStatefulWidget> {
             padding: EdgeInsets.only(left: 70, right: 70),
             child: ElevatedButton(
                 onPressed: () async {
-                  await collectionReferenceMisiones.add({
-                    'fecha': DateTime.now(),
-                    'nombreMision': nombreMision.getValor,
-                    'objetivoMision': objetivoMision.getValor,
-                    'recompensaMision': _currentSliderValue,
-                    'tipo': tipoMissSelect,
-                    'completada_por': FieldValue.arrayUnion([]),
-                    'solicitu_confirmacion': FieldValue.arrayUnion([])
-                  }).then((value) {
+                  if (nombreMision.getValor.isNotEmpty &&
+                      objetivoMision.getValor.isNotEmpty) {
+                    await collectionReferenceMisiones.add({
+                      'fecha': DateTime.now(),
+                      'nombreMision': nombreMision.getValor,
+                      'objetivoMision': objetivoMision.getValor,
+                      'recompensaMision': _currentSliderValue,
+                      'completada_por': FieldValue.arrayUnion([]),
+                      'solicitu_confirmacion': FieldValue.arrayUnion([])
+                    }).then((value) {
+                      Navigator.pop(
+                          contextSala); //Regresa al contextxo de la sala
+                      ScaffoldMessenger.of(contextSala).showSnackBar(
+                          const SnackBar(
+                              content: Text('Mision añadida correctamente')));
+                    });
+                    return;
+                  }
 
-                    Navigator.pop(
-                        contextSala); //Regresa al contextxo de la sala
-                    ScaffoldMessenger.of(contextSala).showSnackBar(
-                        const SnackBar(
-                            content: Text('Mision añadida correctamente')));
-                  });
+                  actions(BuildContext context){
+                    return <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          context.router.pop();
+                        },
+                        child: const Text('Ok'),
+                      ),
+                    ];
+                  }
+
+                  var titulo = const Text('Rellenar campo', textAlign: TextAlign.center);
+                  var message = const Text(
+                    'Es necesario asignar un titulo y un objetivo para crear una misión',
+                    textAlign: TextAlign.center,
+                  );
+
+                  Dialogos.mostrarDialog(actions, titulo, message, context);
 
 
                 },

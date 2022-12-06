@@ -73,7 +73,7 @@ class splashScreen extends StatelessWidget {
               bodyText2: TextStyle(color: Colors.black, fontSize: 17),
               button: TextStyle(color: Colors.black)),
           inputDecorationTheme: InputDecorationTheme(
-              contentPadding: EdgeInsets.only(left: 10),
+              contentPadding: EdgeInsets.all(10),
               border: OutlineInputBorder(
                 borderSide: BorderSide(
                   style: BorderStyle.solid,

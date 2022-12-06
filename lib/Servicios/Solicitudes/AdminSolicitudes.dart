@@ -104,9 +104,8 @@ class Solicitudes {
   //Enviar solicitud-----------------------------------------------------------------------------------------
   static Future<bool> enviarSolicitud(String userName,
       CollectionReference collectionReferenceUsers, String idSala) async {
-    var resultadoFinal = false;
 
-    User? currentUser = FirebaseAuth.instance.currentUser;
+    var resultadoFinal = false;
 
     await collectionReferenceUsers
         .where('nombre_usuario', isEqualTo: userName)
@@ -120,9 +119,9 @@ class Solicitudes {
                       .collection('solicitudesRecibidas')
                       .doc(idSala)
                       .set({
-                    'id_emisor': currentUser?.uid.trim(),
+                    'id_emisor': CurrentUser.getIdCurrentUser(),
                     'id_sala': idSala,
-                    'nombre_emisor': currentUser?.displayName
+                    'nombre_emisor': CurrentUser.currentUser?.displayName
                   }).then((value) => {resultadoFinal = true}),
                 }
               else
