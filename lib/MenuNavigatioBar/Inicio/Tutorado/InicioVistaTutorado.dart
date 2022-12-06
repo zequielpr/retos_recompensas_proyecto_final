@@ -8,6 +8,7 @@ import 'package:retos_proyecto/Rutas.gr.dart';
 import '../../../MediaQuery.dart';
 import '../../../datos/DatosPersonalUser.dart';
 import '../../../datos/UsuarioActual.dart';
+import '../../../widgets/Dialogs.dart';
 
 class InicioVistaTutorado {
   static Widget showCajaRecompensa(CollectionReference collectionReferenceUsers,
@@ -49,22 +50,14 @@ class InicioVistaTutorado {
             child: Column(
               children: [
                 //Puntos acumulado
-                Row(
+                Column(
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: Pantalla.getPorcentPanntalla(2, context, 'y'),
-                          bottom:
-                              Pantalla.getPorcentPanntalla(6, context, 'y')),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.account_balance_wallet_rounded,
-                            color: Colors.black26,
-                          ),
-                          Text(snapshot['puntos_acumulados'].toString())
-                        ],
-                      ),
+                    SizedBox(
+                      height: Pantalla.getPorcentPanntalla(4, context, 'y'),
+                    ),
+                    Text(
+                      snapshot['puntos_acumulados'].toString(),
+                      style: TextStyle(fontSize: 25),
                     )
                   ],
                 ),
@@ -196,10 +189,9 @@ class InicioVistaTutorado {
                                       );
                                     },
                                   );
-                                  print(
-                                      'Actualmente no hay recompensas para reclamar, pongase en contacto con su tutor');
                                 }
-                          : null,
+                          : () =>
+                              mostrarMensaje(snapshot['puntosTotal'], context),
                       child: Image.asset("lib/imgs/cofre/cofre.png")),
                 ),
                 DatosPersonales.getIndicadoAvance(
@@ -210,9 +202,31 @@ class InicioVistaTutorado {
             ),
           );
         }
-        return Text('hola');
+        return Text('Vacío');
       },
     );
+  }
+
+  static mostrarMensaje(int puntosActuales, BuildContext context) {
+    actions(BuildContext context) {
+      return <Widget>[
+        TextButton(
+          onPressed: () {
+            context.router.pop();
+          },
+          child: const Text('Ok'),
+        ),
+      ];
+    }
+
+    var titulo =
+        const Text('Puntos insuficientes', textAlign: TextAlign.center);
+    var message = Text(
+      'Reune 200 puntos o más para reclamar una recompensa\n tus puntos totales son: $puntosActuales',
+      textAlign: TextAlign.center,
+    );
+
+    Dialogos.mostrarDialog(actions, titulo, message, context);
   }
 
   //Metodo para mostrar recompensa
@@ -243,14 +257,16 @@ class InicioVistaTutorado {
                 const SizedBox(
                   height: 15.0,
                 ),
-                Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: Container(
-                    height: 20,
-                    child: title,
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    child: Container(
+                      height: 20,
+                      child: title,
+                    ),
                   ),
                 ),
-                const Divider(indent: 10, endIndent: 10, color: Colors.black),
+                const Divider(indent: 10, endIndent: 10, color: Colors.black, thickness: 0.6,),
                 const SizedBox(
                   height: 5.0,
                 ),
@@ -275,7 +291,7 @@ class InicioVistaTutorado {
                       },
                       child: const Text(
                         "OK",
-                        style: TextStyle(color: Colors.blue, fontSize: 25.0),
+                        style: TextStyle(color: Colors.blue, fontSize: 20.0),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -285,22 +301,6 @@ class InicioVistaTutorado {
                   },
                 )
               ],
-            ),
-          ),
-          Positioned(
-            top: 13.0,
-            right: 8.5,
-            child: Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                icon: Icon(
-                  Icons.close,
-                  size: 25,
-                ),
-                onPressed: () {
-                  context.router.pop();
-                },
-              ),
             ),
           ),
         ],

@@ -41,7 +41,13 @@ class _InicioTutorState extends State<InicioTutor> {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text("Cargando...");
+          return const Center(child: CircularProgressIndicator(),);
+        }
+
+        if(snapshot.data?.docs.isEmpty == true){
+          return const Center(
+            child: Text('Crea una sala'),
+          );
         }
 
         return ListView(
@@ -59,6 +65,9 @@ class _InicioTutorState extends State<InicioTutor> {
                         .snapshots(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if(snapshot.data?.docs.isEmpty == true){
+                      }
+
                       if (snapshot.hasData) {
                         if (snapshot.data!.docs.length > 0) {
                           return Align(
@@ -76,7 +85,7 @@ class _InicioTutorState extends State<InicioTutor> {
                                     alignment: Alignment.topLeft,
                                     child: Text(
                                       data['NombreSala'],
-                                      style: TextStyle(fontSize: 20),
+                                      style:  const TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
                                     ),
                                   ),
                                 ),
@@ -85,12 +94,9 @@ class _InicioTutorState extends State<InicioTutor> {
                             ),
                           );
                         }
-                        return Text('');
-                      } else if (snapshot.hasError) {
-                        return Icon(Icons.error_outline);
-                      } else {
-                        return CircularProgressIndicator();
+                        return const Text('');
                       }
+                      return const Text('');
                     });
 
                 return Text('data');

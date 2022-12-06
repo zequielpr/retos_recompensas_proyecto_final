@@ -34,6 +34,17 @@ class _ListMisionesTutoradoState extends State<ListMisionesTutorado> {
     return StreamBuilder(
       stream: collectionReferenceMisiones.snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+        if(streamSnapshot.connectionState == ConnectionState.waiting){
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        if(streamSnapshot.data?.docs.isEmpty == true){
+          return const Center(
+            child: Text('Aún no tienes misiones'),
+          );
+        }
+
         if (streamSnapshot.hasData) {
           return ListView.builder(
             itemCount: streamSnapshot.data!.docs.length,
@@ -53,9 +64,7 @@ class _ListMisionesTutoradoState extends State<ListMisionesTutorado> {
             },
           );
         }
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+        return const Text('');
       },
     );
   }

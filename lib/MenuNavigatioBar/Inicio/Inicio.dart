@@ -19,7 +19,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late String currentTutor;
+  late String currentTutor = '';
 
   void initCurrentTutor(currentTutor){
     setState(() {
@@ -78,11 +78,6 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         centerTitle: true,
         title: Text('Home'),
-        leading: IconButton(
-          tooltip: 'Ajustes',
-          onPressed: () {},
-          icon: Icon(Icons.settings),
-        ),
         actions: [
           Roll_Data.ROLL_USER_IS_TUTORADO?
           Padding(
