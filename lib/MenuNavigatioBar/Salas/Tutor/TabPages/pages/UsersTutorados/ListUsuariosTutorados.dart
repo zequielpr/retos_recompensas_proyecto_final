@@ -68,8 +68,7 @@ class ListUsuarios extends StatelessWidget {
                         title: SalaDatos.getNombreUsuario(
                             collectionReferenceUsuariosDocPersonal,
                             documentSnapshot.id),
-                        subtitle: Text('xxx' + ' xp',
-                            overflow: TextOverflow.ellipsis, maxLines: 1),
+                        subtitle: DatosPersonales.getDato( documentSnapshot.id, 'nombre_usuario'),
                         trailing: SizedBox(
                           width: 50,
                           child: Row(
@@ -152,6 +151,13 @@ class enviarSolicitudeUsuario {
                 //Boton de enviar solicitud
                 Align(alignment: Alignment.centerLeft, child: ElevatedButton(
                     onPressed: () async {
+                      if( _userNameController.text.isEmpty){
+                        mostrarMensaje(context);
+                        return;
+                      }
+
+
+
                       var resultadoFinal = await Solicitudes.enviarSolicitud(
                           _userNameController.text,
                           collectionReferenceUser,
@@ -172,6 +178,28 @@ class enviarSolicitudeUsuario {
             ),
           );
         });
+  }
+
+   static mostrarMensaje(BuildContext context){
+    actions(BuildContext context){
+      return <Widget>[
+        TextButton(
+          onPressed: () {
+            context.router.pop();
+          },
+          child: const Text('Ok'),
+        ),
+      ];
+    }
+
+    var titulo = const Text('Nombre de usuario vacío', textAlign: TextAlign.center);
+    var message = const Text(
+      'Es necesario escribir un nombre de usuario para enviar una solicitud',
+      textAlign: TextAlign.center,
+    );
+
+    Dialogos.mostrarDialog(actions, titulo, message, context);
+
   }
 
   //Metodo para ennviar solicitud de usuario

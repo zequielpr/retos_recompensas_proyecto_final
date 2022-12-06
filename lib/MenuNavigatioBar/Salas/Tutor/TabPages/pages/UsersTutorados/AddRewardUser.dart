@@ -4,6 +4,7 @@ import 'package:retos_proyecto/MediaQuery.dart';
 
 import '../../../../../../datos/CollecUsers.dart';
 import '../../../../../../datos/UsuarioActual.dart';
+import '../../../../../../widgets/Dialogs.dart';
 
 class AddReward extends StatefulWidget {
   final userId;
@@ -97,6 +98,28 @@ class _AddRewardState extends State<AddReward> {
           .update({
         "recompensa_x_200": {titulo: contenido}
       }).whenComplete(() => {Navigator.pop(context)});
+      return;
     }
+
+
+
+    actions(BuildContext context){
+      return <Widget>[
+        TextButton(
+          onPressed: () {
+            context.router.pop();
+          },
+          child: const Text('Ok'),
+        ),
+      ];
+    }
+
+    var tituloMensaje = const Text('Rellenar campo', textAlign: TextAlign.center);
+    var message = const Text(
+      'Es necesario asignar un titulo y un contenido para asignar una recompensa',
+      textAlign: TextAlign.center,
+    );
+
+    Dialogos.mostrarDialog(actions, tituloMensaje, message, context);
   }
 }

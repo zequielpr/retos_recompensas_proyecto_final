@@ -52,31 +52,35 @@ class _SalaContVistaTutorState extends State<SalaContVistaTutor>
             icon: Icon(Icons.person_add),
           ),
           IconButton(
-            onPressed: ()=> _crearMision(contextSala),
+            onPressed: () => _crearMision(contextSala),
             icon: Icon(Icons.add),
           ),
-          PopupMenuButton<Menu>(
-              // Callback that sets the selected popup menu item.
-              onSelected: (Menu item) {
-                setState(() {
-                  _selectedMenu = item.name;
-                });
-              },
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
-                    PopupMenuItem<Menu>(
-                      value: Menu.AddMision,
-                      onTap: () => _crearMision(context),
-                      child: Text('Añadir misión'),
-                    ),
-                    PopupMenuItem<Menu>(
-                      value: Menu.EliminarSala,
-                      child: Text('Eliminar sala'),
-                      onTap: () async {
-                        await AdminSala.eliminarSala(
-                            args.sala.getIdSala, contextSala, context);
-                      },
-                    )
-                  ]),
+          //Solo re refresca el widget del popup menu
+          StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return PopupMenuButton<Menu>(
+                // Callback that sets the selected popup menu item.
+                onSelected: (Menu item) {
+                  setState(() {
+                    _selectedMenu = item.name;
+                  });
+                },
+                itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
+                      PopupMenuItem<Menu>(
+                        value: Menu.AddMision,
+                        onTap: () => _crearMision(context),
+                        child: Text('Añadir misión'),
+                      ),
+                      PopupMenuItem<Menu>(
+                        value: Menu.EliminarSala,
+                        child: Text('Eliminar sala'),
+                        onTap: () async {
+                          await AdminSala.eliminarSala(
+                              args.sala.getIdSala, contextSala, context);
+                        },
+                      )
+                    ]);
+          }),
         ],
         bottom: TabBar(
           controller: _tabController,
@@ -113,18 +117,20 @@ class _SalaContVistaTutorState extends State<SalaContVistaTutor>
     );
   }
 
-  _crearMision(BuildContext context){
-
-    AdminSala.comprobarNumMisiones(args.sala.getIdSala).then((value){
-      if(value <= 7){
+  _crearMision(BuildContext context) {
+    AdminSala.comprobarNumMisiones(args.sala.getIdSala).then((value) {
+      if (value <= 7) {
         context.router.push(AddMisionRouter(
             collectionReferenceMisiones: args.sala.getColecMisiones,
             contextSala: context));
-      }else{
-        var titulo = Text('Numero maximo de misiones', textAlign: TextAlign.center);
-        var mensaje = Text('Elimina una misión para crear una nueva', textAlign: TextAlign.center,
+      } else {
+        var titulo =
+            Text('Numero maximo de misiones', textAlign: TextAlign.center);
+        var mensaje = Text(
+          'Elimina una misión para crear una nueva',
+          textAlign: TextAlign.center,
         );
-        action(BuildContext context){
+        action(BuildContext context) {
           return <Widget>[
             TextButton(
               onPressed: () => context.router.pop(),
@@ -136,6 +142,5 @@ class _SalaContVistaTutorState extends State<SalaContVistaTutor>
         Dialogos.mostrarDialog(action, titulo, mensaje, context);
       }
     });
-
   }
 }
