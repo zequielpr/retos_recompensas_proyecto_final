@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
+import 'package:retos_proyecto/datos/CollecUsers.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import '../../../Servicios/Autenticacion/NombreUsuario.dart';
@@ -77,21 +78,40 @@ class _ModificarNombreState extends State<ModificarNombre> {
         ));
   }
 
-  void _guardarNombre(String nombre) {
+  Future<void> _guardarNombre(String nombre) async{
     var mensaje = 'Nombre actualizado correctamente';
     if (nombre.length <= 30) {
-      CurrentUser.currentUser?.updateDisplayName(nombre).catchError((onError){
-        mensaje = 'Error al actualizar el nombre';
-      });
-      NombreUsuarioWidget.vistaModificarUserName((){});
-      NombreUsuarioWidget.vistaPerfil((){});
+      await CollecUser.COLECCION_USUARIOS
+          .doc(CurrentUser.getIdCurrentUser())
+          .update({'nombre': nombre}).then(
+              (value) => CurrentUser.currentUser?.updateDisplayName(nombre));
+      NombreUsuarioWidget.vistaModificarUserName(() {});
+      NombreUsuarioWidget.vistaPerfil(() {});
 
       final snackBar = SnackBar(
         content: Text(mensaje),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-
+      context.router.pop();
+      return;
     }
+
+    actions(BuildContext context){
+      return <Widget>[
+        TextButton(
+          onPressed: () {
+            context.router.pop();
+          },
+          child: const Text('Ok'),
+        ),
+      ];
+    }
+    var titulo = const Text('Nombre', textAlign: TextAlign.center);
+    var message = const Text(
+      'Introduzca 30 0 menos caracteres',
+      textAlign: TextAlign.center,
+    );
+
+
   }
 }
