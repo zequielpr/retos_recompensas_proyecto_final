@@ -6,7 +6,6 @@ import '../../../MediaQuery.dart';
 import '../../../datos/CollecUsers.dart';
 import '../../../datos/DatosPersonalUser.dart';
 import '../../../datos/UsuarioActual.dart';
-import '../AdminTutores.dart';
 import '../cambiar_tutor_actual.dart';
 import 'DejarTutoria.dart';
 

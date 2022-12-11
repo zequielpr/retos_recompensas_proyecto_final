@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/AddRewardUser.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/ExpulsarDeSala.dart';
+import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/ListUsuariosTutorados.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 
@@ -40,7 +41,7 @@ class _UserTutoradoState extends State<UserTutorado> {
                   onPressed: () => ExplusarDeSala.ExplusarUsuarioDesala(
                       context,
                       args.collectionReferenceMisiones.parent?.id,
-                      args.snap.reference.id),
+                      args.snap.reference.id, CurrentUser.getIdCurrentUser(), ListUsuarios.titulo, ListUsuarios.mensaje),
                   icon: Icon(Icons.output_rounded)),
             ],
             backgroundColor: Colors.white,

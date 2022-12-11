@@ -6,7 +6,6 @@ import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/datos/Roll_Data.dart';
 
 import '../../datos/CollecUsers.dart';
-import '../Perfil/AdminTutores.dart';
 import '../Perfil/admin_usuarios/Admin_tutores.dart';
 import 'Tutor/VistaInicioTutor.dart';
 import 'Tutorado/InicioVistaTutorado.dart';

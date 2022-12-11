@@ -22,16 +22,20 @@ class Admin_tutorados {
           return Text("Something went wrong");
         }
 
-        if (snapshot.hasData && !snapshot.data!.exists) {
+        if (!snapshot.hasData) {
           Text('Aun no tienes usuarios en tu tutoría');
         }
 
         if (snapshot.hasData) {
+          print('hola');
           try{
             Map<String, dynamic> data =
             snapshot.data!.data() as Map<String, dynamic>;
 
             var listaUsuariosTutorados = data['idUserTotorado'];
+            if(listaUsuariosTutorados.size == 0){
+              return const Text('Aun no tienes usuarios en tu tutoría');
+            }
 
             return ListView.builder(
               padding: const EdgeInsets.all(8),
@@ -50,10 +54,10 @@ class Admin_tutorados {
         }
 
         if(snapshot.connectionState == ConnectionState.waiting){
-          return Center(child: Text('Cargando...'),);
+          return const Center(child: CircularProgressIndicator(),);
         }
 
-        return Center(child: Text('Aun no tienes tutorados'),);
+        return const Center(child: Text('Aun no tienes usuarios en tu tutoría'),);
       },
     );
   }

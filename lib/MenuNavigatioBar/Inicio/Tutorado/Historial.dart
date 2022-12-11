@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:readmore/readmore.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
-import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminTutores.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 
 import '../../../datos/TransferirDatos.dart';

@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
-import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminTutores.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 import 'package:retos_proyecto/datos/DatosPersonalUser.dart';
@@ -38,13 +37,9 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
   void initState() {
     // TODO: implement initState
     NombreUsuarioWidget.vistaPerfil = setState;
-    UsuarioTutores.setCurrentUser(initCurrentTutor);
     super.initState();
   }
 
-  void initCurrentTutor(currentTutor) {
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {

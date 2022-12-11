@@ -5,6 +5,7 @@ import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import '../../../datos/TransferirDatos.dart';
 import '../../../widgets/Cards.dart';
+import '../Tutor/TabPages/pages/UsersTutorados/ExpulsarDeSala.dart';
 
 class ListMisionesTutorado extends StatefulWidget {
   final TransferirDatos args;
@@ -17,12 +18,15 @@ class ListMisionesTutorado extends StatefulWidget {
 class _ListMisionesTutoradoState extends State<ListMisionesTutorado> {
   final TransferirDatos args;
   _ListMisionesTutoradoState(this.args);
+
+  late String idTutor = args.sala.getColecMisiones.parent?.parent.parent?.parent.parent?.id as String;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
           title: Text(args.nombreSala),
+          actions: [IconButton(onPressed: ()=>_salir_de_sala(args.sala.getIdSala, CurrentUser.getIdCurrentUser(), idTutor), icon: Icon(Icons.output))],
         ),
         body: getListMisionesVistTutorado(args.sala.getColecMisiones));
     ;
@@ -68,4 +72,10 @@ class _ListMisionesTutoradoState extends State<ListMisionesTutorado> {
       },
     );
   }
+
+void _salir_de_sala(idSala, idUsuario, idTutor){
+    var titulo = 'Salir';
+    var mensaje = '¿Deseas salir de esta sala?';
+  ExplusarDeSala.ExplusarUsuarioDesala(context, idSala, idUsuario, idTutor, titulo, mensaje);
+}
 }

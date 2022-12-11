@@ -10,7 +10,6 @@ import 'package:retos_proyecto/datos/UsuarioActual.dart';
 import '../../datos/CollecUsers.dart';
 import '../../widgets/Cards.dart';
 import '../../widgets/Dialogs.dart';
-import '../Perfil/AdminTutores.dart';
 import '../Perfil/admin_usuarios/Admin_tutores.dart';
 
 class Salas extends StatefulWidget {

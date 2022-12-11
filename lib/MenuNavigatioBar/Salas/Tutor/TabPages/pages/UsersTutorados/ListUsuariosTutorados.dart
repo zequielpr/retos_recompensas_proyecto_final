@@ -8,6 +8,7 @@ import '../../../../../../Rutas.gr.dart';
 import '../../../../../../datos/DatosPersonalUser.dart';
 import '../../../../../../datos/SalaDatos.dart';
 import '../../../../../../datos/TransferirDatos.dart';
+import '../../../../../../datos/UsuarioActual.dart';
 import '../../../../../../widgets/Dialogs.dart';
 import 'ExpulsarDeSala.dart';
 
@@ -23,6 +24,10 @@ class ListUsuarios extends StatelessWidget {
       required this.contextSala,
       required this.collectionReferenceMisiones})
       : super(key: key);
+
+
+  static const String titulo = 'Expulsar';
+  static const String mensaje = '¿Deseas explusar este usuario de esta sala?';
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +91,7 @@ class ListUsuarios extends StatelessWidget {
                               IconButton(
                                   icon: const Icon(Icons.output_rounded,
                                       size: 25),
-                                  onPressed: () => ExplusarDeSala.ExplusarUsuarioDesala(context, idSala, documentSnapshot.id)),
+                                  onPressed: () => ExplusarDeSala.ExplusarUsuarioDesala(context, idSala, documentSnapshot.id, CurrentUser.getIdCurrentUser(), titulo, mensaje)),
                               // This icon button is used to delete a single product
                             ],
                           ),
