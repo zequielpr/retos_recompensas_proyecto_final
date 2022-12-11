@@ -81,14 +81,11 @@ class _SalasState extends State<Salas> {
             .doc(tutorActual)
             .snapshots(),
         builder: (context, snapshot) {
-
-          if(snapshot.connectionState == ConnectionState.waiting){
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(),
             );
           }
-
-
 
           var documentSnapShot = snapshot.data as DocumentSnapshot;
 
@@ -137,13 +134,12 @@ class _SalasState extends State<Salas> {
           .collection('salas')
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-
-        if(streamSnapshot.connectionState == ConnectionState.waiting){
+        if (streamSnapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         }
-        if(streamSnapshot.data?.docs.isEmpty == true){
+        if (streamSnapshot.data?.docs.isEmpty == true) {
           return const Center(
             child: Text('Crea una sala'),
           );
@@ -172,20 +168,25 @@ class _SalasState extends State<Salas> {
   Future<int> getNumerosalas() async {
     return await CollecUser.COLECCION_USUARIOS
         .doc(CurrentUser.getIdCurrentUser())
-        .collection('rolTutor').doc(CurrentUser.getIdCurrentUser()).collection('salas').get()
+        .collection('rolTutor')
+        .doc(CurrentUser.getIdCurrentUser())
+        .collection('salas')
+        .get()
         .then((value) => value.size);
   }
 
   //Funcion para crear nuevas salas
   Future<void> crearSala() async {
-    actions(BuildContext context){
+    actions(BuildContext context) {
       return <Widget>[
         TextButton(
           onPressed: () => context.router.pop(),
           child: Text('Ok'),
         )
       ];
-    };
+    }
+
+    ;
 
     var title =
         const Text('Numero maximo de salas', textAlign: TextAlign.center);
@@ -200,6 +201,21 @@ class _SalasState extends State<Salas> {
   }
 
   Future<void> showModalCrearSala() async {
+    bool botonActivo = true;
+    var mensajeAdver = Row(
+      children: [
+        Icon(
+          Icons.info_outline,
+          color: Colors.red,
+          size: 16,
+        ),
+        Text(
+          'El nombre de la sala debe terner 16 o menos caracteres',
+          style: TextStyle(color: Colors.red, fontSize: 12),
+        )
+      ],
+    );
+
     var nombreSala = TextEditingController();
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
@@ -208,43 +224,46 @@ class _SalasState extends State<Salas> {
         isScrollControlled: true,
         context: context,
         builder: (BuildContext ctx) {
-          return Padding(
-            padding: EdgeInsets.only(
-                top: 10,
-                left: 20,
-                right: 20,
-                // prevent the soft keyboard from covering text fields
-                bottom: MediaQuery.of(ctx).viewInsets.bottom + 30),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                /*  Row(children: [
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                  top: 10,
+                  left: 20,
+                  right: 20,
+                  // prevent the soft keyboard from covering text fields
+                  bottom: MediaQuery.of(ctx).viewInsets.bottom + 30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  /*  Row(children: [
                   IconButton(onPressed: (){}, icon: Icon(Icons.cancel_outlined))
                 ],),*/
 
-                Row(
-                  //mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Crear una nueva sala",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                  Row(
+                    //mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Crear una nueva sala",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: Pantalla.getPorcentPanntalla(29, context, "x")),
-                      child: IconButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          icon: const Icon(Icons.close)),
-                    )
-                  ],
-                ),
-                /*const ListTile(
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left:
+                                Pantalla.getPorcentPanntalla(29, context, "x")),
+                        child: IconButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            icon: const Icon(Icons.close)),
+                      )
+                    ],
+                  ),
+                  /*const ListTile(
                     leading: Material(
                       color: Colors.transparent,
                     ),
@@ -254,58 +273,78 @@ class _SalasState extends State<Salas> {
                           fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                 ),*/
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextField(
-                    controller: nombreSala,
-                    decoration:
-                        const InputDecoration(labelText: 'Nombre de sala'),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      children: [
+                        TextField(
+                          onChanged: (nombreSala) {
+                            if (nombreSala.length > 16) {
+                              setState(() {
+                                botonActivo = false;
+                              });
+                              return;
+                            }
+                            setState(() {
+                              botonActivo = true;
+                            });
+                          },
+                          controller: nombreSala,
+                          decoration: const InputDecoration(
+                              labelText: 'Nombre de sala'),
+                        ),
+                        botonActivo == false?mensajeAdver:Text('')
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-
-                //Boton de enviar solicitud
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: ElevatedButton(
-                    child: Text('Crear sala'),
-                    onPressed: () async {
-                      final String name = nombreSala.text;
-
-                      if (name.isNotEmpty) {
-                        // Persist a new product to Firestore
-                        await CollecUser.COLECCION_USUARIOS
-                            .doc(CurrentUser.getIdCurrentUser())
-                            .collection('rolTutor')
-                            .doc(CurrentUser.getIdCurrentUser())
-                            .collection('salas')
-                            .add({
-                          "NombreSala": name,
-                          'numMisiones': 0,
-                          'numTutorados': 0
-                        }).whenComplete(() => {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text(
-                                              'Sala creada correctamente')))
-                                });
-                        nombreSala.text = '';
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text(
-                                'Escriba en nombre de la sala. Debe tener al menos dos letras')));
-                      }
-
-                      // Hide the bottom sheet
-                      Navigator.of(context).pop();
-                    },
+                  const SizedBox(
+                    height: 20,
                   ),
-                )
-              ],
-            ),
-          );
+
+                  //Boton de enviar solicitud
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: ElevatedButton(
+                      child: Text('Crear sala'),
+                      onPressed: botonActivo == true
+                          ? () async {
+                              final String name = nombreSala.text;
+
+                              if (name.isNotEmpty) {
+                                // Persist a new product to Firestore
+                                await CollecUser.COLECCION_USUARIOS
+                                    .doc(CurrentUser.getIdCurrentUser())
+                                    .collection('rolTutor')
+                                    .doc(CurrentUser.getIdCurrentUser())
+                                    .collection('salas')
+                                    .add({
+                                  "NombreSala": name,
+                                  'numMisiones': 0,
+                                  'numTutorados': 0
+                                }).whenComplete(() => {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                                  content: Text(
+                                                      'Sala creada correctamente')))
+                                        });
+                                nombreSala.text = '';
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'Escriba en nombre de la sala. Debe tener al menos dos letras')));
+                              }
+
+                              // Hide the bottom sheet
+                              Navigator.of(context).pop();
+                            }
+                          : null,
+                    ),
+                  )
+                ],
+              ),
+            );
+          });
         });
   }
 }

@@ -27,10 +27,12 @@ class Misiones extends StatelessWidget {
         stream: collectionMisiones.snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
           if (streamSnapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator(),);
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
 
-          if(streamSnapshot.data?.docs.isEmpty == true){
+          if (streamSnapshot.data?.docs.isEmpty == true) {
             return const Center(
               child: Text('Crea una misión'),
             );
@@ -124,83 +126,163 @@ class MyStatefulWidgetState extends State<MyStatefulWidget> {
   List<bool> isSelected = [true, false];
   String tipoMissSelect = "nomal";
   double _currentSliderValue = 15;
+  var nombreMisionController = TextEditingController();
+  var objetivoMisionController = TextEditingController();
+  var isFieldNombreCorrect = true;
+  var isFieldObjetiveCorrect = true;
+  var mensajeAdverNombreMision = Row(
+    children: [
+      Icon(
+        Icons.info_outline,
+        color: Colors.red,
+        size: 16,
+      ),
+      Text(
+        'El nombre de la mision debe tener 24 caracteres o menos',
+        style: TextStyle(color: Colors.red, fontSize: 12),
+      )
+    ],
+  );
+
+  var mensajeAdverObjectiveMision = Row(
+    children: [
+      Icon(
+        Icons.info_outline,
+        color: Colors.red,
+        size: 16,
+      ),
+      Text(
+        'El objetivo de la mision debe tener 150 caracteres o menos',
+        style: TextStyle(color: Colors.red, fontSize: 12),
+      )
+    ],
+  );
 
   MyStatefulWidgetState(this.collectionReferenceMisiones, this.contextSala);
 
+
+
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Container(
+        margin: EdgeInsets.only(
+            left: Pantalla.getPorcentPanntalla(4, context, 'x'),
+            right: Pantalla.getPorcentPanntalla(4, context, 'x')),
         child: Column(
-      children: <Widget>[
-        SizedBox(
-          height: Pantalla.getPorcentPanntalla(4, context, 'y'),
-        ),
+          children: <Widget>[
+            SizedBox(
+              height: Pantalla.getPorcentPanntalla(4, context, 'y'),
+            ),
 
-        //Nombre de misión
-        nombreMision.getInstance,
+            //Nombre de misión
+            TextField(
+              controller: nombreMisionController,
+              maxLines: 1,
+              onChanged: (nombreMision){
+                if(nombreMision.length > 24){
+                 setState(() {
+                   isFieldNombreCorrect = false;
+                 });
+                 return;
+                }
+                setState(() {
+                  isFieldNombreCorrect = true;
+                });
+              },
+              obscureText: oculto,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Nombre',
+              ),
+            ),
+            isFieldNombreCorrect == false?mensajeAdverNombreMision:Text(''),
 
-        //Objetivos de mision
-        objetivoMision.getInstance,
+            SizedBox(
+              height: Pantalla.getPorcentPanntalla(2, context, 'y'),
+            ),
 
-        Slider(
-          value: _currentSliderValue,
-          max: 25,
-          divisions: 5,
-          label: _currentSliderValue.round().toString() + ' puntos.',
-          onChanged: (double value) {
-            setState(() {
-              _currentSliderValue = value;
-            });
-          },
-        ),
+            //Objetivos de mision
+            TextField(
+              controller: objetivoMisionController,
+              maxLines: 4,
+              onChanged: (objetivoMision){
+                if(objetivoMision.length > 150){
+                  setState(() {
+                    isFieldObjetiveCorrect = false;
+                  });
+                  return;
+                }
+                setState(() {
+                  isFieldObjetiveCorrect = true;
+                });
+              },
+              obscureText: oculto,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Nombre',
+              ),
+            ),
+            isFieldObjetiveCorrect== false?mensajeAdverObjectiveMision:Text(''),
 
-        //Boton para guardar mision
-        Padding(
-            padding: EdgeInsets.only(left: 70, right: 70),
-            child: ElevatedButton(
-                onPressed: () async {
-                  if (nombreMision.getValor.isNotEmpty &&
-                      objetivoMision.getValor.isNotEmpty) {
-                    await collectionReferenceMisiones.add({
-                      'fecha': DateTime.now(),
-                      'nombreMision': nombreMision.getValor,
-                      'objetivoMision': objetivoMision.getValor,
-                      'recompensaMision': _currentSliderValue,
-                      'completada_por': FieldValue.arrayUnion([]),
-                      'solicitu_confirmacion': FieldValue.arrayUnion([])
-                    }).then((value) {
-                      Navigator.pop(
-                          contextSala); //Regresa al contextxo de la sala
-                      ScaffoldMessenger.of(contextSala).showSnackBar(
-                          const SnackBar(
-                              content: Text('Mision añadida correctamente')));
-                    });
-                    return;
-                  }
+            Slider(
+              value: _currentSliderValue,
+              max: 25,
+              divisions: 5,
+              label: _currentSliderValue.round().toString() + ' puntos.',
+              onChanged: (double value) {
+                setState(() {
+                  _currentSliderValue = value;
+                });
+              },
+            ),
 
-                  actions(BuildContext context){
-                    return <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          context.router.pop();
-                        },
-                        child: const Text('Ok'),
-                      ),
-                    ];
-                  }
+            //Boton para guardar mision
+            Padding(
+                padding: EdgeInsets.only(left: 70, right: 70),
+                child: ElevatedButton(
+                    onPressed: isFieldNombreCorrect && isFieldObjetiveCorrect? () async {
+                      if (nombreMisionController.text.isNotEmpty &&
+                          objetivoMisionController.text.isNotEmpty) {
+                        await collectionReferenceMisiones.add({
+                          'fecha': DateTime.now(),
+                          'nombreMision': nombreMisionController.text,
+                          'objetivoMision': objetivoMisionController.text,
+                          'recompensaMision': _currentSliderValue,
+                          'completada_por': FieldValue.arrayUnion([]),
+                          'solicitu_confirmacion': FieldValue.arrayUnion([])
+                        }).then((value) {
+                          Navigator.pop(
+                              contextSala); //Regresa al contextxo de la sala
+                          ScaffoldMessenger.of(contextSala).showSnackBar(
+                              const SnackBar(
+                                  content:
+                                      Text('Mision añadida correctamente')));
+                        });
+                        return;
+                      }
 
-                  var titulo = const Text('Rellenar campo', textAlign: TextAlign.center);
-                  var message = const Text(
-                    'Es necesario asignar un titulo y un objetivo para crear una misión',
-                    textAlign: TextAlign.center,
-                  );
+                      actions(BuildContext context) {
+                        return <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              context.router.pop();
+                            },
+                            child: const Text('Ok'),
+                          ),
+                        ];
+                      }
 
-                  Dialogos.mostrarDialog(actions, titulo, message, context);
+                      var titulo = const Text('Rellenar campo',
+                          textAlign: TextAlign.center);
+                      var message = const Text(
+                        'Es necesario asignar un titulo y un objetivo para crear una misión',
+                        textAlign: TextAlign.center,
+                      );
 
-
-                },
-                child: Text('Guardar'))),
-      ],
-    ));
+                      Dialogos.mostrarDialog(actions, titulo, message, context);
+                    }:null,
+                    child: Text('Guardar'))),
+          ],
+        ));
   }
 }

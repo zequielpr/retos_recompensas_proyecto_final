@@ -14,7 +14,12 @@ class Validar {
   }
 
   static bool validarUserName(String userName){
-    print('is valid: ${RegExp(r"^[A-Za-z0-9]+(?:[_][A-Za-z0-9]+)*([_]?)$").hasMatch(userName)}');
-    return RegExp(r"^[A-Za-z0-9]+(?:[_][A-Za-z0-9]+)*([_]?)$").hasMatch(userName);
+    print('is valid: ${RegExp(r"^[A-Za-z0-9]{3,20}(?:[_][A-Za-z0-9]+)*([_]?)$").hasMatch(userName)}');
+    return RegExp(r"^[A-Za-z0-9]{3,20}(?:[_][A-Za-z0-9]+)*([_]?)$").hasMatch(userName);
+  }
+
+
+  static bool validarNombre(String nombre){
+    return RegExp(r"^[A-Za-z]{3,20}(?:[\s][A-Za-z]+)*([\s]?)$").hasMatch(nombre);
   }
 }

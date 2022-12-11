@@ -7,6 +7,7 @@ import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import '../../../Servicios/Autenticacion/NombreUsuario.dart';
 import '../../../datos/TransferirDatos.dart';
+import '../../../datos/ValidarDatos.dart';
 
 class ModificarNombre extends StatefulWidget {
   const ModificarNombre({Key? key}) : super(key: key);
@@ -24,6 +25,7 @@ class _ModificarNombreState extends State<ModificarNombre> {
   }
 
   var nameController = TextEditingController();
+  var mostrarMensajeError = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,10 +57,12 @@ class _ModificarNombreState extends State<ModificarNombre> {
                   controller: nameController,
                   keyboardType: TextInputType.name,
                   autofocus: true,
+                  onChanged: (nombre) => _validarNombre(nombre),
                   decoration: InputDecoration(
                       border: OutlineInputBorder(), labelText: "Nombre"),
                 ),
               ),
+              mostrarMensajeError == true?mensajeError:Text(''),
               Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: SizedBox(
@@ -78,9 +82,35 @@ class _ModificarNombreState extends State<ModificarNombre> {
         ));
   }
 
-  Future<void> _guardarNombre(String nombre) async{
+  void _validarNombre(String nombre) {
+    if(!Validar.validarNombre(nombre)){
+      setState(() {
+        mostrarMensajeError = true;
+      });
+      return;
+    }
+    setState(() {
+      mostrarMensajeError = false;
+    });
+  }
+
+  var mensajeError = Row(
+    children: const [
+      Icon(
+        Icons.info_outline,
+        color: Colors.red,
+        size: 16,
+      ),
+      Text(
+        '3-30 caracteres, solo letra y espacios',
+        style: TextStyle(color: Colors.red, fontSize: 13),
+      )
+    ],
+  );
+
+  Future<void> _guardarNombre(String nombre) async {
     var mensaje = 'Nombre actualizado correctamente';
-    if (nombre.length <= 30) {
+    if (nombre.length <= 30 && nombre.length > 2) {
       await CollecUser.COLECCION_USUARIOS
           .doc(CurrentUser.getIdCurrentUser())
           .update({'nombre': nombre}).then(
@@ -96,7 +126,7 @@ class _ModificarNombreState extends State<ModificarNombre> {
       return;
     }
 
-    actions(BuildContext context){
+    actions(BuildContext context) {
       return <Widget>[
         TextButton(
           onPressed: () {
@@ -106,12 +136,11 @@ class _ModificarNombreState extends State<ModificarNombre> {
         ),
       ];
     }
+
     var titulo = const Text('Nombre', textAlign: TextAlign.center);
     var message = const Text(
       'Introduzca 30 0 menos caracteres',
       textAlign: TextAlign.center,
     );
-
-
   }
 }
