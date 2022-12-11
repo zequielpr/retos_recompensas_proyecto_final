@@ -22,46 +22,50 @@ class UsuarioTutores {
     });
   }
 
-
-
-
   static getAllTutores() {
+    return StreamBuilder(
+        stream: CollecUser.COLECCION_USUARIOS
+            .doc(CurrentUser.getIdCurrentUser())
+            .collection('rolTutorado')
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Text('Something went wrong');
+          }
 
-    if(tutorActual.length == 0){
-      return Center(child: Text('Aún no tienes un tutor'),);
-    }
-    return FutureBuilder<QuerySnapshot>(
-      future: CollecUser.COLECCION_USUARIOS
-          .doc(CurrentUser.getIdCurrentUser())
-          .collection('rolTutorado')
-          .get(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasError) {
-          return Text("Something went wrong");
-        }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
 
-        if (snapshot.hasData) {
-          Text('Aun no tienes usuarios en tu tutoría');
-        }
+          if (snapshot.hasError) {
+            return Text("Algo ha ido mal");
+          }
 
-        if (snapshot.connectionState == ConnectionState.done) {
-          return ListView.builder(
-            padding: const EdgeInsets.all(8),
-            itemCount: snapshot.data?.docs.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                child: Center(
-                  child: getCardUsuarioTutorado(
-                      snapshot.data?.docs[index].id, context),
-                ),
-              );
-            },
-          );
-        }
+          if (snapshot.data?.docs.length == 0) {
+            return Center(
+              child: Text('Aún no tienes un tutor'),
+            );
+          }
 
-        return Text("loading");
-      },
-    );
+          if (snapshot.hasData) {
+            return ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: snapshot.data?.docs.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  child: Center(
+                    child: getCardUsuarioTutorado(
+                        snapshot.data?.docs[index].id, context),
+                  ),
+                );
+              },
+            );
+          } else {
+            return Text('Aun no tienes un tutor');
+          }
+        });
   }
 
   static getCardUsuarioTutorado(String? idUsuario, BuildContext context) {
@@ -82,24 +86,31 @@ class UsuarioTutores {
           height: Pantalla.getPorcentPanntalla(5, context, 'y'),
           width: Pantalla.getPorcentPanntalla(20, context, 'x'),
           child: Row(
-            children: [ marcarTutorActual(idUsuario), opciones(idUsuario)],
+            children: [marcarTutorActual(idUsuario), opciones(idUsuario)],
           ),
         ),
       ),
     );
   }
 
- static Widget marcarTutorActual(idUsuario){
+  static Widget marcarTutorActual(idUsuario) {
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
-          void initCurrentTutor(currentTutor) {
-            setState(() {});
-          }
-          UsuarioTutores.setCurrentUser(initCurrentTutor);
+      void initCurrentTutor(currentTutor) {
+        setState(() {});
+      }
 
-          return tutorActual == idUsuario?Icon(Icons.person_pin_rounded, ):Icon(Icons.person_pin_rounded, color: Colors.transparent, );
-        }
-    );
+      UsuarioTutores.setCurrentUser(initCurrentTutor);
+
+      return tutorActual == idUsuario
+          ? Icon(
+              Icons.person_pin_rounded,
+            )
+          : Icon(
+              Icons.person_pin_rounded,
+              color: Colors.transparent,
+            );
+    });
   }
 
   static String _selectedMenu = '';
@@ -117,13 +128,13 @@ class UsuarioTutores {
           itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
                 PopupMenuItem<Menu>(
                   value: Menu.AddMision,
-                  onTap: () => DejarTutoria.eliminarTutor( context, idTutor),
+                  onTap: () => DejarTutoria.eliminarTutor(context, idTutor),
                   child: Text('Dejar tutoría'),
                 ),
                 PopupMenuItem<Menu>(
                   value: Menu.EliminarSala,
                   child: Text('Seleccionar tutoría'),
-                  onTap: ()=> TutorActual.setNewActualTutor(idTutor),
+                  onTap: () => TutorActual.setNewActualTutor(idTutor),
                 )
               ]);
     });

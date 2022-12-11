@@ -70,7 +70,7 @@ class _ModificarNombreState extends State<ModificarNombre> {
                   height: 42,
                   child: ElevatedButton(
                     style: ButtonStyle(elevation: MaterialStateProperty.all(0)),
-                    onPressed: () => _guardarNombre(nameController.text),
+                    onPressed: mostrarMensajeError== false?() =>  _guardarNombre(nameController.text):null,
                     child: Text('Guardar',
                         style: GoogleFonts.roboto(
                             fontSize: 17, fontWeight: FontWeight.w600)),

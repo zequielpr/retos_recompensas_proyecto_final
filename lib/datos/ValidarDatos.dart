@@ -20,6 +20,6 @@ class Validar {
 
 
   static bool validarNombre(String nombre){
-    return RegExp(r"^[A-Za-z]{3,20}(?:[\s][A-Za-z]+)*([\s]?)$").hasMatch(nombre);
+    return RegExp(r"^[A-Za-z\u00C0-\u017F]{3,20}(?:[\s][A-Za-z\u00C0-\u017F]+)*([\s]?)$").hasMatch(nombre);
   }
 }

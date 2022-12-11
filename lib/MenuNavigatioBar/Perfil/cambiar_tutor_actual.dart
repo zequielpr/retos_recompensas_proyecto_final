@@ -22,6 +22,14 @@ class MostrarUsuarios extends StatefulWidget {
 }
 
 class _MostrarUsuariosState extends State<MostrarUsuarios> {
+  void initState() {
+    UsuarioTutores.setCurrentUser(initCurrentTutor);
+    super.initState();
+  }
+
+  void initCurrentTutor(currentTutor) {
+    setState(() {});
+  }
   @override
   Widget build(BuildContext context) {
     return Roll_Data.ROLL_USER_IS_TUTORADO

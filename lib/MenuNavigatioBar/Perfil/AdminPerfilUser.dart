@@ -34,80 +34,59 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
   static var actualizarCuerpo;
   static var actualizarStateUsername;
 
-@override
+  @override
   void initState() {
     // TODO: implement initState
-  NombreUsuarioWidget.vistaPerfil = setState;
+    NombreUsuarioWidget.vistaPerfil = setState;
+    UsuarioTutores.setCurrentUser(initCurrentTutor);
+    super.initState();
   }
 
+  void initCurrentTutor(currentTutor) {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Perfil'),
-        actions: [
-          IconButton(
-            onPressed: () =>  MenuOption.getMenuOption(context),
-            icon: const Icon(Icons.menu),
-          )
-        ],
-        bottom: PreferredSize(
-          preferredSize:
-              Size.fromHeight(Pantalla.getPorcentPanntalla(19, context, 'y')),
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: Pantalla.getPorcentPanntalla(2, context, 'y'),
-              ),
-              ListTile(
-                leading: DatosPersonales.getAvatar(
-                    CurrentUser.getIdCurrentUser(), 30),
-                title: DatosPersonales.getDato(CurrentUser.getIdCurrentUser(), 'nombre'),
-                subtitle: DatosPersonales.getDato(
-                    CurrentUser.getIdCurrentUser(), 'nombre_usuario'),
-              ),
-              //_editarPerfil(),
-              rolActual(),
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text('Perfil'),
+          actions: [
+            IconButton(
+              onPressed: () => MenuOption.getMenuOption(context),
+              icon: const Icon(Icons.menu),
+            )
+          ],
+          bottom: PreferredSize(
+            preferredSize:
+                Size.fromHeight(Pantalla.getPorcentPanntalla(19, context, 'y')),
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: Pantalla.getPorcentPanntalla(2, context, 'y'),
+                ),
+                ListTile(
+                  leading: DatosPersonales.getAvatar(
+                      CurrentUser.getIdCurrentUser(), 30),
+                  title: DatosPersonales.getDato(
+                      CurrentUser.getIdCurrentUser(), 'nombre'),
+                  subtitle: DatosPersonales.getDato(
+                      CurrentUser.getIdCurrentUser(), 'nombre_usuario'),
+                ),
+                //_editarPerfil(),
+                rolActual(),
 
-              //_email(),
-              //adminPassw(),
-              //cerrarSesion(),
-              //eliminarCuenta()
-            ],
+                //_email(),
+                //adminPassw(),
+                //cerrarSesion(),
+                //eliminarCuenta()
+              ],
+            ),
           ),
         ),
-      ),
-      body: MostrarUsuarios()
-    );
+        body: MostrarUsuarios());
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   Widget _editarPerfil() {
     return Padding(
@@ -156,7 +135,7 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
       return Column(
         children: [
           verRoll(),
-         /* Roll_Data.ROLL_USER_IS_TUTORADO
+          /* Roll_Data.ROLL_USER_IS_TUTORADO
               ? adminTutores(actualizarVista)
               : Text(
                   '',
@@ -174,9 +153,6 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
     });
   }
 
-
-
-
   Widget verRoll() {
     return Padding(
       padding: EdgeInsets.only(left: 20),
@@ -186,8 +162,6 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
       ),
     );
   }
-
-
 
   //Administrar contraseña
   Widget adminPassw() {
@@ -215,7 +189,6 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
   }
 
   //Cerrar sesión
-
 
   //Eliminar cuenta
   Widget eliminarCuenta() {

@@ -30,7 +30,6 @@ class _SalasState extends State<Salas> {
   }
 
   void initState() {
-    var initCurrentTutor = this.initCurrentTutor;
     UsuarioTutores.setCurrentUser(initCurrentTutor);
     super.initState();
   }
