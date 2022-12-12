@@ -54,6 +54,7 @@ class _ModificarNombreState extends State<ModificarNombre> {
               Padding(
                 padding: const EdgeInsets.only(top: 0),
                 child: TextField(
+                  maxLength: 30,
                   controller: nameController,
                   keyboardType: TextInputType.name,
                   autofocus: true,
@@ -102,7 +103,7 @@ class _ModificarNombreState extends State<ModificarNombre> {
         size: 16,
       ),
       Text(
-        '3-30 caracteres, solo letra y espacios',
+        '3-20 caracteres, solo letra y espacios',
         style: TextStyle(color: Colors.red, fontSize: 13),
       )
     ],

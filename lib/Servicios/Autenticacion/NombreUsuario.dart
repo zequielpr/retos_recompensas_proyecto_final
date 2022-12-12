@@ -74,6 +74,7 @@ class NombreUsuarioWidget {
           child: Column(
             children: [
               TextField(
+                maxLength: 30,
                 keyboardType: TextInputType.name,
                 autofocus: true,
                 controller: _userNameController,

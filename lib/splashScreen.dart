@@ -160,6 +160,8 @@ class _MyHomePageState extends State<MyHomePage> {
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user == null) {
         var datos = TransferirCollecion(CollecionUsuarios);
+        if (!mounted)return;
+
         context.router.replace(LoginRouter(args: datos));
       } else {
         //Guardar usuario actual
