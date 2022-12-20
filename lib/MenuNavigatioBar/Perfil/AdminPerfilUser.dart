@@ -130,19 +130,6 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
       return Column(
         children: [
           verRoll(),
-          /* Roll_Data.ROLL_USER_IS_TUTORADO
-              ? adminTutores(actualizarVista)
-              : Text(
-                  '',
-                  style: TextStyle(fontSize: 0),
-                ),*/
-
-          CurrentUser.currentUser?.emailVerified == true
-              ? Text(
-                  '',
-                  style: TextStyle(fontSize: 0),
-                )
-              : virificarEmail(),
         ],
       );
     });
