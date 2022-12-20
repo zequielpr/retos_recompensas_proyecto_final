@@ -28,10 +28,13 @@ class EliminarCuenta {
             var error = onError.toString();
 
             if (error.contains('requires-recent-login')) {
-              var titulo = 'Inicio de session necesario';
-              var mensaje =
-                  'Es necesario inciar sesión recientemente para realizar esta acción';
-              mostrarExepcion(titulo, mensaje, context);
+
+              var title = const Text('Eliminar cuenta', textAlign: TextAlign.center);
+              var message = const Text(
+                'Inicio de session necesario',
+                textAlign: TextAlign.center,
+              );
+              mostrarExepcion(title, message, context);
             }
           }).then((value) => Sesion.cerrarSesion(context)),
           child: Text('Ok'),
