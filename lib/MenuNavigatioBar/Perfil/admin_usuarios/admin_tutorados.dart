@@ -32,9 +32,9 @@ class Admin_tutorados {
             Map<String, dynamic> data =
             snapshot.data!.data() as Map<String, dynamic>;
 
-            var listaUsuariosTutorados = data['idUserTotorado'];
-            if(listaUsuariosTutorados.size == 0){
-              return const Text('Aun no tienes usuarios en tu tutoría');
+            List<dynamic> listaUsuariosTutorados = data['idUserTotorado'];
+            if(listaUsuariosTutorados.isEmpty){
+              return const Center(child: Text('Aun no tienes usuarios en tu tutoría'),);
             }
 
             return ListView.builder(
@@ -50,6 +50,7 @@ class Admin_tutorados {
               },
             );
           }catch(e, s){
+            return const Center(child: Text('Ha ocurrido un error'),);
           }
         }
 
