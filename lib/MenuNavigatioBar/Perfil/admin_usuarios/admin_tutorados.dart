@@ -26,7 +26,7 @@ class Admin_tutorados {
           Text('Aun no tienes usuarios en tu tutoría');
         }
 
-        if (snapshot.hasData) {
+        if (snapshot.hasData && snapshot.data!.data() != null) {
           print('hola');
           try{
             Map<String, dynamic> data =
@@ -50,6 +50,7 @@ class Admin_tutorados {
               },
             );
           }catch(e, s){
+            print('Error $e');
             return const Center(child: Text('Ha ocurrido un error'),);
           }
         }
