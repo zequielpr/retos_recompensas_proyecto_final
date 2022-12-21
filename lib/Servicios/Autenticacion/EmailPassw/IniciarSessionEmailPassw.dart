@@ -17,7 +17,8 @@ import '../Autenticacion.dart';
 class IniSesionEmailPassword extends StatelessWidget {
   final TransDatosInicioSesion args;
   static const ROUTE_NAME = 'iniciarSesionEmailPassw';
-  const IniSesionEmailPassword({Key? key, required this.args}) : super(key: key);
+  const IniSesionEmailPassword({Key? key, required this.args})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return StateIniSesionEmailPassword(
@@ -73,6 +74,8 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
 
   var isBtnActivo = false;
   var isBtnOjoVisible = false;
+  bool isPasswordIncorrect = false;
+  bool elusuarioNoExiste = false;
 
   var paddingTopAppName = 80.0;
   var paddingBottonAppName = 130.0;
@@ -108,9 +111,8 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
     });
   }
 
-
-  void _stateBtnOjo(bool status){
-    setState((){
+  void _stateBtnOjo(bool status) {
+    setState(() {
       isBtnOjoVisible = status;
     });
   }
@@ -182,57 +184,82 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
   }
 
   Widget _getTextFielCorreo() {
-    return TextField(
-      autocorrect: true,
-      onEditingComplete: (){print('holaa');},
-      keyboardType: TextInputType.emailAddress,
-      onChanged: (email) {
-        if (email.isNotEmpty && passwdController.text.isNotEmpty && Validar.validarEmail(email.trim())) {
-          setStateBtn(true);
-          return;
-        }
-        setStateBtn(false);
-      },
-      controller: emailController,
-      decoration: const InputDecoration(
-          hintText: 'ejemplo@gmail.com',
-          border: OutlineInputBorder(),
-          labelText: 'Email'),
+    return Column(
+      children: [
+        TextField(
+          autocorrect: true,
+          onEditingComplete: () {
+            print('holaa');
+          },
+          keyboardType: TextInputType.emailAddress,
+          onChanged: (email) {
+            if (email.isNotEmpty &&
+                passwdController.text.isNotEmpty &&
+                Validar.validarEmail(email.trim())) {
+              setStateBtn(true);
+              return;
+            }
+            setStateBtn(false);
+          },
+          controller: emailController,
+          decoration: const InputDecoration(
+              hintText: 'ejemplo@gmail.com',
+              border: OutlineInputBorder(),
+              labelText: 'Email'),
+        ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: elusuarioNoExiste == true ? Text('Usuario incorrecto', style: TextStyle(fontSize: 14, color: Colors.red), ) : SizedBox(),
+        )
+      ],
     );
   }
 
-
   Widget _getTextFieldPassw() {
+
+
     return Padding(
       padding: const EdgeInsets.only(top: 20),
-      child: TextField(
-        keyboardType: TextInputType.visiblePassword,
-        autofocus: false,
-        onChanged: (passw) {
-          passw.isNotEmpty? _stateBtnOjo(true): _stateBtnOjo(false);
-          if (passw.isNotEmpty && emailController.text.isNotEmpty && Validar.validarEmail(emailController.text.trim())) {
-            setStateBtn(true);
-            return;
-          }
-          setStateBtn(false);
-        },
-        controller: passwdController,
-        obscureText: passwOculta,
-        decoration: InputDecoration(
-            suffixIcon: isBtnOjoVisible? IconButton(
-              onPressed: () =>
-              passwOculta == true ? _mostrarPassw() : _ocultarPassw(),
-              icon: iconPassw,
-            ): null,
-            hintText: 'escribe tu contraseña',
-            labelText: 'Contraseña'),
-      ),
+      child: Column(children: [
+        TextField(
+          keyboardType: TextInputType.visiblePassword,
+          autofocus: false,
+          onChanged: (passw) {
+            passw.isNotEmpty ? _stateBtnOjo(true) : _stateBtnOjo(false);
+            if (passw.isNotEmpty &&
+                emailController.text.isNotEmpty &&
+                Validar.validarEmail(emailController.text.trim())) {
+              setStateBtn(true);
+              return;
+            }
+            setStateBtn(false);
+          },
+          controller: passwdController,
+          obscureText: passwOculta,
+          decoration: InputDecoration(
+              suffixIcon: isBtnOjoVisible
+                  ? IconButton(
+                onPressed: () =>
+                passwOculta == true ? _mostrarPassw() : _ocultarPassw(),
+                icon: iconPassw,
+              )
+                  : null,
+              hintText: 'escribe tu contraseña',
+              labelText: 'Contraseña'),
+        ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: isPasswordIncorrect == true ? Text('Contraseña incorrecta', style: TextStyle(fontSize: 14, color: Colors.red), ) : SizedBox(),
+        )],),
     );
   }
 
   Widget _getBtnOlvPassw() {
     return TextButton(
-        onPressed: () {context.router.push(RecoveryPassw());}, child: Text('¿Has olvidado tu contraseña'));
+        onPressed: () {
+          context.router.push(RecoveryPassw());
+        },
+        child: Text('¿Has olvidado tu contraseña'));
   }
 
   Widget _getBtnIniciarSesion() {
@@ -242,16 +269,30 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
         child: ElevatedButton(
             onPressed: isBtnActivo
                 ? () async {
-                    await Autenticar.inciarSesionEmailPasswd(
+                    String resultado = await Autenticar.inciarSesionEmailPasswd(
                         emailController.text.trim(),
                         passwdController.text.trim(),
                         args.collectionReferenceUsers,
                         context);
+                    if (resultado != 's') _indicarDatoErroneo(resultado);
                   }
                 : null,
             child: Text(
               'Iniciar sesion',
             )));
+  }
+
+  void _indicarDatoErroneo(String dato) {
+    isPasswordIncorrect = false;
+    elusuarioNoExiste = false;
+
+    setState(() {
+      if (dato == 'u') {
+        elusuarioNoExiste = true;
+        return;
+      }
+      isPasswordIncorrect = true;
+    });
   }
 
 //Obtener credenciales con los datos especificados

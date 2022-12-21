@@ -135,11 +135,9 @@ class Autenticar {
     }
   }
 
-  static Future<void> inciarSesionEmailPasswd(String email, String password,
+  static Future<String> inciarSesionEmailPasswd(String email, String password,
       CollectionReference collectionReferenceUser, BuildContext context) async {
     try {
-      print(email);
-      print(password);
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
 
@@ -169,11 +167,16 @@ class Autenticar {
           .whenComplete(() async => {await aut.signOut()});
        */
 
+      return 's';//Succeful
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email');
+        return 'u';
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user');
+        return 'p';
+      }
+
+      else{
+        return 'ed'; //Error desconocido
       }
     }
   }
