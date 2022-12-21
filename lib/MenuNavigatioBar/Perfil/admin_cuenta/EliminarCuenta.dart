@@ -21,17 +21,20 @@ class EliminarCuenta {
         TextButton(
             onPressed: () => context.router.pop(), child: Text('Cancelar')),
         TextButton(
-          onPressed: () async =>
-              await CurrentUser.currentUser?.delete().catchError((onError) {
-            var error = onError.toString();
-            print('error $error');
+          onPressed: () async {
+            try{
 
-            if (error.contains('requires-recent-login')) {
-              String title = 'Eliminar cuenta';
-              String message = 'Inicio de session necesario';
-              mostrarExepcion(title, message, context);
+              await CurrentUser.currentUser?.delete();
+              Sesion.cerrarSesion(context);
+            }catch(e){
+              if (e.toString().contains('requires-recent-login')) {
+                String title = 'Eliminar cuenta';
+                String message = 'Cierra e inicia sesion para realizar esta acción';
+                await context.router.pop().then((value) => mostrarExepcion(title, message, context));
+                
+              }
             }
-          }).then((value) => Sesion.cerrarSesion(context)),
+          },
           child: Text('Ok'),
         ),
       ];
@@ -41,13 +44,14 @@ class EliminarCuenta {
   }
 
   static mostrarExepcion(titulo, mensaje, BuildContext context) {
+    
     action(BuildContext context) {
       return <Widget>[
         TextButton(
           onPressed: () {
             context.router.pop();
           },
-          child: const Text('No'),
+          child: const Text('Ok'),
         ),
       ];
     }
