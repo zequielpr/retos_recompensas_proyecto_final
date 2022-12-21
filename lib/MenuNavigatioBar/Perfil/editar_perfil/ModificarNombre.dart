@@ -116,6 +116,8 @@ class _ModificarNombreState extends State<ModificarNombre> {
           .doc(CurrentUser.getIdCurrentUser())
           .update({'nombre': nombre}).then(
               (value) => CurrentUser.currentUser?.updateDisplayName(nombre));
+      CurrentUser.currentUser?.reload();
+      CurrentUser.setCurrentUser();
       NombreUsuarioWidget.vistaModificarUserName(() {});
       NombreUsuarioWidget.vistaPerfil(() {});
 

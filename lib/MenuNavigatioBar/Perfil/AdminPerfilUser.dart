@@ -64,8 +64,7 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
                 ListTile(
                   leading: DatosPersonales.getAvatar(
                       CurrentUser.getIdCurrentUser(), 30),
-                  title: DatosPersonales.getDato(
-                      CurrentUser.getIdCurrentUser(), 'nombre'),
+                  title: Text(CurrentUser.currentUser?.displayName as String),
                   subtitle: DatosPersonales.getDato(
                       CurrentUser.getIdCurrentUser(), 'nombre_usuario'),
                 ),

@@ -66,7 +66,7 @@ class _EditarPerfilState extends State<EditarPerfil> {
                 leading: Icon(Icons.edit),
                 onTap: () => context.router.push(ModificarNombreUsuarioRouter()),
                 visualDensity: VisualDensity.compact,
-                title: DatosPersonales.getDato(CurrentUser.getIdCurrentUser(), 'nombre_usuario'),
+                title: Text(CurrentUser.currentUser?.displayName as String),
                 trailing: Icon(
                   Icons.arrow_forward_ios_sharp,
                   size: arrowSize,
