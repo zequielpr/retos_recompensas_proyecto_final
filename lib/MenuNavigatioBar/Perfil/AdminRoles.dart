@@ -63,15 +63,12 @@ class AdminRoll {
         ),
       ];
     }
-    var titulo = const Text('Cambiar Rol', textAlign: TextAlign.center);
-    var message = const Text(
-      'Desea cambiar de rol? \n al cambiar de rol se reiniciara la aplicación',
-      textAlign: TextAlign.center,
-    );
+    var titulo = 'Cambiar Rol';
+    var message = 'Desea cambiar de rol? \n al cambiar de rol se reiniciara la aplicación';
     showMessaje(actions, titulo, message, context);
   }
 
-  static showMessaje(actions, titulo, mensaje, BuildContext context) {
+  static showMessaje(actions, String titulo, String mensaje, BuildContext context) {
     Dialogos.mostrarDialog(actions, titulo, mensaje, context);
   }
 

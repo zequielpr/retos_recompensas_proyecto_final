@@ -272,12 +272,8 @@ class MyStatefulWidgetState extends State<MyStatefulWidget> {
                         ];
                       }
 
-                      var titulo = const Text('Rellenar campo',
-                          textAlign: TextAlign.center);
-                      var message = const Text(
-                        'Es necesario asignar un titulo y un objetivo para crear una misión',
-                        textAlign: TextAlign.center,
-                      );
+                      var titulo = 'Rellenar campo';
+                      var message = 'Es necesario asignar un titulo y un objetivo para crear una misión';
 
                       Dialogos.mostrarDialog(actions, titulo, message, context);
                     }:null,

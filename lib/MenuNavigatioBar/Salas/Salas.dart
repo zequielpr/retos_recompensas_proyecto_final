@@ -186,12 +186,8 @@ class _SalasState extends State<Salas> {
 
     ;
 
-    var title =
-        const Text('Numero maximo de salas', textAlign: TextAlign.center);
-    var message = const Text(
-      'Numero maximo de salas alcanzado, debe eliminar una o más salas si desea crear una sala',
-      textAlign: TextAlign.center,
-    );
+    var title ='Numero maximo de salas';
+    var message = 'Numero maximo de salas alcanzado, debe eliminar una o más salas si desea crear una sala';
     var numeroDeSalas = await getNumerosalas();
     numeroDeSalas <= 3
         ? showModalCrearSala()

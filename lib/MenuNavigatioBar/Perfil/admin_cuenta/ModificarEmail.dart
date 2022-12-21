@@ -73,29 +73,17 @@ class _ModificarEmailState extends State<ModificarEmail> {
     (CurrentUser.currentUser?.updateEmail(newEmail))?.catchError((onError) {
       var e = onError.toString();
       if (e.contains('invalid-email')) {
-        title = const Text('Email no válido', textAlign: TextAlign.center);
-        message = const Text(
-          'Introduzca un email válido. Ejemplo@gmail.com',
-          textAlign: TextAlign.center,
-        );
+        title = 'Email no válido';
+        message = 'Introduzca un email válido. Ejemplo@gmail.com';
       } else if (e.contains('firebase_auth/unknown')) {
-        title = const Text('Introduzca un email', textAlign: TextAlign.center);
-        message = const Text(
-          'Introduzca un email',
-          textAlign: TextAlign.center,
-        );
+        title = 'Introduzca un email';
+        message = 'Introduzca un email';
       } else if (e.contains('requires-recent-login')) {
-        title = const Text('Acción necesaria', textAlign: TextAlign.center);
-        message = const Text(
-          'Cierre e inicie sesion para poder realizar esta acción',
-          textAlign: TextAlign.center,
-        );
+        title ='Acción necesaria';
+        message = 'Cierre e inicie sesion para poder realizar esta acción';
       } else if (e.contains('email-already-in-use')) {
-        title = const Text('Email en usao', textAlign: TextAlign.center);
-        message = const Text(
-          'El email introducido ya esta en uso',
-          textAlign: TextAlign.center,
-        );
+        title ='Email en usao';
+        message = 'El email introducido ya esta en uso';
       }
       emailCambiado = false;
       _mostrarExepcion(title, message);

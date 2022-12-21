@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminRoles.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
+import 'package:retos_proyecto/widgets/Dialogs.dart';
 
 import '../../../MediaQuery.dart';
 
@@ -113,60 +114,38 @@ class AdminSala {
   //Eliminar mision
   static Future<void> eliminarMision(
       String? idSala, String idMision, BuildContext context) async {
-    var title = const Text('Eliminar mision', textAlign: TextAlign.center);
-    var message = const Text(
-      '¿Deseas eliminar esta misión?',
-      textAlign: TextAlign.center,
-    );
+    var title = 'Eliminar mision';
+    var message = '¿Deseas eliminar esta misión?';
+    actions(BuildContext context){
+      return <Widget>[
+        TextButton(
+          onPressed: () {
+            context.router.pop();
+          },
+          child: Text('Cancelar'),
+        ),
+        TextButton(
+          onPressed: () async {
+            await CollecUser.COLECCION_USUARIOS
+                .doc(
+              CurrentUser.getIdCurrentUser(),
+            )
+                .collection('rolTutor')
+                .doc(CurrentUser.getIdCurrentUser())
+                .collection('salas')
+                .doc(idSala)
+                .collection('misiones')
+                .doc(idMision)
+                .delete()
+                .then(
+                  (value) => context.router.pop(),
+            );
+          },
+          child: Text('Eliminar'),
+        )
+      ];
+    }
 
-    showDialog<String>(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        titlePadding: EdgeInsets.only(
-            left: Pantalla.getPorcentPanntalla(3, context, 'x'),
-            top: Pantalla.getPorcentPanntalla(3, context, 'x'),
-            bottom: Pantalla.getPorcentPanntalla(1, context, 'x')),
-        alignment: Alignment.center,
-        actionsAlignment: MainAxisAlignment.center,
-        buttonPadding: EdgeInsets.all(0),
-        actionsPadding:
-            EdgeInsets.only(top: Pantalla.getPorcentPanntalla(0, context, 'x')),
-        contentPadding: EdgeInsets.only(
-            left: Pantalla.getPorcentPanntalla(3, context, 'x'),
-            right: Pantalla.getPorcentPanntalla(3, context, 'x')),
-        title: title,
-        content: message,
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              context.router.pop();
-            },
-            child: Text('Cancelar'),
-          ),
-          TextButton(
-            onPressed: () async {
-              await CollecUser.COLECCION_USUARIOS
-                  .doc(
-                    CurrentUser.getIdCurrentUser(),
-                  )
-                  .collection('rolTutor')
-                  .doc(CurrentUser.getIdCurrentUser())
-                  .collection('salas')
-                  .doc(idSala)
-                  .collection('misiones')
-                  .doc(idMision)
-                  .delete()
-                  .then(
-                    (value) => context.router.pop(),
-                  );
-            },
-            child: Text('Eliminar'),
-          )
-        ],
-      ),
-    );
-
-    print('id sala: $idSala');
-    print('id mision: $idMision');
+    Dialogos.mostrarDialog(actions, title, message, context);
   }
 }

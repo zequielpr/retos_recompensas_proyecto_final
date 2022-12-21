@@ -207,11 +207,8 @@ class enviarSolicitudeUsuario {
       ];
     }
 
-    var titulo = const Text('Nombre de usuario vacío', textAlign: TextAlign.center);
-    var message = const Text(
-      'Es necesario escribir un nombre de usuario para enviar una solicitud',
-      textAlign: TextAlign.center,
-    );
+    var titulo ='Nombre de usuario vacío';
+    var message = 'Es necesario escribir un nombre de usuario para enviar una solicitud';
 
     Dialogos.mostrarDialog(actions, titulo, message, context);
 

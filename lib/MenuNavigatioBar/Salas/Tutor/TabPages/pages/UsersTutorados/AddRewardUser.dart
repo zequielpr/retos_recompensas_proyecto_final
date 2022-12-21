@@ -114,11 +114,8 @@ class _AddRewardState extends State<AddReward> {
       ];
     }
 
-    var tituloMensaje = const Text('Rellenar campo', textAlign: TextAlign.center);
-    var message = const Text(
-      'Es necesario asignar un titulo y un contenido para asignar una recompensa',
-      textAlign: TextAlign.center,
-    );
+    var tituloMensaje = 'Rellenar campo';
+    var message = 'Es necesario asignar un titulo y un contenido para asignar una recompensa';
 
     Dialogos.mostrarDialog(actions, tituloMensaje, message, context);
   }

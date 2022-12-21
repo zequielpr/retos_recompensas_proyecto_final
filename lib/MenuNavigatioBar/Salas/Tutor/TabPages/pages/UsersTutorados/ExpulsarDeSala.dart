@@ -51,13 +51,8 @@ class ExplusarDeSala {
         ];
       }
 
-      var _titulo = Text(titulo,
-          textAlign: TextAlign.center);
-      var message = Text(mensaje,
-        textAlign: TextAlign.center,
-      );
 
-      Dialogos.mostrarDialog(actions, _titulo, message, context);
+      Dialogos.mostrarDialog(actions, titulo, mensaje, context);
 
   }
 }

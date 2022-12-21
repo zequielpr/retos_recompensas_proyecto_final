@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../MediaQuery.dart';
 
-class Dialogos{
-  static mostrarDialog(actions, titulo, mensaje, BuildContext context){
+class Dialogos {
+  static mostrarDialog(actions, String titulo, String mensaje, BuildContext context) {
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -16,12 +16,15 @@ class Dialogos{
         actionsAlignment: MainAxisAlignment.center,
         buttonPadding: EdgeInsets.all(0),
         actionsPadding:
-        EdgeInsets.only(top: Pantalla.getPorcentPanntalla(0, context, 'x')),
+            EdgeInsets.only(top: Pantalla.getPorcentPanntalla(0, context, 'x')),
         contentPadding: EdgeInsets.only(
             left: Pantalla.getPorcentPanntalla(3, context, 'x'),
             right: Pantalla.getPorcentPanntalla(3, context, 'x')),
-        title: titulo,
-        content: mensaje,
+        title: Text(titulo, textAlign: TextAlign.center, style: TextStyle(backgroundColor: Colors.blue),),
+        content: Text(
+          mensaje,
+          textAlign: TextAlign.center,
+        ),
         actions: actions(context),
       ),
     );

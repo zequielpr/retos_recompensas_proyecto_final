@@ -8,11 +8,9 @@ import '../../../MediaQuery.dart';
 
 class EliminarCuenta {
   static eliminarCuenta(BuildContext context) {
-    var title = const Text('Eliminar cuenta', textAlign: TextAlign.center);
-    var message = const Text(
-      'Al eliminar tu cuenta no será posible recuperar tus datos',
-      textAlign: TextAlign.center,
-    );
+    String title = 'Eliminar cuenta';
+    String message =
+        'Al eliminar tu cuenta no será posible recuperar tus datos';
 
     preguntarEliminarCuenta(title, message, context);
   }
@@ -26,14 +24,11 @@ class EliminarCuenta {
           onPressed: () async =>
               await CurrentUser.currentUser?.delete().catchError((onError) {
             var error = onError.toString();
+            print('error $error');
 
             if (error.contains('requires-recent-login')) {
-
-              var title = const Text('Eliminar cuenta', textAlign: TextAlign.center);
-              var message = const Text(
-                'Inicio de session necesario',
-                textAlign: TextAlign.center,
-              );
+              String title = 'Eliminar cuenta';
+              String message = 'Inicio de session necesario';
               mostrarExepcion(title, message, context);
             }
           }).then((value) => Sesion.cerrarSesion(context)),
@@ -46,10 +41,14 @@ class EliminarCuenta {
   }
 
   static mostrarExepcion(titulo, mensaje, BuildContext context) {
-    action() {
+    action(BuildContext context) {
       return <Widget>[
         TextButton(
-            onPressed: () => context.router.pop(), child: Text('Cancelar')),
+          onPressed: () {
+            context.router.pop();
+          },
+          child: const Text('No'),
+        ),
       ];
     }
 

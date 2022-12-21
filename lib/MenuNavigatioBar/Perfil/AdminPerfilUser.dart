@@ -223,11 +223,8 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
         ),
       ];
 
-      var titulo = const Text('Link enviado', textAlign: TextAlign.center);
-      var message = Text(
-        'Abra el email enviado a ${CurrentUser.currentUser?.email} para virificar tu email',
-        textAlign: TextAlign.center,
-      );
+      var titulo = 'Link enviado';
+      var message = 'Abra el email enviado a ${CurrentUser.currentUser?.email} para virificar tu email';
 
       AdminRoll.showMessaje(actions, titulo, message, context);
     });

@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/widgets/Dialogs.dart';
 
 import '../../../datos/TransferirDatos.dart';
 
@@ -86,10 +87,16 @@ class _RecoveryPasswState extends State<RecoveryPassw> {
       late String title;
       late String message;
       var ex = e.toString();
-      var boton = TextButton(
-        onPressed: () => Navigator.of(context).pop(),
-        child: const Text('OK'),
-      );
+      actions(BuildContext context){
+        return <Widget>[
+          TextButton(
+            onPressed: () {
+              context.router.pop();
+            },
+            child: const Text('Ok'),
+          ),
+        ];
+      };
       print('error $ex');
       if (ex.contains('invalid-email')) {
         title = 'Email no válido';
@@ -110,16 +117,22 @@ class _RecoveryPasswState extends State<RecoveryPassw> {
         message = 'Intentelo más tarde';
       }
 
-      mostrarMensaje(title, message, boton);
+      Dialogos.mostrarDialog(actions, title, message, context);
     }).then((value) {
       var message = 'Link enviado a ${emailController.text}';
-      var boton = TextButton(
-        onPressed: () => context.router.replace(IniSesionEmailPasswordRouter(
-            args: TransDatosInicioSesion('', false, true, emailController.text,
-                CollecUser.COLECCION_USUARIOS))),
-        child: const Text('OK'),
-      );
-      enviar ? mostrarMensaje('Link enviado', message, boton) : null;
+
+      actions(BuildContext context){
+        return <Widget>[
+          TextButton(
+            onPressed: () => context.router.replace(IniSesionEmailPasswordRouter(
+                args: TransDatosInicioSesion('', false, true, emailController.text,
+                    CollecUser.COLECCION_USUARIOS))),
+            child: const Text('OK'),
+          ),
+        ];
+      }
+      String titulo = 'Link enviado';
+      enviar ? Dialogos.mostrarDialog(actions, titulo, message, context) : null;
     });
   }
 
