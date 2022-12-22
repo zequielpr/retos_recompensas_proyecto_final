@@ -63,6 +63,7 @@ class _AddRewardState extends State<AddReward> {
 
   Widget _getTextFielTitulo() {
     return TextField(
+      maxLength: 20,
       autofocus: true,
       autocorrect: true,
       controller: tituloController,
@@ -76,6 +77,7 @@ class _AddRewardState extends State<AddReward> {
   Widget _getTextFielContenido() {
     return TextField(
       maxLines: 5,
+      maxLength: 200,
       autocorrect: true,
       controller: contenidoController,
       decoration: const InputDecoration(

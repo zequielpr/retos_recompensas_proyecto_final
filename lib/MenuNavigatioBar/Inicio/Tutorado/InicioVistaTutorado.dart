@@ -207,7 +207,7 @@ class InicioVistaTutorado {
     );
   }
 
-  static mostrarMensaje(int puntosActuales, BuildContext context) {
+  static mostrarMensaje(puntosActuales, BuildContext context) {
     actions(BuildContext context) {
       return <Widget>[
         TextButton(
