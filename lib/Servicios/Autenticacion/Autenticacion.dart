@@ -143,6 +143,9 @@ class Autenticar {
 
       String? uidUser = credential.user?.uid.trim();
       var datos;
+      if(credential.user?.emailVerified == false){
+        return 'env'; //Email no verificado
+      }
 
       await collectionReferenceUser.doc(uidUser).get().then((snap) => {
             datos = TransferirDatosInicio(snap['rol_tutorado']),
@@ -166,6 +169,7 @@ class Autenticar {
           ?.sendEmailVerification()
           .whenComplete(() async => {await aut.signOut()});
        */
+
 
       return 's';//Succeful
     } on FirebaseAuthException catch (e) {

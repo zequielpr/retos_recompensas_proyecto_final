@@ -351,7 +351,7 @@ class _LoginState extends State<Login> {
 
   //Metodos de cards
   void _buttonPasswdEmail() {
-    var datos = TransDatosInicioSesion('', true, false, '', collecUsuarios);
+    var datos = TransDatosInicioSesion('', true, false, '');
     context.router.push(IniSesionEmailPasswordRouter(args: datos));
 
     /*Autenticar.comprobarNewOrOld(collecUsuarios, context)*/

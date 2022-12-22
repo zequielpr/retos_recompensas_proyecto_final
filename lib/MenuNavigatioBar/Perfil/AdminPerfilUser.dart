@@ -35,6 +35,8 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
 
   @override
   void initState() {
+    CurrentUser.currentUser?.reload();
+    CurrentUser.setCurrentUser();
     // TODO: implement initState
     NombreUsuarioWidget.vistaPerfil = setState;
     super.initState();

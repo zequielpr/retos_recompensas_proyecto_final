@@ -158,7 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
         FirebaseFirestore.instance.collection('usuarios');
     await Future.delayed(Duration(milliseconds: 2500), () {});
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
-      if (user == null) {
+      if (user == null || user.emailVerified == false) {
         var datos = TransferirCollecion(CollecionUsuarios);
         if (!mounted)return;
 

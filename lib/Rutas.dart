@@ -23,6 +23,7 @@ import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/AddRewardUser
 import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/UserTutorado.dart';
 import 'MenuNavigatioBar/Salas/Tutorado/ListMisiones.dart';
 import 'Servicios/Autenticacion/DatosNewUser.dart';
+import 'Servicios/Autenticacion/EmailPassw/InfoVerificacionEmail.dart';
 import 'Servicios/Autenticacion/EmailPassw/IniciarSessionEmailPassw.dart';
 import 'Servicios/Autenticacion/EmailPassw/RecogerEmail.dart';
 import 'Servicios/Autenticacion/EmailPassw/RecogerPassw.dart';
@@ -54,7 +55,7 @@ import 'main.dart';
         page: RecogerPassw, name: 'RecogerPasswRouter', path: '/RecogerPassw'),
     AutoRoute(
         page: RecoveryPassw, name: 'RecoveryPassw', path: '/RecoveryPassw'),
-
+    AutoRoute(page: InfoVerificacionEmail, name: 'InfoVerificacionEmailRouter', path: '/InfoVerificacionEmail'),
     //Ruta de main_principal
     AutoRoute(
       path: "/Main",

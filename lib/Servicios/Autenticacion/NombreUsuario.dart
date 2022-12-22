@@ -210,11 +210,13 @@ class NombreUsuarioWidget {
       //En este caso el el atributo oaUthCredebtial continiene un hash map con la clave y la contrasela para realizar el registro
       //Registrarse con email y contreña
       await Autenticar.registrarConEmailPassw(args.oaUthCredential)
-          .then((userCredential) async => {
-                _currentUser = userCredential?.user,
+          .then((userCredential) async{
+                _currentUser = userCredential?.user;
                 if (_currentUser != null)
                   {
-                    CurrentUser.setCurrentUser(),
+                    CurrentUser.setCurrentUser();
+                    CurrentUser.currentUser?.updatePhotoURL('https://firebasestorage.googleapis.com/v0/b/retosrecompensas.appspot.com/o/Imagen_anonimo.jpg?alt=media&token=b9e53ae2-d606-4a52-a7c5-4c4f146b9c89');
+                    CurrentUser.currentUser?.updateDisplayName( _userNameController.text.trim());
                     await args.collectionReferenceUsers
                         .doc(_currentUser?.uid)
                         .set({
@@ -223,8 +225,8 @@ class NombreUsuarioWidget {
                       "rol_tutorado":
                           args.dropdownValue == "Tutor" ? false : true,
                       'nombre': args.userName,
-                      'imgPerfil': _currentUser?.photoURL
-                    }),
+                      'imgPerfil': 'https://firebasestorage.googleapis.com/v0/b/retosrecompensas.appspot.com/o/Imagen_anonimo.jpg?alt=media&token=b9e53ae2-d606-4a52-a7c5-4c4f146b9c89'
+                    });
                     await args.collectionReferenceUsers
                         .doc(_currentUser?.uid)
                         .collection('notificaciones')
@@ -234,9 +236,11 @@ class NombreUsuarioWidget {
                       'nueva_solicitud': false,
                       'numb_misiones': 0,
                       'numb_solicitudes': 0
-                    }),
-                    Token.guardarToken(),
-                    _context.router.replace(MainRouter())
+                    });
+                    Token.guardarToken();
+                    var datos = TransDatosInicioSesion('', false, true, CurrentUser.currentUser?.email as String);
+                    await _context.router.replaceAll([InfoVerificacionEmailRouter( arg: datos)]);
+
                   }
               });
     } else {

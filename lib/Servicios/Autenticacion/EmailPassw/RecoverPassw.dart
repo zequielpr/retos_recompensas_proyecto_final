@@ -126,7 +126,7 @@ class _RecoveryPasswState extends State<RecoveryPassw> {
           TextButton(
             onPressed: () => context.router.replace(IniSesionEmailPasswordRouter(
                 args: TransDatosInicioSesion('', false, true, emailController.text,
-                    CollecUser.COLECCION_USUARIOS))),
+                ))),
             child: const Text('OK'),
           ),
         ];

@@ -6,11 +6,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/Servicios/Autenticacion/DatosNewUser.dart';
+import 'package:retos_proyecto/datos/CollecUsers.dart';
 import 'package:retos_proyecto/datos/TransferirDatos.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
+import '../../../datos/UsuarioActual.dart';
 import '../../../datos/ValidarDatos.dart';
 import '../Autenticacion.dart';
 
@@ -87,7 +90,7 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
   }
 
   void _ActionCrearUnaCuenta(TransDatosInicioSesion arg) {
-    var datos = TranferirDatosRoll('x', arg.collectionReferenceUsers);
+    var datos = TranferirDatosRoll('x', CollecUser.COLECCION_USUARIOS);
     context.router.push(RollRouter(args: datos));
   }
 
@@ -136,7 +139,7 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
       ),
        */
       body: Padding(
-        padding: EdgeInsets.only(top: paddingTopAppName, left: 40, right: 40),
+        padding: EdgeInsets.only(top: paddingTopAppName, left: Pantalla.getPorcentPanntalla(5, context, 'x'), right: Pantalla.getPorcentPanntalla(5, context, 'x')),
         child: Column(
           children: [
             _getAppName(),
@@ -187,7 +190,7 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
     return Column(
       children: [
         TextField(
-          autocorrect: true,
+          autocorrect: args.focusEmail,
           onEditingComplete: () {
             print('holaa');
           },
@@ -223,7 +226,7 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
       child: Column(children: [
         TextField(
           keyboardType: TextInputType.visiblePassword,
-          autofocus: false,
+          autofocus: args.focusPassw,
           onChanged: (passw) {
             passw.isNotEmpty ? _stateBtnOjo(true) : _stateBtnOjo(false);
             if (passw.isNotEmpty &&
@@ -272,7 +275,7 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
                     String resultado = await Autenticar.inciarSesionEmailPasswd(
                         emailController.text.trim(),
                         passwdController.text.trim(),
-                        args.collectionReferenceUsers,
+                        CollecUser.COLECCION_USUARIOS,
                         context);
                     if (resultado != 's') _indicarDatoErroneo(resultado);
                   }
@@ -283,6 +286,12 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
   }
 
   void _indicarDatoErroneo(String dato) {
+    if(dato == 'env'){
+      var datos = TransDatosInicioSesion('', false, true, CurrentUser.currentUser != null?CurrentUser.currentUser?.email as String:'');
+      context.router.push(InfoVerificacionEmailRouter(arg: datos));
+      return;
+    }
+
     isPasswordIncorrect = false;
     elusuarioNoExiste = false;
 
