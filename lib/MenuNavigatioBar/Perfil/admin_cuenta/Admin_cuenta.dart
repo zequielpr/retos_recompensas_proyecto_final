@@ -61,7 +61,7 @@ class _AdminCuentaState extends State<AdminCuenta> {
                 ),
               ),
             ),
-            Card(
+           /* Card(
               elevation: 0,
               margin: EdgeInsets.all(0),
               child: ListTile(
@@ -74,7 +74,7 @@ class _AdminCuentaState extends State<AdminCuenta> {
                   size: arrowSize,
                 ),
               ),
-            ),
+            ),*/
             Card(
               elevation: 0,
               margin: EdgeInsets.all(0),
