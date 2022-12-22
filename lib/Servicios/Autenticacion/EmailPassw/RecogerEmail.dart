@@ -127,7 +127,7 @@ class _RecogerEmail extends State<RecogerEmail> {
       //Si es existe un metodo de inicio de sesion, se redireje a la ruta de inicio de sesión
       if (metodoInicioSesion.isNotEmpty) {
         var datos = TransDatosInicioSesion('Ya estas registrado, inicia sesión',
-            false, true, email, args.collectionReferenceUsers);
+            false, true, email);
 
         FocusScope.of(context).requestFocus(FocusNode());
         await Future.delayed(const Duration(milliseconds: 70));

@@ -33,6 +33,28 @@ class NombreUsuarioWidget {
   bool _botonActivo = true;
   late User? _currentUser;
 
+  bool noMostrarAdver = true;
+  var mensajeAdver;
+
+  void _mostrarMensjae(mensaje) {
+    _setState(() {
+      noMostrarAdver = false;
+      mensajeAdver = Row(
+        children: [
+          const Icon(
+            Icons.info_outline,
+            color: Colors.red,
+            size: 16,
+          ),
+          Text(
+            mensaje,
+            style: TextStyle(color: Colors.red, fontSize: 13),
+          )
+        ],
+      );
+    });
+  }
+
   Widget textFielNombreUsuario() {
     return Column(
       children: [
@@ -49,17 +71,23 @@ class NombreUsuarioWidget {
         ),
         Padding(
           padding: const EdgeInsets.only(top: 0),
-          child: TextField(
-            keyboardType: TextInputType.name,
-            autofocus: true,
-            controller: _userNameController,
-            onChanged: (usuario) {
-              _esperar(usuario);
-            },
-            decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: "Nombre de usuario",
-                suffixIcon: _estadoUsuario),
+          child: Column(
+            children: [
+              TextField(
+                maxLength: 30,
+                keyboardType: TextInputType.name,
+                autofocus: true,
+                controller: _userNameController,
+                onChanged: (usuario) {
+                  _esperar(usuario);
+                },
+                decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: "Nombre de usuario",
+                    suffixIcon: _estadoUsuario),
+              ),
+              noMostrarAdver == false ? mensajeAdver : Text('')
+            ],
           ),
         ),
         Padding(
@@ -69,9 +97,10 @@ class NombreUsuarioWidget {
             height: 42,
             child: ElevatedButton(
               style: ButtonStyle(elevation: MaterialStateProperty.all(0)),
-              onPressed:
-                  _botonActivo ? () async =>   _guardarNombreUsuario(_args) : null,
-              child: Text(_isRegistrandoUser?"Registrarme":'Guardar',
+              onPressed: _botonActivo
+                  ? () async => _guardarNombreUsuario(_args)
+                  : null,
+              child: Text(_isRegistrandoUser ? "Registrarme" : 'Guardar',
                   style: GoogleFonts.roboto(
                       fontSize: 17, fontWeight: FontWeight.w600)),
             ),
@@ -81,13 +110,12 @@ class NombreUsuarioWidget {
     );
   }
 
-  void _guardarNombreUsuario(_args){
-    if(_isRegistrandoUser){
+  void _guardarNombreUsuario(_args) {
+    if (_isRegistrandoUser) {
       _registrarUsuario(_args);
       return;
     }
     _modificarUserName(_args.userName);
-
   }
 
   void _cambiarCheck(Transform check) {
@@ -98,36 +126,42 @@ class NombreUsuarioWidget {
   }
 
   void _esperar(String userName) {
+    noMostrarAdver = true;
+    _botonActivo = false;
     _cambiarCheck(_escribiendo);
-    _setState(() {
-      _botonActivo = false;
-    });
     print('Nombre: $userName');
 
     _args.setUserName(userName);
     _contador = 0;
     _timer.cancel();
     if (!Validar.validarUserName(userName)) {
-      _botonActivo = false;
+      //Mostrar advertencia especificando por que el nombre de usuario no es valido
+      var mensaje = '3-30 caracteres, no caracteres especiales';
+      _mostrarMensjae(mensaje);
       _cambiarCheck(_noDisponible);
-      return;
-    }
-    _timer = Timer.periodic(Duration(milliseconds: 800), (timer) async {
-      _contador++;
-      if (_contador >= 2) {
-        _cambiarCheck(_espera);
-        await Autenticar.comprUserName(userName).then((resultado) => {
-              if (resultado)
-                {_botonActivo = true, _cambiarCheck(_disponible)}
-              else
-                {_botonActivo = false, _cambiarCheck(_noDisponible)}
-            });
+    } else {
+      _timer = Timer.periodic(Duration(milliseconds: 800), (timer) async {
+        _contador++;
+        if (_contador >= 2) {
+          _cambiarCheck(_espera);
+          await Autenticar.comprUserName(userName).then((resultado) {
+            if (resultado) {
+              _botonActivo = true;
+              _cambiarCheck(_disponible);
+            } else {
+              var mensaje = 'Usuario no disponible';
+              _mostrarMensjae(mensaje);
+              _botonActivo = false;
+              _cambiarCheck(_noDisponible);
+            }
+          });
 
-        _contador = 0;
-        timer.cancel();
-        print("Debe comprobarse el nombre de usuario");
-      }
-    });
+          _contador = 0;
+          timer.cancel();
+          print("Debe comprobarse el nombre de usuario");
+        }
+      });
+    }
   }
 
   var _estadoUsuario = Transform.scale(
@@ -176,11 +210,13 @@ class NombreUsuarioWidget {
       //En este caso el el atributo oaUthCredebtial continiene un hash map con la clave y la contrasela para realizar el registro
       //Registrarse con email y contreña
       await Autenticar.registrarConEmailPassw(args.oaUthCredential)
-          .then((userCredential) async => {
-                _currentUser = userCredential?.user,
+          .then((userCredential) async{
+                _currentUser = userCredential?.user;
                 if (_currentUser != null)
                   {
-                    CurrentUser.setCurrentUser(),
+                    CurrentUser.setCurrentUser();
+                    CurrentUser.currentUser?.updatePhotoURL('https://firebasestorage.googleapis.com/v0/b/retosrecompensas.appspot.com/o/Imagen_anonimo.jpg?alt=media&token=b9e53ae2-d606-4a52-a7c5-4c4f146b9c89');
+                    CurrentUser.currentUser?.updateDisplayName( _userNameController.text.trim());
                     await args.collectionReferenceUsers
                         .doc(_currentUser?.uid)
                         .set({
@@ -189,8 +225,8 @@ class NombreUsuarioWidget {
                       "rol_tutorado":
                           args.dropdownValue == "Tutor" ? false : true,
                       'nombre': args.userName,
-                      'imgPerfil': _currentUser?.photoURL
-                    }),
+                      'imgPerfil': 'https://firebasestorage.googleapis.com/v0/b/retosrecompensas.appspot.com/o/Imagen_anonimo.jpg?alt=media&token=b9e53ae2-d606-4a52-a7c5-4c4f146b9c89'
+                    });
                     await args.collectionReferenceUsers
                         .doc(_currentUser?.uid)
                         .collection('notificaciones')
@@ -200,9 +236,11 @@ class NombreUsuarioWidget {
                       'nueva_solicitud': false,
                       'numb_misiones': 0,
                       'numb_solicitudes': 0
-                    }),
-                    Token.guardarToken(),
-                    _context.router.replace(MainRouter())
+                    });
+                    Token.guardarToken();
+                    var datos = TransDatosInicioSesion('', false, true, CurrentUser.currentUser?.email as String);
+                    await _context.router.replaceAll([InfoVerificacionEmailRouter( arg: datos)]);
+
                   }
               });
     } else {
@@ -262,5 +300,6 @@ class NombreUsuarioWidget {
       content: Text(mensaje),
     );
     ScaffoldMessenger.of(_context).showSnackBar(snackBar);
+    _context.router.pop();
   }
 }

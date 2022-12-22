@@ -11,7 +11,9 @@ import 'package:retos_proyecto/Servicios/Notificaciones/Badge.dart';
 import 'package:retos_proyecto/datos/Roll_Data.dart';
 import 'package:retos_proyecto/splashScreen.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
+import 'package:retos_proyecto/widgets/Dialogs.dart';
 
+import 'MediaQuery.dart';
 import 'Servicios/Notificaciones/notificaciones_bandeja.dart';
 import 'Servicios/Autenticacion/login.dart';
 import 'datos/TransferirDatos.dart';
@@ -180,23 +182,49 @@ class MainState extends State<Main> {
       _onItemTapped(0);
       return false;
     }
-    return (await showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Are you sure?'),
-            content: const Text('Do you want to exit an App'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: const Text('No'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: const Text('Yes'),
-              ),
-            ],
-          ),
-        )) ??
+    var actions = <Widget>[
+      TextButton(
+        onPressed: () {
+          Navigator.of(context).pop(false);
+        },
+        child: const Text('No'),
+      ),
+      TextButton(
+        onPressed: () {
+          Navigator.of(context).pop(true);
+        },
+        child: const Text('si'),
+      ),
+
+    ];
+    var titulo = const Text('Salir', textAlign: TextAlign.center);
+    var message = const Text(
+      '¿Deseas salir de la aplicacion?',
+      textAlign: TextAlign.center,
+    );
+
+
+
+    return (await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        titlePadding: EdgeInsets.only(
+            left: Pantalla.getPorcentPanntalla(3, context, 'x'),
+            top: Pantalla.getPorcentPanntalla(3, context, 'x'),
+            bottom: Pantalla.getPorcentPanntalla(1, context, 'x')),
+        alignment: Alignment.center,
+        actionsAlignment: MainAxisAlignment.center,
+        buttonPadding: EdgeInsets.all(0),
+        actionsPadding:
+        EdgeInsets.only(top: Pantalla.getPorcentPanntalla(0, context, 'x')),
+        contentPadding: EdgeInsets.only(
+            left: Pantalla.getPorcentPanntalla(3, context, 'x'),
+            right: Pantalla.getPorcentPanntalla(3, context, 'x')),
+        title: titulo,
+        content: message,
+        actions: actions,
+      ),
+    )) ??
         false;
   }
 }

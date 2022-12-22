@@ -8,6 +8,7 @@ import '../../../../../../Rutas.gr.dart';
 import '../../../../../../datos/DatosPersonalUser.dart';
 import '../../../../../../datos/SalaDatos.dart';
 import '../../../../../../datos/TransferirDatos.dart';
+import '../../../../../../datos/UsuarioActual.dart';
 import '../../../../../../widgets/Dialogs.dart';
 import 'ExpulsarDeSala.dart';
 
@@ -24,6 +25,10 @@ class ListUsuarios extends StatelessWidget {
       required this.collectionReferenceMisiones})
       : super(key: key);
 
+
+  static const String titulo = 'Expulsar';
+  static const String mensaje = '¿Deseas explusar este usuario de esta sala?';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +36,16 @@ class ListUsuarios extends StatelessWidget {
         child: StreamBuilder(
           stream: collectionReferenceUsuariosTutorados.snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+            if (streamSnapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator(),);
+            }
+
+            if(streamSnapshot.data?.docs.isEmpty == true){
+              return const Center(
+                child: Text('Añade un usuario a tu tutoría'),
+              );
+            }
+
             if (streamSnapshot.hasData) {
               return ListView.builder(
                 itemCount: streamSnapshot.data!.docs.length,
@@ -76,7 +91,7 @@ class ListUsuarios extends StatelessWidget {
                               IconButton(
                                   icon: const Icon(Icons.output_rounded,
                                       size: 25),
-                                  onPressed: () => ExplusarDeSala.ExplusarUsuarioDesala(context, idSala, documentSnapshot.id)),
+                                  onPressed: () => ExplusarDeSala.ExplusarUsuarioDesala(context, idSala, documentSnapshot.id, CurrentUser.getIdCurrentUser(), titulo, mensaje)),
                               // This icon button is used to delete a single product
                             ],
                           ),
@@ -192,11 +207,8 @@ class enviarSolicitudeUsuario {
       ];
     }
 
-    var titulo = const Text('Nombre de usuario vacío', textAlign: TextAlign.center);
-    var message = const Text(
-      'Es necesario escribir un nombre de usuario para enviar una solicitud',
-      textAlign: TextAlign.center,
-    );
+    var titulo ='Nombre de usuario vacío';
+    var message = 'Es necesario escribir un nombre de usuario para enviar una solicitud';
 
     Dialogos.mostrarDialog(actions, titulo, message, context);
 

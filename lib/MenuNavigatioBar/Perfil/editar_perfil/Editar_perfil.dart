@@ -79,7 +79,4 @@ class _EditarPerfilState extends State<EditarPerfil> {
     );
   }
 
-  //Editar email
-//Editar nombre de usuario
-//Editar nombre1
 }

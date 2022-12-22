@@ -207,7 +207,7 @@ class InicioVistaTutorado {
     );
   }
 
-  static mostrarMensaje(int puntosActuales, BuildContext context) {
+  static mostrarMensaje(puntosActuales, BuildContext context) {
     actions(BuildContext context) {
       return <Widget>[
         TextButton(
@@ -219,12 +219,8 @@ class InicioVistaTutorado {
       ];
     }
 
-    var titulo =
-        const Text('Puntos insuficientes', textAlign: TextAlign.center);
-    var message = Text(
-      'Reune 200 puntos o más para reclamar una recompensa\n tus puntos totales son: $puntosActuales',
-      textAlign: TextAlign.center,
-    );
+    var titulo ='Puntos insuficientes';
+    var message = 'Reune 200 puntos o más para reclamar una recompensa\n tus puntos totales son: $puntosActuales';
 
     Dialogos.mostrarDialog(actions, titulo, message, context);
   }

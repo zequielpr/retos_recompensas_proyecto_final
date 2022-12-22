@@ -11,33 +11,34 @@
 // ignore_for_file: type=lint
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i9;
-import 'package:cloud_firestore/cloud_firestore.dart' as _i29;
-import 'package:flutter/material.dart' as _i27;
+import 'package:auto_route/auto_route.dart' as _i10;
+import 'package:cloud_firestore/cloud_firestore.dart' as _i30;
+import 'package:flutter/material.dart' as _i28;
 
-import 'datos/TransferirDatos.dart' as _i28;
-import 'main.dart' as _i8;
-import 'MenuNavigatioBar/Inicio/Inicio.dart' as _i10;
-import 'MenuNavigatioBar/Inicio/Tutorado/Historial.dart' as _i11;
-import 'MenuNavigatioBar/Notificaciones.dart' as _i14;
-import 'MenuNavigatioBar/Perfil/admin_cuenta/Admin_cuenta.dart' as _i23;
-import 'MenuNavigatioBar/Perfil/admin_cuenta/change_password.dart' as _i21;
-import 'MenuNavigatioBar/Perfil/admin_cuenta/ModificarEmail.dart' as _i24;
-import 'MenuNavigatioBar/Perfil/AdminPerfilUser.dart' as _i20;
-import 'MenuNavigatioBar/Perfil/editar_perfil/Editar_perfil.dart' as _i22;
-import 'MenuNavigatioBar/Perfil/editar_perfil/ModificarNombre.dart' as _i25;
+import 'datos/TransferirDatos.dart' as _i29;
+import 'main.dart' as _i9;
+import 'MenuNavigatioBar/Inicio/Inicio.dart' as _i11;
+import 'MenuNavigatioBar/Inicio/Tutorado/Historial.dart' as _i12;
+import 'MenuNavigatioBar/Notificaciones.dart' as _i15;
+import 'MenuNavigatioBar/Perfil/admin_cuenta/Admin_cuenta.dart' as _i24;
+import 'MenuNavigatioBar/Perfil/admin_cuenta/change_password.dart' as _i22;
+import 'MenuNavigatioBar/Perfil/admin_cuenta/ModificarEmail.dart' as _i25;
+import 'MenuNavigatioBar/Perfil/AdminPerfilUser.dart' as _i21;
+import 'MenuNavigatioBar/Perfil/editar_perfil/Editar_perfil.dart' as _i23;
+import 'MenuNavigatioBar/Perfil/editar_perfil/ModificarNombre.dart' as _i26;
 import 'MenuNavigatioBar/Perfil/editar_perfil/ModificarNombreUsuario.dart'
-    as _i26;
-import 'MenuNavigatioBar/Salas/Mision.dart' as _i15;
-import 'MenuNavigatioBar/Salas/Salas.dart' as _i16;
-import 'MenuNavigatioBar/Salas/Tutor/SalaVistaTutor.dart' as _i17;
-import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/Misiones.dart' as _i18;
+    as _i27;
+import 'MenuNavigatioBar/Salas/Mision.dart' as _i16;
+import 'MenuNavigatioBar/Salas/Salas.dart' as _i17;
+import 'MenuNavigatioBar/Salas/Tutor/SalaVistaTutor.dart' as _i18;
+import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/Misiones.dart' as _i19;
 import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/AddRewardUser.dart'
-    as _i13;
+    as _i14;
 import 'MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/UserTutorado.dart'
-    as _i12;
-import 'MenuNavigatioBar/Salas/Tutorado/ListMisiones.dart' as _i19;
+    as _i13;
+import 'MenuNavigatioBar/Salas/Tutorado/ListMisiones.dart' as _i20;
 import 'Servicios/Autenticacion/DatosNewUser.dart' as _i4;
+import 'Servicios/Autenticacion/EmailPassw/InfoVerificacionEmail.dart' as _i8;
 import 'Servicios/Autenticacion/EmailPassw/IniciarSessionEmailPassw.dart'
     as _i3;
 import 'Servicios/Autenticacion/EmailPassw/RecogerEmail.dart' as _i5;
@@ -46,21 +47,21 @@ import 'Servicios/Autenticacion/EmailPassw/RecoverPassw.dart' as _i7;
 import 'Servicios/Autenticacion/login.dart' as _i2;
 import 'splashScreen.dart' as _i1;
 
-class AppRouter extends _i9.RootStackRouter {
-  AppRouter([_i27.GlobalKey<_i27.NavigatorState>? navigatorKey])
+class AppRouter extends _i10.RootStackRouter {
+  AppRouter([_i28.GlobalKey<_i28.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
-  final Map<String, _i9.PageFactory> pagesMap = {
+  final Map<String, _i10.PageFactory> pagesMap = {
     SplashScreenRouter.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i1.MyHomePage(),
       );
     },
     LoginRouter.name: (routeData) {
       final args = routeData.argsAs<LoginRouterArgs>();
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
         child: _i2.Login(
           key: args.key,
@@ -70,7 +71,7 @@ class AppRouter extends _i9.RootStackRouter {
     },
     IniSesionEmailPasswordRouter.name: (routeData) {
       final args = routeData.argsAs<IniSesionEmailPasswordRouterArgs>();
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
         child: _i3.IniSesionEmailPassword(
           key: args.key,
@@ -80,7 +81,7 @@ class AppRouter extends _i9.RootStackRouter {
     },
     RollRouter.name: (routeData) {
       final args = routeData.argsAs<RollRouterArgs>();
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
         child: _i4.Roll(
           key: args.key,
@@ -90,7 +91,7 @@ class AppRouter extends _i9.RootStackRouter {
     },
     RecogerEmailRouter.name: (routeData) {
       final args = routeData.argsAs<RecogerEmailRouterArgs>();
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
         child: _i5.RecogerEmail(
           key: args.key,
@@ -100,7 +101,7 @@ class AppRouter extends _i9.RootStackRouter {
     },
     NombreUsuarioRouter.name: (routeData) {
       final args = routeData.argsAs<NombreUsuarioRouterArgs>();
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
         child: _i4.NombreUsuario(
           key: args.key,
@@ -110,7 +111,7 @@ class AppRouter extends _i9.RootStackRouter {
     },
     RecogerPasswRouter.name: (routeData) {
       final args = routeData.argsAs<RecogerPasswRouterArgs>();
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
         child: _i6.RecogerPassw(
           key: args.key,
@@ -119,58 +120,68 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     RecoveryPassw.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i7.RecoveryPassw(),
       );
     },
-    MainRouter.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
+    InfoVerificacionEmailRouter.name: (routeData) {
+      final args = routeData.argsAs<InfoVerificacionEmailRouterArgs>();
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i8.Main(),
+        child: _i8.InfoVerificacionEmail(
+          key: args.key,
+          arg: args.arg,
+        ),
+      );
+    },
+    MainRouter.name: (routeData) {
+      return _i10.MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const _i9.Main(),
       );
     },
     HomeRouter.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i9.EmptyRouterPage(),
+        child: const _i10.EmptyRouterPage(),
       );
     },
     NotificacionesRouter.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i9.EmptyRouterPage(),
+        child: const _i10.EmptyRouterPage(),
       );
     },
     SalasRouter.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i9.EmptyRouterPage(),
+        child: const _i10.EmptyRouterPage(),
       );
     },
     AdminPerfilUserRouter.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i9.EmptyRouterPage(),
+        child: const _i10.EmptyRouterPage(),
       );
     },
     Home.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i10.Home(),
+        child: const _i11.Home(),
       );
     },
     Historial.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i11.Historial(),
+        child: const _i12.Historial(),
       );
     },
     UserTutorado.name: (routeData) {
       final args = routeData.argsAs<UserTutoradoArgs>();
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i12.UserTutorado(
+        child: _i13.UserTutorado(
           key: args.key,
           args: args.args,
         ),
@@ -179,41 +190,41 @@ class AppRouter extends _i9.RootStackRouter {
     AddRewardRouter.name: (routeData) {
       final args = routeData.argsAs<AddRewardRouterArgs>(
           orElse: () => const AddRewardRouterArgs());
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i13.AddReward(
+        child: _i14.AddReward(
           key: args.key,
           userId: args.userId,
         ),
       );
     },
     Notificaciones.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i14.Notificaciones(),
+        child: const _i15.Notificaciones(),
       );
     },
     Mision.name: (routeData) {
       final args = routeData.argsAs<MisionArgs>();
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i15.Mision(
+        child: _i16.Mision(
           key: args.key,
           snap: args.snap,
         ),
       );
     },
     Salas.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i16.Salas(),
+        child: const _i17.Salas(),
       );
     },
     SalaContVistaTutor.name: (routeData) {
       final args = routeData.argsAs<SalaContVistaTutorArgs>();
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i17.SalaContVistaTutor(
+        child: _i18.SalaContVistaTutor(
           key: args.key,
           args: args.args,
         ),
@@ -221,9 +232,9 @@ class AppRouter extends _i9.RootStackRouter {
     },
     AddMisionRouter.name: (routeData) {
       final args = routeData.argsAs<AddMisionRouterArgs>();
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i18.AddMision(
+        child: _i19.AddMision(
           key: args.key,
           collectionReferenceMisiones: args.collectionReferenceMisiones,
           contextSala: args.contextSala,
@@ -232,186 +243,190 @@ class AppRouter extends _i9.RootStackRouter {
     },
     ListMisionesTutorado.name: (routeData) {
       final args = routeData.argsAs<ListMisionesTutoradoArgs>();
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i19.ListMisionesTutorado(
+        child: _i20.ListMisionesTutorado(
           key: args.key,
           args: args.args,
         ),
       );
     },
     AdminPerfilUser.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i20.AdminPerfilUser(),
+        child: const _i21.AdminPerfilUser(),
       );
     },
     ChangePasswdRouter.name: (routeData) {
       final args = routeData.argsAs<ChangePasswdRouterArgs>();
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i21.ChangePasswd(
+        child: _i22.ChangePasswd(
           key: args.key,
           contextPerfil: args.contextPerfil,
         ),
       );
     },
     EditarPerfilRouter.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i22.EditarPerfil(),
+        child: const _i23.EditarPerfil(),
       );
     },
     AdminCuentaRoute.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i23.AdminCuenta(),
+        child: const _i24.AdminCuenta(),
       );
     },
     ModificarEmailRouter.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i24.ModificarEmail(),
+        child: const _i25.ModificarEmail(),
       );
     },
     ModificarNombreRouter.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i25.ModificarNombre(),
+        child: const _i26.ModificarNombre(),
       );
     },
     ModificarNombreUsuarioRouter.name: (routeData) {
-      return _i9.MaterialPageX<dynamic>(
+      return _i10.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i26.ModificarNombreUsuario(),
+        child: const _i27.ModificarNombreUsuario(),
       );
     },
   };
 
   @override
-  List<_i9.RouteConfig> get routes => [
-        _i9.RouteConfig(
+  List<_i10.RouteConfig> get routes => [
+        _i10.RouteConfig(
           '/#redirect',
           path: '/',
           redirectTo: '/EsplashScreen',
           fullMatch: true,
         ),
-        _i9.RouteConfig(
+        _i10.RouteConfig(
           SplashScreenRouter.name,
           path: '/EsplashScreen',
         ),
-        _i9.RouteConfig(
+        _i10.RouteConfig(
           LoginRouter.name,
           path: '/Login',
         ),
-        _i9.RouteConfig(
+        _i10.RouteConfig(
           IniSesionEmailPasswordRouter.name,
           path: '/IniSesionEmailPassword',
         ),
-        _i9.RouteConfig(
+        _i10.RouteConfig(
           RollRouter.name,
           path: '/Roll',
         ),
-        _i9.RouteConfig(
+        _i10.RouteConfig(
           RecogerEmailRouter.name,
           path: '/RecogerEmail',
         ),
-        _i9.RouteConfig(
+        _i10.RouteConfig(
           NombreUsuarioRouter.name,
           path: '/NombreUsuario',
         ),
-        _i9.RouteConfig(
+        _i10.RouteConfig(
           RecogerPasswRouter.name,
           path: '/RecogerPassw',
         ),
-        _i9.RouteConfig(
+        _i10.RouteConfig(
           RecoveryPassw.name,
           path: '/RecoveryPassw',
         ),
-        _i9.RouteConfig(
+        _i10.RouteConfig(
+          InfoVerificacionEmailRouter.name,
+          path: '/InfoVerificacionEmail',
+        ),
+        _i10.RouteConfig(
           MainRouter.name,
           path: '/Main',
           children: [
-            _i9.RouteConfig(
+            _i10.RouteConfig(
               HomeRouter.name,
               path: 'Home',
               parent: MainRouter.name,
               children: [
-                _i9.RouteConfig(
+                _i10.RouteConfig(
                   Home.name,
                   path: '',
                   parent: HomeRouter.name,
                 ),
-                _i9.RouteConfig(
+                _i10.RouteConfig(
                   Historial.name,
                   path: 'Historial',
                   parent: HomeRouter.name,
                 ),
-                _i9.RouteConfig(
+                _i10.RouteConfig(
                   UserTutorado.name,
                   path: 'UserTutoradoDescrip',
                   parent: HomeRouter.name,
                 ),
-                _i9.RouteConfig(
+                _i10.RouteConfig(
                   AddRewardRouter.name,
                   path: 'AddReward',
                   parent: HomeRouter.name,
                 ),
               ],
             ),
-            _i9.RouteConfig(
+            _i10.RouteConfig(
               NotificacionesRouter.name,
               path: 'Notificaciones',
               parent: MainRouter.name,
               children: [
-                _i9.RouteConfig(
+                _i10.RouteConfig(
                   Notificaciones.name,
                   path: '',
                   parent: NotificacionesRouter.name,
                 ),
-                _i9.RouteConfig(
+                _i10.RouteConfig(
                   Mision.name,
                   path: 'Mision',
                   parent: NotificacionesRouter.name,
                 ),
               ],
             ),
-            _i9.RouteConfig(
+            _i10.RouteConfig(
               SalasRouter.name,
               path: 'Salas',
               parent: MainRouter.name,
               children: [
-                _i9.RouteConfig(
+                _i10.RouteConfig(
                   Salas.name,
                   path: '',
                   parent: SalasRouter.name,
                 ),
-                _i9.RouteConfig(
+                _i10.RouteConfig(
                   SalaContVistaTutor.name,
                   path: 'SalaContVistaTutor',
                   parent: SalasRouter.name,
                 ),
-                _i9.RouteConfig(
+                _i10.RouteConfig(
                   UserTutorado.name,
                   path: 'UserTutoradoDescrip',
                   parent: SalasRouter.name,
                 ),
-                _i9.RouteConfig(
+                _i10.RouteConfig(
                   AddMisionRouter.name,
                   path: 'AddMision',
                   parent: SalasRouter.name,
                 ),
-                _i9.RouteConfig(
+                _i10.RouteConfig(
                   ListMisionesTutorado.name,
                   path: 'ListaMisionesTutorado',
                   parent: SalasRouter.name,
                 ),
-                _i9.RouteConfig(
+                _i10.RouteConfig(
                   AddRewardRouter.name,
                   path: 'AddReward',
                   parent: SalasRouter.name,
                 ),
-                _i9.RouteConfig(
+                _i10.RouteConfig(
                   '*#redirect',
                   path: '*',
                   parent: SalasRouter.name,
@@ -420,47 +435,47 @@ class AppRouter extends _i9.RootStackRouter {
                 ),
               ],
             ),
-            _i9.RouteConfig(
+            _i10.RouteConfig(
               AdminPerfilUserRouter.name,
               path: 'AdminPerfilUser',
               parent: MainRouter.name,
               children: [
-                _i9.RouteConfig(
+                _i10.RouteConfig(
                   AdminPerfilUser.name,
                   path: '',
                   parent: AdminPerfilUserRouter.name,
                 ),
-                _i9.RouteConfig(
+                _i10.RouteConfig(
                   ChangePasswdRouter.name,
                   path: 'ChangePasswd',
                   parent: AdminPerfilUserRouter.name,
                 ),
-                _i9.RouteConfig(
+                _i10.RouteConfig(
                   EditarPerfilRouter.name,
                   path: 'EditarPerfil',
                   parent: AdminPerfilUserRouter.name,
                 ),
-                _i9.RouteConfig(
+                _i10.RouteConfig(
                   AdminCuentaRoute.name,
                   path: 'AdminCuenta',
                   parent: AdminPerfilUserRouter.name,
                 ),
-                _i9.RouteConfig(
+                _i10.RouteConfig(
                   ModificarEmailRouter.name,
                   path: 'ModificarEmail',
                   parent: AdminPerfilUserRouter.name,
                 ),
-                _i9.RouteConfig(
+                _i10.RouteConfig(
                   ModificarNombreRouter.name,
                   path: 'ModificarNombre',
                   parent: AdminPerfilUserRouter.name,
                 ),
-                _i9.RouteConfig(
+                _i10.RouteConfig(
                   ModificarNombreUsuarioRouter.name,
                   path: 'ModificarNombreUsuario',
                   parent: AdminPerfilUserRouter.name,
                 ),
-                _i9.RouteConfig(
+                _i10.RouteConfig(
                   '*#redirect',
                   path: '*',
                   parent: AdminPerfilUserRouter.name,
@@ -476,7 +491,7 @@ class AppRouter extends _i9.RootStackRouter {
 
 /// generated route for
 /// [_i1.MyHomePage]
-class SplashScreenRouter extends _i9.PageRouteInfo<void> {
+class SplashScreenRouter extends _i10.PageRouteInfo<void> {
   const SplashScreenRouter()
       : super(
           SplashScreenRouter.name,
@@ -488,10 +503,10 @@ class SplashScreenRouter extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.Login]
-class LoginRouter extends _i9.PageRouteInfo<LoginRouterArgs> {
+class LoginRouter extends _i10.PageRouteInfo<LoginRouterArgs> {
   LoginRouter({
-    _i27.Key? key,
-    required _i28.TransferirCollecion args,
+    _i28.Key? key,
+    required _i29.TransferirCollecion args,
   }) : super(
           LoginRouter.name,
           path: '/Login',
@@ -510,9 +525,9 @@ class LoginRouterArgs {
     required this.args,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
-  final _i28.TransferirCollecion args;
+  final _i29.TransferirCollecion args;
 
   @override
   String toString() {
@@ -523,10 +538,10 @@ class LoginRouterArgs {
 /// generated route for
 /// [_i3.IniSesionEmailPassword]
 class IniSesionEmailPasswordRouter
-    extends _i9.PageRouteInfo<IniSesionEmailPasswordRouterArgs> {
+    extends _i10.PageRouteInfo<IniSesionEmailPasswordRouterArgs> {
   IniSesionEmailPasswordRouter({
-    _i27.Key? key,
-    required _i28.TransDatosInicioSesion args,
+    _i28.Key? key,
+    required _i29.TransDatosInicioSesion args,
   }) : super(
           IniSesionEmailPasswordRouter.name,
           path: '/IniSesionEmailPassword',
@@ -545,9 +560,9 @@ class IniSesionEmailPasswordRouterArgs {
     required this.args,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
-  final _i28.TransDatosInicioSesion args;
+  final _i29.TransDatosInicioSesion args;
 
   @override
   String toString() {
@@ -557,10 +572,10 @@ class IniSesionEmailPasswordRouterArgs {
 
 /// generated route for
 /// [_i4.Roll]
-class RollRouter extends _i9.PageRouteInfo<RollRouterArgs> {
+class RollRouter extends _i10.PageRouteInfo<RollRouterArgs> {
   RollRouter({
-    _i27.Key? key,
-    required _i28.TranferirDatosRoll args,
+    _i28.Key? key,
+    required _i29.TranferirDatosRoll args,
   }) : super(
           RollRouter.name,
           path: '/Roll',
@@ -579,9 +594,9 @@ class RollRouterArgs {
     required this.args,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
-  final _i28.TranferirDatosRoll args;
+  final _i29.TranferirDatosRoll args;
 
   @override
   String toString() {
@@ -591,10 +606,10 @@ class RollRouterArgs {
 
 /// generated route for
 /// [_i5.RecogerEmail]
-class RecogerEmailRouter extends _i9.PageRouteInfo<RecogerEmailRouterArgs> {
+class RecogerEmailRouter extends _i10.PageRouteInfo<RecogerEmailRouterArgs> {
   RecogerEmailRouter({
-    _i27.Key? key,
-    required _i28.TrasnferirDatosNombreUser args,
+    _i28.Key? key,
+    required _i29.TrasnferirDatosNombreUser args,
   }) : super(
           RecogerEmailRouter.name,
           path: '/RecogerEmail',
@@ -613,9 +628,9 @@ class RecogerEmailRouterArgs {
     required this.args,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
-  final _i28.TrasnferirDatosNombreUser args;
+  final _i29.TrasnferirDatosNombreUser args;
 
   @override
   String toString() {
@@ -625,10 +640,10 @@ class RecogerEmailRouterArgs {
 
 /// generated route for
 /// [_i4.NombreUsuario]
-class NombreUsuarioRouter extends _i9.PageRouteInfo<NombreUsuarioRouterArgs> {
+class NombreUsuarioRouter extends _i10.PageRouteInfo<NombreUsuarioRouterArgs> {
   NombreUsuarioRouter({
-    _i27.Key? key,
-    required _i28.TrasnferirDatosNombreUser args,
+    _i28.Key? key,
+    required _i29.TrasnferirDatosNombreUser args,
   }) : super(
           NombreUsuarioRouter.name,
           path: '/NombreUsuario',
@@ -647,9 +662,9 @@ class NombreUsuarioRouterArgs {
     required this.args,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
-  final _i28.TrasnferirDatosNombreUser args;
+  final _i29.TrasnferirDatosNombreUser args;
 
   @override
   String toString() {
@@ -659,10 +674,10 @@ class NombreUsuarioRouterArgs {
 
 /// generated route for
 /// [_i6.RecogerPassw]
-class RecogerPasswRouter extends _i9.PageRouteInfo<RecogerPasswRouterArgs> {
+class RecogerPasswRouter extends _i10.PageRouteInfo<RecogerPasswRouterArgs> {
   RecogerPasswRouter({
-    _i27.Key? key,
-    required _i28.TrasnferirDatosNombreUser args,
+    _i28.Key? key,
+    required _i29.TrasnferirDatosNombreUser args,
   }) : super(
           RecogerPasswRouter.name,
           path: '/RecogerPassw',
@@ -681,9 +696,9 @@ class RecogerPasswRouterArgs {
     required this.args,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
-  final _i28.TrasnferirDatosNombreUser args;
+  final _i29.TrasnferirDatosNombreUser args;
 
   @override
   String toString() {
@@ -693,7 +708,7 @@ class RecogerPasswRouterArgs {
 
 /// generated route for
 /// [_i7.RecoveryPassw]
-class RecoveryPassw extends _i9.PageRouteInfo<void> {
+class RecoveryPassw extends _i10.PageRouteInfo<void> {
   const RecoveryPassw()
       : super(
           RecoveryPassw.name,
@@ -704,9 +719,44 @@ class RecoveryPassw extends _i9.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i8.Main]
-class MainRouter extends _i9.PageRouteInfo<void> {
-  const MainRouter({List<_i9.PageRouteInfo>? children})
+/// [_i8.InfoVerificacionEmail]
+class InfoVerificacionEmailRouter
+    extends _i10.PageRouteInfo<InfoVerificacionEmailRouterArgs> {
+  InfoVerificacionEmailRouter({
+    _i28.Key? key,
+    required _i29.TransDatosInicioSesion arg,
+  }) : super(
+          InfoVerificacionEmailRouter.name,
+          path: '/InfoVerificacionEmail',
+          args: InfoVerificacionEmailRouterArgs(
+            key: key,
+            arg: arg,
+          ),
+        );
+
+  static const String name = 'InfoVerificacionEmailRouter';
+}
+
+class InfoVerificacionEmailRouterArgs {
+  const InfoVerificacionEmailRouterArgs({
+    this.key,
+    required this.arg,
+  });
+
+  final _i28.Key? key;
+
+  final _i29.TransDatosInicioSesion arg;
+
+  @override
+  String toString() {
+    return 'InfoVerificacionEmailRouterArgs{key: $key, arg: $arg}';
+  }
+}
+
+/// generated route for
+/// [_i9.Main]
+class MainRouter extends _i10.PageRouteInfo<void> {
+  const MainRouter({List<_i10.PageRouteInfo>? children})
       : super(
           MainRouter.name,
           path: '/Main',
@@ -717,9 +767,9 @@ class MainRouter extends _i9.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i9.EmptyRouterPage]
-class HomeRouter extends _i9.PageRouteInfo<void> {
-  const HomeRouter({List<_i9.PageRouteInfo>? children})
+/// [_i10.EmptyRouterPage]
+class HomeRouter extends _i10.PageRouteInfo<void> {
+  const HomeRouter({List<_i10.PageRouteInfo>? children})
       : super(
           HomeRouter.name,
           path: 'Home',
@@ -730,9 +780,9 @@ class HomeRouter extends _i9.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i9.EmptyRouterPage]
-class NotificacionesRouter extends _i9.PageRouteInfo<void> {
-  const NotificacionesRouter({List<_i9.PageRouteInfo>? children})
+/// [_i10.EmptyRouterPage]
+class NotificacionesRouter extends _i10.PageRouteInfo<void> {
+  const NotificacionesRouter({List<_i10.PageRouteInfo>? children})
       : super(
           NotificacionesRouter.name,
           path: 'Notificaciones',
@@ -743,9 +793,9 @@ class NotificacionesRouter extends _i9.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i9.EmptyRouterPage]
-class SalasRouter extends _i9.PageRouteInfo<void> {
-  const SalasRouter({List<_i9.PageRouteInfo>? children})
+/// [_i10.EmptyRouterPage]
+class SalasRouter extends _i10.PageRouteInfo<void> {
+  const SalasRouter({List<_i10.PageRouteInfo>? children})
       : super(
           SalasRouter.name,
           path: 'Salas',
@@ -756,9 +806,9 @@ class SalasRouter extends _i9.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i9.EmptyRouterPage]
-class AdminPerfilUserRouter extends _i9.PageRouteInfo<void> {
-  const AdminPerfilUserRouter({List<_i9.PageRouteInfo>? children})
+/// [_i10.EmptyRouterPage]
+class AdminPerfilUserRouter extends _i10.PageRouteInfo<void> {
+  const AdminPerfilUserRouter({List<_i10.PageRouteInfo>? children})
       : super(
           AdminPerfilUserRouter.name,
           path: 'AdminPerfilUser',
@@ -769,8 +819,8 @@ class AdminPerfilUserRouter extends _i9.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i10.Home]
-class Home extends _i9.PageRouteInfo<void> {
+/// [_i11.Home]
+class Home extends _i10.PageRouteInfo<void> {
   const Home()
       : super(
           Home.name,
@@ -781,8 +831,8 @@ class Home extends _i9.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i11.Historial]
-class Historial extends _i9.PageRouteInfo<void> {
+/// [_i12.Historial]
+class Historial extends _i10.PageRouteInfo<void> {
   const Historial()
       : super(
           Historial.name,
@@ -793,11 +843,11 @@ class Historial extends _i9.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i12.UserTutorado]
-class UserTutorado extends _i9.PageRouteInfo<UserTutoradoArgs> {
+/// [_i13.UserTutorado]
+class UserTutorado extends _i10.PageRouteInfo<UserTutoradoArgs> {
   UserTutorado({
-    _i27.Key? key,
-    required _i28.TransfDatosUserTutorado args,
+    _i28.Key? key,
+    required _i29.TransfDatosUserTutorado args,
   }) : super(
           UserTutorado.name,
           path: 'UserTutoradoDescrip',
@@ -816,9 +866,9 @@ class UserTutoradoArgs {
     required this.args,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
-  final _i28.TransfDatosUserTutorado args;
+  final _i29.TransfDatosUserTutorado args;
 
   @override
   String toString() {
@@ -827,10 +877,10 @@ class UserTutoradoArgs {
 }
 
 /// generated route for
-/// [_i13.AddReward]
-class AddRewardRouter extends _i9.PageRouteInfo<AddRewardRouterArgs> {
+/// [_i14.AddReward]
+class AddRewardRouter extends _i10.PageRouteInfo<AddRewardRouterArgs> {
   AddRewardRouter({
-    _i27.Key? key,
+    _i28.Key? key,
     dynamic userId,
   }) : super(
           AddRewardRouter.name,
@@ -850,7 +900,7 @@ class AddRewardRouterArgs {
     this.userId,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
   final dynamic userId;
 
@@ -861,8 +911,8 @@ class AddRewardRouterArgs {
 }
 
 /// generated route for
-/// [_i14.Notificaciones]
-class Notificaciones extends _i9.PageRouteInfo<void> {
+/// [_i15.Notificaciones]
+class Notificaciones extends _i10.PageRouteInfo<void> {
   const Notificaciones()
       : super(
           Notificaciones.name,
@@ -873,11 +923,11 @@ class Notificaciones extends _i9.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i15.Mision]
-class Mision extends _i9.PageRouteInfo<MisionArgs> {
+/// [_i16.Mision]
+class Mision extends _i10.PageRouteInfo<MisionArgs> {
   Mision({
-    _i27.Key? key,
-    required _i29.DocumentSnapshot<Object?> snap,
+    _i28.Key? key,
+    required _i30.DocumentSnapshot<Object?> snap,
   }) : super(
           Mision.name,
           path: 'Mision',
@@ -896,9 +946,9 @@ class MisionArgs {
     required this.snap,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
-  final _i29.DocumentSnapshot<Object?> snap;
+  final _i30.DocumentSnapshot<Object?> snap;
 
   @override
   String toString() {
@@ -907,8 +957,8 @@ class MisionArgs {
 }
 
 /// generated route for
-/// [_i16.Salas]
-class Salas extends _i9.PageRouteInfo<void> {
+/// [_i17.Salas]
+class Salas extends _i10.PageRouteInfo<void> {
   const Salas()
       : super(
           Salas.name,
@@ -919,11 +969,11 @@ class Salas extends _i9.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i17.SalaContVistaTutor]
-class SalaContVistaTutor extends _i9.PageRouteInfo<SalaContVistaTutorArgs> {
+/// [_i18.SalaContVistaTutor]
+class SalaContVistaTutor extends _i10.PageRouteInfo<SalaContVistaTutorArgs> {
   SalaContVistaTutor({
-    _i27.Key? key,
-    required _i28.TransferirDatos args,
+    _i28.Key? key,
+    required _i29.TransferirDatos args,
   }) : super(
           SalaContVistaTutor.name,
           path: 'SalaContVistaTutor',
@@ -942,9 +992,9 @@ class SalaContVistaTutorArgs {
     required this.args,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
-  final _i28.TransferirDatos args;
+  final _i29.TransferirDatos args;
 
   @override
   String toString() {
@@ -953,12 +1003,12 @@ class SalaContVistaTutorArgs {
 }
 
 /// generated route for
-/// [_i18.AddMision]
-class AddMisionRouter extends _i9.PageRouteInfo<AddMisionRouterArgs> {
+/// [_i19.AddMision]
+class AddMisionRouter extends _i10.PageRouteInfo<AddMisionRouterArgs> {
   AddMisionRouter({
-    _i27.Key? key,
-    required _i29.CollectionReference<Object?> collectionReferenceMisiones,
-    required _i27.BuildContext contextSala,
+    _i28.Key? key,
+    required _i30.CollectionReference<Object?> collectionReferenceMisiones,
+    required _i28.BuildContext contextSala,
   }) : super(
           AddMisionRouter.name,
           path: 'AddMision',
@@ -979,11 +1029,11 @@ class AddMisionRouterArgs {
     required this.contextSala,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
-  final _i29.CollectionReference<Object?> collectionReferenceMisiones;
+  final _i30.CollectionReference<Object?> collectionReferenceMisiones;
 
-  final _i27.BuildContext contextSala;
+  final _i28.BuildContext contextSala;
 
   @override
   String toString() {
@@ -992,11 +1042,12 @@ class AddMisionRouterArgs {
 }
 
 /// generated route for
-/// [_i19.ListMisionesTutorado]
-class ListMisionesTutorado extends _i9.PageRouteInfo<ListMisionesTutoradoArgs> {
+/// [_i20.ListMisionesTutorado]
+class ListMisionesTutorado
+    extends _i10.PageRouteInfo<ListMisionesTutoradoArgs> {
   ListMisionesTutorado({
-    _i27.Key? key,
-    required _i28.TransferirDatos args,
+    _i28.Key? key,
+    required _i29.TransferirDatos args,
   }) : super(
           ListMisionesTutorado.name,
           path: 'ListaMisionesTutorado',
@@ -1015,9 +1066,9 @@ class ListMisionesTutoradoArgs {
     required this.args,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
-  final _i28.TransferirDatos args;
+  final _i29.TransferirDatos args;
 
   @override
   String toString() {
@@ -1026,8 +1077,8 @@ class ListMisionesTutoradoArgs {
 }
 
 /// generated route for
-/// [_i20.AdminPerfilUser]
-class AdminPerfilUser extends _i9.PageRouteInfo<void> {
+/// [_i21.AdminPerfilUser]
+class AdminPerfilUser extends _i10.PageRouteInfo<void> {
   const AdminPerfilUser()
       : super(
           AdminPerfilUser.name,
@@ -1038,11 +1089,11 @@ class AdminPerfilUser extends _i9.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i21.ChangePasswd]
-class ChangePasswdRouter extends _i9.PageRouteInfo<ChangePasswdRouterArgs> {
+/// [_i22.ChangePasswd]
+class ChangePasswdRouter extends _i10.PageRouteInfo<ChangePasswdRouterArgs> {
   ChangePasswdRouter({
-    _i27.Key? key,
-    required _i27.BuildContext contextPerfil,
+    _i28.Key? key,
+    required _i28.BuildContext contextPerfil,
   }) : super(
           ChangePasswdRouter.name,
           path: 'ChangePasswd',
@@ -1061,9 +1112,9 @@ class ChangePasswdRouterArgs {
     required this.contextPerfil,
   });
 
-  final _i27.Key? key;
+  final _i28.Key? key;
 
-  final _i27.BuildContext contextPerfil;
+  final _i28.BuildContext contextPerfil;
 
   @override
   String toString() {
@@ -1072,8 +1123,8 @@ class ChangePasswdRouterArgs {
 }
 
 /// generated route for
-/// [_i22.EditarPerfil]
-class EditarPerfilRouter extends _i9.PageRouteInfo<void> {
+/// [_i23.EditarPerfil]
+class EditarPerfilRouter extends _i10.PageRouteInfo<void> {
   const EditarPerfilRouter()
       : super(
           EditarPerfilRouter.name,
@@ -1084,8 +1135,8 @@ class EditarPerfilRouter extends _i9.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i23.AdminCuenta]
-class AdminCuentaRoute extends _i9.PageRouteInfo<void> {
+/// [_i24.AdminCuenta]
+class AdminCuentaRoute extends _i10.PageRouteInfo<void> {
   const AdminCuentaRoute()
       : super(
           AdminCuentaRoute.name,
@@ -1096,8 +1147,8 @@ class AdminCuentaRoute extends _i9.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i24.ModificarEmail]
-class ModificarEmailRouter extends _i9.PageRouteInfo<void> {
+/// [_i25.ModificarEmail]
+class ModificarEmailRouter extends _i10.PageRouteInfo<void> {
   const ModificarEmailRouter()
       : super(
           ModificarEmailRouter.name,
@@ -1108,8 +1159,8 @@ class ModificarEmailRouter extends _i9.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i25.ModificarNombre]
-class ModificarNombreRouter extends _i9.PageRouteInfo<void> {
+/// [_i26.ModificarNombre]
+class ModificarNombreRouter extends _i10.PageRouteInfo<void> {
   const ModificarNombreRouter()
       : super(
           ModificarNombreRouter.name,
@@ -1120,8 +1171,8 @@ class ModificarNombreRouter extends _i9.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i26.ModificarNombreUsuario]
-class ModificarNombreUsuarioRouter extends _i9.PageRouteInfo<void> {
+/// [_i27.ModificarNombreUsuario]
+class ModificarNombreUsuarioRouter extends _i10.PageRouteInfo<void> {
   const ModificarNombreUsuarioRouter()
       : super(
           ModificarNombreUsuarioRouter.name,

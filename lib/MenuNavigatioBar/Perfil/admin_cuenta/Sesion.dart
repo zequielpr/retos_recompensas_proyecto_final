@@ -10,11 +10,8 @@ import '../AdminRoles.dart';
 
 class Sesion {
   static dialogCerrarSesion(BuildContext context) {
-    var titulo = Text('Cerrar sesión', textAlign: TextAlign.center);
-    var mensaje = const Text(
-      '¿Desea cerrar sesión?',
-      textAlign: TextAlign.center,
-    );
+    var titulo ='Cerrar sesión';
+    var mensaje ='¿Desea cerrar sesión?';
 
     List<TextButton> actions(BuildContext context) {
       return [

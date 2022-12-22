@@ -38,11 +38,9 @@ class BandejaNotificaciones {
     );
   }
 
-
   //Obtener las solicitudes recibidas------------------------------------------------------------------
   static Widget getSolicitudesRecibidas(
       CollectionReference collectionReference, BuildContext context) {
-
     CollectionReference notificacionesRecibidas = collectionReference
         .doc(idCurrentUser)
         .collection('notificaciones')
@@ -52,13 +50,26 @@ class BandejaNotificaciones {
     return StreamBuilder(
       stream: notificacionesRecibidas.snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+        if (streamSnapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        if (streamSnapshot.data?.docs.isEmpty == true) {
+          return const Center(
+            child: Text('Aun no tienes solicitudes'),
+          );
+        }
+
         if (streamSnapshot.hasData) {
           return ListView.builder(
             itemCount: streamSnapshot.data!.docs.length,
             itemBuilder: (context, index) {
               final DocumentSnapshot documentSnapshot =
                   streamSnapshot.data!.docs[index];
-              return Cards.getCardSolicitud(documentSnapshot, collectionReference, idCurrentUser, context);
+              return Cards.getCardSolicitud(documentSnapshot,
+                  collectionReference, idCurrentUser, context);
             },
           );
         }
@@ -71,8 +82,6 @@ class BandejaNotificaciones {
 
   //Obtener las misiones recibidas------------------------------------------------------------------
   static Widget getMisiones(CollectionReference collectionReference) {
-
-
     CollectionReference notificacionesRecibidas = collectionReference
         .doc(idCurrentUser)
         .collection('notificaciones')
@@ -82,6 +91,16 @@ class BandejaNotificaciones {
     return StreamBuilder(
       stream: notificacionesRecibidas.snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+        if (streamSnapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator(),);
+        }
+
+        if(streamSnapshot.data?.docs.isEmpty == true){
+          return const Center(
+            child: Text('Aun no tienes misiones'),
+          );
+        }
+
         if (streamSnapshot.hasData) {
           return ListView.builder(
             itemCount: streamSnapshot.data!.docs.length,
@@ -98,9 +117,4 @@ class BandejaNotificaciones {
       },
     );
   }
-
-
-
-
-
 }

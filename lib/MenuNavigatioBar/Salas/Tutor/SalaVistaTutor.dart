@@ -124,12 +124,8 @@ class _SalaContVistaTutorState extends State<SalaContVistaTutor>
             collectionReferenceMisiones: args.sala.getColecMisiones,
             contextSala: context));
       } else {
-        var titulo =
-            Text('Numero maximo de misiones', textAlign: TextAlign.center);
-        var mensaje = Text(
-          'Elimina una misión para crear una nueva',
-          textAlign: TextAlign.center,
-        );
+        var titulo ='Numero maximo de misiones';
+        var mensaje = 'Elimina una misión para crear una nueva';
         action(BuildContext context) {
           return <Widget>[
             TextButton(

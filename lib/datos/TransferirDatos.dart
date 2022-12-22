@@ -40,10 +40,9 @@ class TransDatosInicioSesion {
   final bool focusEmail;
   final bool focusPassw;
   final String email;
-  final CollectionReference collectionReferenceUsers;
 
   TransDatosInicioSesion(this.titulo, this.focusEmail, this.focusPassw,
-      this.email, this.collectionReferenceUsers);
+      this.email);
 }
 
 class TrasnferirDatosNombreUser {

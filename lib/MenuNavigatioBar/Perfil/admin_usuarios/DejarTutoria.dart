@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
+import 'package:retos_proyecto/widgets/Dialogs.dart';
 
 import '../../../MediaQuery.dart';
 
@@ -14,45 +15,28 @@ class DejarTutoria {
 
   //preguntar antes de dejar la tutoría
   static dialogDejarTutoria(BuildContext context, String idTutor) {
-    showDialog<String>(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        titlePadding: EdgeInsets.only(
-            left: Pantalla.getPorcentPanntalla(3, context, 'x'),
-            top: Pantalla.getPorcentPanntalla(3, context, 'x'),
-            bottom: Pantalla.getPorcentPanntalla(1, context, 'x')),
-        alignment: Alignment.center,
-        actionsAlignment: MainAxisAlignment.center,
-        buttonPadding: EdgeInsets.all(0),
-        actionsPadding:
-            EdgeInsets.only(top: Pantalla.getPorcentPanntalla(0, context, 'x')),
-        contentPadding: EdgeInsets.only(
-            left: Pantalla.getPorcentPanntalla(3, context, 'x'),
-            right: Pantalla.getPorcentPanntalla(3, context, 'x')),
-        title: Text('Dejar tutoría', textAlign: TextAlign.center),
-        content: const Text(
-          'Los avances obtenidos en esta tutoría serán eliminados y no será posible recuperarlos',
-          textAlign: TextAlign.center,
+    String titulo = 'Dejar tutoría';
+    String mensaje = 'Los avances obtenidos en esta tutoría serán eliminados y no será posible recuperarlos';
+    actions(BuildContext context){
+      return <Widget>[
+        TextButton(
+          onPressed: () => context.router.pop(),
+          child: Text('Cancelar'),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => context.router.pop(),
-            child: Text('Cancelar'),
-          ),
-          TextButton(
-            onPressed: () async {
-              eliminarDeCurrentTutor(CurrentUser.getIdCurrentUser());
-              eliminarAvance(idTutor);
-              eliminarDeListaAllUsers(idTutor);
-              eliminarDeTodasSalas(idTutor);
-              context.router.pop();
-            },
-            child: Text('ok'),
-          )
-        ],
-      ),
-    );
-    ;
+        TextButton(
+          onPressed: () async {
+            eliminarDeCurrentTutor(CurrentUser.getIdCurrentUser());
+            eliminarAvance(idTutor);
+            eliminarDeListaAllUsers(idTutor);
+            eliminarDeTodasSalas(idTutor);
+            context.router.pop();
+          },
+          child: Text('ok'),
+        )
+      ];
+    }
+
+    Dialogos.mostrarDialog(actions, titulo, mensaje, context);
   }
 
   //eliminar id el usuario tutor

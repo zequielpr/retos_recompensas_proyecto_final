@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
-import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminTutores.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 import 'package:retos_proyecto/datos/DatosPersonalUser.dart';
@@ -34,80 +33,56 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
   static var actualizarCuerpo;
   static var actualizarStateUsername;
 
-@override
+  @override
   void initState() {
+    CurrentUser.currentUser?.reload();
+    CurrentUser.setCurrentUser();
     // TODO: implement initState
-  NombreUsuarioWidget.vistaPerfil = setState;
+    NombreUsuarioWidget.vistaPerfil = setState;
+    super.initState();
   }
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Perfil'),
-        actions: [
-          IconButton(
-            onPressed: () =>  MenuOption.getMenuOption(context),
-            icon: const Icon(Icons.menu),
-          )
-        ],
-        bottom: PreferredSize(
-          preferredSize:
-              Size.fromHeight(Pantalla.getPorcentPanntalla(19, context, 'y')),
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: Pantalla.getPorcentPanntalla(2, context, 'y'),
-              ),
-              ListTile(
-                leading: DatosPersonales.getAvatar(
-                    CurrentUser.getIdCurrentUser(), 30),
-                title: Text(CurrentUser.currentUser?.displayName as String),
-                subtitle: DatosPersonales.getDato(
-                    CurrentUser.getIdCurrentUser(), 'nombre_usuario'),
-              ),
-              //_editarPerfil(),
-              rolActual(),
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text('Perfil'),
+          actions: [
+            IconButton(
+              onPressed: () => MenuOption.getMenuOption(context),
+              icon: const Icon(Icons.menu),
+            )
+          ],
+          bottom: PreferredSize(
+            preferredSize:
+                Size.fromHeight(Pantalla.getPorcentPanntalla(19, context, 'y')),
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: Pantalla.getPorcentPanntalla(2, context, 'y'),
+                ),
+                ListTile(
+                  leading: DatosPersonales.getAvatar(
+                      CurrentUser.getIdCurrentUser(), 30),
+                  title: Text(CurrentUser.currentUser?.displayName as String),
+                  subtitle: DatosPersonales.getDato(
+                      CurrentUser.getIdCurrentUser(), 'nombre_usuario'),
+                ),
+                //_editarPerfil(),
+                rolActual(),
 
-              //_email(),
-              //adminPassw(),
-              //cerrarSesion(),
-              //eliminarCuenta()
-            ],
+                //_email(),
+                //adminPassw(),
+                //cerrarSesion(),
+                //eliminarCuenta()
+              ],
+            ),
           ),
         ),
-      ),
-      body: MostrarUsuarios()
-    );
+        body: MostrarUsuarios());
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   Widget _editarPerfil() {
     return Padding(
@@ -156,26 +131,10 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
       return Column(
         children: [
           verRoll(),
-         /* Roll_Data.ROLL_USER_IS_TUTORADO
-              ? adminTutores(actualizarVista)
-              : Text(
-                  '',
-                  style: TextStyle(fontSize: 0),
-                ),*/
-
-          CurrentUser.currentUser?.emailVerified == true
-              ? Text(
-                  '',
-                  style: TextStyle(fontSize: 0),
-                )
-              : virificarEmail(),
         ],
       );
     });
   }
-
-
-
 
   Widget verRoll() {
     return Padding(
@@ -186,8 +145,6 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
       ),
     );
   }
-
-
 
   //Administrar contraseña
   Widget adminPassw() {
@@ -215,7 +172,6 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
   }
 
   //Cerrar sesión
-
 
   //Eliminar cuenta
   Widget eliminarCuenta() {
@@ -268,11 +224,8 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
         ),
       ];
 
-      var titulo = const Text('Link enviado', textAlign: TextAlign.center);
-      var message = Text(
-        'Abra el email enviado a ${CurrentUser.currentUser?.email} para virificar tu email',
-        textAlign: TextAlign.center,
-      );
+      var titulo = 'Link enviado';
+      var message = 'Abra el email enviado a ${CurrentUser.currentUser?.email} para virificar tu email';
 
       AdminRoll.showMessaje(actions, titulo, message, context);
     });

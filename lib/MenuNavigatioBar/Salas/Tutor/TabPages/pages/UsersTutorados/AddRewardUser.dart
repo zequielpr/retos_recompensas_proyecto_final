@@ -63,6 +63,7 @@ class _AddRewardState extends State<AddReward> {
 
   Widget _getTextFielTitulo() {
     return TextField(
+      maxLength: 20,
       autofocus: true,
       autocorrect: true,
       controller: tituloController,
@@ -76,6 +77,7 @@ class _AddRewardState extends State<AddReward> {
   Widget _getTextFielContenido() {
     return TextField(
       maxLines: 5,
+      maxLength: 200,
       autocorrect: true,
       controller: contenidoController,
       decoration: const InputDecoration(
@@ -114,11 +116,8 @@ class _AddRewardState extends State<AddReward> {
       ];
     }
 
-    var tituloMensaje = const Text('Rellenar campo', textAlign: TextAlign.center);
-    var message = const Text(
-      'Es necesario asignar un titulo y un contenido para asignar una recompensa',
-      textAlign: TextAlign.center,
-    );
+    var tituloMensaje = 'Rellenar campo';
+    var message = 'Es necesario asignar un titulo y un contenido para asignar una recompensa';
 
     Dialogos.mostrarDialog(actions, tituloMensaje, message, context);
   }
