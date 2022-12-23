@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/Servicios/Solicitudes/AdminSolicitudes.dart';
+import 'package:retos_proyecto/recursos/Espacios.dart';
 import '../../../../../../Rutas.gr.dart';
 import '../../../../../../datos/DatosPersonalUser.dart';
 import '../../../../../../datos/SalaDatos.dart';
@@ -88,7 +89,7 @@ class ListUsuarios extends StatelessWidget {
                       subtitle: DatosPersonales.getDato(
                           documentSnapshot.id, 'nombre_usuario'),
                       trailing: SizedBox(
-                        width: 50,
+                        width: Pantalla.getPorcentPanntalla(15, context, 'x'),
                         child: Row(
                           children: [
                             IconButton(
@@ -126,6 +127,8 @@ class ListUsuarios extends StatelessWidget {
 class enviarSolicitudeUsuario {
   static InterfaceEnviarSolicitud(BuildContext context,
       CollectionReference collectionReferenceUser, String idSala) {
+    var leftRight =
+        Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
     var _userNameController = TextEditingController();
     return showModalBottomSheet(
         shape: const RoundedRectangleBorder(
@@ -136,10 +139,9 @@ class enviarSolicitudeUsuario {
         builder: (BuildContext ctx) {
           return Padding(
             padding: EdgeInsets.only(
-                top: 10,
-                left: 20,
-                right: 20,
-                // prevent the soft keyboard from covering text fields
+                top: Pantalla.getPorcentPanntalla(2, context, 'y'),
+                left: leftRight,
+                right: leftRight,
                 bottom: MediaQuery.of(ctx).viewInsets.bottom + 30),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -149,20 +151,25 @@ class enviarSolicitudeUsuario {
                 ],),*/
 
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   //mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: Pantalla.getPorcentPanntalla(5, context, 'y'),
+                      height: Pantalla.getPorcentPanntalla(4, context, "y"),
                     ),
-                    Text(
-                      "Enviar solicitud a usuario",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Enviar solicitud",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
                     ),
+
                   ],
                 ),
-
+                SizedBox(
+                  height: Pantalla.getPorcentPanntalla(1.5, context, "y"),
+                ),
                 TextField(
                   controller: _userNameController,
                   decoration:

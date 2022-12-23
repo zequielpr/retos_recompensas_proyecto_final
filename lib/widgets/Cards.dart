@@ -8,6 +8,7 @@ import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/AdminSala.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/recursos/Espacios.dart';
 import 'package:retos_proyecto/widgets/Dialogs.dart';
 
 import '../Colores.dart';
@@ -151,13 +152,16 @@ class Cards {
         visualDensity: VisualDensity.comfortable,
         dense: true,
         //horizontalTitleGap: -4,
-        contentPadding: EdgeInsets.only(left: 15, top: 0, bottom: 10),
+        contentPadding: EdgeInsets.only(
+            left: Pantalla.getPorcentPanntalla(4, context, 'x'),
+            bottom: Pantalla.getPorcentPanntalla(1, context, 'y')),
         /*leading: CircleAvatar(
                   backgroundImage: NetworkImage(
                       "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1581413287870&di=35491998b94817cbcf04d9f9f3d2d4b3&imgtype=jpg&src=http%3A%2F%2Fimg0.imgtn.bdimg.com%2Fit%2Fu%3D2464547320%2C3316604757%26fm%3D214%26gp%3D0.jpg"),
                 ),*/
         title: Padding(
-            padding: EdgeInsets.only(bottom: 5),
+            padding: EdgeInsets.only(
+                bottom: Pantalla.getPorcentPanntalla(1, context, 'y')),
             child: Row(
               children: [
                 Text(
@@ -170,7 +174,7 @@ class Cards {
                 ),
                 Text(' ' + Recompensa.toString() + 'XP',
                     style:
-                        GoogleFonts.roboto(color:  Colors.amber, fontSize: 15))
+                        GoogleFonts.roboto(color: Colors.amber, fontSize: 15))
               ],
             )),
         subtitle: ReadMoreText(
@@ -190,7 +194,9 @@ class Cards {
               GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
         ),
         trailing: SizedBox(
-          width: 60,
+          width: Pantalla.getPorcentPanntalla(16, context, 'x'),
+          height: Pantalla.getPorcentPanntalla(
+              Pantalla.getPorcentPanntalla(0.6, context, 'y'), context, 'y'),
           child: IconButton(
               icon: completada_por.contains(userId)
                   ? const Icon(
@@ -375,11 +381,13 @@ class Cards {
       margin: EdgeInsets.only(
           left: Pantalla.getPorcentPanntalla(4, context, 'x'),
           right: Pantalla.getPorcentPanntalla(4, context, 'x'),
-      top: Pantalla.getPorcentPanntalla(4, context, 'x')),
+          top: Pantalla.getPorcentPanntalla(4, context, 'x')),
       color: Colors.white,
       elevation: 0,
       child: ListTile(
-        contentPadding: const EdgeInsets.only(left: 15, top: 0, bottom: 10),
+        contentPadding: EdgeInsets.only(
+            left: Pantalla.getPorcentPanntalla(4, context, 'x'),
+            bottom: Pantalla.getPorcentPanntalla(1, context, 'y')),
         visualDensity: VisualDensity.comfortable,
         dense: true,
         onTap: () => print('object'),
@@ -389,7 +397,8 @@ class Cards {
                       "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1581413287870&di=35491998b94817cbcf04d9f9f3d2d4b3&imgtype=jpg&src=http%3A%2F%2Fimg0.imgtn.bdimg.com%2Fit%2Fu%3D2464547320%2C3316604757%26fm%3D214%26gp%3D0.jpg"),
                 ),*/
         title: Padding(
-            padding: EdgeInsets.only(bottom: 5),
+            padding: EdgeInsets.only(
+                bottom: Pantalla.getPorcentPanntalla(1, context, 'y')),
             child: Row(
               children: [
                 Text(
@@ -415,7 +424,6 @@ class Cards {
           ).data.toString(),
           style: GoogleFonts.roboto(fontSize: 16),
           trimLines: 1,
-          colorClickableText: Colors.pink,
           trimMode: TrimMode.Line,
           lessStyle:
               GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
@@ -425,8 +433,9 @@ class Cards {
               GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
         ),
         trailing: SizedBox(
-          width: 60,
-          height: Pantalla.getPorcentPanntalla(5, context, 'y'),
+          width: Pantalla.getPorcentPanntalla(16, context, 'x'),
+          height: Pantalla.getPorcentPanntalla(
+              Pantalla.getPorcentPanntalla(0.6, context, 'y'), context, 'y'),
           child: IconButton(
             tooltip: 'Eliminar',
             splashRadius: 0.1,
@@ -447,7 +456,8 @@ class Cards {
       CollectionReference collecionUsuarios,
       DocumentSnapshot documentSnapshot) {
     return Padding(
-      padding: EdgeInsets.only(top: 10, bottom: 10),
+      padding: EdgeInsets.only(
+          top: Pantalla.getPorcentPanntalla(Espacios.top, context, 'y')),
       child: FlatButton(
         color: Colors.transparent,
         splashColor: Colors.black26,
@@ -479,7 +489,8 @@ class Cards {
   static Widget vistaTutor(BuildContext context,
       CollectionReference collecionUsuarios, documentSnapshot) {
     return Padding(
-      padding: EdgeInsets.only(top: 10, bottom: 10),
+      padding: EdgeInsets.only(
+          top: Pantalla.getPorcentPanntalla(Espacios.top, context, 'y')),
       child: ElevatedButton(
           style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.transparent)),
@@ -519,12 +530,13 @@ class Cards {
         borderRadius: const BorderRadius.all(Radius.circular(12)),
       ),
       child: SizedBox(
-        width: 300,
-        height: 100,
+        width: Pantalla.getPorcentPanntalla(90, context, 'x'),
+        height: Pantalla.getPorcentPanntalla(13, context, 'y'),
         child: Center(
             child: Text(
           nombreSala,
-          style: TextStyle(fontSize: 35, color: Color.fromARGB(255, 255, 255, 255)),
+          style: TextStyle(
+              fontSize: 35, color: Color.fromARGB(255, 255, 255, 255)),
         )),
       ),
     );

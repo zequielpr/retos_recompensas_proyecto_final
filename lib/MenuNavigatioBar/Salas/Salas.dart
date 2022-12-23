@@ -6,6 +6,7 @@ import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminRoles.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 import 'package:retos_proyecto/datos/Roll_Data.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
+import 'package:retos_proyecto/recursos/Espacios.dart';
 
 import '../../datos/CollecUsers.dart';
 import '../../widgets/Cards.dart';
@@ -115,7 +116,6 @@ class _SalasState extends State<Salas> {
             },
             itemCount: listaIdasSalas.length,
             shrinkWrap: true,
-            padding: EdgeInsets.all(5),
             scrollDirection: Axis.vertical,
           );
         });
@@ -197,19 +197,6 @@ class _SalasState extends State<Salas> {
 
   Future<void> showModalCrearSala() async {
     bool botonActivo = true;
-    var mensajeAdver = Row(
-      children: [
-        Icon(
-          Icons.info_outline,
-          color: Colors.red,
-          size: 16,
-        ),
-        Text(
-          'El nombre de la sala debe terner 16 o menos caracteres',
-          style: TextStyle(color: Colors.red, fontSize: 12),
-        )
-      ],
-    );
 
     var nombreSala = TextEditingController();
     showModalBottomSheet(
@@ -223,11 +210,11 @@ class _SalasState extends State<Salas> {
               builder: (BuildContext context, StateSetter setState) {
             return Padding(
               padding: EdgeInsets.only(
-                  top: 10,
-                  left: 20,
-                  right: 20,
+                  left: Pantalla.getPorcentPanntalla(Espacios.leftRight, ctx, 'x'),
+                  right: Pantalla.getPorcentPanntalla(Espacios.leftRight, ctx, 'x'),
+                  bottom: Pantalla.getPorcentPanntalla(2, context, 'y'),
                   // prevent the soft keyboard from covering text fields
-                  bottom: MediaQuery.of(ctx).viewInsets.bottom + 30),
+               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -266,6 +253,7 @@ class _SalasState extends State<Salas> {
                     child: Column(
                       children: [
                         TextField(
+
                           onChanged: (nombreSala) {
                             if (nombreSala.length > 16) {
                               setState(() {
@@ -277,11 +265,11 @@ class _SalasState extends State<Salas> {
                               botonActivo = true;
                             });
                           },
+                          maxLength: 16,
                           controller: nombreSala,
                           decoration: const InputDecoration(
                               labelText: 'Nombre de sala'),
-                        ),
-                        botonActivo == false ? mensajeAdver : Text('')
+                        )
                       ],
                     ),
                   ),

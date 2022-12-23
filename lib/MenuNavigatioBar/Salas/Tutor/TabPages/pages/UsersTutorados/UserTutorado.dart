@@ -1,11 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/AddRewardUser.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/ExpulsarDeSala.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/ListUsuariosTutorados.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/recursos/Espacios.dart';
 
 import '../../../../../../Colores.dart';
 import '../../../../../../datos/DatosPersonalUser.dart';
@@ -42,42 +44,46 @@ class _UserTutoradoState extends State<UserTutorado> {
                   onPressed: () => ExplusarDeSala.ExplusarUsuarioDesala(
                       context,
                       args.collectionReferenceMisiones.parent?.id,
-                      args.snap.reference.id, CurrentUser.getIdCurrentUser(), ListUsuarios.titulo, ListUsuarios.mensaje),
+                      args.snap.reference.id,
+                      CurrentUser.getIdCurrentUser(),
+                      ListUsuarios.titulo,
+                      ListUsuarios.mensaje),
                   icon: Icon(Icons.output_rounded)),
             ],
             backgroundColor: Colors.white,
             foregroundColor: Colors.black,
             elevation: 0,
             bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(200),
+                preferredSize: Size.fromHeight(
+                    Pantalla.getPorcentPanntalla(28, context, 'y')),
                 child: Column(
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Expanded(
-                            flex: 4,
-                            child: Center(
-                              child: DatosPersonales.getAvatar(
-                                  args.snap.id.trim(), 40),
-                            ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Expanded(
+                          flex: 4,
+                          child: Center(
+                            child: DatosPersonales.getAvatar(
+                                args.snap.id.trim(), 40),
                           ),
-                          Expanded(
-                              flex: 6,
-                              child: DatosPersonales.getIndicadoAvance(
-                                  args.snap.reference.id,
-                                  colecTodosLosUsuarios,
-                                  CurrentUser.getIdCurrentUser())),
-                          Expanded(flex: 1, child: Text(''))
-                        ],
-                      ),
+                        ),
+                        Expanded(
+                            flex: 6,
+                            child: DatosPersonales.getIndicadoAvance(
+                                args.snap.reference.id,
+                                colecTodosLosUsuarios,
+                                CurrentUser.getIdCurrentUser())),
+                        Expanded(flex: 1, child: Text(''))
+                      ],
                     ),
                     Row(
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(left: 20, top: 10),
+                          padding: EdgeInsets.only(
+                              left: Pantalla.getPorcentPanntalla(
+                                  Espacios.leftRight, context, 'x'),
+                              top: Pantalla.getPorcentPanntalla(1, context, 'y')),
                           child: DatosPersonales.getDato(
                               args.snap.id.trim(), 'nombre'),
                         )
@@ -217,9 +223,13 @@ class _UserTutoradoState extends State<UserTutorado> {
               children: [
                 Text(
                   titulo_recompensa,
-                  style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 30),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w500, fontSize: 30),
                 ),
-                Text(contenido,  style: const TextStyle(fontSize: 25),)
+                Text(
+                  contenido,
+                  style: const TextStyle(fontSize: 25),
+                )
               ],
             ),
           );
