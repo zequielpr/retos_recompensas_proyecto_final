@@ -100,7 +100,7 @@ class DatosPersonales {
             );
           });
     }catch(e){
-      return Center(child: Text('hola'),);
+      return Center(child: Text('Ha ocurrido un error'),);
     }
   }
 }
