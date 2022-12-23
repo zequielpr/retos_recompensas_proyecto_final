@@ -79,8 +79,6 @@ class _InfoVerificacionEmailState extends State<InfoVerificacionEmail> {
   }
 
   Future<void> _irInicioSesion(arg) async {
-    FocusScope.of(context).requestFocus(FocusNode());
-    await Future.delayed(const Duration(milliseconds: 70));
     context.router.replace(IniSesionEmailPasswordRouter(args: arg));
     //_context.router.replace(MainRouter())
   }

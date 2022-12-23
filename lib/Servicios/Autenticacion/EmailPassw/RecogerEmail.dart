@@ -132,10 +132,6 @@ class _RecogerEmail extends State<RecogerEmail> {
       if (metodoInicioSesion.isNotEmpty) {
         var datos = TransDatosInicioSesion('Ya estas registrado, inicia sesión',
             false, true, email);
-
-        FocusScope.of(context).requestFocus(FocusNode());
-        await Future.delayed(const Duration(milliseconds: 70));
-        if (!mounted) return;
         context.router.push(IniSesionEmailPasswordRouter(args: datos));
         return;
       }
