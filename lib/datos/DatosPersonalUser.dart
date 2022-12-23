@@ -75,17 +75,17 @@ class DatosPersonales {
             var userDocument = snapshot.data as DocumentSnapshot;
             return LinearPercentIndicator(
               linearGradient: const LinearGradient(
-                begin: Alignment.centerLeft,
+                begin: Alignment.bottomLeft,
                 end: Alignment(0.8, 1),
                 colors: <Color>[
-                  Color(0xff1f005c),
-                  Color(0xff5b0060),
-                  Color(0xff870160),
-                  Color(0xffac255e),
-                  Color(0xffca485c),
-                  Color(0xffe16b5c),
-                  Color(0xfff39060),
-                  Color(0xffffb56b),
+                  Color(0xff03045E),
+                  Color(0xff023E8A),
+                  Color(0xff0077B6),
+                  Color(0xff0096C7),
+                  Color(0xff00B4D8),
+                  Color(0xff48CAE4),
+                  Color(0xff90E0EF),
+                  Color(0xffADE8F4),
                 ], // Gradient from https://learnui.design/tools/gradient-generator.html
               ),
 
@@ -95,7 +95,7 @@ class DatosPersonales {
               animationDuration: 1500,
               percent: userDocument['puntosTotal'] / 200,
               center: Text(userDocument['puntosTotal'].toString()),
-              barRadius: Radius.circular(10),
+              barRadius: Radius.circular(5),
               //progressColor: Colors.amber,
             );
           });

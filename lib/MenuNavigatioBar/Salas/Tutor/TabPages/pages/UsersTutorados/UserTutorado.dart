@@ -7,6 +7,7 @@ import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/Users
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 
+import '../../../../../../Colores.dart';
 import '../../../../../../datos/DatosPersonalUser.dart';
 import '../../../../../../datos/TransferirDatos.dart';
 import '../../../../../../datos/UsuarioActual.dart';
@@ -83,6 +84,7 @@ class _UserTutoradoState extends State<UserTutorado> {
                       ],
                     ),
                     const TabBar(
+                      indicatorColor: Colores.colorPrincipal,
                       labelColor: Colors.black,
                       tabs: [
                         Tab(

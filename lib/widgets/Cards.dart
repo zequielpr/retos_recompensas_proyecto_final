@@ -10,6 +10,7 @@ import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 import 'package:retos_proyecto/widgets/Dialogs.dart';
 
+import '../Colores.dart';
 import '../datos/DatosPersonalUser.dart';
 import '../datos/Roll_Data.dart';
 import '../Servicios/Solicitudes/AdminSolicitudes.dart';
@@ -34,8 +35,7 @@ class Cards {
                 children: [
                   ListTile(
                     leading: DatosPersonales.getAvatar(
-                        documentSnapshot['id_emisor'],
-                        25),
+                        documentSnapshot['id_emisor'], 25),
                     title: Text(documentSnapshot['nombre_emisor'].toString()),
                     subtitle: Text(
                         documentSnapshot['nombre_emisor'].toString() +
@@ -120,8 +120,8 @@ class Cards {
                   )
                 ], style: TextStyle(color: Colors.black)),
               ),
-              leading: DatosPersonales.getAvatar(
-                  documentSnapshot['id_emisor'], 20),
+              leading:
+                  DatosPersonales.getAvatar(documentSnapshot['id_emisor'], 20),
             ),
           ],
         ),
@@ -141,6 +141,11 @@ class Cards {
       double Recompensa,
       dynamic puntos_total_de_usuario) {
     return Card(
+      margin: EdgeInsets.only(
+          left: Pantalla.getPorcentPanntalla(4, context, 'x'),
+          right: Pantalla.getPorcentPanntalla(4, context, 'x'),
+          top: Pantalla.getPorcentPanntalla(4, context, 'x')),
+      color: Colors.white,
       elevation: 0,
       child: ListTile(
         visualDensity: VisualDensity.comfortable,
@@ -165,7 +170,7 @@ class Cards {
                 ),
                 Text(' ' + Recompensa.toString() + 'XP',
                     style:
-                        GoogleFonts.roboto(color: Colors.amber, fontSize: 15))
+                        GoogleFonts.roboto(color:  Colors.amber, fontSize: 15))
               ],
             )),
         subtitle: ReadMoreText(
@@ -210,7 +215,6 @@ class Cards {
     );
   }
 
-
   static mostrarDialog(
       BuildContext context,
       List completada_por,
@@ -234,7 +238,7 @@ class Cards {
       String titulo = nombreMision;
       String mensaje = 'Misión pendiente de realizar';
 
-      actions(BuildContext context){
+      actions(BuildContext context) {
         return <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'OK'),
@@ -251,7 +255,7 @@ class Cards {
   static void getDialogMisionRealizada(BuildContext context, nombreMision) {
     String titulo = nombreMision;
     String mensaje = 'Esta misión ha sido realizada';
-    actions(BuildContext context){
+    actions(BuildContext context) {
       return <Widget>[
         TextButton(
           onPressed: () => Navigator.pop(context, 'OK'),
@@ -261,7 +265,6 @@ class Cards {
     }
 
     Dialogos.mostrarDialog(actions, titulo, mensaje, context);
-
   }
 
   static void getDialogPendienteConfirmacion(context, nombreMision, docMision,
@@ -269,7 +272,8 @@ class Cards {
     //Añadir recompensa sobrante
     GuardarRecompensaSobrante(recompensa) async {
       await CollecUser.COLECCION_USUARIOS
-          .doc(userId).collection('rolTutorado')
+          .doc(userId)
+          .collection('rolTutorado')
           .doc(CurrentUser.getIdCurrentUser())
           .update({'puntos_acumulados': FieldValue.increment(recompensa)});
       return;
@@ -283,67 +287,67 @@ class Cards {
           .update({'puntosTotal': FieldValue.increment(recompensa)});
       return;
     }
+
     String mensaje = !Roll_Data.ROLL_USER_IS_TUTORADO
         ? '¿La tarea ha sido completada?'
         : 'Confirmacion pendiente';
     String titulo = nombreMision;
-    actions(BuildContext context){
+    actions(BuildContext context) {
       return <Widget>[
         !Roll_Data.ROLL_USER_IS_TUTORADO
             ? TextButton(
-          onPressed: () => Navigator.pop(context, 'OK'),
-          child: const Text('no'),
-        )
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('no'),
+              )
             : TextButton(
-          onPressed: () => Navigator.pop(context, 'OK'),
-          child: const Text('ok'),
-        ),
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('ok'),
+              ),
         !Roll_Data.ROLL_USER_IS_TUTORADO
             ? TextButton(
-          onPressed: () async {
-            await docMision.update({
-              'solicitu_confirmacion': FieldValue.arrayRemove([userId])
-            }).then((value) async {
-              await docMision.update({
-                'completada_por': FieldValue.arrayUnion([userId])
-              }).then((value) async {
-                //Debe actualizar con el dato en tiempo real
-                if (puntos_total_de_usuario + recompensa <= 200) {
-                  addRecompensa(recompensa);
-                  return;
-                } else if (puntos_total_de_usuario == 200) {
-                  await GuardarRecompensaSobrante(recompensa);
-                  return;
-                }
-                var recompensaMaxima = 200;
-                //Puntos sobrantes de la recompensa maxima
-                var sobrante = (puntos_total_de_usuario + recompensa) -
-                    recompensaMaxima;
-                print('Sobrante $sobrante');
-                //Añade los puntos necesarios para la recompensa maxima
-                addRecompensa(recompensa - sobrante);
-                //Guarda la recompensa sobrante
-                await GuardarRecompensaSobrante(sobrante);
+                onPressed: () async {
+                  await docMision.update({
+                    'solicitu_confirmacion': FieldValue.arrayRemove([userId])
+                  }).then((value) async {
+                    await docMision.update({
+                      'completada_por': FieldValue.arrayUnion([userId])
+                    }).then((value) async {
+                      //Debe actualizar con el dato en tiempo real
+                      if (puntos_total_de_usuario + recompensa <= 200) {
+                        addRecompensa(recompensa);
+                        return;
+                      } else if (puntos_total_de_usuario == 200) {
+                        await GuardarRecompensaSobrante(recompensa);
+                        return;
+                      }
+                      var recompensaMaxima = 200;
+                      //Puntos sobrantes de la recompensa maxima
+                      var sobrante = (puntos_total_de_usuario + recompensa) -
+                          recompensaMaxima;
+                      print('Sobrante $sobrante');
+                      //Añade los puntos necesarios para la recompensa maxima
+                      addRecompensa(recompensa - sobrante);
+                      //Guarda la recompensa sobrante
+                      await GuardarRecompensaSobrante(sobrante);
 
-                return;
-              });
-            });
-            Navigator.pop(context, 'OK');
-          },
-          child: const Text('si'),
-        )
+                      return;
+                    });
+                  });
+                  Navigator.pop(context, 'OK');
+                },
+                child: const Text('si'),
+              )
             : Text(''),
       ];
     }
+
     Dialogos.mostrarDialog(actions, titulo, mensaje, context);
-
-
   }
 
   static void getDialogSolicitud(context, nombreMision, docMision, userId) {
     String mensaje = '¿Enviar un solicitud de confirmacion?';
     String titulo = nombreMision;
-    actions(BuildContext context){
+    actions(BuildContext context) {
       return <Widget>[
         TextButton(
             onPressed: () => Navigator.pop(context, 'OK'),
@@ -359,6 +363,7 @@ class Cards {
         ),
       ];
     }
+
     Dialogos.mostrarDialog(actions, titulo, mensaje, context);
   }
 
@@ -367,6 +372,11 @@ class Cards {
     String? idSala = documentSnapshot.reference.parent.parent?.id;
     String idMision = documentSnapshot.id;
     return Card(
+      margin: EdgeInsets.only(
+          left: Pantalla.getPorcentPanntalla(4, context, 'x'),
+          right: Pantalla.getPorcentPanntalla(4, context, 'x'),
+      top: Pantalla.getPorcentPanntalla(4, context, 'x')),
+      color: Colors.white,
       elevation: 0,
       child: ListTile(
         contentPadding: const EdgeInsets.only(left: 15, top: 0, bottom: 10),
@@ -410,7 +420,7 @@ class Cards {
           lessStyle:
               GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
           trimCollapsedText: 'ver más',
-          trimExpandedText: 'ver menos',
+          trimExpandedText: ' ver menos',
           moreStyle:
               GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
         ),
@@ -423,7 +433,8 @@ class Cards {
             icon: const Icon(
               Icons.delete,
             ),
-            onPressed: () async => await AdminSala.eliminarMision(idSala, idMision, context), //Eliminar mision
+            onPressed: () async => await AdminSala.eliminarMision(
+                idSala, idMision, context), //Eliminar mision
           ),
         ),
       ),
@@ -499,12 +510,12 @@ class Cards {
 
   static Widget vistaCardSala(BuildContext context, String nombreSala) {
     return Card(
-      color: Colors.orange,
+      color: Colores.colorPrincipal,
       elevation: 0,
       shape: RoundedRectangleBorder(
-        side: BorderSide(
-          color: Theme.of(context).colorScheme.outline,
-        ),
+        /*side: BorderSide(
+          color: Color.fromARGB(100, 0, 0, 0),
+        ),*/
         borderRadius: const BorderRadius.all(Radius.circular(12)),
       ),
       child: SizedBox(
@@ -513,7 +524,7 @@ class Cards {
         child: Center(
             child: Text(
           nombreSala,
-          style: TextStyle(fontSize: 35),
+          style: TextStyle(fontSize: 35, color: Color.fromARGB(255, 255, 255, 255)),
         )),
       ),
     );

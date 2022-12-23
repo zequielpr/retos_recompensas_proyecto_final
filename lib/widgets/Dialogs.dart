@@ -20,7 +20,7 @@ class Dialogos {
         contentPadding: EdgeInsets.only(
             left: Pantalla.getPorcentPanntalla(3, context, 'x'),
             right: Pantalla.getPorcentPanntalla(3, context, 'x')),
-        title: Text(titulo, textAlign: TextAlign.center, style: TextStyle(backgroundColor: Colors.blue),),
+        title: Text(titulo, textAlign: TextAlign.center),
         content: Text(
           mensaje,
           textAlign: TextAlign.center,

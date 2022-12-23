@@ -207,7 +207,7 @@ class _StateRoll extends State<Roll> {
                             fontSize: 18),
                         underline: Container(
                           height: 2,
-                          color: Colors.green,
+                          color: Colors.grey,
                         ),
                         onChanged: (String? newValue) {
                           if (!mounted) return;

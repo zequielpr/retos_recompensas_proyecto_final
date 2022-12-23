@@ -13,6 +13,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
 
+import 'Colores.dart';
 import 'Rutas.gr.dart';
 import 'datos/Roll_Data.dart';
 import 'Rutas.dart';
@@ -69,10 +70,12 @@ class splashScreen extends StatelessWidget {
       routerDelegate: _appRouter.delegate(),
       routeInformationParser: _appRouter.defaultRouteParser(),
       theme: ThemeData(
+        textButtonTheme: TextButtonThemeData(style: ButtonStyle(foregroundColor:  MaterialStateProperty.all(Colores.colorPrincipal))),
           textTheme: const TextTheme(
               bodyText2: TextStyle(color: Colors.black, fontSize: 17),
               button: TextStyle(color: Colors.black)),
           inputDecorationTheme: InputDecorationTheme(
+            labelStyle: TextStyle(color: Colors.black),
               contentPadding: EdgeInsets.all(10),
               border: OutlineInputBorder(
                 borderSide: BorderSide(
@@ -81,7 +84,7 @@ class splashScreen extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide:
-                    BorderSide(style: BorderStyle.solid, color: Colors.blue),
+                    BorderSide(style: BorderStyle.solid, color: Colores.colorPrincipal),
               )),
           appBarTheme: const AppBarTheme(
             backgroundColor: Colors.white,
@@ -89,18 +92,17 @@ class splashScreen extends StatelessWidget {
             elevation: 0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
           ),
-          bottomAppBarTheme: const BottomAppBarTheme(color: Colors.amber),
           primaryTextTheme: TextTheme(button: TextStyle(color: Colors.black)),
           tabBarTheme: TabBarTheme(labelColor: Colors.black),
           elevatedButtonTheme: ElevatedButtonThemeData(
               style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all(Color.fromARGB(236,255,255,255)),
                   //foregroundColor: MaterialStateProperty.all(Colors.black26),
                   overlayColor: MaterialStateProperty.all(
                       const Color.fromARGB(165, 243, 241, 241)),
                   elevation: MaterialStateProperty.all(0),
-                  backgroundColor: MaterialStateProperty.all(Colors.blue),
+                  backgroundColor: MaterialStateProperty.all(Colores.colorPrincipal),
                   textStyle: MaterialStateProperty.all(GoogleFonts.roboto(
-                      color: Colors.black,
                       fontSize: 16,
                       fontWeight: FontWeight.w700))))),
     );

@@ -186,8 +186,9 @@ class _SalasState extends State<Salas> {
 
     ;
 
-    var title ='Numero maximo de salas';
-    var message = 'Numero maximo de salas alcanzado, debe eliminar una o más salas si desea crear una sala';
+    var title = 'Numero maximo de salas';
+    var message =
+        'Numero maximo de salas alcanzado, debe eliminar una o más salas si desea crear una sala';
     var numeroDeSalas = await getNumerosalas();
     numeroDeSalas <= 3
         ? showModalCrearSala()
@@ -245,16 +246,9 @@ class _SalasState extends State<Salas> {
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left:
-                                Pantalla.getPorcentPanntalla(29, context, "x")),
-                        child: IconButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            icon: const Icon(Icons.close)),
-                      )
+                      SizedBox(
+                        height: Pantalla.getPorcentPanntalla(8, context, "y"),
+                      ),
                     ],
                   ),
                   /*const ListTile(
@@ -287,12 +281,9 @@ class _SalasState extends State<Salas> {
                           decoration: const InputDecoration(
                               labelText: 'Nombre de sala'),
                         ),
-                        botonActivo == false?mensajeAdver:Text('')
+                        botonActivo == false ? mensajeAdver : Text('')
                       ],
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
                   ),
 
                   //Boton de enviar solicitud

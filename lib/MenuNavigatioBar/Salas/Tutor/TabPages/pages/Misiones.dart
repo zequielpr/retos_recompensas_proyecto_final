@@ -178,6 +178,7 @@ class MyStatefulWidgetState extends State<MyStatefulWidget> {
             TextField(
               controller: nombreMisionController,
               maxLines: 1,
+              maxLength: 24,
               onChanged: (nombreMision){
                 if(nombreMision.length > 24){
                  setState(() {
@@ -205,6 +206,7 @@ class MyStatefulWidgetState extends State<MyStatefulWidget> {
             TextField(
               controller: objetivoMisionController,
               maxLines: 4,
+              maxLength: 150,
               onChanged: (objetivoMision){
                 if(objetivoMision.length > 150){
                   setState(() {

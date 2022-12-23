@@ -13,6 +13,7 @@ import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/Servicios/Autenticacion/EmailPassw/IniciarSessionEmailPassw.dart';
 
+import '../../Colores.dart';
 import '../../MediaQuery.dart';
 import '../../datos/TransferirDatos.dart';
 import '../Notificaciones/AdministrarTokens.dart';
@@ -275,7 +276,7 @@ class _LoginState extends State<Login> {
             TextSpan(
               text: ' Terminos del servicios ',
               style: const TextStyle(
-                color: Color.fromARGB(236, 231, 64, 122),
+                color: Colores.colorPrincipal,
               ),
               recognizer: TapGestureRecognizer()..onTap = _terminosDelServicio,
             ),
@@ -283,7 +284,7 @@ class _LoginState extends State<Login> {
             TextSpan(
                 text: 'politica de privacidad.',
                 style:
-                    const TextStyle(color: Color.fromARGB(236, 231, 64, 122)),
+                    const TextStyle(color: Colores.colorPrincipal),
                 recognizer: TapGestureRecognizer()
                   ..onTap = _politicaDePrivacidad),
           ]),
@@ -316,7 +317,7 @@ class _LoginState extends State<Login> {
                       style: TextStyle(color: Colors.black)),
                   TextSpan(
                       text: '   Registrarse',
-                      style: TextStyle(color: Colors.pinkAccent))
+                      style: TextStyle(color: Colores.colorPrincipal))
                 ]),
               ))
         ],

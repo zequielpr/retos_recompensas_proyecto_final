@@ -70,7 +70,7 @@ class InicioVistaTutorado {
                   child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(Colors.blueGrey),
+                            MaterialStateProperty.all(Colors.transparent),
                       ),
                       onPressed: snapshot['puntosTotal'] == 200
                           ? snapshot['recompensa_x_200'].isNotEmpty
