@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/recursos/Espacios.dart';
 import 'package:retos_proyecto/widgets/Dialogs.dart';
 
 import '../../../datos/TransferirDatos.dart';
@@ -18,30 +19,24 @@ class RecoveryPassw extends StatefulWidget {
 
 class _RecoveryPasswState extends State<RecoveryPassw> {
   var emailController = TextEditingController();
+  var leftRight;
   @override
   Widget build(BuildContext context) {
+    leftRight = Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: Icon(Icons.help),
-            onPressed: () {},
-          ),
-        ],
+        centerTitle: true,
         titleTextStyle: TextStyle(),
-        title: Align(
-          alignment: Alignment.center,
-          child: Text(
-            'Reestablecer',
-            style: TextStyle(color: Colors.black, fontSize: 25),
-          ),
+        title: Text(
+          'Reestablecer',
+          style: TextStyle(color: Colors.black, fontSize: 25),
         ),
       ),
       body: Container(
         margin: EdgeInsets.only(
-            left: Pantalla.getPorcentPanntalla(6, context, 'x'),
-            right: Pantalla.getPorcentPanntalla(6, context, 'x'),
-            top: Pantalla.getPorcentPanntalla(4, context, 'y')),
+            left: leftRight,
+            right: leftRight,
+            top: Pantalla.getPorcentPanntalla(Espacios.top, context, 'y')),
         child: Column(
           children: <Widget>[
             Align(
@@ -57,7 +52,7 @@ class _RecoveryPasswState extends State<RecoveryPassw> {
             Container(
               margin: EdgeInsets.only(
                   top: Pantalla.getPorcentPanntalla(2, context, 'y'),
-                  bottom: Pantalla.getPorcentPanntalla(2, context, 'y')),
+                  bottom: Pantalla.getPorcentPanntalla(4, context, 'y')),
               child: TextField(
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -66,11 +61,16 @@ class _RecoveryPasswState extends State<RecoveryPassw> {
                     hintText: 'escribe tu email aquí', labelText: 'Email'),
               ),
             ),
-            ElevatedButton(
-                onPressed: () {
-                  enviarLinkRecovPassw(emailController.text);
-                },
-                child: Text('Restablecer'))
+            SizedBox(
+              width: Pantalla.getPorcentPanntalla(50, context, 'x'),
+              height: Pantalla.getPorcentPanntalla(6, context, 'y'),
+              child: ElevatedButton(
+                  onPressed: () {
+                    enviarLinkRecovPassw(emailController.text);
+                  },
+                  child: Text('Restablecer')),
+            )
+
           ],
         ),
       ),

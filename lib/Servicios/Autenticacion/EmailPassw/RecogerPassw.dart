@@ -2,9 +2,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/Servicios/Autenticacion/DatosNewUser.dart';
 import 'package:retos_proyecto/datos/ValidarDatos.dart';
+import 'package:retos_proyecto/recursos/Espacios.dart';
 
 import '../../../datos/TransferirDatos.dart';
 
@@ -39,15 +41,17 @@ class _RecogerPassw extends State<RecogerPassw> {
     size: 20,
     color: Colors.grey,
   );
+  var paddinLeftRight;
   @override
   Widget build(BuildContext context) {
+    paddinLeftRight = Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
     return Scaffold(
       appBar: AppBar(
         title: Text('Registrarse'),
       ),
       body: Container(
         child: Padding(
-          padding: EdgeInsets.only(top: 40, left: 30, right: 30),
+          padding: EdgeInsets.only(top: Pantalla.getPorcentPanntalla(Espacios.top, context, 'y'), left: paddinLeftRight, right: paddinLeftRight),
           child: getTextFieldPasswd(),
         ),
       ),
@@ -61,7 +65,7 @@ class _RecogerPassw extends State<RecogerPassw> {
         Align(
           alignment: Alignment.centerLeft,
           child: Padding(
-            padding: EdgeInsets.only(bottom: 25),
+            padding: EdgeInsets.only(bottom: Pantalla.getPorcentPanntalla(4, context, 'y')),
             child: Text(
               'Establece una contraseña',
               style: GoogleFonts.roboto(
@@ -115,10 +119,10 @@ class _RecogerPassw extends State<RecogerPassw> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 20),
+          padding: EdgeInsets.only(top:  Pantalla.getPorcentPanntalla(2, context, 'y')),
           child: SizedBox(
-              width: 200,
-              height: 42,
+              width: Pantalla.getPorcentPanntalla(50, context, 'x'),
+              height: Pantalla.getPorcentPanntalla(6, context, 'y'),
               child: ElevatedButton(
                   style: ButtonStyle(
                       elevation: MaterialStateProperty.all(0)),

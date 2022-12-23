@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 
+import '../../../MediaQuery.dart';
 import '../../../datos/TransferirDatos.dart';
 import '../../../datos/ValidarDatos.dart';
+import '../../../recursos/Espacios.dart';
 import '../Autenticacion.dart';
 import 'IniciarSessionEmailPassw.dart';
 import 'RecogerPassw.dart';
@@ -24,6 +26,7 @@ class _RecogerEmail extends State<RecogerEmail> {
   var emailController = TextEditingController();
   var colorWarning = Colors.transparent;
   var colorSubfix = Colors.transparent;
+  var paddingRightLeft;
   bool btnActivo = true;
   void _cambiarColor(Color colorWarning, Color colorSubfix) {
     setState(() {
@@ -34,20 +37,21 @@ class _RecogerEmail extends State<RecogerEmail> {
 
   @override
   Widget build(BuildContext context) {
+    paddingRightLeft = Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
     return Scaffold(
       appBar: AppBar(
         title: Text('Registrarse'),
       ),
       body: Container(
         child: Padding(
-          padding: EdgeInsets.only(top: 40, left: 30, right: 30),
+          padding: EdgeInsets.only(top: Pantalla.getPorcentPanntalla(Espacios.top, context, 'y'), left: paddingRightLeft, right: paddingRightLeft),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: EdgeInsets.only(bottom: 25),
+                  padding: EdgeInsets.only(bottom: Pantalla.getPorcentPanntalla(4, context, 'y')),
                   child: Text(
                     'Introduce un correo eletrónico',
                     style: GoogleFonts.roboto(
@@ -97,10 +101,10 @@ class _RecogerEmail extends State<RecogerEmail> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 20),
+                padding: EdgeInsets.only(top: Pantalla.getPorcentPanntalla(2, context, 'y')),
                 child: SizedBox(
-                    width: 200,
-                    height: 42,
+                    width: Pantalla.getPorcentPanntalla(50, context, 'x'),
+                    height: Pantalla.getPorcentPanntalla(6, context, 'y'),
                     child: ElevatedButton(
                         onPressed: btnActivo?  () async => _continua(args): null,
                         child: Text(

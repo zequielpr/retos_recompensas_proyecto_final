@@ -17,6 +17,7 @@ import '../../Colores.dart';
 import '../../Loanding.dart';
 import '../../MediaQuery.dart';
 import '../../datos/TransferirDatos.dart';
+import '../../recursos/Espacios.dart';
 import '../Notificaciones/AdministrarTokens.dart';
 import 'Autenticacion.dart';
 import '../../main.dart';
@@ -71,7 +72,7 @@ class _LoginState extends State<Login> {
     collecUsuarios = args.collectionReferenceUser;
     final correo = TextEditingController();
 
-    pLeftRight = Pantalla.getPorcentPanntalla(5, context, 'x');
+    pLeftRight = Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
     mTop = Pantalla.getPorcentPanntalla(2, context, 'y');
 
     var body = Container(

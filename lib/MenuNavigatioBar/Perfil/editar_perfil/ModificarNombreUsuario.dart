@@ -38,7 +38,7 @@ class _ModificarNombreUsuarioState extends State<ModificarNombreUsuario> {
             left: Pantalla.getPorcentPanntalla(6, context, 'x'),
             right: Pantalla.getPorcentPanntalla(6, context, 'x'),
             top: Pantalla.getPorcentPanntalla(6, context, 'x')),
-        child: textField.textFielNombreUsuario(),
+        child: textField.textFielNombreUsuario(context),
       ),
     );
   }

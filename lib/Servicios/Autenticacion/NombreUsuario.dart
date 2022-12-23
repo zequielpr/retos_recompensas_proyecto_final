@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 
+import '../../MediaQuery.dart';
 import '../../Rutas.gr.dart';
 import '../../datos/TransferirDatos.dart';
 import '../../datos/UsuarioActual.dart';
@@ -55,13 +56,13 @@ class NombreUsuarioWidget {
     });
   }
 
-  Widget textFielNombreUsuario() {
+  Widget textFielNombreUsuario(BuildContext context) {
     return Column(
       children: [
         Align(
           alignment: Alignment.centerLeft,
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 25),
+            padding: EdgeInsets.only(bottom: Pantalla.getPorcentPanntalla(4, context, 'y')),
             child: Text(
               'Nombre de usuario',
               style:
@@ -69,32 +70,29 @@ class NombreUsuarioWidget {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 0),
-          child: Column(
-            children: [
-              TextField(
-                maxLength: 30,
-                keyboardType: TextInputType.name,
-                autofocus: true,
-                controller: _userNameController,
-                onChanged: (usuario) {
-                  _esperar(usuario);
-                },
-                decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    labelText: "Nombre de usuario",
-                    suffixIcon: _estadoUsuario),
-              ),
-              noMostrarAdver == false ? mensajeAdver : Text('')
-            ],
-          ),
+        Column(
+          children: [
+            TextField(
+              maxLength: 30,
+              keyboardType: TextInputType.name,
+              autofocus: true,
+              controller: _userNameController,
+              onChanged: (usuario) {
+                _esperar(usuario);
+              },
+              decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: "Nombre de usuario",
+                  suffixIcon: _estadoUsuario),
+            ),
+            noMostrarAdver == false ? mensajeAdver : Text('')
+          ],
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 20),
+          padding: EdgeInsets.only(top: Pantalla.getPorcentPanntalla(2, context, 'y')),
           child: SizedBox(
-            width: 200,
-            height: 42,
+            width: Pantalla.getPorcentPanntalla(50, context, 'x'),
+            height: Pantalla.getPorcentPanntalla(6, context, 'y'),
             child: ElevatedButton(
               style: ButtonStyle(elevation: MaterialStateProperty.all(0)),
               onPressed: _botonActivo
