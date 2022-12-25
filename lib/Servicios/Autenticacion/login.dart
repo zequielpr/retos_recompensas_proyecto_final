@@ -13,8 +13,11 @@ import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/Servicios/Autenticacion/EmailPassw/IniciarSessionEmailPassw.dart';
 
+import '../../Colores.dart';
+import '../../Loanding.dart';
 import '../../MediaQuery.dart';
 import '../../datos/TransferirDatos.dart';
+import '../../recursos/Espacios.dart';
 import '../Notificaciones/AdministrarTokens.dart';
 import 'Autenticacion.dart';
 import '../../main.dart';
@@ -69,7 +72,7 @@ class _LoginState extends State<Login> {
     collecUsuarios = args.collectionReferenceUser;
     final correo = TextEditingController();
 
-    pLeftRight = Pantalla.getPorcentPanntalla(5, context, 'x');
+    pLeftRight = Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
     mTop = Pantalla.getPorcentPanntalla(2, context, 'y');
 
     var body = Container(
@@ -98,32 +101,7 @@ class _LoginState extends State<Login> {
                     }
      */
 
-    var bodyProgress = Container(
-      child: Stack(
-        children: <Widget>[
-          body,
-          Container(
-            alignment: AlignmentDirectional.center,
-            decoration: const BoxDecoration(),
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.blue[200],
-                  borderRadius: BorderRadius.circular(10.0)),
-              width: 50.0,
-              height: 50.0,
-              alignment: AlignmentDirectional.center,
-              child: Transform.scale(
-                scale: 0.7,
-                child: const CircularProgressIndicator(
-                  color: Colors.grey,
-                  strokeWidth: 5,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+    var bodyProgress = Loanding.getLoanding(body, context);
 
     return Scaffold(
       body: _loading ? bodyProgress : body,
@@ -275,15 +253,14 @@ class _LoginState extends State<Login> {
             TextSpan(
               text: ' Terminos del servicios ',
               style: const TextStyle(
-                color: Color.fromARGB(236, 231, 64, 122),
+                color: Colores.colorPrincipal,
               ),
               recognizer: TapGestureRecognizer()..onTap = _terminosDelServicio,
             ),
             const TextSpan(text: 'y confirmas haber leido la '),
             TextSpan(
                 text: 'politica de privacidad.',
-                style:
-                    const TextStyle(color: Color.fromARGB(236, 231, 64, 122)),
+                style: const TextStyle(color: Colores.colorPrincipal),
                 recognizer: TapGestureRecognizer()
                   ..onTap = _politicaDePrivacidad),
           ]),
@@ -293,32 +270,31 @@ class _LoginState extends State<Login> {
   Widget _getFooter() {
     return Container(
       height: Pantalla.getPorcentPanntalla(8, context, 'y'),
-      color: const Color.fromARGB(202, 217, 217, 217),
+      //color: const Color.fromARGB(202, 217, 217, 217),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Divider(indent: 1, endIndent: 1, color: Colors.black),
-
           ElevatedButton(
-              style: ButtonStyle(
-                  elevation: MaterialStateProperty.all(0),
-                  backgroundColor:
-                      MaterialStateProperty.all(Colors.transparent)),
-              onPressed: () {
-                TranferirDatosRoll datos =
-                    TranferirDatosRoll('userContraseña', collecUsuarios);
-                _irRollPage(datos);
-              },
-              child: RichText(
-                text: const TextSpan(children: [
-                  TextSpan(
-                      text: '¿No tienes una cuenta?',
-                      style: TextStyle(color: Colors.black)),
-                  TextSpan(
-                      text: '   Registrarse',
-                      style: TextStyle(color: Colors.pinkAccent))
-                ]),
-              ))
+            style: ButtonStyle(
+                elevation: MaterialStateProperty.all(0),
+                backgroundColor: MaterialStateProperty.all(Colors.transparent)),
+            onPressed: () {
+              TranferirDatosRoll datos =
+                  TranferirDatosRoll('userContraseña', collecUsuarios);
+              _irRollPage(datos);
+            },
+            child: RichText(
+              text: const TextSpan(children: [
+                TextSpan(
+                    text: '¿No tienes una cuenta?',
+                    style: TextStyle(color: Colors.black)),
+                TextSpan(
+                    text: '   Registrarse',
+                    style: TextStyle(color: Colores.colorPrincipal))
+              ]),
+            ),
+          ),
+          Divider(),
         ],
       ),
     );
@@ -351,7 +327,7 @@ class _LoginState extends State<Login> {
 
   //Metodos de cards
   void _buttonPasswdEmail() {
-    var datos = TransDatosInicioSesion('', true, false, '');
+    var datos = TransDatosInicioSesion('', false, false, '');
     context.router.push(IniSesionEmailPasswordRouter(args: datos));
 
     /*Autenticar.comprobarNewOrOld(collecUsuarios, context)*/

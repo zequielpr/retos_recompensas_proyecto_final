@@ -11,10 +11,11 @@ import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/Servicios/Autenticacion/DatosNewUser.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 import 'package:retos_proyecto/datos/TransferirDatos.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
+import '../../../Loanding.dart';
 import '../../../datos/UsuarioActual.dart';
 import '../../../datos/ValidarDatos.dart';
+import '../../../recursos/Espacios.dart';
 import '../Autenticacion.dart';
 
 class IniSesionEmailPassword extends StatelessWidget {
@@ -39,7 +40,6 @@ class StateIniSesionEmailPassword extends StatefulWidget {
 }
 
 class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
-  late StreamSubscription<bool> keyboardSubscription;
   final TransDatosInicioSesion args;
   _StateIniSesionEmailPassword(this.args);
 
@@ -48,26 +48,6 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
     super.initState();
 
     emailController.text = args.email;
-
-    //Controlar la visibilidad del teclado
-    var keyboardVisibilityController = KeyboardVisibilityController();
-    print(
-        'Keyboard visibility direct query: ${keyboardVisibilityController.isVisible}');
-    keyboardSubscription =
-        keyboardVisibilityController.onChange.listen((bool visible) async {
-      if (visible) {
-        _cambiarPadding(10, 40);
-        return;
-      }
-      await Future.delayed(const Duration(milliseconds: 100));
-      _cambiarPadding(150, 80);
-    });
-  }
-
-  @override
-  void dispose() {
-    keyboardSubscription.cancel();
-    super.dispose();
   }
 
   var emailController = TextEditingController();
@@ -82,12 +62,6 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
 
   var paddingTopAppName = 80.0;
   var paddingBottonAppName = 130.0;
-  void _cambiarPadding(double paddingBottonAppName, double paddingTopAppName) {
-    setState(() {
-      this.paddingTopAppName = paddingTopAppName;
-      this.paddingBottonAppName = paddingBottonAppName;
-    });
-  }
 
   void _ActionCrearUnaCuenta(TransDatosInicioSesion arg) {
     var datos = TranferirDatosRoll('x', CollecUser.COLECCION_USUARIOS);
@@ -120,8 +94,36 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
     });
   }
 
+  var body;
+
+  var isWaiting = false;
+  late Widget loanding;
   @override
   Widget build(BuildContext context) {
+    body = Container(
+      margin: EdgeInsets.only(
+          left: Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x'),
+          right:
+              Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x')),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                _getAppName(),
+                _getIntentoRegistrarse(),
+                _getTextFielCorreo(),
+                _getTextFieldPassw(),
+                _getBtnOlvPassw(),
+                _getBtnIniciarSesion(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+    loanding = Loanding.getLoanding(body, context);
     //emailController.selection = TextSelection.fromPosition(TextPosition(offset: emailController.text.length));
     return Scaffold(
       /*
@@ -138,19 +140,7 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
         title: Text('Iniciar sesión'),
       ),
        */
-      body: Padding(
-        padding: EdgeInsets.only(top: paddingTopAppName, left: Pantalla.getPorcentPanntalla(5, context, 'x'), right: Pantalla.getPorcentPanntalla(5, context, 'x')),
-        child: Column(
-          children: [
-            _getAppName(),
-            _getIntentoRegistrarse(),
-            _getTextFielCorreo(),
-            _getTextFieldPassw(),
-            _getBtnOlvPassw(),
-            _getBtnIniciarSesion(),
-          ],
-        ),
-      ),
+      body: isWaiting == true? loanding : body,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: TextButton(
         onPressed: () => _ActionCrearUnaCuenta(args),
@@ -162,7 +152,8 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
   //Metodos constructores de widgetd
   Widget _getAppName() {
     return Padding(
-      padding: EdgeInsets.only(bottom: paddingBottonAppName),
+      padding: EdgeInsets.only(
+          bottom: Pantalla.getPorcentPanntalla(2, context, 'y')),
       child: Text(
         'App name',
         style: GoogleFonts.roboto(fontSize: 40, fontWeight: FontWeight.w600),
@@ -171,29 +162,25 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
   }
 
   Widget _getIntentoRegistrarse() {
-    return args.titulo.isNotEmpty
-        ? Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 20),
-              child: Text(
-                args.titulo,
-                style: GoogleFonts.roboto(
-                    fontSize: 20, fontWeight: FontWeight.w500),
-              ),
-            ),
-          )
-        : Text('');
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: EdgeInsets.only(
+            bottom: Pantalla.getPorcentPanntalla(2, context, 'y')),
+        child: Text(
+          args.titulo,
+          style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w500),
+        ),
+      ),
+    );
   }
 
   Widget _getTextFielCorreo() {
+    print('debe hacer focus en el email ${args.focusEmail}');
     return Column(
       children: [
         TextField(
-          autocorrect: args.focusEmail,
-          onEditingComplete: () {
-            print('holaa');
-          },
+          autofocus: args.focusEmail,
           keyboardType: TextInputType.emailAddress,
           onChanged: (email) {
             if (email.isNotEmpty &&
@@ -212,48 +199,63 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
         ),
         Align(
           alignment: Alignment.centerLeft,
-          child: elusuarioNoExiste == true ? Text('Usuario incorrecto', style: TextStyle(fontSize: 14, color: Colors.red), ) : SizedBox(),
+          child: elusuarioNoExiste == true
+              ? Text(
+                  'Usuario incorrecto',
+                  style: TextStyle(fontSize: 14, color: Colors.red),
+                )
+              : SizedBox(),
         )
       ],
     );
   }
 
   Widget _getTextFieldPassw() {
-
-
     return Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: Column(children: [
-        TextField(
-          keyboardType: TextInputType.visiblePassword,
-          autofocus: args.focusPassw,
-          onChanged: (passw) {
-            passw.isNotEmpty ? _stateBtnOjo(true) : _stateBtnOjo(false);
-            if (passw.isNotEmpty &&
-                emailController.text.isNotEmpty &&
-                Validar.validarEmail(emailController.text.trim())) {
-              setStateBtn(true);
-              return;
-            }
-            setStateBtn(false);
-          },
-          controller: passwdController,
-          obscureText: passwOculta,
-          decoration: InputDecoration(
-              suffixIcon: isBtnOjoVisible
-                  ? IconButton(
-                onPressed: () =>
-                passwOculta == true ? _mostrarPassw() : _ocultarPassw(),
-                icon: iconPassw,
-              )
-                  : null,
-              hintText: 'escribe tu contraseña',
-              labelText: 'Contraseña'),
-        ),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: isPasswordIncorrect == true ? Text('Contraseña incorrecta', style: TextStyle(fontSize: 14, color: Colors.red), ) : SizedBox(),
-        )],),
+      padding:
+          EdgeInsets.only(top: Pantalla.getPorcentPanntalla(4, context, 'y')),
+      child: Column(
+        children: [
+          TextField(
+            keyboardType: TextInputType.visiblePassword,
+            autofocus: args.focusPassw,
+            onChanged: (passw) {
+              print(passw);
+              passw.isNotEmpty ? _stateBtnOjo(true) : _stateBtnOjo(false);
+              if (passw.isNotEmpty &&
+                  emailController.text.isNotEmpty &&
+                  Validar.validarEmail(emailController.text.trim())) {
+                setStateBtn(true);
+                print('Es valido');
+                return;
+              }
+              setStateBtn(false);
+            },
+            controller: passwdController,
+            obscureText: passwOculta,
+            decoration: InputDecoration(
+                suffixIcon: isBtnOjoVisible
+                    ? IconButton(
+                        onPressed: () => passwOculta == true
+                            ? _mostrarPassw()
+                            : _ocultarPassw(),
+                        icon: iconPassw,
+                      )
+                    : null,
+                hintText: 'escribe tu contraseña',
+                labelText: 'Contraseña'),
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: isPasswordIncorrect == true
+                ? Text(
+                    'Contraseña incorrecta',
+                    style: TextStyle(fontSize: 14, color: Colors.red),
+                  )
+                : SizedBox(),
+          )
+        ],
+      ),
     );
   }
 
@@ -267,16 +269,22 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
 
   Widget _getBtnIniciarSesion() {
     return SizedBox(
-        width: 200,
-        height: 40,
+        width: Pantalla.getPorcentPanntalla(50, context, 'x'),
+        height: Pantalla.getPorcentPanntalla(6, context, 'y'),
         child: ElevatedButton(
             onPressed: isBtnActivo
                 ? () async {
+                    setState(() {
+                      isWaiting = true;
+                    });
                     String resultado = await Autenticar.inciarSesionEmailPasswd(
-                        emailController.text.trim(),
-                        passwdController.text.trim(),
-                        CollecUser.COLECCION_USUARIOS,
-                        context);
+                            emailController.text.trim(),
+                            passwdController.text.trim(),
+                            CollecUser.COLECCION_USUARIOS,
+                            context)
+                        .whenComplete(() => setState(() {
+                              isWaiting = false;
+                            }));
                     if (resultado != 's') _indicarDatoErroneo(resultado);
                   }
                 : null,
@@ -286,8 +294,15 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
   }
 
   void _indicarDatoErroneo(String dato) {
-    if(dato == 'env'){
-      var datos = TransDatosInicioSesion('', false, true, CurrentUser.currentUser != null?CurrentUser.currentUser?.email as String:'');
+    if (dato == 'env') {
+      //Email no verificado
+      var datos = TransDatosInicioSesion(
+          '',
+          false,
+          true,
+          CurrentUser.currentUser != null
+              ? CurrentUser.currentUser?.email as String
+              : '');
       context.router.push(InfoVerificacionEmailRouter(arg: datos));
       return;
     }

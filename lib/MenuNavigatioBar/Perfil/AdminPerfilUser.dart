@@ -66,55 +66,16 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
                 ListTile(
                   leading: DatosPersonales.getAvatar(
                       CurrentUser.getIdCurrentUser(), 30),
-                  title: Text(CurrentUser.currentUser?.displayName as String),
+                  title: Text(CurrentUser.currentUser?.displayName as String, style: TextStyle(fontSize: 25),),
                   subtitle: DatosPersonales.getDato(
-                      CurrentUser.getIdCurrentUser(), 'nombre_usuario'),
+                      CurrentUser.getIdCurrentUser(), 'nombre_usuario', TextStyle()),
                 ),
-                //_editarPerfil(),
                 rolActual(),
-
-                //_email(),
-                //adminPassw(),
-                //cerrarSesion(),
-                //eliminarCuenta()
               ],
             ),
           ),
         ),
         body: MostrarUsuarios());
-  }
-
-  Widget _editarPerfil() {
-    return Padding(
-      padding: EdgeInsets.only(left: 20, top: 10),
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: TextButton(
-          style: ButtonStyle(
-              padding:
-                  MaterialStateProperty.all(const EdgeInsets.only(left: 0))),
-          child: const Text(
-            'Editar perfil',
-            style: TextStyle(
-                fontSize: 20,
-                color: Colors.black,
-                fontWeight: FontWeight.normal),
-          ),
-          onPressed: () => context.router.push(const EditarPerfilRouter()),
-        ),
-      ),
-    );
-  }
-
-  Widget _email() {
-    return Padding(
-      padding: EdgeInsets.only(left: 20, top: 10),
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: Text(CurrentUser.currentUser?.email as String,
-            style: const TextStyle(fontSize: 20)),
-      ),
-    );
   }
 
   Widget rolActual() {
@@ -144,90 +105,5 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
         child: AdminRoll.getRoll(context),
       ),
     );
-  }
-
-  //Administrar contraseña
-  Widget adminPassw() {
-    return Padding(
-      padding: EdgeInsets.only(left: 20, top: 10),
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: TextButton(
-          style: ButtonStyle(
-              padding:
-                  MaterialStateProperty.all(const EdgeInsets.only(left: 0))),
-          onPressed: () {
-            context.router.pushWidget(ChangePasswd(contextPerfil: context));
-          },
-          child: const Text(
-            'Cambiar Contraseña',
-            style: TextStyle(
-                fontSize: 20,
-                color: Colors.black,
-                fontWeight: FontWeight.normal),
-          ),
-        ),
-      ),
-    );
-  }
-
-  //Cerrar sesión
-
-  //Eliminar cuenta
-  Widget eliminarCuenta() {
-    return Padding(
-      padding: EdgeInsets.only(left: 20, top: 17),
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: Text(
-          'Eliminar cuenta',
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
-    );
-  }
-
-  Widget virificarEmail() {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: 20,
-      ),
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: TextButton(
-          style: ButtonStyle(
-              padding:
-                  MaterialStateProperty.all(const EdgeInsets.only(left: 0))),
-          onPressed: () => enviarLinkDevificacion(),
-          child: Text(
-            "Verificar email",
-            style: TextStyle(
-                fontSize: 20,
-                color: Colors.black,
-                fontWeight: FontWeight.normal),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void enviarLinkDevificacion() {
-    (CurrentUser.currentUser?.sendEmailVerification())
-        ?.catchError((onError) {})
-        .then((value) {
-      var actions = <Widget>[
-        TextButton(
-          onPressed: () {
-            context.router.pop();
-          },
-          child: const Text('Ok'),
-        ),
-      ];
-
-      var titulo = 'Link enviado';
-      var message = 'Abra el email enviado a ${CurrentUser.currentUser?.email} para virificar tu email';
-
-      AdminRoll.showMessaje(actions, titulo, message, context);
-    });
   }
 }

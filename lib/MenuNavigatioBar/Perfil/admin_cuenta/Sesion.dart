@@ -9,7 +9,7 @@ import '../../../widgets/Dialogs.dart';
 import '../AdminRoles.dart';
 
 class Sesion {
-  static dialogCerrarSesion(BuildContext context) {
+  static dialogCerrarSesion(BuildContext context, espararCerrarSesion) {
     var titulo ='Cerrar sesión';
     var mensaje ='¿Desea cerrar sesión?';
 
@@ -20,7 +20,7 @@ class Sesion {
           child: Text('Cancelar'),
         ),
         TextButton(
-          onPressed: () => cerrarSesion(context),
+          onPressed: () => cerrarSesion(context, espararCerrarSesion),
           child: Text('Cerrar sesión'),
         )
       ];
@@ -29,9 +29,10 @@ class Sesion {
     Dialogos.mostrarDialog(actions, titulo, mensaje, context);
   }
 
-  static Future<void> cerrarSesion(BuildContext context) async {
+  static Future<void> cerrarSesion(BuildContext context, espararCerrarSesion) async {
+    espararCerrarSesion(true);
     await FirebaseAuth.instance.signOut().then((value) async =>
-        {await _p(), context.router.replace(SplashScreenRouter())});
+        {await _p(), context.router.replace(SplashScreenRouter())}).whenComplete(() => espararCerrarSesion(false));
   }
 
   static Future<void> _p() async {

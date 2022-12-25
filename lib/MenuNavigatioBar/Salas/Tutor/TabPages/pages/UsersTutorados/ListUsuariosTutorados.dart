@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/Servicios/Solicitudes/AdminSolicitudes.dart';
+import 'package:retos_proyecto/recursos/Espacios.dart';
 import '../../../../../../Rutas.gr.dart';
 import '../../../../../../datos/DatosPersonalUser.dart';
 import '../../../../../../datos/SalaDatos.dart';
@@ -25,7 +26,6 @@ class ListUsuarios extends StatelessWidget {
       required this.collectionReferenceMisiones})
       : super(key: key);
 
-
   static const String titulo = 'Expulsar';
   static const String mensaje = '¿Deseas explusar este usuario de esta sala?';
 
@@ -37,10 +37,12 @@ class ListUsuarios extends StatelessWidget {
           stream: collectionReferenceUsuariosTutorados.snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
             if (streamSnapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator(),);
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             }
 
-            if(streamSnapshot.data?.docs.isEmpty == true){
+            if (streamSnapshot.data?.docs.isEmpty == true) {
               return const Center(
                 child: Text('Añade un usuario a tu tutoría'),
               );
@@ -54,18 +56,19 @@ class ListUsuarios extends StatelessWidget {
                       streamSnapshot.data!.docs[index];
 
                   var idSala = documentSnapshot.reference.parent.parent?.id;
-                  return Padding(
-                    padding: EdgeInsets.only(top: 10, bottom: 10),
-                    child: Card(
-                      color: Colors.transparent,
-                      margin: const EdgeInsets.all(10),
-                      elevation: 0,
-                      child: ListTile(
-                        onTap: () {
-                          var datos = TransfDatosUserTutorado(
-                              collectionReferenceMisiones, documentSnapshot);
-                          contextSala.router.push(UserTutorado(args: datos));
-                          /* Navigator.pushNamed(
+                  return Card(
+                    color: Colors.transparent,
+                    margin: EdgeInsets.only(
+                        left: Pantalla.getPorcentPanntalla(4, context, 'x'),
+                        right: Pantalla.getPorcentPanntalla(2, context, 'x'),
+                        top: Pantalla.getPorcentPanntalla(1, context, 'y')),
+                    elevation: 0,
+                    child: ListTile(
+                      onTap: () {
+                        var datos = TransfDatosUserTutorado(
+                            collectionReferenceMisiones, documentSnapshot);
+                        contextSala.router.push(UserTutorado(args: datos));
+                        /* Navigator.pushNamed(
                         context,
                         MenuSala.routeName,
                         arguments: TransferirDatos(
@@ -74,27 +77,34 @@ class ListUsuarios extends StatelessWidget {
                         ),
                       );
 */
-                          //this.titulo = 'holaaa';
+                        //this.titulo = 'holaaa';
 
-                          //Navigator.push(context, MaterialPageRoute(builder: (context)=>MenuSala()) );
-                        },
-                        leading:
-                            DatosPersonales.getAvatar(documentSnapshot.id, 20),
-                        title: SalaDatos.getNombreUsuario(
-                            collectionReferenceUsuariosDocPersonal,
-                            documentSnapshot.id),
-                        subtitle: DatosPersonales.getDato( documentSnapshot.id, 'nombre_usuario'),
-                        trailing: SizedBox(
-                          width: 50,
-                          child: Row(
-                            children: [
-                              IconButton(
-                                  icon: const Icon(Icons.output_rounded,
-                                      size: 25),
-                                  onPressed: () => ExplusarDeSala.ExplusarUsuarioDesala(context, idSala, documentSnapshot.id, CurrentUser.getIdCurrentUser(), titulo, mensaje)),
-                              // This icon button is used to delete a single product
-                            ],
-                          ),
+                        //Navigator.push(context, MaterialPageRoute(builder: (context)=>MenuSala()) );
+                      },
+                      leading:
+                          DatosPersonales.getAvatar(documentSnapshot.id, 20),
+                      title: SalaDatos.getNombreUsuario(
+                          collectionReferenceUsuariosDocPersonal,
+                          documentSnapshot.id),
+                      subtitle: DatosPersonales.getDato(
+                          documentSnapshot.id, 'nombre_usuario', TextStyle()),
+                      trailing: SizedBox(
+                        width: Pantalla.getPorcentPanntalla(15, context, 'x'),
+                        child: Row(
+                          children: [
+                            IconButton(
+                                icon:
+                                    const Icon(Icons.output_rounded, size: 25),
+                                onPressed: () =>
+                                    ExplusarDeSala.ExplusarUsuarioDesala(
+                                        context,
+                                        idSala,
+                                        documentSnapshot.id,
+                                        CurrentUser.getIdCurrentUser(),
+                                        titulo,
+                                        mensaje)),
+                            // This icon button is used to delete a single product
+                          ],
                         ),
                       ),
                     ),
@@ -117,6 +127,8 @@ class ListUsuarios extends StatelessWidget {
 class enviarSolicitudeUsuario {
   static InterfaceEnviarSolicitud(BuildContext context,
       CollectionReference collectionReferenceUser, String idSala) {
+    var leftRight =
+        Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
     var _userNameController = TextEditingController();
     return showModalBottomSheet(
         shape: const RoundedRectangleBorder(
@@ -127,10 +139,9 @@ class enviarSolicitudeUsuario {
         builder: (BuildContext ctx) {
           return Padding(
             padding: EdgeInsets.only(
-                top: 10,
-                left: 20,
-                right: 20,
-                // prevent the soft keyboard from covering text fields
+                top: Pantalla.getPorcentPanntalla(2, context, 'y'),
+                left: leftRight,
+                right: leftRight,
                 bottom: MediaQuery.of(ctx).viewInsets.bottom + 30),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -140,20 +151,25 @@ class enviarSolicitudeUsuario {
                 ],),*/
 
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   //mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: Pantalla.getPorcentPanntalla(5, context, 'y'),
+                      height: Pantalla.getPorcentPanntalla(4, context, "y"),
                     ),
-                    Text(
-                      "Enviar solicitud a usuario",
-                      style: TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Enviar solicitud",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
                     ),
+
                   ],
                 ),
-
+                SizedBox(
+                  height: Pantalla.getPorcentPanntalla(1.5, context, "y"),
+                ),
                 TextField(
                   controller: _userNameController,
                   decoration:
@@ -164,39 +180,40 @@ class enviarSolicitudeUsuario {
                 ),
 
                 //Boton de enviar solicitud
-                Align(alignment: Alignment.centerLeft, child: ElevatedButton(
-                    onPressed: () async {
-                      if( _userNameController.text.isEmpty){
-                        mostrarMensaje(context);
-                        return;
-                      }
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        if (_userNameController.text.isEmpty) {
+                          mostrarMensaje(context);
+                          return;
+                        }
 
+                        var resultadoFinal = await Solicitudes.enviarSolicitud(
+                            _userNameController.text,
+                            collectionReferenceUser,
+                            idSala);
 
-
-                      var resultadoFinal = await Solicitudes.enviarSolicitud(
-                          _userNameController.text,
-                          collectionReferenceUser,
-                          idSala);
-
-                      var colorSnackBar =
-                      resultadoFinal == true ? Colors.green : Colors.red;
-                      var mensaje = resultadoFinal == true
-                          ? 'Solicitud enviada correctamente'
-                          : 'Error al enviar solicitud, el usuario no existe';
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          backgroundColor: colorSnackBar,
-                          content: Text(mensaje)));
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Enviar solicitud')),)
+                        var colorSnackBar =
+                            resultadoFinal == true ? Colors.green : Colors.red;
+                        var mensaje = resultadoFinal == true
+                            ? 'Solicitud enviada correctamente'
+                            : 'Error al enviar solicitud, el usuario no existe';
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: colorSnackBar,
+                            content: Text(mensaje)));
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Enviar solicitud')),
+                )
               ],
             ),
           );
         });
   }
 
-   static mostrarMensaje(BuildContext context){
-    actions(BuildContext context){
+  static mostrarMensaje(BuildContext context) {
+    actions(BuildContext context) {
       return <Widget>[
         TextButton(
           onPressed: () {
@@ -207,11 +224,11 @@ class enviarSolicitudeUsuario {
       ];
     }
 
-    var titulo ='Nombre de usuario vacío';
-    var message = 'Es necesario escribir un nombre de usuario para enviar una solicitud';
+    var titulo = 'Nombre de usuario vacío';
+    var message =
+        'Es necesario escribir un nombre de usuario para enviar una solicitud';
 
     Dialogos.mostrarDialog(actions, titulo, message, context);
-
   }
 
   //Metodo para ennviar solicitud de usuario

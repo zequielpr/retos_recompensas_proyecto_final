@@ -126,7 +126,7 @@ class _HistorialState extends State<Historial> {
                               ),
                             ],
                           ),
-                          Text('Orde:', style: TextStyle(fontSize: 22)),
+                          Text('Orden:', style: TextStyle(fontSize: 22)),
                           const SizedBox(
                             height: 5.0,
                           ),
@@ -189,8 +189,6 @@ class _HistorialState extends State<Historial> {
                                       },
                                       child: const Text(
                                         "Cancelar",
-                                        style: TextStyle(
-                                            color: Colors.blue, fontSize: 25.0),
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
@@ -211,8 +209,6 @@ class _HistorialState extends State<Historial> {
                                       },
                                       child: const Text(
                                         "OK",
-                                        style: TextStyle(
-                                            color: Colors.blue, fontSize: 25.0),
                                         textAlign: TextAlign.center,
                                       ),
                                     )

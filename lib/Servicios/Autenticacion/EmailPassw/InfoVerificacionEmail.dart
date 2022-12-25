@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
+import 'package:retos_proyecto/recursos/Espacios.dart';
 
 import '../../../Rutas.gr.dart';
 import '../../../datos/TransferirDatos.dart';
@@ -40,15 +41,15 @@ class _InfoVerificacionEmailState extends State<InfoVerificacionEmail> {
         body: Center(
           child: Container(
             margin: EdgeInsets.only(
-                right: Pantalla.getPorcentPanntalla(5, context, 'x'),
-                left: Pantalla.getPorcentPanntalla(5, context, 'x')),
+                right: Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x'),
+                left: Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x')),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   margin: EdgeInsets.only(bottom: Pantalla.getPorcentPanntalla(2, context, 'y')),
                   child: Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: Alignment.center,
                   child: Text(
                     'Verificación de email necesaria',
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
@@ -56,15 +57,20 @@ class _InfoVerificacionEmailState extends State<InfoVerificacionEmail> {
                 ),),
                 Text(
                   'Para verificar el email, abra el link enviado a ${arg.email} y luego inicie sesión.',
-                  textAlign: TextAlign.left,
+                  textAlign: TextAlign.justify,
                   style: TextStyle(fontSize: 20),
                 ),
                 SizedBox(
-                  height: Pantalla.getPorcentPanntalla(2, context, 'y'),
+                  height: Pantalla.getPorcentPanntalla(4, context, 'y'),
                 ),
-                ElevatedButton(
-                    onPressed: () => _irInicioSesion(arg),
-                    child: Text('Iniciar sesión'))
+                SizedBox(
+                  width: Pantalla.getPorcentPanntalla(50, context, 'x'),
+                  height: Pantalla.getPorcentPanntalla(6, context, 'y'),
+                  child: ElevatedButton(
+                      onPressed: () => _irInicioSesion(arg),
+                      child: Text('Iniciar sesión')),
+                )
+
               ],
             ),
           ),
@@ -72,9 +78,7 @@ class _InfoVerificacionEmailState extends State<InfoVerificacionEmail> {
     ;
   }
 
-  Future<void> _irInicioSesion(arg) async {
-    FocusScope.of(context).requestFocus(FocusNode());
-    await Future.delayed(const Duration(milliseconds: 70));
+  void _irInicioSesion(arg) {
     context.router.replace(IniSesionEmailPasswordRouter(args: arg));
     //_context.router.replace(MainRouter())
   }

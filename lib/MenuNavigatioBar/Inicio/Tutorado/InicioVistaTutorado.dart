@@ -70,7 +70,7 @@ class InicioVistaTutorado {
                   child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(Colors.blueGrey),
+                            MaterialStateProperty.all(Colors.transparent),
                       ),
                       onPressed: snapshot['puntosTotal'] == 200
                           ? snapshot['recompensa_x_200'].isNotEmpty
@@ -287,7 +287,6 @@ class InicioVistaTutorado {
                       },
                       child: const Text(
                         "OK",
-                        style: TextStyle(color: Colors.blue, fontSize: 20.0),
                         textAlign: TextAlign.center,
                       ),
                     ),

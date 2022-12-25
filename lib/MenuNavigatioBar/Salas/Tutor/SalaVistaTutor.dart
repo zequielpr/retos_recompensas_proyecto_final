@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:retos_proyecto/Colores.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/AdminSala.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/Misiones.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/Ruleta.dart';
@@ -83,6 +84,7 @@ class _SalaContVistaTutorState extends State<SalaContVistaTutor>
           }),
         ],
         bottom: TabBar(
+          indicatorColor: Colores.colorPrincipal,
           controller: _tabController,
           tabs: const [
             Tab(

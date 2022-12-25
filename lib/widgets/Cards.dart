@@ -8,8 +8,10 @@ import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/AdminSala.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/recursos/Espacios.dart';
 import 'package:retos_proyecto/widgets/Dialogs.dart';
 
+import '../Colores.dart';
 import '../datos/DatosPersonalUser.dart';
 import '../datos/Roll_Data.dart';
 import '../Servicios/Solicitudes/AdminSolicitudes.dart';
@@ -34,8 +36,7 @@ class Cards {
                 children: [
                   ListTile(
                     leading: DatosPersonales.getAvatar(
-                        documentSnapshot['id_emisor'],
-                        25),
+                        documentSnapshot['id_emisor'], 25),
                     title: Text(documentSnapshot['nombre_emisor'].toString()),
                     subtitle: Text(
                         documentSnapshot['nombre_emisor'].toString() +
@@ -120,8 +121,8 @@ class Cards {
                   )
                 ], style: TextStyle(color: Colors.black)),
               ),
-              leading: DatosPersonales.getAvatar(
-                  documentSnapshot['id_emisor'], 20),
+              leading:
+                  DatosPersonales.getAvatar(documentSnapshot['id_emisor'], 20),
             ),
           ],
         ),
@@ -141,18 +142,26 @@ class Cards {
       double Recompensa,
       dynamic puntos_total_de_usuario) {
     return Card(
+      margin: EdgeInsets.only(
+          left: Pantalla.getPorcentPanntalla(4, context, 'x'),
+          right: Pantalla.getPorcentPanntalla(4, context, 'x'),
+          top: Pantalla.getPorcentPanntalla(4, context, 'x')),
+      color: Colors.white,
       elevation: 0,
       child: ListTile(
         visualDensity: VisualDensity.comfortable,
         dense: true,
         //horizontalTitleGap: -4,
-        contentPadding: EdgeInsets.only(left: 15, top: 0, bottom: 10),
+        contentPadding: EdgeInsets.only(
+            left: Pantalla.getPorcentPanntalla(4, context, 'x'),
+            bottom: Pantalla.getPorcentPanntalla(1, context, 'y')),
         /*leading: CircleAvatar(
                   backgroundImage: NetworkImage(
                       "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1581413287870&di=35491998b94817cbcf04d9f9f3d2d4b3&imgtype=jpg&src=http%3A%2F%2Fimg0.imgtn.bdimg.com%2Fit%2Fu%3D2464547320%2C3316604757%26fm%3D214%26gp%3D0.jpg"),
                 ),*/
         title: Padding(
-            padding: EdgeInsets.only(bottom: 5),
+            padding: EdgeInsets.only(
+                bottom: Pantalla.getPorcentPanntalla(1, context, 'y')),
             child: Row(
               children: [
                 Text(
@@ -185,7 +194,9 @@ class Cards {
               GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
         ),
         trailing: SizedBox(
-          width: 60,
+          width: Pantalla.getPorcentPanntalla(16, context, 'x'),
+          height: Pantalla.getPorcentPanntalla(
+              Pantalla.getPorcentPanntalla(0.6, context, 'y'), context, 'y'),
           child: IconButton(
               icon: completada_por.contains(userId)
                   ? const Icon(
@@ -210,7 +221,6 @@ class Cards {
     );
   }
 
-
   static mostrarDialog(
       BuildContext context,
       List completada_por,
@@ -234,7 +244,7 @@ class Cards {
       String titulo = nombreMision;
       String mensaje = 'Misión pendiente de realizar';
 
-      actions(BuildContext context){
+      actions(BuildContext context) {
         return <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'OK'),
@@ -251,7 +261,7 @@ class Cards {
   static void getDialogMisionRealizada(BuildContext context, nombreMision) {
     String titulo = nombreMision;
     String mensaje = 'Esta misión ha sido realizada';
-    actions(BuildContext context){
+    actions(BuildContext context) {
       return <Widget>[
         TextButton(
           onPressed: () => Navigator.pop(context, 'OK'),
@@ -261,7 +271,6 @@ class Cards {
     }
 
     Dialogos.mostrarDialog(actions, titulo, mensaje, context);
-
   }
 
   static void getDialogPendienteConfirmacion(context, nombreMision, docMision,
@@ -269,7 +278,8 @@ class Cards {
     //Añadir recompensa sobrante
     GuardarRecompensaSobrante(recompensa) async {
       await CollecUser.COLECCION_USUARIOS
-          .doc(userId).collection('rolTutorado')
+          .doc(userId)
+          .collection('rolTutorado')
           .doc(CurrentUser.getIdCurrentUser())
           .update({'puntos_acumulados': FieldValue.increment(recompensa)});
       return;
@@ -283,67 +293,67 @@ class Cards {
           .update({'puntosTotal': FieldValue.increment(recompensa)});
       return;
     }
+
     String mensaje = !Roll_Data.ROLL_USER_IS_TUTORADO
         ? '¿La tarea ha sido completada?'
         : 'Confirmacion pendiente';
     String titulo = nombreMision;
-    actions(BuildContext context){
+    actions(BuildContext context) {
       return <Widget>[
         !Roll_Data.ROLL_USER_IS_TUTORADO
             ? TextButton(
-          onPressed: () => Navigator.pop(context, 'OK'),
-          child: const Text('no'),
-        )
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('no'),
+              )
             : TextButton(
-          onPressed: () => Navigator.pop(context, 'OK'),
-          child: const Text('ok'),
-        ),
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('ok'),
+              ),
         !Roll_Data.ROLL_USER_IS_TUTORADO
             ? TextButton(
-          onPressed: () async {
-            await docMision.update({
-              'solicitu_confirmacion': FieldValue.arrayRemove([userId])
-            }).then((value) async {
-              await docMision.update({
-                'completada_por': FieldValue.arrayUnion([userId])
-              }).then((value) async {
-                //Debe actualizar con el dato en tiempo real
-                if (puntos_total_de_usuario + recompensa <= 200) {
-                  addRecompensa(recompensa);
-                  return;
-                } else if (puntos_total_de_usuario == 200) {
-                  await GuardarRecompensaSobrante(recompensa);
-                  return;
-                }
-                var recompensaMaxima = 200;
-                //Puntos sobrantes de la recompensa maxima
-                var sobrante = (puntos_total_de_usuario + recompensa) -
-                    recompensaMaxima;
-                print('Sobrante $sobrante');
-                //Añade los puntos necesarios para la recompensa maxima
-                addRecompensa(recompensa - sobrante);
-                //Guarda la recompensa sobrante
-                await GuardarRecompensaSobrante(sobrante);
+                onPressed: () async {
+                  await docMision.update({
+                    'solicitu_confirmacion': FieldValue.arrayRemove([userId])
+                  }).then((value) async {
+                    await docMision.update({
+                      'completada_por': FieldValue.arrayUnion([userId])
+                    }).then((value) async {
+                      //Debe actualizar con el dato en tiempo real
+                      if (puntos_total_de_usuario + recompensa <= 200) {
+                        addRecompensa(recompensa);
+                        return;
+                      } else if (puntos_total_de_usuario == 200) {
+                        await GuardarRecompensaSobrante(recompensa);
+                        return;
+                      }
+                      var recompensaMaxima = 200;
+                      //Puntos sobrantes de la recompensa maxima
+                      var sobrante = (puntos_total_de_usuario + recompensa) -
+                          recompensaMaxima;
+                      print('Sobrante $sobrante');
+                      //Añade los puntos necesarios para la recompensa maxima
+                      addRecompensa(recompensa - sobrante);
+                      //Guarda la recompensa sobrante
+                      await GuardarRecompensaSobrante(sobrante);
 
-                return;
-              });
-            });
-            Navigator.pop(context, 'OK');
-          },
-          child: const Text('si'),
-        )
+                      return;
+                    });
+                  });
+                  Navigator.pop(context, 'OK');
+                },
+                child: const Text('si'),
+              )
             : Text(''),
       ];
     }
+
     Dialogos.mostrarDialog(actions, titulo, mensaje, context);
-
-
   }
 
   static void getDialogSolicitud(context, nombreMision, docMision, userId) {
     String mensaje = '¿Enviar un solicitud de confirmacion?';
     String titulo = nombreMision;
-    actions(BuildContext context){
+    actions(BuildContext context) {
       return <Widget>[
         TextButton(
             onPressed: () => Navigator.pop(context, 'OK'),
@@ -359,6 +369,7 @@ class Cards {
         ),
       ];
     }
+
     Dialogos.mostrarDialog(actions, titulo, mensaje, context);
   }
 
@@ -367,9 +378,16 @@ class Cards {
     String? idSala = documentSnapshot.reference.parent.parent?.id;
     String idMision = documentSnapshot.id;
     return Card(
+      margin: EdgeInsets.only(
+          left: Pantalla.getPorcentPanntalla(4, context, 'x'),
+          right: Pantalla.getPorcentPanntalla(4, context, 'x'),
+          top: Pantalla.getPorcentPanntalla(4, context, 'x')),
+      color: Colors.white,
       elevation: 0,
       child: ListTile(
-        contentPadding: const EdgeInsets.only(left: 15, top: 0, bottom: 10),
+        contentPadding: EdgeInsets.only(
+            left: Pantalla.getPorcentPanntalla(4, context, 'x'),
+            bottom: Pantalla.getPorcentPanntalla(1, context, 'y')),
         visualDensity: VisualDensity.comfortable,
         dense: true,
         onTap: () => print('object'),
@@ -379,7 +397,8 @@ class Cards {
                       "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1581413287870&di=35491998b94817cbcf04d9f9f3d2d4b3&imgtype=jpg&src=http%3A%2F%2Fimg0.imgtn.bdimg.com%2Fit%2Fu%3D2464547320%2C3316604757%26fm%3D214%26gp%3D0.jpg"),
                 ),*/
         title: Padding(
-            padding: EdgeInsets.only(bottom: 5),
+            padding: EdgeInsets.only(
+                bottom: Pantalla.getPorcentPanntalla(1, context, 'y')),
             child: Row(
               children: [
                 Text(
@@ -405,25 +424,26 @@ class Cards {
           ).data.toString(),
           style: GoogleFonts.roboto(fontSize: 16),
           trimLines: 1,
-          colorClickableText: Colors.pink,
           trimMode: TrimMode.Line,
           lessStyle:
               GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
           trimCollapsedText: 'ver más',
-          trimExpandedText: 'ver menos',
+          trimExpandedText: ' ver menos',
           moreStyle:
               GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
         ),
         trailing: SizedBox(
-          width: 60,
-          height: Pantalla.getPorcentPanntalla(5, context, 'y'),
+          width: Pantalla.getPorcentPanntalla(16, context, 'x'),
+          height: Pantalla.getPorcentPanntalla(
+              Pantalla.getPorcentPanntalla(0.6, context, 'y'), context, 'y'),
           child: IconButton(
             tooltip: 'Eliminar',
             splashRadius: 0.1,
             icon: const Icon(
               Icons.delete,
             ),
-            onPressed: () async => await AdminSala.eliminarMision(idSala, idMision, context), //Eliminar mision
+            onPressed: () async => await AdminSala.eliminarMision(
+                idSala, idMision, context), //Eliminar mision
           ),
         ),
       ),
@@ -436,7 +456,8 @@ class Cards {
       CollectionReference collecionUsuarios,
       DocumentSnapshot documentSnapshot) {
     return Padding(
-      padding: EdgeInsets.only(top: 10, bottom: 10),
+      padding: EdgeInsets.only(
+          top: Pantalla.getPorcentPanntalla(Espacios.top, context, 'y')),
       child: FlatButton(
         color: Colors.transparent,
         splashColor: Colors.black26,
@@ -468,7 +489,8 @@ class Cards {
   static Widget vistaTutor(BuildContext context,
       CollectionReference collecionUsuarios, documentSnapshot) {
     return Padding(
-      padding: EdgeInsets.only(top: 10, bottom: 10),
+      padding: EdgeInsets.only(
+          top: Pantalla.getPorcentPanntalla(Espacios.top, context, 'y')),
       child: ElevatedButton(
           style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.transparent)),
@@ -499,21 +521,22 @@ class Cards {
 
   static Widget vistaCardSala(BuildContext context, String nombreSala) {
     return Card(
-      color: Colors.orange,
+      color: Colores.colorPrincipal,
       elevation: 0,
       shape: RoundedRectangleBorder(
-        side: BorderSide(
-          color: Theme.of(context).colorScheme.outline,
-        ),
+        /*side: BorderSide(
+          color: Color.fromARGB(100, 0, 0, 0),
+        ),*/
         borderRadius: const BorderRadius.all(Radius.circular(12)),
       ),
       child: SizedBox(
-        width: 300,
-        height: 100,
+        width: Pantalla.getPorcentPanntalla(90, context, 'x'),
+        height: Pantalla.getPorcentPanntalla(13, context, 'y'),
         child: Center(
             child: Text(
           nombreSala,
-          style: TextStyle(fontSize: 35),
+          style: TextStyle(
+              fontSize: 35, color: Color.fromARGB(255, 255, 255, 255)),
         )),
       ),
     );
