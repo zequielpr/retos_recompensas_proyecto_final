@@ -87,7 +87,7 @@ class ListUsuarios extends StatelessWidget {
                           collectionReferenceUsuariosDocPersonal,
                           documentSnapshot.id),
                       subtitle: DatosPersonales.getDato(
-                          documentSnapshot.id, 'nombre_usuario'),
+                          documentSnapshot.id, 'nombre_usuario', TextStyle()),
                       trailing: SizedBox(
                         width: Pantalla.getPorcentPanntalla(15, context, 'x'),
                         child: Row(

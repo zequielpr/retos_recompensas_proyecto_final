@@ -38,7 +38,7 @@ class _UserTutoradoState extends State<UserTutorado> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: DatosPersonales.getDato(args.snap.id, 'nombre_usuario'),
+            title: DatosPersonales.getDato(args.snap.id, 'nombre_usuario', TextStyle()),
             actions: [
               IconButton(
                   onPressed: () => ExplusarDeSala.ExplusarUsuarioDesala(
@@ -85,7 +85,7 @@ class _UserTutoradoState extends State<UserTutorado> {
                                   Espacios.leftRight, context, 'x'),
                               top: Pantalla.getPorcentPanntalla(1, context, 'y')),
                           child: DatosPersonales.getDato(
-                              args.snap.id.trim(), 'nombre'),
+                              args.snap.id.trim(), 'nombre', TextStyle()),
                         )
                       ],
                     ),

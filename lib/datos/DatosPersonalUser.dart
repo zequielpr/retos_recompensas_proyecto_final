@@ -5,7 +5,7 @@ import 'package:retos_proyecto/datos/CollecUsers.dart';
 
 class DatosPersonales {
   ///Datos personales del usuario con el id pasado por parámetro. Devuelve el valor correspondiente a la key pasada por parámetro
-  static Widget getDato(String idUser, String key) {
+  static Widget getDato(String idUser, String key, TextStyle style) {
     return FutureBuilder<DocumentSnapshot>(
       future: CollecUser.COLECCION_USUARIOS.doc(idUser).get(),
       builder:
@@ -22,7 +22,7 @@ class DatosPersonales {
           Map<String, dynamic> data =
               snapshot.data!.data() as Map<String, dynamic>;
 
-          return Text(data[key]);
+          return Text(data[key], style: style,);
         }
 
         return Text("loading");

@@ -68,7 +68,7 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
                       CurrentUser.getIdCurrentUser(), 30),
                   title: Text(CurrentUser.currentUser?.displayName as String, style: TextStyle(fontSize: 25),),
                   subtitle: DatosPersonales.getDato(
-                      CurrentUser.getIdCurrentUser(), 'nombre_usuario'),
+                      CurrentUser.getIdCurrentUser(), 'nombre_usuario', TextStyle()),
                 ),
                 rolActual(),
               ],

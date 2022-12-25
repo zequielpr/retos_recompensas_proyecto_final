@@ -72,8 +72,8 @@ class Admin_tutorados {
         visualDensity: VisualDensity.comfortable,
         dense: true,
         leading: DatosPersonales.getAvatar(idUsuario, 20),
-        title: DatosPersonales.getDato(idUsuario, 'nombre'),
-        subtitle: DatosPersonales.getDato(idUsuario, 'nombre_usuario'),
+        title: DatosPersonales.getDato(idUsuario, 'nombre', TextStyle(fontSize: 16)),
+        subtitle: DatosPersonales.getDato(idUsuario, 'nombre_usuario', TextStyle(fontSize: 15)),
         trailing: SizedBox(
           height: Pantalla.getPorcentPanntalla(5, context, 'y'),
           child: ElevatedButton(

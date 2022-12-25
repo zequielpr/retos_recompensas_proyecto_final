@@ -157,7 +157,7 @@ class _InicioTutorState extends State<InicioTutor> {
                                     3, context, 'x')),
                             child: DatosPersonales.getDato(
                                 document.id,
-                                'nombre_usuario'),
+                                'nombre_usuario', TextStyle()),
                           ),
                           trailing: Padding(
                             padding: EdgeInsets.only(

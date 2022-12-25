@@ -79,8 +79,8 @@ class UsuarioTutores {
                       "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1581413287870&di=35491998b94817cbcf04d9f9f3d2d4b3&imgtype=jpg&src=http%3A%2F%2Fimg0.imgtn.bdimg.com%2Fit%2Fu%3D2464547320%2C3316604757%26fm%3D214%26gp%3D0.jpg"),
                 ),*/
         leading: DatosPersonales.getAvatar(idUsuario!, 20),
-        title: DatosPersonales.getDato(idUsuario, 'nombre'),
-        subtitle: DatosPersonales.getDato(idUsuario, 'nombre_usuario'),
+        title: DatosPersonales.getDato(idUsuario, 'nombre', TextStyle()),
+        subtitle: DatosPersonales.getDato(idUsuario, 'nombre_usuario', TextStyle()),
         trailing: SizedBox(
           height: Pantalla.getPorcentPanntalla(5, context, 'y'),
           width: Pantalla.getPorcentPanntalla(20, context, 'x'),
