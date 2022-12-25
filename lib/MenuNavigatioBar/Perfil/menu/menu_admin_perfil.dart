@@ -18,6 +18,7 @@ class MenuOption{
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Card(
+              color: Colors.transparent,
               elevation: 0,
               margin: const EdgeInsets.all(0),
               child: ListTile(
@@ -32,6 +33,7 @@ class MenuOption{
               ),
             ),
             Card(
+              color: Colors.transparent,
               elevation: 0,
               margin: const EdgeInsets.all(0),
               child: ListTile(

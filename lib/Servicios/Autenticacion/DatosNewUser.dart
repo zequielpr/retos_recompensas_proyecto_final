@@ -9,6 +9,7 @@ import 'package:firebase_auth_platform_interface/src/providers/oauth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:retos_proyecto/Loanding.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/ValidarDatos.dart';
@@ -101,16 +102,28 @@ class _StateRoll extends State<Roll> {
   final TranferirDatosRoll args;
   _StateRoll(this.args);
   var paddingRightLeft;
+  var body;
+  var loanding;
+  var isWaiting = false;
   @override
   Widget build(BuildContext context) {
     paddingRightLeft =
         Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
-    /*
-    FlutterStatusbarcolor.setStatusBarWhiteForeground(
-        false); //Colores de los iconos de la barra superior
-    FlutterStatusbarcolor.setStatusBarColor(Colors.white,
-        animate: true); //Color de la barra superior
-     */
+    body = Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(
+                left: paddingRightLeft, right: paddingRightLeft),
+            child: Column(
+              children: [_getTitle(), _getSelectRoll(), _getBtnSiguiente()],
+            ),
+          ),
+        ],
+      ),
+    );
+    loanding = Loanding.getLoanding(body, context);
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.black,
@@ -123,98 +136,87 @@ class _StateRoll extends State<Roll> {
           ],
         ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            /*
-            const Padding(
-              padding: EdgeInsets.only(left: 30, right: 30, bottom: 100),
-              child: Text(
-                  "Selecciona el roll que deseas desepeñar. Luego podrás cambiarlo lugo", style: TextStyle(fontSize: 16),),
-            ),
-             */
-            Padding(
-              padding: EdgeInsets.only(
-                  left: paddingRightLeft, right: paddingRightLeft),
-              child: Column(
-                children: [
-                  Align(
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        bottom: Pantalla.getPorcentPanntalla(2, context, 'y'),
-                      ),
-                      child: Text(
-                        'Selecciona un roll para continuar',
-                        style: GoogleFonts.roboto(
-                            fontSize: 25, fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text('Roll seleccionado: ',
-                          style: TextStyle(fontSize: 20)),
-                      DropdownButton<String>(
-                        value: dropdownValue,
-                        icon: Padding(
-                          padding: EdgeInsets.only(
-                              left: Pantalla.getPorcentPanntalla(
-                                  2, context, 'x')),
-                          child: Icon(Icons.arrow_drop_down),
-                        ),
-                        elevation: 1,
-                        style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18),
-                        underline: Container(
-                          height: 1.5,
-                          color: Colors.grey,
-                        ),
-                        onChanged: (String? newValue) {
-                          if (!mounted) return;
-                          setState(() {
-                            dropdownValue = newValue!;
-                          });
-                        },
-                        items: <String>['Tutorado', 'Tutor']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                  top: Pantalla.getPorcentPanntalla(2, context, 'y')),
-              child: SizedBox(
-                width: Pantalla.getPorcentPanntalla(40, context, 'x'),
-                height: Pantalla.getPorcentPanntalla(6, context, 'y'),
-                child: ElevatedButton(
-                  onPressed: () async => _siguiente(args),
-                  child: const Text(
-                    "Siguiente",
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
+      body: isWaiting ? loanding : body,
     );
     throw UnimplementedError();
   }
 
+  Align _getTitle() {
+    return Align(
+      child: Padding(
+        padding: EdgeInsets.only(
+          bottom: Pantalla.getPorcentPanntalla(2, context, 'y'),
+        ),
+        child: Text(
+          'Selecciona un roll para continuar',
+          style: GoogleFonts.roboto(fontSize: 25, fontWeight: FontWeight.w500),
+        ),
+      ),
+    );
+  }
+
+  Row _getSelectRoll() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text('Roll seleccionado: ', style: TextStyle(fontSize: 20)),
+        DropdownButton<String>(
+          value: dropdownValue,
+          icon: Padding(
+            padding: EdgeInsets.only(
+                left: Pantalla.getPorcentPanntalla(2, context, 'x')),
+            child: Icon(Icons.arrow_drop_down),
+          ),
+          elevation: 1,
+          style: const TextStyle(
+              color: Colors.black, fontWeight: FontWeight.w600, fontSize: 18),
+          underline: Container(
+            height: 1.5,
+            color: Colors.grey,
+          ),
+          onChanged: (String? newValue) {
+            if (!mounted) return;
+            setState(() {
+              dropdownValue = newValue!;
+            });
+          },
+          items: <String>['Tutorado', 'Tutor']
+              .map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+        )
+      ],
+    );
+  }
+
+  Padding _getBtnSiguiente() {
+    return Padding(
+      padding:
+          EdgeInsets.only(top: Pantalla.getPorcentPanntalla(2, context, 'y')),
+      child: SizedBox(
+        width: Pantalla.getPorcentPanntalla(40, context, 'x'),
+        height: Pantalla.getPorcentPanntalla(6, context, 'y'),
+        child: ElevatedButton(
+          onPressed: () async => _siguiente(args),
+          child: const Text(
+            "Siguiente",
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<void> _siguiente(TranferirDatosRoll args) async {
-    String userName = await generarUserName(args.collectionReferenceUsers);
+    setState(() {
+      isWaiting = true;
+    });
+    String userName = await generarUserName(args.collectionReferenceUsers)
+        .whenComplete(() => setState(() {
+              isWaiting = false;
+            }));
     var creden = args.oaUthCredential;
 
     if (args.oaUthCredential.runtimeType == String) {

@@ -25,7 +25,7 @@ class EliminarCuenta {
             try{
 
               await CurrentUser.currentUser?.delete();
-              Sesion.cerrarSesion(context);
+              //Sesion.cerrarSesion(context, );
             }catch(e){
               if (e.toString().contains('requires-recent-login')) {
                 String title = 'Eliminar cuenta';

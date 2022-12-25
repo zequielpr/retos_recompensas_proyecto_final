@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:retos_proyecto/Loanding.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 
 import '../../MediaQuery.dart';
@@ -22,6 +23,9 @@ class NombreUsuarioWidget {
   late BuildContext _context;
   TrasnferirDatosNombreUser _args;
   bool _isRegistrandoUser;
+  var body;
+  var loanding;
+  bool isWaiting = false;
 
   NombreUsuarioWidget(
       this._setState, this._context, this._args, this._isRegistrandoUser) {
@@ -57,56 +61,71 @@ class NombreUsuarioWidget {
   }
 
   Widget textFielNombreUsuario(BuildContext context) {
+
+    body = Column(
+      children: [
+        _getTitle(context)
+        ,
+        _getTextField()
+        ,
+        _getBtn(context)
+      ],
+    );
+    loanding = Loanding.getLoanding(body, context);
+    return isWaiting?loanding:body;
+  }
+  Align _getTitle(BuildContext context){
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: EdgeInsets.only(bottom: Pantalla.getPorcentPanntalla(4, context, 'y')),
+        child: Text(
+          'Nombre de usuario',
+          style:
+          GoogleFonts.roboto(fontSize: 25, fontWeight: FontWeight.w400),
+        ),
+      ),
+    );
+  }
+  Column _getTextField(){
     return Column(
       children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: EdgeInsets.only(bottom: Pantalla.getPorcentPanntalla(4, context, 'y')),
-            child: Text(
-              'Nombre de usuario',
-              style:
-                  GoogleFonts.roboto(fontSize: 25, fontWeight: FontWeight.w400),
-            ),
-          ),
+        TextField(
+          maxLength: 30,
+          keyboardType: TextInputType.name,
+          autofocus: true,
+          controller: _userNameController,
+          onChanged: (usuario) {
+            _esperar(usuario);
+          },
+          decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: "Nombre de usuario",
+              suffixIcon: _estadoUsuario),
         ),
-        Column(
-          children: [
-            TextField(
-              maxLength: 30,
-              keyboardType: TextInputType.name,
-              autofocus: true,
-              controller: _userNameController,
-              onChanged: (usuario) {
-                _esperar(usuario);
-              },
-              decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: "Nombre de usuario",
-                  suffixIcon: _estadoUsuario),
-            ),
-            noMostrarAdver == false ? mensajeAdver : Text('')
-          ],
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: Pantalla.getPorcentPanntalla(2, context, 'y')),
-          child: SizedBox(
-            width: Pantalla.getPorcentPanntalla(50, context, 'x'),
-            height: Pantalla.getPorcentPanntalla(6, context, 'y'),
-            child: ElevatedButton(
-              style: ButtonStyle(elevation: MaterialStateProperty.all(0)),
-              onPressed: _botonActivo
-                  ? () async => _guardarNombreUsuario(_args)
-                  : null,
-              child: Text(_isRegistrandoUser ? "Registrarme" : 'Guardar',
-                  style: GoogleFonts.roboto(
-                      fontSize: 17, fontWeight: FontWeight.w600)),
-            ),
-          ),
-        )
+        noMostrarAdver == false ? mensajeAdver : Text('')
       ],
     );
   }
+  Padding _getBtn(BuildContext context){
+    return Padding(
+      padding: EdgeInsets.only(top: Pantalla.getPorcentPanntalla(2, context, 'y')),
+      child: SizedBox(
+        width: Pantalla.getPorcentPanntalla(50, context, 'x'),
+        height: Pantalla.getPorcentPanntalla(6, context, 'y'),
+        child: ElevatedButton(
+          style: ButtonStyle(elevation: MaterialStateProperty.all(0)),
+          onPressed: _botonActivo
+              ? () async => _guardarNombreUsuario(_args)
+              : null,
+          child: Text(_isRegistrandoUser ? "Registrarme" : 'Guardar',
+              style: GoogleFonts.roboto(
+                  fontSize: 17, fontWeight: FontWeight.w600)),
+        ),
+      ),
+    );
+  }
+  
 
   void _guardarNombreUsuario(_args) {
     if (_isRegistrandoUser) {
@@ -203,6 +222,7 @@ class NombreUsuarioWidget {
     var datos;
     var medioRegistro = args.oaUthCredential.runtimeType;
 
+    _setState((){isWaiting = true;});
     //Usuario que no se registran con google
     if (medioRegistro != GoogleAuthCredential) {
       //En este caso el el atributo oaUthCredebtial continiene un hash map con la clave y la contrasela para realizar el registro
@@ -240,7 +260,7 @@ class NombreUsuarioWidget {
                     await _context.router.replaceAll([InfoVerificacionEmailRouter( arg: datos)]);
 
                   }
-              });
+              }).whenComplete(() => _setState((){isWaiting = false;}));
     } else {
       await Autenticar.iniciarSesion(args.oaUthCredential)
           .then((userCredential) async => {
@@ -275,7 +295,7 @@ class NombreUsuarioWidget {
                     //Dirigirse a la pantalla principal
                     _context.router.replace(MainRouter())
                   }
-              });
+              }).whenComplete(() => _setState((){isWaiting = false;}));
     }
   }
 

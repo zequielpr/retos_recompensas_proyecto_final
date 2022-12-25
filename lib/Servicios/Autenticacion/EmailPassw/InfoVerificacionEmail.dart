@@ -78,7 +78,7 @@ class _InfoVerificacionEmailState extends State<InfoVerificacionEmail> {
     ;
   }
 
-  Future<void> _irInicioSesion(arg) async {
+  void _irInicioSesion(arg) {
     context.router.replace(IniSesionEmailPasswordRouter(args: arg));
     //_context.router.replace(MainRouter())
   }

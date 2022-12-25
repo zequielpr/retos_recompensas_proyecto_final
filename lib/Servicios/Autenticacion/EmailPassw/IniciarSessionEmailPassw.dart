@@ -12,6 +12,7 @@ import 'package:retos_proyecto/Servicios/Autenticacion/DatosNewUser.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 import 'package:retos_proyecto/datos/TransferirDatos.dart';
 
+import '../../../Loanding.dart';
 import '../../../datos/UsuarioActual.dart';
 import '../../../datos/ValidarDatos.dart';
 import '../../../recursos/Espacios.dart';
@@ -39,7 +40,6 @@ class StateIniSesionEmailPassword extends StatefulWidget {
 }
 
 class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
-  late StreamSubscription<bool> keyboardSubscription;
   final TransDatosInicioSesion args;
   _StateIniSesionEmailPassword(this.args);
 
@@ -94,8 +94,36 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
     });
   }
 
+  var body;
+
+  var isWaiting = false;
+  late Widget loanding;
   @override
   Widget build(BuildContext context) {
+    body = Container(
+      margin: EdgeInsets.only(
+          left: Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x'),
+          right:
+              Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x')),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                _getAppName(),
+                _getIntentoRegistrarse(),
+                _getTextFielCorreo(),
+                _getTextFieldPassw(),
+                _getBtnOlvPassw(),
+                _getBtnIniciarSesion(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+    loanding = Loanding.getLoanding(body, context);
     //emailController.selection = TextSelection.fromPosition(TextPosition(offset: emailController.text.length));
     return Scaffold(
       /*
@@ -112,26 +140,7 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
         title: Text('Iniciar sesión'),
       ),
        */
-      body: Container(margin: EdgeInsets.only(left:
-      Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x'),
-          right:
-          Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x')), child:Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                _getAppName(),
-                _getIntentoRegistrarse(),
-                _getTextFielCorreo(),
-                _getTextFieldPassw(),
-                _getBtnOlvPassw(),
-                _getBtnIniciarSesion(),
-              ],
-            ),
-          ),
-        ],
-      ) ,),
+      body: isWaiting == true? loanding : body,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: TextButton(
         onPressed: () => _ActionCrearUnaCuenta(args),
@@ -143,7 +152,8 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
   //Metodos constructores de widgetd
   Widget _getAppName() {
     return Padding(
-      padding: EdgeInsets.only(bottom: Pantalla.getPorcentPanntalla(2, context, 'y')),
+      padding: EdgeInsets.only(
+          bottom: Pantalla.getPorcentPanntalla(2, context, 'y')),
       child: Text(
         'App name',
         style: GoogleFonts.roboto(fontSize: 40, fontWeight: FontWeight.w600),
@@ -155,7 +165,8 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
     return Align(
       alignment: Alignment.centerLeft,
       child: Padding(
-        padding: EdgeInsets.only(bottom: Pantalla.getPorcentPanntalla(2, context, 'y')),
+        padding: EdgeInsets.only(
+            bottom: Pantalla.getPorcentPanntalla(2, context, 'y')),
         child: Text(
           args.titulo,
           style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w500),
@@ -209,11 +220,13 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
             keyboardType: TextInputType.visiblePassword,
             autofocus: args.focusPassw,
             onChanged: (passw) {
+              print(passw);
               passw.isNotEmpty ? _stateBtnOjo(true) : _stateBtnOjo(false);
               if (passw.isNotEmpty &&
                   emailController.text.isNotEmpty &&
                   Validar.validarEmail(emailController.text.trim())) {
                 setStateBtn(true);
+                print('Es valido');
                 return;
               }
               setStateBtn(false);
@@ -261,11 +274,17 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
         child: ElevatedButton(
             onPressed: isBtnActivo
                 ? () async {
+                    setState(() {
+                      isWaiting = true;
+                    });
                     String resultado = await Autenticar.inciarSesionEmailPasswd(
-                        emailController.text.trim(),
-                        passwdController.text.trim(),
-                        CollecUser.COLECCION_USUARIOS,
-                        context);
+                            emailController.text.trim(),
+                            passwdController.text.trim(),
+                            CollecUser.COLECCION_USUARIOS,
+                            context)
+                        .whenComplete(() => setState(() {
+                              isWaiting = false;
+                            }));
                     if (resultado != 's') _indicarDatoErroneo(resultado);
                   }
                 : null,
