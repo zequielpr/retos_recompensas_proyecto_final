@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:retos_proyecto/recursos/Espacios.dart';
 
 import '../../../MediaQuery.dart';
 import '../../../datos/UsuarioActual.dart';
@@ -21,18 +22,20 @@ class _ModificarEmailState extends State<ModificarEmail> {
     emailControler.text = CurrentUser.currentUser?.email as String;
     super.initState();
   }
+  var leftRight;
 
   @override
   Widget build(BuildContext context) {
+    leftRight = Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
     return Scaffold(
         appBar: AppBar(
           title: Text('Cambiar email'),
         ),
         body: Container(
           margin: EdgeInsets.only(
-              left: Pantalla.getPorcentPanntalla(5, context, 'x'),
-              right: Pantalla.getPorcentPanntalla(5, context, 'x'),
-              top: Pantalla.getPorcentPanntalla(5, context, 'y')),
+              left: leftRight,
+              right: leftRight,
+              top: Pantalla.getPorcentPanntalla(Espacios.top, context, 'y')),
           child: Column(
             children: [
               TextField(
@@ -52,9 +55,13 @@ class _ModificarEmailState extends State<ModificarEmail> {
                   border: OutlineInputBorder(),
                 ),
               ),
-              ElevatedButton(
-                  onPressed: () => changeEmail(emailControler.text),
-                  child: Text('Guardar'))
+              SizedBox(height: Pantalla.getPorcentPanntalla(3, context, 'y'),),
+            SizedBox(
+                width: Pantalla.getPorcentPanntalla(50, context, 'x'),
+                height: Pantalla.getPorcentPanntalla(6, context, 'y'),
+                child: ElevatedButton(
+                    onPressed: () => changeEmail(emailControler.text),
+                    child: Text('Guardar')))
             ],
           ),
         ));
