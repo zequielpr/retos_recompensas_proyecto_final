@@ -48,7 +48,7 @@ class _SalaContVistaTutorState extends State<SalaContVistaTutor>
           IconButton(
             onPressed: () {
               enviarSolicitudeUsuario.InterfaceEnviarSolicitud(
-                  contextSala, args.collecionUsuarios, args.sala.getIdSala);
+                  contextSala,  args.sala.getIdSala);
             },
             icon: Icon(Icons.person_add),
           ),
@@ -108,8 +108,6 @@ class _SalaContVistaTutorState extends State<SalaContVistaTutor>
               ListUsuarios(
                   collectionReferenceUsuariosTutorados:
                       args.sala.getColecUsuariosTutorados,
-                  collectionReferenceUsuariosDocPersonal:
-                      args.collecionUsuarios,
                   contextSala: contextSala,
                   collectionReferenceMisiones: args.sala.getColecMisiones),
             ],

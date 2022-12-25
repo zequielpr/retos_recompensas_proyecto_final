@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:ui';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -51,11 +54,9 @@ class MainState extends State<Main> {
     }
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('se ha recibido una nueva notificacion');
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
       if (notification != null && android != null) {
-        print('Se debería mostrar la notificacion');
         print(notification.title);
         flutterLocalNotificationsPlugin.show(
             notification.hashCode,
@@ -76,23 +77,10 @@ class MainState extends State<Main> {
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('A new onMessageOpenedApp event was published!');
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
       if (notification != null && android != null) {
-        showDialog(
-            context: context,
-            builder: (_) {
-              return AlertDialog(
-                title: Text(notification.title.toString()),
-                content: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [Text(notification.body.toString())],
-                  ),
-                ),
-              );
-            });
+        _onItemTapped(1);
       }
     });
   }

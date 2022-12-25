@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 class SalaDatos{
 
   late final DocumentReference docSala;
+  late  String nombre;
 
-  SalaDatos(this.docSala); //Constructor - sala individual
+  SalaDatos(this.docSala, this.nombre); //Constructor - sala individual
 
 
   //Obtener id de la sala
@@ -21,22 +22,13 @@ class SalaDatos{
   //Devuelve la coleccin que contiene todos los usuarios tutorados
   CollectionReference get getColecUsuariosTutorados => docSala.collection('usersTutorados');
   //Tomar nombre de usuario tutorado desde su documento personal
-  static Widget getNombreUsuario(CollectionReference collectionReferenceUsuarios, String idUsuario){
-    return StreamBuilder(
-        stream: collectionReferenceUsuarios.doc(idUsuario.trim()).snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Text("Loading");
-          }
-          var userDocument = snapshot.data as DocumentSnapshot;
-          return Text(userDocument["nombre"]);
-        }
-    );
-  }
 
 
   //Ruletas-----------------------------------------------------------------------------------------------------------------
   //Devuelve el documento que contiene los valores de la ruleta
   CollectionReference get getColecRuletas => docSala.collection('contenidoRuleta');
 
+  Future<void> setNombreSala() async => await docSala.get().then((value) => nombre = value['NombreSala']);
+
+  String getNombreSala() => nombre;
 }

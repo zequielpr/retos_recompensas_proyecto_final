@@ -10,9 +10,8 @@ class TransferirCollecion {
 class TransferirDatos {
   final String nombreSala;
   final SalaDatos sala;
-  final CollectionReference collecionUsuarios;
 
-  TransferirDatos(this.nombreSala, this.sala, this.collecionUsuarios);
+  TransferirDatos(this.nombreSala, this.sala);
 }
 
 class TransferirDatosMisiones {

@@ -101,6 +101,7 @@ exports.notificarNuevaMision = functions.firestore
     const tutorId = context.params.tutorId;
     const idSala = context.params.idSala;
     const nombreMision = snap.data()['nombreMision'];
+    const fecha = snap.data()['fecha'];
     const idMision = context.params.idMision;
 
     //Toma todos los usuario que se encuentran en la sala en la cual se ha creado una nueva misión
@@ -142,8 +143,8 @@ exports.notificarNuevaMision = functions.firestore
     const payload = {
       notification: {
         title: "Nueva misión",
-        body: nombreTutor + "ha añadido una nueva mision",
-        icon: "https://imborrable.com/wp-content/uploads/2021/04/fotos-gratis-de-stock-1.jpg",
+        body: nombreTutor + " ha añadido una nueva mision",
+        icon: "https://firebasestorage.googleapis.com/v0/b/retosrecompensas.appspot.com/o/Imagen_anonimo.jpg?alt=media&token=b9e53ae2-d606-4a52-a7c5-4c4f146b9c89",
       },
     };
 
@@ -171,6 +172,7 @@ exports.notificarNuevaMision = functions.firestore
           isNew: true,
           idMision: idMision,
           nombre_mision: nombreMision,
+          fecha: fecha
         });
 
       await docUsuario
@@ -248,7 +250,7 @@ exports.notificarSolicitudesRecibidas = functions.firestore
       notification: {
         title: "Solicitud de tutoría",
         body: nombre_emisor + " te ha enviado una solicitud de tutoría",
-        icon: "https://imborrable.com/wp-content/uploads/2021/04/fotos-gratis-de-stock-1.jpg",
+        icon: "https://firebasestorage.googleapis.com/v0/b/retosrecompensas.appspot.com/o/Imagen_anonimo.jpg?alt=media&token=b9e53ae2-d606-4a52-a7c5-4c4f146b9c89",
       },
     };
 

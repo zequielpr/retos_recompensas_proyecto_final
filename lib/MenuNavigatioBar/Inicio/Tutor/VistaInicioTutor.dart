@@ -136,7 +136,7 @@ class _InicioTutorState extends State<InicioTutor> {
                             Pantalla.getPorcentPanntalla(2.2, context, 'y')),
                         child: ListTile(
                           onTap: () {
-                            var sala = SalaDatos(documentReference);
+                            var sala = SalaDatos(documentReference, '');
                             TransfDatosUserTutorado datosUser =
                             TransfDatosUserTutorado(
                                 sala.getColecMisiones, document);

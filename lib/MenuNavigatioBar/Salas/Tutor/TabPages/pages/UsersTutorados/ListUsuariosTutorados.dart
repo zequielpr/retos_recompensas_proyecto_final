@@ -15,13 +15,11 @@ import 'ExpulsarDeSala.dart';
 
 class ListUsuarios extends StatelessWidget {
   final CollectionReference collectionReferenceUsuariosTutorados;
-  final CollectionReference collectionReferenceUsuariosDocPersonal;
   final BuildContext contextSala;
   final CollectionReference collectionReferenceMisiones;
   ListUsuarios(
       {Key? key,
       required this.collectionReferenceUsuariosTutorados,
-      required this.collectionReferenceUsuariosDocPersonal,
       required this.contextSala,
       required this.collectionReferenceMisiones})
       : super(key: key);
@@ -83,9 +81,8 @@ class ListUsuarios extends StatelessWidget {
                       },
                       leading:
                           DatosPersonales.getAvatar(documentSnapshot.id, 20),
-                      title: SalaDatos.getNombreUsuario(
-                          collectionReferenceUsuariosDocPersonal,
-                          documentSnapshot.id),
+                      title:DatosPersonales.getDato(
+                          documentSnapshot.id, 'nombre', TextStyle()),
                       subtitle: DatosPersonales.getDato(
                           documentSnapshot.id, 'nombre_usuario', TextStyle()),
                       trailing: SizedBox(
@@ -125,8 +122,7 @@ class ListUsuarios extends StatelessWidget {
 //Enviar solici
 
 class enviarSolicitudeUsuario {
-  static InterfaceEnviarSolicitud(BuildContext context,
-      CollectionReference collectionReferenceUser, String idSala) {
+  static InterfaceEnviarSolicitud(BuildContext context, String idSala) {
     var leftRight =
         Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
     var _userNameController = TextEditingController();
@@ -191,7 +187,6 @@ class enviarSolicitudeUsuario {
 
                         var resultadoFinal = await Solicitudes.enviarSolicitud(
                             _userNameController.text,
-                            collectionReferenceUser,
                             idSala);
 
                         var colorSnackBar =
