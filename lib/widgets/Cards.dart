@@ -83,6 +83,7 @@ class Cards {
   //Cuerpo de las notificaciones sobre las misiones_________________________________________________________________
   static Widget cardNotificacionMisiones(
       DocumentSnapshot documentSnapshot, BuildContext context) {
+    var leftRight = Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
     return Card(
       color: Colors.transparent,
       elevation: 0,
@@ -91,7 +92,7 @@ class Cards {
           children: [
             ListTile(
               contentPadding:
-                  EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
+                  EdgeInsets.only( left: leftRight, right: leftRight),
               onTap: () {
                 context.router.push(Mision(snap: documentSnapshot));
               },
