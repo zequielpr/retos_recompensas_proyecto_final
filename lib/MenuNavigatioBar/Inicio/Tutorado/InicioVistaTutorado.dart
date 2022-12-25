@@ -287,7 +287,6 @@ class InicioVistaTutorado {
                       },
                       child: const Text(
                         "OK",
-                        style: TextStyle(color: Colors.blue, fontSize: 20.0),
                         textAlign: TextAlign.center,
                       ),
                     ),
