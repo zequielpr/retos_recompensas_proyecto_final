@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,6 +14,7 @@ import 'package:retos_proyecto/datos/CollecUsers.dart';
 import 'package:retos_proyecto/datos/TransferirDatos.dart';
 
 import '../../../Loanding.dart';
+import '../../../datos/Roll_Data.dart';
 import '../../../datos/UsuarioActual.dart';
 import '../../../datos/ValidarDatos.dart';
 import '../../../recursos/Espacios.dart';
@@ -140,7 +142,7 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
         title: Text('Iniciar sesión'),
       ),
        */
-      body: isWaiting == true? loanding : body,
+      body: isWaiting == true ? loanding : body,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: TextButton(
         onPressed: () => _ActionCrearUnaCuenta(args),
@@ -282,10 +284,12 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
                             passwdController.text.trim(),
                             CollecUser.COLECCION_USUARIOS,
                             context)
-                        .whenComplete(() => setState(() {
-                              isWaiting = false;
-                            }));
-                    if (resultado != 's') _indicarDatoErroneo(resultado);
+                        .whenComplete((){
+                              setState(() {
+                                isWaiting = false;
+                              });
+                            });
+                    if (resultado != 's')_indicarDatoErroneo(resultado);
                   }
                 : null,
             child: Text(

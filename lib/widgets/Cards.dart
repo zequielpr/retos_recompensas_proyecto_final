@@ -83,6 +83,8 @@ class Cards {
   //Cuerpo de las notificaciones sobre las misiones_________________________________________________________________
   static Widget cardNotificacionMisiones(
       DocumentSnapshot documentSnapshot, BuildContext context) {
+    var leftRight =
+        Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
     return Card(
       color: Colors.transparent,
       elevation: 0,
@@ -91,8 +93,10 @@ class Cards {
           children: [
             ListTile(
               contentPadding:
-                  EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
-              onTap: () {
+                  EdgeInsets.only(left: leftRight, right: leftRight),
+              onTap: (){
+
+
                 context.router.push(Mision(snap: documentSnapshot));
               },
               /*
@@ -465,14 +469,13 @@ class Cards {
         //pasar datos de la sala pulzada a la siguiente ventana
         onPressed: () {
           //Crea un objeto con la sala pulzada para posteriormente obtener su contenido midiante geters en la siguiente ventana
-          SalaDatos sala = SalaDatos(documentSnapshot.reference);
+          SalaDatos sala = SalaDatos(documentSnapshot.reference, '');
 
           var datos = TransferirDatos(
               Text(documentSnapshot['NombreSala'])
                   .data
                   .toString(), //Nombre de la sala pulsada
-              sala,
-              collecionUsuarios);
+              sala);
 
           context.router.push(ListMisionesTutorado(args: datos));
 
@@ -501,14 +504,13 @@ class Cards {
           //pasar datos de la sala pulzada a la siguiente ventana
           onPressed: () {
             //Crea un objeto con la sala pulzada para posteriormente obtener su contenido midiante geters en la siguiente ventana
-            SalaDatos sala = SalaDatos(documentSnapshot.reference);
+            SalaDatos sala = SalaDatos(documentSnapshot.reference, '');
 
             var datos = TransferirDatos(
                 Text(documentSnapshot['NombreSala'])
                     .data
                     .toString(), //Nombre de la sala pulsada
-                sala,
-                collecionUsuarios);
+                sala);
 
             context.router.push(SalaContVistaTutor(args: datos));
             //this.titulo = 'holaaa';

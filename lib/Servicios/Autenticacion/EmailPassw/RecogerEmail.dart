@@ -140,8 +140,8 @@ class _RecogerEmail extends State<RecogerEmail> {
       setState(() {isWaiting = true;});
       _cambiarColor(Colors.transparent, Colors.transparent);
       List<String> metodoInicioSesion =
-          await Autenticar.metodoInicioSesion(email)
-              .whenComplete(() => setState(() {isWaiting = false;}));
+          await Autenticar.metodoInicioSesion(email);
+
       //Si es existe un metodo de inicio de sesion, se redireje a la ruta de inicio de sesión
       if (metodoInicioSesion.isNotEmpty) {
         var datos = TransDatosInicioSesion(
@@ -153,7 +153,8 @@ class _RecogerEmail extends State<RecogerEmail> {
       args.setValor('email',
           email); //Añede el correo al objeto map creado en la ruta tutorado
       if (!mounted) return;
-      context.router.push(RecogerPasswRouter(args: args));
+      
+      context.router.push(RecogerPasswRouter(args: args)).whenComplete(() => setState(() {isWaiting = false;}));
 
       _cambiarColor(Colors.transparent, Colors.transparent);
       return;

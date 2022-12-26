@@ -102,12 +102,11 @@ class Solicitudes {
   }
 
   //Enviar solicitud-----------------------------------------------------------------------------------------
-  static Future<bool> enviarSolicitud(String userName,
-      CollectionReference collectionReferenceUsers, String idSala) async {
+  static Future<bool> enviarSolicitud(String userName, String idSala) async {
 
     var resultadoFinal = false;
 
-    await collectionReferenceUsers
+    await CollecUser.COLECCION_USUARIOS
         .where('nombre_usuario', isEqualTo: userName)
         .get()
         .then((resultado) async => {

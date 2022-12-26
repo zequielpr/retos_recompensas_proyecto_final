@@ -89,7 +89,7 @@ class BandejaNotificaciones {
         .collection('misiones_recibidas');
 
     return StreamBuilder(
-      stream: notificacionesRecibidas.snapshots(),
+      stream: notificacionesRecibidas.orderBy('fecha', descending: true).snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
         if (streamSnapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator(),);

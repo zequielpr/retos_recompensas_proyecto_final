@@ -38,11 +38,12 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  print('A bg message just showed up :  ${message.messageId}');
 }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -72,7 +73,7 @@ class splashScreen extends StatelessWidget {
       theme: ThemeData(
           textButtonTheme: TextButtonThemeData(
               style: ButtonStyle(
-                textStyle: MaterialStateProperty.all(TextStyle(fontSize: 20)),
+                  textStyle: MaterialStateProperty.all(TextStyle(fontSize: 20)),
                   foregroundColor:
                       MaterialStateProperty.all(Colores.colorPrincipal))),
           textTheme: const TextTheme(
@@ -174,7 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
         //Guardar usuario actual
         CurrentUser.setCurrentUser();
         DocumentReference docUser =
-            CollecionUsuarios.doc(FirebaseAuth.instance.currentUser?.uid);
+            CollecionUsuarios.doc(CurrentUser.getIdCurrentUser());
         await docUser.get().then((value) {
           Roll_Data.ROLL_USER_IS_TUTORADO = value['rol_tutorado'];
           if (!mounted) return;

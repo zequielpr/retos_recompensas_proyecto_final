@@ -8,6 +8,8 @@ import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/CollecUsers.dart';
 import 'package:retos_proyecto/datos/TransferirDatos.dart';
 
+import '../../datos/Roll_Data.dart';
+import '../../datos/UsuarioActual.dart';
 import '../../main.dart';
 import '../Notificaciones/AdministrarTokens.dart';
 import 'DatosNewUser.dart';
@@ -147,28 +149,14 @@ class Autenticar {
         return 'env'; //Email no verificado
       }
 
-      await collectionReferenceUser.doc(uidUser).get().then((snap) => {
-            datos = TransferirDatosInicio(snap['rol_tutorado']),
-        context.router.replace(MainRouter())
-          });
+      CurrentUser.setCurrentUser();
+      DocumentReference docUser =
+      CollecUser.COLECCION_USUARIOS.doc(CurrentUser.getIdCurrentUser());
+      await docUser.get().then((value) {
+        Roll_Data.ROLL_USER_IS_TUTORADO = value['rol_tutorado'];
+        context.router.replace(MainRouter());
+      });
 
-      /*
-      User? user = credential.user;
-      if (user?.emailVerified as bool) {
-        var datos;
-        await collectionReferenceUser.doc(user?.uid).get().then((value) => {
-              datos = TransferirDatosInicio(value['rol_tutorado']),
-              Navigator.pushReplacementNamed(context, Inicio.ROUTE_NAME, arguments: datos)
-            });
-        //navegar a la ruta de inicio
-        print('usurio listo para iniciar sesion');
-        return;
-      }
-      print('se envió el link de verificacion');
-      await user
-          ?.sendEmailVerification()
-          .whenComplete(() async => {await aut.signOut()});
-       */
 
 
       return 's';//Succeful
