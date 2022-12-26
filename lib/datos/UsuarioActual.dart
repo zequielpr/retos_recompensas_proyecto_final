@@ -11,6 +11,10 @@ class CurrentUser{
 
 
   static String getIdCurrentUser(){
-    return currentUser?.uid as String;
+    try{
+      return currentUser?.uid as String;
+    }catch(e){
+      return '';
+    }
   }
 }

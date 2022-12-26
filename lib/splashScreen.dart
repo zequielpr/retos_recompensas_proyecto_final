@@ -173,7 +173,7 @@ class _MyHomePageState extends State<MyHomePage> {
         //Guardar usuario actual
         CurrentUser.setCurrentUser();
         DocumentReference docUser =
-            CollecionUsuarios.doc(FirebaseAuth.instance.currentUser?.uid);
+            CollecionUsuarios.doc(CurrentUser.getIdCurrentUser());
         await docUser.get().then((value) {
           Roll_Data.ROLL_USER_IS_TUTORADO = value['rol_tutorado'];
           if (!mounted) return;
