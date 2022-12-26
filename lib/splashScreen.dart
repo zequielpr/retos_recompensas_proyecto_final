@@ -42,6 +42,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -71,7 +73,7 @@ class splashScreen extends StatelessWidget {
       theme: ThemeData(
           textButtonTheme: TextButtonThemeData(
               style: ButtonStyle(
-                textStyle: MaterialStateProperty.all(TextStyle(fontSize: 20)),
+                  textStyle: MaterialStateProperty.all(TextStyle(fontSize: 20)),
                   foregroundColor:
                       MaterialStateProperty.all(Colores.colorPrincipal))),
           textTheme: const TextTheme(
