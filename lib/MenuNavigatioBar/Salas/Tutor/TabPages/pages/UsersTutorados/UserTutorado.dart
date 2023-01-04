@@ -38,7 +38,8 @@ class _UserTutoradoState extends State<UserTutorado> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: DatosPersonales.getDato(args.snap.id, 'nombre_usuario', TextStyle()),
+            title: DatosPersonales.getDato(
+                args.snap.id, 'nombre_usuario', TextStyle()),
             actions: [
               IconButton(
                   onPressed: () => ExplusarDeSala.ExplusarUsuarioDesala(
@@ -83,7 +84,8 @@ class _UserTutoradoState extends State<UserTutorado> {
                           padding: EdgeInsets.only(
                               left: Pantalla.getPorcentPanntalla(
                                   Espacios.leftRight, context, 'x'),
-                              top: Pantalla.getPorcentPanntalla(1, context, 'y')),
+                              top: Pantalla.getPorcentPanntalla(
+                                  1, context, 'y')),
                           child: DatosPersonales.getDato(
                               args.snap.id.trim(), 'nombre', TextStyle()),
                         )
@@ -185,7 +187,7 @@ class _UserTutoradoState extends State<UserTutorado> {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text("Loading");
+          return const Center(child: CircularProgressIndicator(),);
         }
 
         if (snapshot.hasData) {
@@ -218,19 +220,26 @@ class _UserTutoradoState extends State<UserTutorado> {
             contenido = value;
           });
           return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  titulo_recompensa,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w500, fontSize: 30),
-                ),
-                Text(
-                  contenido,
-                  style: const TextStyle(fontSize: 25),
-                )
-              ],
+            child: Container(
+              margin: EdgeInsets.only(
+                  left: Pantalla.getPorcentPanntalla(
+                      Espacios.leftRight, context, 'x'),
+                  right: Pantalla.getPorcentPanntalla(
+                      Espacios.leftRight, context, 'x')),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    titulo_recompensa,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 30),
+                  ),
+                  Text(
+                    contenido,
+                    style: const TextStyle(fontSize: 25),
+                  )
+                ],
+              ),
             ),
           );
           Card(
