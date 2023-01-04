@@ -73,12 +73,14 @@ class splashScreen extends StatelessWidget {
       theme: ThemeData(
           textButtonTheme: TextButtonThemeData(
               style: ButtonStyle(
-                  textStyle: MaterialStateProperty.all(TextStyle(fontSize: 20)),
+                  textStyle: MaterialStateProperty.all(TextStyle(fontSize: 15)),
                   foregroundColor:
                       MaterialStateProperty.all(Colores.colorPrincipal))),
-          textTheme: const TextTheme(
-              bodyText2: TextStyle(color: Colors.black, fontSize: 17),
-              button: TextStyle(color: Colors.black)),
+          textTheme: TextTheme(
+            subtitle1:GoogleFonts.roboto(color: Colors.black54) ,
+            bodyText2: GoogleFonts.roboto(color: Colors.black),
+
+          ),
           inputDecorationTheme: InputDecorationTheme(
               labelStyle: TextStyle(color: Colors.black),
               contentPadding: EdgeInsets.all(10),
@@ -97,7 +99,6 @@ class splashScreen extends StatelessWidget {
             elevation: 0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
           ),
-          primaryTextTheme: TextTheme(button: TextStyle(color: Colors.black)),
           tabBarTheme: TabBarTheme(labelColor: Colors.black),
           elevatedButtonTheme: ElevatedButtonThemeData(
               style: ButtonStyle(
@@ -158,18 +159,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Container(
         color: Colors.white,
-        child: FlutterLogo(size: MediaQuery.of(context).size.height));
+        child: Image.asset('lib/imgs/ic_launcher.png', scale: 10.0));
   }
 
   _navigateToHome() async {
     final CollectionReference CollecionUsuarios =
         FirebaseFirestore.instance.collection('usuarios');
-    await Future.delayed(Duration(milliseconds: 2500), () {});
+    await Future.delayed(const Duration(milliseconds: 1900), () {});
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user == null || user.emailVerified == false) {
         var datos = TransferirCollecion(CollecionUsuarios);
-        if (!mounted) return;
-
         context.router.replace(LoginRouter(args: datos));
       } else {
         //Guardar usuario actual
