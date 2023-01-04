@@ -183,7 +183,7 @@ class _UserTutoradoState extends State<UserTutorado> {
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
-          return Text('Something went wrong');
+          return Text('Ha ocurrido un error');
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {

@@ -77,7 +77,7 @@ class splashScreen extends StatelessWidget {
                   foregroundColor:
                       MaterialStateProperty.all(Colores.colorPrincipal))),
           textTheme: TextTheme(
-            subtitle1:GoogleFonts.roboto(color: Colors.black54) ,
+            subtitle1:GoogleFonts.roboto(color: Colors.black) ,
             bodyText2: GoogleFonts.roboto(color: Colors.black),
 
           ),

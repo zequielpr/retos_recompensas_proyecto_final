@@ -94,11 +94,6 @@ class Cards {
             ListTile(
               contentPadding:
                   EdgeInsets.only(left: leftRight, right: leftRight),
-              onTap: (){
-
-
-                context.router.push(Mision(snap: documentSnapshot));
-              },
               /*
                                 leading: const CircleAvatar(
                                   backgroundImage: NetworkImage(
@@ -111,19 +106,18 @@ class Cards {
                 text: TextSpan(children: [
                   TextSpan(
                       text: documentSnapshot['nombre_tutor'],
-                      style: TextStyle(fontWeight: FontWeight.w500)),
+                      style: GoogleFonts.roboto(fontWeight: FontWeight.w500)),
                   TextSpan(
-                      text: ' Ha asignado una nueva tarea en la sala ',
-                      style: TextStyle(fontWeight: FontWeight.w500)),
+                      text: ': recibe ${documentSnapshot['recompensa'].toString()} por ',),
                   TextSpan(
-                    text: documentSnapshot['nombre_sala'].toString() + ': ',
-                    style: TextStyle(fontWeight: FontWeight.w500),
+                    text: '${documentSnapshot['nombre_mision'].toString()} en la sala ',
                   ),
                   TextSpan(
-                    text: documentSnapshot['nombre_mision'].toString(),
-                    style: TextStyle(),
-                  )
-                ], style: TextStyle(color: Colors.black)),
+                    text: documentSnapshot['nombre_sala'].toString(),
+                    style: GoogleFonts.roboto(fontWeight: FontWeight.w500),
+                  ),
+
+                ], style: GoogleFonts.roboto(color: Colors.black)),
               ),
               leading:
                   DatosPersonales.getAvatar(documentSnapshot['id_emisor'], 20),
