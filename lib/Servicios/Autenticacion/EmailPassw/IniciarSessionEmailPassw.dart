@@ -17,6 +17,7 @@ import '../../../Loanding.dart';
 import '../../../datos/Roll_Data.dart';
 import '../../../datos/UsuarioActual.dart';
 import '../../../datos/ValidarDatos.dart';
+import '../../../recursos/AppName.dart';
 import '../../../recursos/Espacios.dart';
 import '../Autenticacion.dart';
 
@@ -156,8 +157,7 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
     return Padding(
       padding: EdgeInsets.only(
           bottom: Pantalla.getPorcentPanntalla(2, context, 'y')),
-      child: Text(
-        'App name',
+      child: Text(AppName.nombre,
         style: GoogleFonts.roboto(fontSize: 40, fontWeight: FontWeight.w600),
       ),
     );

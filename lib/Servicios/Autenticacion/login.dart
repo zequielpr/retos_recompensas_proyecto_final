@@ -17,6 +17,7 @@ import '../../Colores.dart';
 import '../../Loanding.dart';
 import '../../MediaQuery.dart';
 import '../../datos/TransferirDatos.dart';
+import '../../recursos/AppName.dart';
 import '../../recursos/Espacios.dart';
 import '../Notificaciones/AdministrarTokens.dart';
 import 'Autenticacion.dart';
@@ -123,11 +124,10 @@ class _LoginState extends State<Login> {
           SizedBox(
             width: Pantalla.getPorcentPanntalla(90, context, 'x'),
             child: Column(
-              children: const [
+              children: [
                 Text(
-                  'Inicia sesion en <<App name>>',
+                  'Inicia sesion en ${AppName.nombre}',
                   style: TextStyle(
-                      color: Colors.black,
                       fontSize: 22.5,
                       fontWeight: FontWeight.w600),
                   textAlign: TextAlign.center,
@@ -138,11 +138,11 @@ class _LoginState extends State<Login> {
           SizedBox(
             width: Pantalla.getPorcentPanntalla(70, context, 'x'),
             child: Text(
-              'Inicia sesion en <<App name>>, tutorea'
+
+              'Inicia sesion en ${AppName.nombre} y tutorea'
               ' o se tutoreado empleando nuestros servicios',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15.5,
+              style: GoogleFonts.roboto(
+                  fontSize: 16,
                   fontWeight: FontWeight.w300),
               textAlign: TextAlign.center,
             ),
@@ -178,7 +178,8 @@ class _LoginState extends State<Login> {
         return CircleAvatar(
           backgroundColor: TRANSPARENT,
           maxRadius: sizeImg,
-          backgroundImage: AssetImage('lib/imgs/img_logo_provicional.png'),
+          minRadius: 0,
+          backgroundImage: AssetImage('lib/imgs/ic_launcher.png'),
         );
       case 'g':
         return CircleAvatar(
@@ -204,8 +205,8 @@ class _LoginState extends State<Login> {
   }
 
   Widget _getTitle(option, BuildContext context) {
-    var wordSize = Pantalla.getPorcentPanntalla(5, context, 'x');
-    var styleTxt = TextStyle(fontSize: wordSize);
+    var wordSize =17.5;
+    var styleTxt = GoogleFonts.roboto(fontSize: wordSize);
 
     switch (option) {
       case 'p':
@@ -247,12 +248,12 @@ class _LoginState extends State<Login> {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-          style: TextStyle(color: Colors.black),
+          style: GoogleFonts.roboto(color: Colors.black),
           text: 'Al continuar, aceptas nuestros ',
           children: <TextSpan>[
             TextSpan(
               text: ' Terminos del servicios ',
-              style: const TextStyle(
+              style: GoogleFonts.roboto(
                 color: Colores.colorPrincipal,
               ),
               recognizer: TapGestureRecognizer()..onTap = _terminosDelServicio,
@@ -260,7 +261,7 @@ class _LoginState extends State<Login> {
             const TextSpan(text: 'y confirmas haber leido la '),
             TextSpan(
                 text: 'politica de privacidad.',
-                style: const TextStyle(color: Colores.colorPrincipal),
+                style: GoogleFonts.roboto(color: Colores.colorPrincipal),
                 recognizer: TapGestureRecognizer()
                   ..onTap = _politicaDePrivacidad),
           ]),
