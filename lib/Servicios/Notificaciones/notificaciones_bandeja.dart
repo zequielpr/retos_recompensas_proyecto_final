@@ -49,7 +49,7 @@ class BandejaNotificaciones {
 
     return StreamBuilder(
       stream: notificacionesRecibidas.snapshots(),
-      builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+      builder: (cxt_stream, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
         if (streamSnapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -65,7 +65,7 @@ class BandejaNotificaciones {
         if (streamSnapshot.hasData) {
           return ListView.builder(
             itemCount: streamSnapshot.data!.docs.length,
-            itemBuilder: (context, index) {
+            itemBuilder: (ctx_lista, index) {
               final DocumentSnapshot documentSnapshot =
                   streamSnapshot.data!.docs[index];
               return Cards.getCardSolicitud(documentSnapshot,

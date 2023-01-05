@@ -12,49 +12,81 @@ class Solicitudes {
       CollectionReference collectionReferenceUers,
       String? idCurrentUser,
       BuildContext context) async {
-    await collectionReferenceUers
-        .doc(idCurrentUser)
-        .collection('rolTutorado')
-        .doc(id_emisor.trim())
-        .get()
-        .then((value) async {
-      if (value.exists) {
-        await value.reference.update({
-          'salas_id': FieldValue.arrayUnion([id_sala])
-        });
-        return;
-      }
-      //Si el usuario aun no esta bajo su tutoría
-      await collectionReferenceUers
-          .doc(idCurrentUser)
-          .update({'current_tutor': id_emisor.trim()});
-      await value.reference.set({
-        'salas_id': FieldValue.arrayUnion([id_sala]),
-        'puntosTotal': 0,
-        'recompensa_x_200': {},
-        'puntos_acumulados': 0
-      });
-    }).then((value) async => {
-              await collectionReferenceUers
-                  .doc(id_emisor)
-                  .collection('rolTutor')
-                  .doc(id_emisor)
-                  .collection('salas')
-                  .doc(id_sala)
-                  .collection('usersTutorados')
-                  .doc(idCurrentUser)
-                  .set({'xxx': 0}).then((value) async => {
-                        await addUser(
-                            id_emisor, CurrentUser.getIdCurrentUser()),
-                        await eliminarNotificacion(
-                            id_sala,
-                            collectionReferenceUers,
-                            idCurrentUser,
-                            context,
-                            'aceptada')
-                      })
+
+  await  addUserTutoria(id_emisor, id_sala, idCurrentUser!, context).then((value) async {
+      if(value){
+        await collectionReferenceUers
+            .doc(idCurrentUser)
+            .collection('rolTutorado')
+            .doc(id_emisor.trim())
+            .get()
+            .then((value) async {
+          if (value.exists) {
+            await value.reference.update({
+              'salas_id': FieldValue.arrayUnion([id_sala])
             });
+            return;
+          }
+          //Si el usuario aun no esta bajo su tutoría
+          await collectionReferenceUers
+              .doc(idCurrentUser)
+              .update({'current_tutor': id_emisor.trim()});
+          await value.reference.set({
+            'salas_id': FieldValue.arrayUnion([id_sala]),
+            'puntosTotal': 0,
+            'recompensa_x_200': {},
+            'puntos_acumulados': 0
+          });
+        });
+      }
+    });
+
   }
+
+
+  //Añadir usuario a la tutoría
+  static Future<bool> addUserTutoria(String id_emisor, id_sala, String idCurrentUser, BuildContext context) async {
+
+    try{
+      DocumentReference sala = CollecUser.COLECCION_USUARIOS
+          .doc(id_emisor)
+          .collection('rolTutor')
+          .doc(id_emisor)
+          .collection('salas')
+          .doc(id_sala);
+
+
+
+      if((await sala.get().then((value) => value.exists))){
+        await sala
+            .collection('usersTutorados')
+            .doc(idCurrentUser)
+            .set({'xxx': 0}).then((value) async => {
+          await addUser(
+              id_emisor, CurrentUser.getIdCurrentUser()),
+          await eliminarNotificacion(
+              id_sala,
+              CollecUser.COLECCION_USUARIOS,
+              idCurrentUser,
+              context,
+              'Solicitude aceptada correctamente')
+        });
+        return true;
+      }
+      eliminarNotificacion(
+          id_sala,
+          CollecUser.COLECCION_USUARIOS,
+          idCurrentUser,
+          context,
+          'La sala a la que has sido invitado ha sido borrada');
+      return false;
+
+    }catch(e){
+      print('fallo$e');
+      return false;
+    }
+  }
+
 
   //Añadir el id del usuario del usuario a la lista de todos los usuarios tutorados
   static Future<void> addUser(String idTutor, idRemoveUser) async {
@@ -78,14 +110,18 @@ class Solicitudes {
     });
   }
 
+
+
+
 //Eliminar solicitude------------------------------------------------------------------------------------
   static eliminarNotificacion(
       String id_sala,
       CollectionReference collectionReferenceUers,
       String? idCurrentUser,
       BuildContext context,
-      String accion) async {
-    var colorSnackBar = accion == 'aceptada' ? Colors.green : Colors.red;
+      String Mensaje) async {
+    var colorSnackBar = Mensaje == 'Solicitude aceptada correctamente' ? Colors.green : Colors.red;
+
 
     await collectionReferenceUers
         .doc(idCurrentUser)
@@ -97,7 +133,7 @@ class Solicitudes {
         .then((value) async => {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   backgroundColor: colorSnackBar,
-                  content: Text('Solicitude $accion correctamente')))
+                  content: Text(Mensaje)))
             });
   }
 

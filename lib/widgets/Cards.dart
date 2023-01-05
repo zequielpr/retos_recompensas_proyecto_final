@@ -52,7 +52,7 @@ class Cards {
                             width: 100,
                             child: ElevatedButton(
                                 onPressed: () async =>
-                                    Solicitudes.aceptarSolicitud(
+                                    await Solicitudes.aceptarSolicitud(
                                         documentSnapshot['id_emisor'],
                                         documentSnapshot['id_sala'],
                                         collectionReference,
@@ -70,7 +70,7 @@ class Cards {
                                     collectionReference,
                                     idCurrentUser,
                                     context,
-                                    'rechazada'),
+                                    'Solicitud rechazada correctamente'),
                             child: Text("Rechazar")),
                       )
                     ],
