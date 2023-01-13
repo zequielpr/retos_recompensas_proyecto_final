@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 import 'package:retos_proyecto/widgets/Dialogs.dart';
 
@@ -41,14 +41,14 @@ class DejarTutoria {
 
   //eliminar id el usuario tutor
   static Future<void> eliminarDeCurrentTutor(String idRemoveUser) async {
-    await CollecUser.COLECCION_USUARIOS
+    await Coleciones.COLECCION_USUARIOS
         .doc(idRemoveUser)
         .update({"current_tutor": ''});
   }
 
   //Eliminar avance otenido con el tutor
   static Future<void> eliminarAvance(idTutor) async {
-    await CollecUser.COLECCION_USUARIOS
+    await Coleciones.COLECCION_USUARIOS
         .doc(CurrentUser.getIdCurrentUser())
         .collection('rolTutorado')
         .doc(idTutor)
@@ -57,7 +57,7 @@ class DejarTutoria {
 
   //Eliminar de la lista de todos los usarios tutorados
   static Future<void> eliminarDeListaAllUsers(String idTutor) async {
-    await CollecUser.COLECCION_USUARIOS
+    await Coleciones.COLECCION_USUARIOS
         .doc(idTutor)
         .collection('rolTutor')
         .doc(idTutor)
@@ -70,7 +70,7 @@ class DejarTutoria {
 
   //Eliminar de todas las salas en las que se encuentre
   static Future<void> eliminarDeTodasSalas(idTutor) async {
-    await CollecUser.COLECCION_USUARIOS
+    await Coleciones.COLECCION_USUARIOS
         .doc(idTutor)
         .collection('rolTutor')
         .doc(idTutor)

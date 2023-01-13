@@ -7,7 +7,7 @@ import 'package:retos_proyecto/datos/DatosPersonalUser.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import '../../../Servicios/Autenticacion/NombreUsuario.dart';
-import '../../../datos/CollecUsers.dart';
+import '../../../datos/Colecciones.dart';
 
 class EditarPerfil extends StatefulWidget {
   const EditarPerfil({Key? key}) : super(key: key);
@@ -21,7 +21,7 @@ class _EditarPerfilState extends State<EditarPerfil> {
     // TODO: implement initState
     NombreUsuarioWidget.vistaModificarUserName = setState;
 
-    CollecUser.COLECCION_USUARIOS
+    Coleciones.COLECCION_USUARIOS
         .doc(CurrentUser.getIdCurrentUser())
         .get()
         .then((DocumentSnapshot documentSnapshot) {

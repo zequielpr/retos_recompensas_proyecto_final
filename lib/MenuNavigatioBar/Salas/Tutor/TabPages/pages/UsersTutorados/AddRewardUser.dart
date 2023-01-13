@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
 
-import '../../../../../../datos/CollecUsers.dart';
+import '../../../../../../datos/Colecciones.dart';
 import '../../../../../../datos/UsuarioActual.dart';
 import '../../../../../../widgets/Dialogs.dart';
 
@@ -93,7 +93,7 @@ class _AddRewardState extends State<AddReward> {
     var contenido = contenidoController.text;
 
     if (titulo.isNotEmpty && contenido.isNotEmpty) {
-      await CollecUser.COLECCION_USUARIOS
+      await Coleciones.COLECCION_USUARIOS
           .doc(userId)
           .collection("rolTutorado")
           .doc(CurrentUser.getIdCurrentUser())

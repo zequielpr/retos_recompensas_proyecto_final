@@ -6,7 +6,7 @@ import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/Users
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/ExpulsarDeSala.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/ListUsuariosTutorados.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
-import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/recursos/Espacios.dart';
 
 import '../../../../../../Colores.dart';
@@ -31,7 +31,7 @@ class _UserTutoradoState extends State<UserTutorado> {
 
   @override
   Widget build(BuildContext context) {
-    final colecTodosLosUsuarios = CollecUser
+    final colecTodosLosUsuarios = Coleciones
         .COLECCION_USUARIOS; //navega hacia la coleccion de todos los usuarios
 
     return DefaultTabController(
@@ -175,7 +175,7 @@ class _UserTutoradoState extends State<UserTutorado> {
   //Recompensa que obtendrá el usuario
   Widget getRecompensaForUser() {
     return StreamBuilder<DocumentSnapshot>(
-      stream: CollecUser.COLECCION_USUARIOS
+      stream: Coleciones.COLECCION_USUARIOS
           .doc(args.snap.reference.id.trim())
           .collection("rolTutorado")
           .doc(CurrentUser.getIdCurrentUser())

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
-import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/datos/TransferirDatos.dart';
 
 import '../../datos/Roll_Data.dart';
@@ -44,7 +44,7 @@ class Autenticar {
       String userName) async {
     bool userNameValido = false;
 
-    await CollecUser.COLECCION_USUARIOS
+    await Coleciones.COLECCION_USUARIOS
         .where("nombre_usuario", isEqualTo: userName)
         .get()
         .then((value) => {
@@ -151,7 +151,7 @@ class Autenticar {
 
       CurrentUser.setCurrentUser();
       DocumentReference docUser =
-      CollecUser.COLECCION_USUARIOS.doc(CurrentUser.getIdCurrentUser());
+      Coleciones.COLECCION_USUARIOS.doc(CurrentUser.getIdCurrentUser());
       await docUser.get().then((value) {
         Roll_Data.ROLL_USER_IS_TUTORADO = value['rol_tutorado'];
         context.router.replace(MainRouter());

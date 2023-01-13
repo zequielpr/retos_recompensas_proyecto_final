@@ -1,20 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:ntp/ntp.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
+
+import '../../recursos/DateActual.dart';
 
 class Solicitudes {
 //Apceptar solicitud-------------------------------------------------------------------------------------
   static aceptarSolicitud(
-      String id_emisor,
-      String id_sala,
+      DocumentSnapshot documentSnapshot,
       CollectionReference collectionReferenceUers,
       String? idCurrentUser,
       BuildContext context) async {
 
-  await  addUserTutoria(id_emisor, id_sala, idCurrentUser!, context).then((value) async {
-      if(value){
+    String id_emisor = documentSnapshot['id_emisor'];
+    String id_sala = documentSnapshot['id_sala'];
+    await addUserTutoria(id_emisor, id_sala, idCurrentUser!, context)
+        .then((value) async {
+      if (value) {
         await collectionReferenceUers
             .doc(idCurrentUser)
             .collection('rolTutorado')
@@ -38,59 +43,41 @@ class Solicitudes {
             'puntos_acumulados': 0
           });
         });
+        eliminarNotificacion(documentSnapshot, 1);
       }
     });
-
   }
 
-
   //Añadir usuario a la tutoría
-  static Future<bool> addUserTutoria(String id_emisor, id_sala, String idCurrentUser, BuildContext context) async {
-
-    try{
-      DocumentReference sala = CollecUser.COLECCION_USUARIOS
+  static Future<bool> addUserTutoria(String id_emisor, id_sala,
+      String idCurrentUser, BuildContext context) async {
+    try {
+      DocumentReference sala = Coleciones.COLECCION_USUARIOS
           .doc(id_emisor)
           .collection('rolTutor')
           .doc(id_emisor)
           .collection('salas')
           .doc(id_sala);
 
-
-
-      if((await sala.get().then((value) => value.exists))){
+      if ((await sala.get().then((value) => value.exists))) {
         await sala
             .collection('usersTutorados')
             .doc(idCurrentUser)
             .set({'xxx': 0}).then((value) async => {
-          await addUser(
-              id_emisor, CurrentUser.getIdCurrentUser()),
-          await eliminarNotificacion(
-              id_sala,
-              CollecUser.COLECCION_USUARIOS,
-              idCurrentUser,
-              context,
-              'Solicitude aceptada correctamente')
-        });
+                  await addUser(id_emisor, CurrentUser.getIdCurrentUser()),
+                });
         return true;
       }
-      eliminarNotificacion(
-          id_sala,
-          CollecUser.COLECCION_USUARIOS,
-          idCurrentUser,
-          context,
-          'La sala a la que has sido invitado ha sido borrada');
       return false;
-
-    }catch(e){
+    } catch (e) {
       print('fallo$e');
       return false;
     }
   }
 
-
   //Añadir el id del usuario del usuario a la lista de todos los usuarios tutorados
   static Future<void> addUser(String idTutor, idRemoveUser) async {
-    var documentReference = CollecUser.COLECCION_USUARIOS
+    var documentReference = Coleciones.COLECCION_USUARIOS
         .doc(idTutor)
         .collection('rolTutor')
         .doc(idTutor)
@@ -99,56 +86,50 @@ class Solicitudes {
 
     documentReference.update({
       'idUserTotorado': FieldValue.arrayUnion([idRemoveUser])
-    }).catchError((onError){
+    }).catchError((onError) {
       var error = onError.toString();
 
-      if(error.contains('not-found')){
+      if (error.contains('not-found')) {
         documentReference.set({
           'idUserTotorado': FieldValue.arrayUnion([idRemoveUser])
         });
-      };
+      }
+      ;
     });
   }
 
-
-
-
 //Eliminar solicitude------------------------------------------------------------------------------------
-  static eliminarNotificacion(
-      String id_sala,
-      CollectionReference collectionReferenceUers,
-      String? idCurrentUser,
-      BuildContext context,
-      String Mensaje) async {
-    var colorSnackBar = Mensaje == 'Solicitude aceptada correctamente' ? Colors.green : Colors.red;
-
-
-    await collectionReferenceUers
-        .doc(idCurrentUser)
-        .collection('notificaciones')
-        .doc(idCurrentUser)
-        .collection('solicitudesRecibidas')
-        .doc(id_sala)
-        .delete()
-        .then((value) async => {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  backgroundColor: colorSnackBar,
-                  content: Text(Mensaje)))
-            });
+  static eliminarNotificacion(DocumentSnapshot documentSnapshot, int nuevoStado) async {
+    await documentSnapshot.reference.update({'estado':nuevoStado});
   }
 
   //Enviar solicitud-----------------------------------------------------------------------------------------
-  static Future<bool> enviarSolicitud(String userName, String idSala) async {
+  static Future<bool> enviarSolicitud(String userName, String idSala, String nombreSala) async {
+    DateTime fechaActual = await DateActual.getActualDateTime();
 
     var resultadoFinal = false;
 
-    await CollecUser.COLECCION_USUARIOS
+    await Coleciones.COLECCION_USUARIOS
         .where('nombre_usuario', isEqualTo: userName)
         .get()
         .then((resultado) async => {
               if (resultado.docs.length == 1)
                 {
-                  await resultado.docs[0].reference
+                  await Coleciones.NOTIFICACIONES
+                      .doc('doc_nitificaciones')
+                      .collection('solicitudes')
+                      .doc()
+                      .set({
+                    'id_emisor': CurrentUser.getIdCurrentUser(),
+                    'id_sala': idSala,
+                    'nombre_emisor': CurrentUser.currentUser?.displayName,
+                    'id_destinatario': resultado.docs.first.id,
+                    'fecha_actual': fechaActual,
+                    'estado': 0,
+                    'nombre_sala': nombreSala
+                  }).then((value) => resultadoFinal = true),
+
+                  /*await resultado.docs[0].reference
                       .collection('notificaciones')
                       .doc(resultado.docs[0].id)
                       .collection('solicitudesRecibidas')
@@ -157,7 +138,7 @@ class Solicitudes {
                     'id_emisor': CurrentUser.getIdCurrentUser(),
                     'id_sala': idSala,
                     'nombre_emisor': CurrentUser.currentUser?.displayName
-                  }).then((value) => {resultadoFinal = true}),
+                  }).then((value) => {resultadoFinal = true}),*/
                 }
               else
                 {print("el usuario especificado no existe")}

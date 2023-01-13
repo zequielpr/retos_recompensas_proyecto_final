@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../../datos/CollecUsers.dart';
+import '../../datos/Colecciones.dart';
 import '../Perfil/admin_usuarios/Admin_tutores.dart';
 
 class Mision extends StatefulWidget {
@@ -32,7 +32,7 @@ class _MisionState extends State<Mision> {
   Widget getDatosMision( DocumentSnapshot documentSnapshot){
     String idTutorActual = UsuarioTutores.tutorActual;
     return StreamBuilder(
-      stream: CollecUser.COLECCION_USUARIOS
+      stream: Coleciones.COLECCION_USUARIOS
         .doc(idTutorActual)
         .collection('rolTutor')
         .doc(idTutorActual)

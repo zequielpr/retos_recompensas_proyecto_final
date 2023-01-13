@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import '../../MediaQuery.dart';
-import '../../datos/CollecUsers.dart';
+import '../../datos/Colecciones.dart';
 import '../../datos/Roll_Data.dart';
 import '../../widgets/Dialogs.dart';
 
@@ -52,7 +52,7 @@ class AdminRoll {
         TextButton(
           onPressed: () async {
             var rol = rol_tutorado == 'Tutorado' ? true : false;
-            await (CollecUser.COLECCION_USUARIOS
+            await (Coleciones.COLECCION_USUARIOS
                 .doc(CurrentUser.getIdCurrentUser())
                 .update({'rol_tutorado': rol}))
                 .catchError((onError) {})

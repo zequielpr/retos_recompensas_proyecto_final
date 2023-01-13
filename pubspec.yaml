@@ -51,6 +51,7 @@ dependencies:
   readmore: ^2.2.0
   custom_navigation_bar: ^0.8.2
   auto_route: ^5.0.4
+  ntp: ^2.0.0
 
   #flutter_facebook_auth: '^3.5.0'
   #sign_in_with_apple: ^3.0.0

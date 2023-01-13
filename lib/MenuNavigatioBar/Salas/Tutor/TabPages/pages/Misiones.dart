@@ -2,12 +2,14 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ntp/ntp.dart';
 import 'package:readmore/readmore.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminRoles.dart';
 import 'package:retos_proyecto/recursos/Espacios.dart';
 import 'package:retos_proyecto/widgets/Dialogs.dart';
 
+import '../../../../../recursos/DateActual.dart';
 import '../../../../../widgets/Cards.dart';
 import '../../../../../widgets/Fields.dart';
 import '../../AdminSala.dart';
@@ -253,10 +255,14 @@ class MyStatefulWidgetState extends State<MyStatefulWidget> {
                         onPressed: isFieldNombreCorrect &&
                                 isFieldObjetiveCorrect
                             ? () async {
+
                                 if (nombreMisionController.text.isNotEmpty &&
                                     objetivoMisionController.text.isNotEmpty) {
+
+                                  DateTime dateActual = await DateActual.getActualDateTime();
+
                                   await collectionReferenceMisiones.add({
-                                    'fecha': DateTime.now(),
+                                    'fecha': dateActual,
                                     'nombreMision': nombreMisionController.text,
                                     'objetivoMision':
                                         objetivoMisionController.text,

@@ -3,12 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminRoles.dart';
-import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/datos/Roll_Data.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 import 'package:retos_proyecto/recursos/Espacios.dart';
 
-import '../../datos/CollecUsers.dart';
+import '../../datos/Colecciones.dart';
 import '../../widgets/Cards.dart';
 import '../../widgets/Dialogs.dart';
 import '../Perfil/admin_usuarios/Admin_tutores.dart';
@@ -51,7 +51,7 @@ class _SalasState extends State<Salas> {
       body: Container(
         child: Roll_Data.ROLL_USER_IS_TUTORADO
             ? listaSalasVistaTutorado()
-            : getVistaSalasVistaTutor(context, CollecUser.COLECCION_USUARIOS),
+            : getVistaSalasVistaTutor(context, Coleciones.COLECCION_USUARIOS),
       ),
     );
     ;
@@ -60,7 +60,7 @@ class _SalasState extends State<Salas> {
   Widget listaSalasVistaTutorado() {
     if (currentTutor != null && currentTutor.length != 0) {
       return _listarVistaTutorados(
-          context, CollecUser.COLECCION_USUARIOS, currentTutor);
+          context, Coleciones.COLECCION_USUARIOS, currentTutor);
     } else {
       return Center(
         child: Text('Aun no tienes un tutor'),
@@ -164,7 +164,7 @@ class _SalasState extends State<Salas> {
 
   //Contar numero de salas creadas
   Future<int> getNumerosalas() async {
-    return await CollecUser.COLECCION_USUARIOS
+    return await Coleciones.COLECCION_USUARIOS
         .doc(CurrentUser.getIdCurrentUser())
         .collection('rolTutor')
         .doc(CurrentUser.getIdCurrentUser())
@@ -285,7 +285,7 @@ class _SalasState extends State<Salas> {
 
                               if (name.isNotEmpty) {
                                 // Persist a new product to Firestore
-                                await CollecUser.COLECCION_USUARIOS
+                                await Coleciones.COLECCION_USUARIOS
                                     .doc(CurrentUser.getIdCurrentUser())
                                     .collection('rolTutor')
                                     .doc(CurrentUser.getIdCurrentUser())

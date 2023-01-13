@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 class Badge {
   static void isNewNotifications(mostrarBadge) {
-    CollectionReference collectionReferenceUser = CollecUser.COLECCION_USUARIOS;
+    CollectionReference collectionReferenceUser = Coleciones.COLECCION_USUARIOS;
 
     bool isNewMisiones;
     collectionReferenceUser
@@ -24,14 +24,14 @@ class Badge {
 
   ///actualilzar cantidad de misiones nuevas
   static void setStatusNewMision(){
-    CollecUser.COLECCION_USUARIOS
+    Coleciones.COLECCION_USUARIOS
         .doc(CurrentUser.getIdCurrentUser())
         .collection('notificaciones')
         .doc(CurrentUser.getIdCurrentUser()).update({'numb_misiones': 0, 'nueva_mision': false});
 
 
     print('hola');
-    CollecUser.COLECCION_USUARIOS
+    Coleciones.COLECCION_USUARIOS
         .doc(CurrentUser.getIdCurrentUser())
         .collection('notificaciones')
         .doc(CurrentUser.getIdCurrentUser()).update({'numb_solicitudes': 0, 'nueva_solicitud': false});

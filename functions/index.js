@@ -291,9 +291,9 @@ exports.notificarNuevaMision = functions.firestore
       }
 
       //Ecribir la notificación en el buzón del usuario
-      await docUsuario
-        .collection("notificaciones")
-        .doc(doc.id.trim())
+      var colecContentNotificaciones = db.collection('notificaciones');
+      await colecContentNotificaciones
+        .doc('doc_nitificaciones')
         .collection("misiones_recibidas")
         .add({
           id_emisor: tutorId,
@@ -301,7 +301,6 @@ exports.notificarNuevaMision = functions.firestore
           nombre_tutor: nombreTutor,
           nombre_sala: nombreSala,
           isNew: true,
-          idMision: idMision,
           nombre_mision: nombreMision,
           recompensa: recompensa,
           fecha: fecha

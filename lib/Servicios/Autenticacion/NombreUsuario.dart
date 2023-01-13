@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:retos_proyecto/Loanding.dart';
-import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
 
 import '../../MediaQuery.dart';
 import '../../Rutas.gr.dart';
@@ -302,7 +302,7 @@ class NombreUsuarioWidget {
   Future<void> _modificarUserName(String userName) async {
     bool succeful = true;
     var mensaje = 'Nombre de usuario guardado correctamente';
-    await CollecUser.COLECCION_USUARIOS
+    await Coleciones.COLECCION_USUARIOS
         .doc(CurrentUser.getIdCurrentUser())
         .update({'nombre_usuario': userName}).catchError((onError) {
       succeful = false;

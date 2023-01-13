@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Perfil/admin_usuarios/DejarTutoria.dart';
 
 import '../../../MediaQuery.dart';
-import '../../../datos/CollecUsers.dart';
+import '../../../datos/Colecciones.dart';
 import '../../../datos/UsuarioActual.dart';
 import '../../../widgets/Dialogs.dart';
 
@@ -51,7 +51,7 @@ class EliminarTutorado{
   static var usuarioTutor = CurrentUser.getIdCurrentUser();
   //Eliminar de la lista de todos los usuarios
   static Future<void> eliminarDeListaAllUsers(String idTutoro) async {
-    await CollecUser.COLECCION_USUARIOS
+    await Coleciones.COLECCION_USUARIOS
         .doc(usuarioTutor)
         .collection('rolTutor')
         .doc(usuarioTutor)
@@ -65,7 +65,7 @@ class EliminarTutorado{
 
   //Eliminar el avance del usuario
   static Future<void> eliminarAvance(idRemoveUser) async {
-    await CollecUser.COLECCION_USUARIOS
+    await Coleciones.COLECCION_USUARIOS
         .doc(idRemoveUser)
         .collection('rolTutorado')
         .doc(usuarioTutor)
@@ -74,7 +74,7 @@ class EliminarTutorado{
 
   //Eliminar de todas las salas
   static Future<void> eliminarDeTodasSalas(idTutoro) async {
-    await CollecUser.COLECCION_USUARIOS
+    await Coleciones.COLECCION_USUARIOS
         .doc(usuarioTutor)
         .collection('rolTutor')
         .doc(usuarioTutor)

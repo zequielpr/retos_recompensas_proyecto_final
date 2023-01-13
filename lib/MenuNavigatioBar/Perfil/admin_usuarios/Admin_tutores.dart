@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../MediaQuery.dart';
-import '../../../datos/CollecUsers.dart';
+import '../../../datos/Colecciones.dart';
 import '../../../datos/DatosPersonalUser.dart';
 import '../../../datos/UsuarioActual.dart';
 import '../cambiar_tutor_actual.dart';
@@ -12,7 +12,7 @@ import 'DejarTutoria.dart';
 class UsuarioTutores {
   static var tutorActual;
   static Future setCurrentUser(initCurrenntTutor) async {
-    CollecUser.COLECCION_USUARIOS
+    Coleciones.COLECCION_USUARIOS
         .doc(CurrentUser.getIdCurrentUser())
         .snapshots()
         .listen((event) {
@@ -23,7 +23,7 @@ class UsuarioTutores {
 
   static getAllTutores() {
     return StreamBuilder(
-        stream: CollecUser.COLECCION_USUARIOS
+        stream: Coleciones.COLECCION_USUARIOS
             .doc(CurrentUser.getIdCurrentUser())
             .collection('rolTutorado')
             .snapshots(),
