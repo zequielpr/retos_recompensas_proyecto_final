@@ -86,7 +86,7 @@ class Cards {
                 children: [
                   ListTile(
                     leading: DatosPersonales.getAvatar(
-                        documentSnapshot['id_emisor'], 25),
+                        documentSnapshot['id_emisor'], 26),
                     title: Text(documentSnapshot['nombre_emisor'].toString()),
                     subtitle: Text(
                         documentSnapshot['nombre_emisor'].toString() +

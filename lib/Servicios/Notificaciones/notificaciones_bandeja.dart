@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:retos_proyecto/MenuNavigatioBar/Perfil/cambiar_tutor_actual.dart';
 import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/datos/Roll_Data.dart';
+import '../../MenuNavigatioBar/Perfil/admin_usuarios/Admin_tutores.dart';
 import '../../widgets/Cards.dart';
 import '../Solicitudes/AdminSolicitudes.dart';
 
@@ -94,14 +96,12 @@ class BandejaNotificaciones {
 
   //Obtener las misiones recibidas------------------------------------------------------------------
   static Widget getMisiones(CollectionReference collectionReference) {
-    CollectionReference notificacionesRecibidas = collectionReference
-        .doc(idCurrentUser)
-        .collection('notificaciones')
-        .doc(idCurrentUser)
+    CollectionReference notificacionesRecibidas = Coleciones.NOTIFICACIONES
+        .doc('doc_nitificaciones')
         .collection('misiones_recibidas');
 
     return StreamBuilder(
-      stream: notificacionesRecibidas
+      stream: notificacionesRecibidas.where('id_emisor', isEqualTo: UsuarioTutores.tutorActual)
           .orderBy('fecha', descending: true)
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
@@ -123,7 +123,7 @@ class BandejaNotificaciones {
             itemBuilder: (context, index) {
               final DocumentSnapshot documentSnapshot =
                   streamSnapshot.data!.docs[index];
-              return Cards.cardNotificacionMisiones(documentSnapshot, context);
+              return Column(children: [Cards.cardNotificacionMisiones(documentSnapshot, context), Divider(height: 0, thickness: 0.5,)],);
             },
           );
         }

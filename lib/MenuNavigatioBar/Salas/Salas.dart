@@ -24,6 +24,9 @@ class _SalasState extends State<Salas> {
   var currentTutor;
 
   void initCurrentTutor(currentTutor) {
+    if (!mounted) {
+      return;
+    }
     setState(() {
       this.currentTutor = currentTutor;
     });

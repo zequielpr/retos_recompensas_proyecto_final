@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:retos_proyecto/datos/Colecciones.dart';
 
 import '../Servicios/Notificaciones/notificaciones_bandeja.dart';
+import 'Perfil/admin_usuarios/Admin_tutores.dart';
 
 class Notificaciones extends StatefulWidget {
   const Notificaciones({Key? key}) : super(key: key);
@@ -13,17 +14,17 @@ class Notificaciones extends StatefulWidget {
 class _NotificacionesState extends State<Notificaciones> {
 
   GlobalKey _scaffold = GlobalKey();
- void initState(){
-   super.initState();
-   setState((){});
- }
- @override
- void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-   setState(() {
+  void initCurrentTutor(currentTutor) {
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+    });
+  }
 
-   });
-    super.didChangeDependencies();
+  void initState() {
+    UsuarioTutores.setCurrentUser(initCurrentTutor);
+    super.initState();
   }
 
   @override
