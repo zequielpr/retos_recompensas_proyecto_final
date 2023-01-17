@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
 
 class DatosPersonales {
   ///Datos personales del usuario con el id pasado por parámetro. Devuelve el valor correspondiente a la key pasada por parámetro
   static Widget getDato(String idUser, String key, TextStyle style) {
     return FutureBuilder<DocumentSnapshot>(
-      future: CollecUser.COLECCION_USUARIOS.doc(idUser).get(),
+      future: Coleciones.COLECCION_USUARIOS.doc(idUser).get(),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
@@ -33,7 +33,7 @@ class DatosPersonales {
   ///Devuelve el avatar del usuario con el id especificado. El tamaño del avatar será el pasado por parámetro
   static Widget getAvatar(String idUser, double size) {
     return FutureBuilder<DocumentSnapshot>(
-      future: CollecUser.COLECCION_USUARIOS.doc(idUser).get(),
+      future: Coleciones.COLECCION_USUARIOS.doc(idUser).get(),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {

@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
-import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import '../../../Servicios/Autenticacion/NombreUsuario.dart';
@@ -112,7 +112,7 @@ class _ModificarNombreState extends State<ModificarNombre> {
   Future<void> _guardarNombre(String nombre) async {
     var mensaje = 'Nombre actualizado correctamente';
     if (nombre.length <= 30 && nombre.length > 2) {
-      await CollecUser.COLECCION_USUARIOS
+      await Coleciones.COLECCION_USUARIOS
           .doc(CurrentUser.getIdCurrentUser())
           .update({'nombre': nombre}).then(
               (value) => CurrentUser.currentUser?.updateDisplayName(nombre));

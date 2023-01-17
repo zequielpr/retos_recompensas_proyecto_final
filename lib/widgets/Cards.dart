@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,7 +9,7 @@ import 'package:readmore/readmore.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/AdminSala.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
-import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/recursos/Espacios.dart';
 import 'package:retos_proyecto/widgets/Dialogs.dart';
 
@@ -20,6 +22,54 @@ import '../datos/TransferirDatos.dart';
 import '../datos/UsuarioActual.dart';
 
 class Cards {
+  static Widget getStadoSolicitud(
+      DocumentSnapshot documentSnapshot, BuildContext context, stado) {
+    bool isTutorado = Roll_Data.ROLL_USER_IS_TUTORADO;
+    String titulo = '';
+    String subtitle = '';
+    Color color = Colors.transparent;
+    late Widget trailain ;
+    switch (stado) {
+      case 0:
+        color = Colors.transparent;
+        trailain = Icon(Icons.access_time_outlined);
+        titulo = 'Solicitud pendiente para la sala';
+        break;
+      case 1:
+        color = Color.fromARGB(84, 105, 240, 174);
+        trailain = Icon(Icons.check);
+        titulo = 'Solicitud aceptada';
+        break;
+      case 2:
+        color = Color.fromARGB(84, 255, 32, 32);
+        trailain = Icon(Icons.cancel_outlined);
+        titulo = 'Solicitude rechazada';
+        break;
+    }
+
+    Widget miniatura = DatosPersonales.getAvatar(
+        isTutorado
+            ? documentSnapshot['id_emisor']
+            : documentSnapshot['id_destinatario'],
+        26);
+
+    Widget nombre = DatosPersonales.getDato(isTutorado
+        ? documentSnapshot['id_emisor']
+        : documentSnapshot['id_destinatario'], 'nombre_usuario', TextStyle());
+    return Card(
+      shape: Border(),
+      margin: EdgeInsets.all(0),
+      color: color,
+      elevation: 0,
+      child: ListTile(
+        leading: miniatura,
+        title: Text(titulo),
+        subtitle: nombre,
+        trailing: trailain,
+      ),
+    );
+  }
+
   static Widget getCardSolicitud(
       DocumentSnapshot documentSnapshot,
       CollectionReference collectionReference,
@@ -36,7 +86,7 @@ class Cards {
                 children: [
                   ListTile(
                     leading: DatosPersonales.getAvatar(
-                        documentSnapshot['id_emisor'], 25),
+                        documentSnapshot['id_emisor'], 26),
                     title: Text(documentSnapshot['nombre_emisor'].toString()),
                     subtitle: Text(
                         documentSnapshot['nombre_emisor'].toString() +
@@ -52,9 +102,8 @@ class Cards {
                             width: 100,
                             child: ElevatedButton(
                                 onPressed: () async =>
-                                    Solicitudes.aceptarSolicitud(
-                                        documentSnapshot['id_emisor'],
-                                        documentSnapshot['id_sala'],
+                                    await Solicitudes.aceptarSolicitud(
+                                        documentSnapshot,
                                         collectionReference,
                                         idCurrentUser,
                                         context),
@@ -66,11 +115,7 @@ class Cards {
                         child: ElevatedButton(
                             onPressed: () async =>
                                 Solicitudes.eliminarNotificacion(
-                                    documentSnapshot['id_sala'],
-                                    collectionReference,
-                                    idCurrentUser,
-                                    context,
-                                    'rechazada'),
+                                    documentSnapshot, 2),
                             child: Text("Rechazar")),
                       )
                     ],
@@ -94,11 +139,6 @@ class Cards {
             ListTile(
               contentPadding:
                   EdgeInsets.only(left: leftRight, right: leftRight),
-              onTap: (){
-
-
-                context.router.push(Mision(snap: documentSnapshot));
-              },
               /*
                                 leading: const CircleAvatar(
                                   backgroundImage: NetworkImage(
@@ -111,19 +151,20 @@ class Cards {
                 text: TextSpan(children: [
                   TextSpan(
                       text: documentSnapshot['nombre_tutor'],
-                      style: TextStyle(fontWeight: FontWeight.w500)),
+                      style: GoogleFonts.roboto(fontWeight: FontWeight.w500)),
                   TextSpan(
-                      text: ' Ha asignado una nueva tarea en la sala ',
-                      style: TextStyle(fontWeight: FontWeight.w500)),
-                  TextSpan(
-                    text: documentSnapshot['nombre_sala'].toString() + ': ',
-                    style: TextStyle(fontWeight: FontWeight.w500),
+                    text:
+                        ': recibe ${documentSnapshot['recompensa'].toString()} por ',
                   ),
                   TextSpan(
-                    text: documentSnapshot['nombre_mision'].toString(),
-                    style: TextStyle(),
-                  )
-                ], style: TextStyle(color: Colors.black)),
+                    text:
+                        '${documentSnapshot['nombre_mision'].toString()} en la sala ',
+                  ),
+                  TextSpan(
+                    text: documentSnapshot['nombre_sala'].toString(),
+                    style: GoogleFonts.roboto(fontWeight: FontWeight.w500),
+                  ),
+                ], style: GoogleFonts.roboto(color: Colors.black)),
               ),
               leading:
                   DatosPersonales.getAvatar(documentSnapshot['id_emisor'], 20),
@@ -281,7 +322,7 @@ class Cards {
       userId, puntos_total_de_usuario, recompensa) {
     //Añadir recompensa sobrante
     GuardarRecompensaSobrante(recompensa) async {
-      await CollecUser.COLECCION_USUARIOS
+      await Coleciones.COLECCION_USUARIOS
           .doc(userId)
           .collection('rolTutorado')
           .doc(CurrentUser.getIdCurrentUser())
@@ -290,7 +331,7 @@ class Cards {
     }
 
     addRecompensa(recompensa) async {
-      await CollecUser.COLECCION_USUARIOS
+      await Coleciones.COLECCION_USUARIOS
           .doc(userId)
           .collection('rolTutorado')
           .doc(CurrentUser.getIdCurrentUser())

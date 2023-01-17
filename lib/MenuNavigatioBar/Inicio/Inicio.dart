@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/datos/Roll_Data.dart';
 
-import '../../datos/CollecUsers.dart';
+import '../../datos/Colecciones.dart';
 import '../Perfil/admin_usuarios/Admin_tutores.dart';
 import 'Tutor/VistaInicioTutor.dart';
 import 'Tutorado/InicioVistaTutorado.dart';
@@ -21,9 +21,11 @@ class _HomeState extends State<Home> {
   late String currentTutor = '';
 
   void initCurrentTutor(currentTutor){
-    setState(() {
+    if(mounted) {
+      setState(() {
       this.currentTutor = currentTutor;
     });
+    }
   }
   @override
 
@@ -97,7 +99,7 @@ class _HomeState extends State<Home> {
   Widget getInicioCurrentTutor(){
     if(currentTutor!= null && currentTutor.length != 0){
       return  InicioVistaTutorado.showCajaRecompensa(
-          CollecUser.COLECCION_USUARIOS,
+          Coleciones.COLECCION_USUARIOS,
           currentTutor,
           changeImage,
           cofre);

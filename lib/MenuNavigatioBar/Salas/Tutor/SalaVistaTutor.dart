@@ -6,7 +6,7 @@ import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/Misio
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/Ruleta.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/ListUsuariosTutorados.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
-import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
 
 import '../../../MediaQuery.dart';
 import '../../../datos/TransferirDatos.dart';
@@ -48,7 +48,7 @@ class _SalaContVistaTutorState extends State<SalaContVistaTutor>
           IconButton(
             onPressed: () {
               enviarSolicitudeUsuario.InterfaceEnviarSolicitud(
-                  contextSala,  args.sala.getIdSala);
+                  contextSala,  args.sala.getIdSala, args.nombreSala);
             },
             icon: Icon(Icons.person_add),
           ),

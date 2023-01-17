@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:readmore/readmore.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
-import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
 
 import '../../../datos/TransferirDatos.dart';
 import '../../../datos/UsuarioActual.dart';
@@ -46,7 +46,7 @@ class _HistorialState extends State<Historial> {
           ],
           title: Text('Recompensas recibidas'),
         ),
-        body: _getTodasRecompensas(CollecUser.COLECCION_USUARIOS,
+        body: _getTodasRecompensas(Coleciones.COLECCION_USUARIOS,
             UsuarioTutores.tutorActual, campo, order)
         //_getTidasRecompensas(
         //                 CollecUser.COLECCION_USUARIOS, 'hr44Bc4CRqWJjFfDYMCBmu707Qq1')

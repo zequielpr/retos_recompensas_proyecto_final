@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/datos/DatosPersonalUser.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
@@ -10,7 +10,7 @@ import 'eliminar_tutorado.dart';
 class Admin_tutorados {
   static getAllUser(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
-      stream: CollecUser.COLECCION_USUARIOS
+      stream: Coleciones.COLECCION_USUARIOS
           .doc(CurrentUser.getIdCurrentUser())
           .collection('rolTutor')
           .doc(CurrentUser.getIdCurrentUser())

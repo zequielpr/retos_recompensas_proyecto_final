@@ -122,7 +122,7 @@ class ListUsuarios extends StatelessWidget {
 //Enviar solici
 
 class enviarSolicitudeUsuario {
-  static InterfaceEnviarSolicitud(BuildContext context, String idSala) {
+  static InterfaceEnviarSolicitud(BuildContext context, String idSala, String nombreSala) {
     var leftRight =
         Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
     var _userNameController = TextEditingController();
@@ -187,7 +187,7 @@ class enviarSolicitudeUsuario {
 
                         var resultadoFinal = await Solicitudes.enviarSolicitud(
                             _userNameController.text,
-                            idSala);
+                            idSala, nombreSala);
 
                         var colorSnackBar =
                             resultadoFinal == true ? Colors.green : Colors.red;

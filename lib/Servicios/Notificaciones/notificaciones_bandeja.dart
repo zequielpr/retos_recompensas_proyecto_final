@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:retos_proyecto/MenuNavigatioBar/Perfil/cambiar_tutor_actual.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
+import 'package:retos_proyecto/datos/Roll_Data.dart';
+import '../../MenuNavigatioBar/Perfil/admin_usuarios/Admin_tutores.dart';
 import '../../widgets/Cards.dart';
 import '../Solicitudes/AdminSolicitudes.dart';
 
@@ -41,15 +45,16 @@ class BandejaNotificaciones {
   //Obtener las solicitudes recibidas------------------------------------------------------------------
   static Widget getSolicitudesRecibidas(
       CollectionReference collectionReference, BuildContext context) {
-    CollectionReference notificacionesRecibidas = collectionReference
-        .doc(idCurrentUser)
-        .collection('notificaciones')
-        .doc(idCurrentUser)
-        .collection('solicitudesRecibidas');
+    CollectionReference notificacionesRecibidas = Coleciones.NOTIFICACIONES
+        .doc('doc_nitificaciones')
+        .collection('solicitudes');
 
     return StreamBuilder(
-      stream: notificacionesRecibidas.snapshots(),
-      builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+      stream: notificacionesRecibidas.where(
+          Roll_Data.ROLL_USER_IS_TUTORADO ? 'id_destinatario' : 'id_emisor',
+          isEqualTo: idCurrentUser).orderBy('fecha_actual', descending: true)
+    .snapshots(),
+      builder: (cxt_stream, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
         if (streamSnapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -65,11 +70,20 @@ class BandejaNotificaciones {
         if (streamSnapshot.hasData) {
           return ListView.builder(
             itemCount: streamSnapshot.data!.docs.length,
-            itemBuilder: (context, index) {
+            itemBuilder: (ctx_lista, index) {
               final DocumentSnapshot documentSnapshot =
                   streamSnapshot.data!.docs[index];
-              return Cards.getCardSolicitud(documentSnapshot,
-                  collectionReference, idCurrentUser, context);
+              if (Roll_Data.ROLL_USER_IS_TUTORADO &&
+                  documentSnapshot['estado'] == 0) {
+                return Cards.getCardSolicitud(documentSnapshot,
+                    collectionReference, idCurrentUser, context);
+              }
+              return Column(children: [
+                Cards.getStadoSolicitud(
+                    documentSnapshot, context, documentSnapshot['estado']),
+              Divider(height: 0, thickness: 0.5,)
+              ],);
+
             },
           );
         }
@@ -82,20 +96,22 @@ class BandejaNotificaciones {
 
   //Obtener las misiones recibidas------------------------------------------------------------------
   static Widget getMisiones(CollectionReference collectionReference) {
-    CollectionReference notificacionesRecibidas = collectionReference
-        .doc(idCurrentUser)
-        .collection('notificaciones')
-        .doc(idCurrentUser)
+    CollectionReference notificacionesRecibidas = Coleciones.NOTIFICACIONES
+        .doc('doc_nitificaciones')
         .collection('misiones_recibidas');
 
     return StreamBuilder(
-      stream: notificacionesRecibidas.orderBy('fecha', descending: true).snapshots(),
+      stream: notificacionesRecibidas.where('id_emisor', isEqualTo: UsuarioTutores.tutorActual)
+          .orderBy('fecha', descending: true)
+          .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
         if (streamSnapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator(),);
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         }
 
-        if(streamSnapshot.data?.docs.isEmpty == true){
+        if (streamSnapshot.data?.docs.isEmpty == true) {
           return const Center(
             child: Text('Aun no tienes misiones'),
           );
@@ -107,7 +123,7 @@ class BandejaNotificaciones {
             itemBuilder: (context, index) {
               final DocumentSnapshot documentSnapshot =
                   streamSnapshot.data!.docs[index];
-              return Cards.cardNotificacionMisiones(documentSnapshot, context);
+              return Column(children: [Cards.cardNotificacionMisiones(documentSnapshot, context), Divider(height: 0, thickness: 0.5,)],);
             },
           );
         }

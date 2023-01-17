@@ -10,7 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/Servicios/Autenticacion/DatosNewUser.dart';
-import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/datos/TransferirDatos.dart';
 
 import '../../../Loanding.dart';
@@ -67,7 +67,7 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
   var paddingBottonAppName = 130.0;
 
   void _ActionCrearUnaCuenta(TransDatosInicioSesion arg) {
-    var datos = TranferirDatosRoll('x', CollecUser.COLECCION_USUARIOS);
+    var datos = TranferirDatosRoll('x', Coleciones.COLECCION_USUARIOS);
     context.router.push(RollRouter(args: datos));
   }
 
@@ -282,7 +282,7 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
                     String resultado = await Autenticar.inciarSesionEmailPasswd(
                             emailController.text.trim(),
                             passwdController.text.trim(),
-                            CollecUser.COLECCION_USUARIOS,
+                            Coleciones.COLECCION_USUARIOS,
                             context)
                         .whenComplete((){
                               setState(() {

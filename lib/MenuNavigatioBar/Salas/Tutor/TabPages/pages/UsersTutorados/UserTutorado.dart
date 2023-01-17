@@ -6,7 +6,7 @@ import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/Users
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/ExpulsarDeSala.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/ListUsuariosTutorados.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
-import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/recursos/Espacios.dart';
 
 import '../../../../../../Colores.dart';
@@ -31,14 +31,15 @@ class _UserTutoradoState extends State<UserTutorado> {
 
   @override
   Widget build(BuildContext context) {
-    final colecTodosLosUsuarios = CollecUser
+    final colecTodosLosUsuarios = Coleciones
         .COLECCION_USUARIOS; //navega hacia la coleccion de todos los usuarios
 
     return DefaultTabController(
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: DatosPersonales.getDato(args.snap.id, 'nombre_usuario', TextStyle()),
+            title: DatosPersonales.getDato(
+                args.snap.id, 'nombre_usuario', TextStyle()),
             actions: [
               IconButton(
                   onPressed: () => ExplusarDeSala.ExplusarUsuarioDesala(
@@ -83,7 +84,8 @@ class _UserTutoradoState extends State<UserTutorado> {
                           padding: EdgeInsets.only(
                               left: Pantalla.getPorcentPanntalla(
                                   Espacios.leftRight, context, 'x'),
-                              top: Pantalla.getPorcentPanntalla(1, context, 'y')),
+                              top: Pantalla.getPorcentPanntalla(
+                                  1, context, 'y')),
                           child: DatosPersonales.getDato(
                               args.snap.id.trim(), 'nombre', TextStyle()),
                         )
@@ -173,7 +175,7 @@ class _UserTutoradoState extends State<UserTutorado> {
   //Recompensa que obtendrá el usuario
   Widget getRecompensaForUser() {
     return StreamBuilder<DocumentSnapshot>(
-      stream: CollecUser.COLECCION_USUARIOS
+      stream: Coleciones.COLECCION_USUARIOS
           .doc(args.snap.reference.id.trim())
           .collection("rolTutorado")
           .doc(CurrentUser.getIdCurrentUser())
@@ -181,11 +183,11 @@ class _UserTutoradoState extends State<UserTutorado> {
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
-          return Text('Something went wrong');
+          return Text('Ha ocurrido un error');
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text("Loading");
+          return const Center(child: CircularProgressIndicator(),);
         }
 
         if (snapshot.hasData) {
@@ -218,19 +220,26 @@ class _UserTutoradoState extends State<UserTutorado> {
             contenido = value;
           });
           return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  titulo_recompensa,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w500, fontSize: 30),
-                ),
-                Text(
-                  contenido,
-                  style: const TextStyle(fontSize: 25),
-                )
-              ],
+            child: Container(
+              margin: EdgeInsets.only(
+                  left: Pantalla.getPorcentPanntalla(
+                      Espacios.leftRight, context, 'x'),
+                  right: Pantalla.getPorcentPanntalla(
+                      Espacios.leftRight, context, 'x')),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    titulo_recompensa,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 30),
+                  ),
+                  Text(
+                    contenido,
+                    style: const TextStyle(fontSize: 25),
+                  )
+                ],
+              ),
             ),
           );
           Card(

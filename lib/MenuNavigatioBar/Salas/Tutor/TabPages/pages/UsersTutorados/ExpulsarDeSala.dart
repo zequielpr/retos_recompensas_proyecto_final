@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import '../../../../../../widgets/Dialogs.dart';
@@ -24,7 +24,7 @@ class ExplusarDeSala {
           TextButton(
             onPressed: () async {
               bool succeful = true;
-              await CollecUser.COLECCION_USUARIOS
+              await Coleciones.COLECCION_USUARIOS
                   .doc(idTutor)
                   .collection('rolTutor')
                   .doc(idTutor)
@@ -36,7 +36,7 @@ class ExplusarDeSala {
                   .catchError((onError) {
                 succeful = false;
               }).then((value) async {
-                await CollecUser.COLECCION_USUARIOS
+                await Coleciones.COLECCION_USUARIOS
                     .doc(idUsuario)
                     .collection('rolTutorado')
                     .doc(idTutor)

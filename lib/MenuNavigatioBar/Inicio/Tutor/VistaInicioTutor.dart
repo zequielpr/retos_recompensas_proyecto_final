@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import '../../../MediaQuery.dart';
@@ -31,7 +31,7 @@ class _InicioTutorState extends State<InicioTutor> {
 
   static Widget getSalas() {
     return StreamBuilder<QuerySnapshot>(
-      stream: CollecUser.COLECCION_USUARIOS
+      stream: Coleciones.COLECCION_USUARIOS
           .doc(CurrentUser.getIdCurrentUser())
           .collection('rolTutor').doc(CurrentUser.getIdCurrentUser()).collection('salas')
           .snapshots(),
@@ -149,7 +149,7 @@ class _InicioTutorState extends State<InicioTutor> {
                           leading: DatosPersonales.getAvatar( document.id, 26),
                           title: DatosPersonales.getIndicadoAvance(
                               document.id,
-                              CollecUser.COLECCION_USUARIOS,
+                              Coleciones.COLECCION_USUARIOS,
                               CurrentUser.getIdCurrentUser()),
                           subtitle: Padding(
                             padding: EdgeInsets.only(
@@ -183,7 +183,7 @@ class _InicioTutorState extends State<InicioTutor> {
   static Widget comprobarRecompensa(String idUser) {
     if(idUser.length > 0) {
       return StreamBuilder(
-          stream: CollecUser.COLECCION_USUARIOS
+          stream: Coleciones.COLECCION_USUARIOS
               .doc(idUser)
               .collection('rolTutorado')
               .doc(CurrentUser.getIdCurrentUser())

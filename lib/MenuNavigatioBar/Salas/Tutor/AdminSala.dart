@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminRoles.dart';
-import 'package:retos_proyecto/datos/CollecUsers.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 import 'package:retos_proyecto/widgets/Dialogs.dart';
 
@@ -61,7 +61,7 @@ class AdminSala {
 
   //Eliminar sala de usuarios tutorados
   static Future<void> eliminarSalasDeUsuarios(String idSala) async {
-    await (CollecUser.COLECCION_USUARIOS
+    await (Coleciones.COLECCION_USUARIOS
         .doc(CurrentUser.getIdCurrentUser())
         .collection('rolTutor')
         .doc(CurrentUser.getIdCurrentUser())
@@ -71,7 +71,7 @@ class AdminSala {
         .get()
         .then((value) {
       value.docs.forEach((element) {
-        CollecUser.COLECCION_USUARIOS
+        Coleciones.COLECCION_USUARIOS
             .doc(element.id)
             .collection('rolTutorado')
             .doc(CurrentUser.getIdCurrentUser())
@@ -85,7 +85,7 @@ class AdminSala {
   }
 
   static Future<void> _eliminarSala(idSala) async {
-    await CollecUser.COLECCION_USUARIOS
+    await Coleciones.COLECCION_USUARIOS
         .doc(CurrentUser.getIdCurrentUser())
         .collection('rolTutor')
         .doc(CurrentUser.getIdCurrentUser())
@@ -96,7 +96,7 @@ class AdminSala {
 
   static Future<int> comprobarNumMisiones(String? idSala) async {
     int numeroMisiones = 0;
-    await CollecUser.COLECCION_USUARIOS
+    await Coleciones.COLECCION_USUARIOS
         .doc(CurrentUser.getIdCurrentUser())
         .collection('rolTutor').doc(CurrentUser.getIdCurrentUser()).collection('salas')
         .doc(idSala)
@@ -126,7 +126,7 @@ class AdminSala {
         ),
         TextButton(
           onPressed: () async {
-            await CollecUser.COLECCION_USUARIOS
+            await Coleciones.COLECCION_USUARIOS
                 .doc(
               CurrentUser.getIdCurrentUser(),
             )

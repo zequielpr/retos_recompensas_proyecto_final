@@ -146,7 +146,7 @@ class _RecogerEmail extends State<RecogerEmail> {
       if (metodoInicioSesion.isNotEmpty) {
         var datos = TransDatosInicioSesion(
             'Ya estas registrado, inicia sesión', false, true, email);
-        context.router.push(IniSesionEmailPasswordRouter(args: datos));
+        context.router.push(IniSesionEmailPasswordRouter(args: datos)).whenComplete(() => setState(() {isWaiting = false;}));
         return;
       }
 
