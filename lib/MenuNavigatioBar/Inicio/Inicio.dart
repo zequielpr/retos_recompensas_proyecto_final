@@ -21,12 +21,11 @@ class _HomeState extends State<Home> {
   late String currentTutor = '';
 
   void initCurrentTutor(currentTutor){
-    if (!mounted) {
-      return;
-    }
-    setState(() {
+    if(mounted) {
+      setState(() {
       this.currentTutor = currentTutor;
     });
+    }
   }
   @override
 

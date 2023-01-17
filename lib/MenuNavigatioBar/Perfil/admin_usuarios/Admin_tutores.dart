@@ -85,32 +85,11 @@ class UsuarioTutores {
           height: Pantalla.getPorcentPanntalla(5, context, 'y'),
           width: Pantalla.getPorcentPanntalla(20, context, 'x'),
           child: Row(
-            children: [marcarTutorActual(idUsuario), opciones(idUsuario)],
+            children: [MarcActualTutor(idUsuario), opciones(idUsuario)],
           ),
         ),
       ),
     );
-  }
-
-  static Widget marcarTutorActual(idUsuario) {
-    return StatefulBuilder(
-        builder: (BuildContext context, StateSetter setState) {
-      void initCurrentTutor(currentTutor) {
-
-        setState(() {});
-      }
-
-      UsuarioTutores.setCurrentUser(initCurrentTutor);
-
-      return tutorActual == idUsuario
-          ? Icon(
-              Icons.person_pin_rounded,
-            )
-          : Icon(
-              Icons.person_pin_rounded,
-              color: Colors.transparent,
-            );
-    });
   }
 
   static String _selectedMenu = '';
@@ -142,3 +121,43 @@ class UsuarioTutores {
 }
 
 enum Menu { AddMision, AddUsuario, EliminarSala }
+
+
+class MarcActualTutor extends StatefulWidget {
+  final idUsuario;
+  const MarcActualTutor(this.idUsuario, {Key? key}) : super(key: key);
+
+  @override
+  State<MarcActualTutor> createState() => _MarcActualTutorState(idUsuario);
+}
+
+class _MarcActualTutorState extends State<MarcActualTutor> {
+String idUsuario;
+  _MarcActualTutorState(this.idUsuario);
+
+void initCurrentTutor(currentTutor) {
+
+  if(mounted)setState(() {});
+}
+
+
+@override
+  void initState() {
+    // TODO: implement initState
+  UsuarioTutores.setCurrentUser(initCurrentTutor);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return UsuarioTutores.tutorActual == idUsuario
+        ? Icon(
+      Icons.person_pin_rounded,
+    )
+        : Icon(
+      Icons.person_pin_rounded,
+      color: Colors.transparent,
+    );;
+  }
+}
+

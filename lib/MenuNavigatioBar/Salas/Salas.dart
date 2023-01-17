@@ -24,12 +24,11 @@ class _SalasState extends State<Salas> {
   var currentTutor;
 
   void initCurrentTutor(currentTutor) {
-    if (!mounted) {
-      return;
+    if (mounted) {
+      setState(() {
+        this.currentTutor = currentTutor;
+      });
     }
-    setState(() {
-      this.currentTutor = currentTutor;
-    });
   }
 
   void initState() {
@@ -213,11 +212,13 @@ class _SalasState extends State<Salas> {
               builder: (BuildContext context, StateSetter setState) {
             return Padding(
               padding: EdgeInsets.only(
-                  left: Pantalla.getPorcentPanntalla(Espacios.leftRight, ctx, 'x'),
-                  right: Pantalla.getPorcentPanntalla(Espacios.leftRight, ctx, 'x'),
-                  bottom: Pantalla.getPorcentPanntalla(2, context, 'y'),
-                  // prevent the soft keyboard from covering text fields
-               ),
+                left:
+                    Pantalla.getPorcentPanntalla(Espacios.leftRight, ctx, 'x'),
+                right:
+                    Pantalla.getPorcentPanntalla(Espacios.leftRight, ctx, 'x'),
+                bottom: Pantalla.getPorcentPanntalla(2, context, 'y'),
+                // prevent the soft keyboard from covering text fields
+              ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -256,7 +257,6 @@ class _SalasState extends State<Salas> {
                     child: Column(
                       children: [
                         TextField(
-
                           onChanged: (nombreSala) {
                             if (nombreSala.length > 16) {
                               setState(() {

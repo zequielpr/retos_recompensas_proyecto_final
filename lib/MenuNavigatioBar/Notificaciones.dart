@@ -12,14 +12,9 @@ class Notificaciones extends StatefulWidget {
 }
 
 class _NotificacionesState extends State<Notificaciones> {
-
   GlobalKey _scaffold = GlobalKey();
   void initCurrentTutor(currentTutor) {
-    if (!mounted) {
-      return;
-    }
-    setState(() {
-    });
+    if (mounted) setState(() {});
   }
 
   void initState() {
@@ -30,9 +25,12 @@ class _NotificacionesState extends State<Notificaciones> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffold,
+        key: _scaffold,
         appBar: AppBar(
-          title: Align(alignment: Alignment.center, child: Text('Notificaciones'),),
+          title: Align(
+            alignment: Alignment.center,
+            child: Text('Notificaciones'),
+          ),
         ),
         body: BandejaNotificaciones.getBandejaNotificaciones(
             Coleciones.COLECCION_USUARIOS, context));
