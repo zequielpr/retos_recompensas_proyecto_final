@@ -30,6 +30,7 @@ import 'Servicios/Autenticacion/EmailPassw/RecogerEmail.dart';
 import 'Servicios/Autenticacion/EmailPassw/RecogerPassw.dart';
 import 'Servicios/Autenticacion/login.dart';
 import 'main.dart';
+import 'onboarding/onboarding.dart';
 
 @MaterialAutoRouter(
   replaceInRouteName: 'Page,Route',
@@ -57,6 +58,7 @@ import 'main.dart';
     AutoRoute(
         page: RecoveryPassw, name: 'RecoveryPassw', path: '/RecoveryPassw'),
     AutoRoute(page: InfoVerificacionEmail, name: 'InfoVerificacionEmailRouter', path: '/InfoVerificacionEmail'),
+    AutoRoute(page: Onboarding, name: 'OnboadingRouter', path: '/Onboading'),
     //Ruta de main_principal
     AutoRoute(
       path: "/Main",
