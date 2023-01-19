@@ -12,6 +12,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/Servicios/Autenticacion/EmailPassw/IniciarSessionEmailPassw.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
 
 import '../../Colores.dart';
 import '../../Loanding.dart';
@@ -25,19 +26,16 @@ import '../../main.dart';
 import 'DatosNewUser.dart';
 
 class Login extends StatefulWidget {
-  static const ROUTE_NAME = 'Login';
-  final TransferirCollecion args;
-  const Login({Key? key, required this.args}) : super(key: key);
+  const Login({Key? key}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState(args);
+  State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-  final TransferirCollecion args;
   bool _loading = false;
 
-  _LoginState(this.args);
+  _LoginState();
 
   void _onLoading() {
     setState(() {
@@ -70,7 +68,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    collecUsuarios = args.collectionReferenceUser;
+    collecUsuarios = Coleciones.COLECCION_USUARIOS;
     final correo = TextEditingController();
 
     pLeftRight = Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
@@ -89,7 +87,7 @@ class _LoginState extends State<Login> {
           //getOptionLoggin('a', context),
           //getOptionLoggin('f', context),
           _getSizedBox(10),
-          getTerms()
+          //getTerms()
         ],
       ),
     );
@@ -135,6 +133,7 @@ class _LoginState extends State<Login> {
               ],
             ),
           ),
+          SizedBox(height: Pantalla.getPorcentPanntalla(1, context, 'y'),),
           SizedBox(
             width: Pantalla.getPorcentPanntalla(70, context, 'x'),
             child: Text(
@@ -142,8 +141,9 @@ class _LoginState extends State<Login> {
               'Inicia sesion en ${AppName.nombre} y tutorea'
               ' o se tutoreado empleando nuestros servicios',
               style: GoogleFonts.roboto(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w300),
+                fontSize: 18,
+                color: Colors.grey,
+    ),
               textAlign: TextAlign.center,
             ),
           )

@@ -71,15 +71,15 @@ class splashScreen extends StatelessWidget {
       routerDelegate: _appRouter.delegate(),
       routeInformationParser: _appRouter.defaultRouteParser(),
       theme: ThemeData(
+          primaryColor: Colores.colorPrincipal,
           textButtonTheme: TextButtonThemeData(
               style: ButtonStyle(
                   textStyle: MaterialStateProperty.all(TextStyle(fontSize: 15)),
                   foregroundColor:
                       MaterialStateProperty.all(Colores.colorPrincipal))),
           textTheme: TextTheme(
-            subtitle1:GoogleFonts.roboto(color: Colors.black) ,
+            subtitle1: GoogleFonts.roboto(color: Colors.black),
             bodyText2: GoogleFonts.roboto(color: Colors.black),
-
           ),
           inputDecorationTheme: InputDecorationTheme(
               labelStyle: TextStyle(color: Colors.black),
@@ -169,7 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user == null || user.emailVerified == false) {
         var datos = TransferirCollecion(CollecionUsuarios);
-        context.router.replace(LoginRouter(args: datos));
+        if(mounted)context.router.replace(OnboadingRouter());
       } else {
         //Guardar usuario actual
         CurrentUser.setCurrentUser();
@@ -181,6 +181,6 @@ class _MyHomePageState extends State<MyHomePage> {
           context.router.replace(MainRouter());
         });
       }
-    });
+    }).onError((handleError){print('holaaaaaaa');});
   }
 }
