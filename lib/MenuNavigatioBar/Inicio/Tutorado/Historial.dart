@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:readmore/readmore.dart';
+import 'package:retos_proyecto/Colores.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/datos/Colecciones.dart';
 
@@ -312,7 +313,8 @@ class _HistorialState extends State<Historial> {
   Widget getCardRecompensa(
       String titulo, String contenido, Timestamp fechaReclamo) {
     return Card(
-      color: Colors.blueGrey,
+      elevation: 0,
+      color: Colores.colorPrincipal,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -323,12 +325,13 @@ class _HistorialState extends State<Historial> {
               titulo,
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
-              style: TextStyle(fontSize: 20),
+              style: TextStyle(fontSize: 20, color: Colors.white),
             ),
             subtitle: Text(
               contenido,
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
+              style: TextStyle(color: Colors.white),
             ),
           ),
           Row(
@@ -339,7 +342,7 @@ class _HistorialState extends State<Historial> {
                     right: Pantalla.getPorcentPanntalla(3, context, 'x')),
                 child: Text(
                   'Reclamado en ${DateFormat('dd-MM-yyyy').format(fechaReclamo.toDate())}',
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400, color: Colors.white),
                 ),
               )
             ],

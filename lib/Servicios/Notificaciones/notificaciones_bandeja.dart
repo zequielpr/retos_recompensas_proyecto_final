@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Perfil/cambiar_tutor_actual.dart';
 import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/datos/Roll_Data.dart';
+import 'package:retos_proyecto/recursos/DateActual.dart';
 import '../../MenuNavigatioBar/Perfil/admin_usuarios/Admin_tutores.dart';
 import '../../widgets/Cards.dart';
 import '../Solicitudes/AdminSolicitudes.dart';
@@ -102,7 +103,7 @@ class BandejaNotificaciones {
 
     return StreamBuilder(
       stream: notificacionesRecibidas.where('id_emisor', isEqualTo: UsuarioTutores.tutorActual)
-          .orderBy('fecha', descending: true)
+          .orderBy('fecha_actual', descending: true)
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
         if (streamSnapshot.connectionState == ConnectionState.waiting) {

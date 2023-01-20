@@ -10,6 +10,7 @@ import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/AdminSala.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/Colecciones.dart';
+import 'package:retos_proyecto/recursos/DateActual.dart';
 import 'package:retos_proyecto/recursos/Espacios.dart';
 import 'package:retos_proyecto/widgets/Dialogs.dart';
 
@@ -25,25 +26,25 @@ class Cards {
   static Widget getStadoSolicitud(
       DocumentSnapshot documentSnapshot, BuildContext context, stado) {
     bool isTutorado = Roll_Data.ROLL_USER_IS_TUTORADO;
-    String titulo = '';
     String subtitle = '';
     Color color = Colors.transparent;
+
     late Widget trailain ;
     switch (stado) {
       case 0:
         color = Colors.transparent;
         trailain = Icon(Icons.access_time_outlined);
-        titulo = 'Solicitud pendiente para la sala';
+        subtitle = 'Solicitud pendiente';
         break;
       case 1:
         color = Color.fromARGB(84, 105, 240, 174);
         trailain = Icon(Icons.check);
-        titulo = 'Solicitud aceptada';
+        subtitle = 'Solicitud aceptada hace';
         break;
       case 2:
         color = Color.fromARGB(84, 255, 32, 32);
         trailain = Icon(Icons.cancel_outlined);
-        titulo = 'Solicitude rechazada';
+        subtitle = 'Solicitude rechazada hace';
         break;
     }
 
@@ -56,6 +57,8 @@ class Cards {
     Widget nombre = DatosPersonales.getDato(isTutorado
         ? documentSnapshot['id_emisor']
         : documentSnapshot['id_destinatario'], 'nombre_usuario', TextStyle());
+
+
     return Card(
       shape: Border(),
       margin: EdgeInsets.all(0),
@@ -63,8 +66,8 @@ class Cards {
       elevation: 0,
       child: ListTile(
         leading: miniatura,
-        title: Text(titulo),
-        subtitle: nombre,
+        title: nombre,
+        subtitle: Text(subtitle),
         trailing: trailain,
       ),
     );

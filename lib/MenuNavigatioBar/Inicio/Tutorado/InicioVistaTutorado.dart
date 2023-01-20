@@ -8,6 +8,7 @@ import 'package:retos_proyecto/Rutas.gr.dart';
 import '../../../MediaQuery.dart';
 import '../../../datos/DatosPersonalUser.dart';
 import '../../../datos/UsuarioActual.dart';
+import '../../../recursos/DateActual.dart';
 import '../../../widgets/Dialogs.dart';
 
 class InicioVistaTutorado {
@@ -89,7 +90,7 @@ class InicioVistaTutorado {
                                           .set({
                                         'titulo': key,
                                         'contenido': value,
-                                        'fehca_reclamo': DateTime.now()
+                                        'fehca_reclamo': DateActual.getActualDateTime()
                                       });
                                     });
                                     //Eliminar la recompensa reclamada
