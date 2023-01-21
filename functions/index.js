@@ -426,12 +426,12 @@ exports.notificarSolicitudesRecibidas = functions.firestore
 //Solicitud en europa___________________
 exports.notificarSolicitudesRecibidas = functions.region('europe-west1').firestore
   .document(
-    "/usuarios/{userId}/notificaciones/{userId2}/solicitudesRecibidas/{idSolicitud}"
+    "/notificaciones/doc_nitificaciones/solicitudes/{solicitud_id}"
   )
   .onCreate(async (snapshot, context) => {
     var nuevaSolicitud = snapshot.data();
 
-    var user_id = context.params.userId;
+    var user_id = nuevaSolicitud.id_destinatario;
     var nombre_emisor = nuevaSolicitud.nombre_emisor;
 
     //Obtener documento de usuaro al cual se le ha enviado la solicitud
