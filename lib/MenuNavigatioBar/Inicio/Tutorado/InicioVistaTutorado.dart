@@ -84,13 +84,14 @@ class InicioVistaTutorado {
                                     //Reclama la recompensa a cambio de los 200 puntos
                                     snapshot['recompensa_x_200']
                                         .forEach((key, value) async {
+                                          var fechaActual = await DateActual.getActualDateTime();
                                       await docTutor
                                           .collection('billeteraRecompensas')
                                           .doc()
                                           .set({
                                         'titulo': key,
                                         'contenido': value,
-                                        'fehca_reclamo': DateActual.getActualDateTime()
+                                        'fehca_reclamo': fechaActual
                                       });
                                     });
                                     //Eliminar la recompensa reclamada

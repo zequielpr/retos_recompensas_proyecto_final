@@ -409,8 +409,6 @@ class _HistorialState extends State<Historial> {
                             },
                             child: const Text(
                               "OK",
-                              style:
-                                  TextStyle(color: Colors.blue, fontSize: 25.0),
                               textAlign: TextAlign.center,
                             ),
                           ),

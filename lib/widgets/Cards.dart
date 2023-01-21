@@ -138,7 +138,9 @@ class Cards {
 
   //Cuerpo de las notificaciones sobre las misiones_________________________________________________________________
   static Widget cardNotificacionMisiones(
+
       DocumentSnapshot documentSnapshot, BuildContext context) {
+    DateActual.getActualDateTime();
 
     Timestamp fecha_solicitu = documentSnapshot['fecha_actual'];
 
