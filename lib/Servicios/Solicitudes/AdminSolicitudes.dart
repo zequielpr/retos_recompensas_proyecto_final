@@ -43,7 +43,7 @@ class Solicitudes {
             'puntos_acumulados': 0
           });
         });
-        eliminarNotificacion(documentSnapshot, 1);
+        cambiarStatdoSolicitud(documentSnapshot, 1);
       }
     });
   }
@@ -99,8 +99,9 @@ class Solicitudes {
   }
 
 //Eliminar solicitude------------------------------------------------------------------------------------
-  static eliminarNotificacion(DocumentSnapshot documentSnapshot, int nuevoStado) async {
-    await documentSnapshot.reference.update({'estado':nuevoStado});
+  static cambiarStatdoSolicitud(DocumentSnapshot documentSnapshot, int nuevoStado) async {
+    DateTime fechaActual = await DateActual.getActualDateTime();
+    await documentSnapshot.reference.update({'estado':nuevoStado, 'fecha_actual': fechaActual});
   }
 
   //Enviar solicitud-----------------------------------------------------------------------------------------

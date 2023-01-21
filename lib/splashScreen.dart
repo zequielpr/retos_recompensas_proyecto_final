@@ -12,6 +12,7 @@ import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
+import 'package:retos_proyecto/recursos/DateActual.dart';
 
 import 'Colores.dart';
 import 'Rutas.gr.dart';
@@ -125,6 +126,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
+    DateActual.getActualDateTime();
     super.initState();
     FlutterStatusbarcolor.setNavigationBarWhiteForeground(
         false); //Colores de los iconos de la barra inferior

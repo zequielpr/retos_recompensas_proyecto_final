@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,6 +16,7 @@ import 'package:retos_proyecto/recursos/Espacios.dart';
 import 'package:retos_proyecto/widgets/Dialogs.dart';
 
 import '../Colores.dart';
+import '../Servicios/Notificaciones/AntiguedadNotificacion.dart';
 import '../datos/DatosPersonalUser.dart';
 import '../datos/Roll_Data.dart';
 import '../Servicios/Solicitudes/AdminSolicitudes.dart';
@@ -25,26 +27,30 @@ import '../datos/UsuarioActual.dart';
 class Cards {
   static Widget getStadoSolicitud(
       DocumentSnapshot documentSnapshot, BuildContext context, stado) {
+    DateActual.getActualDateTime();
     bool isTutorado = Roll_Data.ROLL_USER_IS_TUTORADO;
     String subtitle = '';
     Color color = Colors.transparent;
 
-    late Widget trailain ;
+    Timestamp fecha_solicitu = documentSnapshot['fecha_actual'];
+
+    var unidadTiempo = AntiguedadNotificaciones.getAntiguedad(fecha_solicitu);
+    late Widget trailain;
     switch (stado) {
       case 0:
         color = Colors.transparent;
         trailain = Icon(Icons.access_time_outlined);
-        subtitle = 'Solicitud pendiente';
+        subtitle = 'Solicitud enviada hace  $unidadTiempo';
         break;
       case 1:
         color = Color.fromARGB(84, 105, 240, 174);
         trailain = Icon(Icons.check);
-        subtitle = 'Solicitud aceptada hace';
+        subtitle = 'Solicitud aceptada hace $unidadTiempo';
         break;
       case 2:
         color = Color.fromARGB(84, 255, 32, 32);
         trailain = Icon(Icons.cancel_outlined);
-        subtitle = 'Solicitude rechazada hace';
+        subtitle = 'Solicitude rechazada hace $unidadTiempo';
         break;
     }
 
@@ -54,10 +60,12 @@ class Cards {
             : documentSnapshot['id_destinatario'],
         26);
 
-    Widget nombre = DatosPersonales.getDato(isTutorado
-        ? documentSnapshot['id_emisor']
-        : documentSnapshot['id_destinatario'], 'nombre_usuario', TextStyle());
-
+    Widget nombre = DatosPersonales.getDato(
+        isTutorado
+            ? documentSnapshot['id_emisor']
+            : documentSnapshot['id_destinatario'],
+        'nombre_usuario',
+        TextStyle());
 
     return Card(
       shape: Border(),
@@ -117,7 +125,7 @@ class Cards {
                         width: 100,
                         child: ElevatedButton(
                             onPressed: () async =>
-                                Solicitudes.eliminarNotificacion(
+                                Solicitudes.cambiarStatdoSolicitud(
                                     documentSnapshot, 2),
                             child: Text("Rechazar")),
                       )
@@ -131,6 +139,11 @@ class Cards {
   //Cuerpo de las notificaciones sobre las misiones_________________________________________________________________
   static Widget cardNotificacionMisiones(
       DocumentSnapshot documentSnapshot, BuildContext context) {
+
+    Timestamp fecha_solicitu = documentSnapshot['fecha_actual'];
+
+    var unidadTiempo = AntiguedadNotificaciones.getAntiguedad(fecha_solicitu);
+
     var leftRight =
         Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
     return Card(
@@ -169,6 +182,7 @@ class Cards {
                   ),
                 ], style: GoogleFonts.roboto(color: Colors.black)),
               ),
+              subtitle: Text("Hace " + unidadTiempo),
               leading:
                   DatosPersonales.getAvatar(documentSnapshot['id_emisor'], 20),
             ),
