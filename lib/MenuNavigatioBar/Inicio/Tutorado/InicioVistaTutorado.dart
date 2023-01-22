@@ -15,16 +15,11 @@ class InicioVistaTutorado {
   static Widget showCajaRecompensa(CollectionReference collectionReferenceUsers,
       String idTutorActual, changeImg, cofre) {
     //Mensaje para cuendo no se encuentra ninguna recompensa disponible
-    var mensajeNonRecomp = const Text(
-      "Recompensa no disponible,  pongase en contacto con su tutor",
-      style: TextStyle(fontSize: 20.0, color: Colors.black),
-      textAlign: TextAlign.center,
-    );
 
     var tituloNoRecompensa = Text(
       'Recompensa no disponible',
       style: const TextStyle(
-          fontSize: 20.0, color: Colors.black, fontWeight: FontWeight.w500),
+          fontSize: 20.0, color: Colors.black, fontWeight: FontWeight.w600),
     );
 
     //Action
@@ -184,8 +179,7 @@ class InicioVistaTutorado {
                                         elevation: 0.0,
                                         backgroundColor: Colors.transparent,
                                         child: dialogPulCofre(
-                                            context,
-                                            mensajeNonRecomp,
+                                            context,Image.asset('lib/imgs/undraw_xmas_surprise_57p1.png'),
                                             actionOk,
                                             tituloNoRecompensa),
                                       );
@@ -222,9 +216,9 @@ class InicioVistaTutorado {
     }
 
     var titulo ='Puntos insuficientes';
-    var message = 'Reune 200 puntos o más para reclamar una recompensa\n tus puntos totales son: $puntosActuales';
+    var content = Image.asset('lib/imgs/undraw_feeling_blue_4b7q.png');
 
-    Dialogos.mostrarDialog(actions, titulo, message, context);
+    Dialogos.mostrarDialog(actions, titulo, content, context);
   }
 
   //Metodo para mostrar recompensa
@@ -264,14 +258,13 @@ class InicioVistaTutorado {
                     ),
                   ),
                 ),
-                const Divider(indent: 10, endIndent: 10, color: Colors.black, thickness: 0.6,),
                 const SizedBox(
                   height: 5.0,
                 ),
                 Center(
                     child: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: mensaje,
+                  child:  mensaje,
                 ) //
                     ),
                 SizedBox(height: 24.0),
