@@ -181,9 +181,9 @@ class MyStatefulWidgetState extends State<MyStatefulWidget> {
               TextField(
                 controller: nombreMisionController,
                 maxLines: 1,
-                maxLength: 24,
+                maxLength: 15,
                 onChanged: (nombreMision) {
-                  if (nombreMision.length > 24) {
+                  if (nombreMision.length > 15) {
                     setState(() {
                       isFieldNombreCorrect = false;
                     });

@@ -32,7 +32,7 @@ const db = admin.firestore();
 export const createUserEuropean = region('europe-west1')
   .firestore
   .document('/usuarios/{tutorId}/rolTutor/{idSala}/misiones/{idMision}')
-  .onCreate(async (snap, context) => {
+  .onCreate(async (snapshot, context) => {
     // Get an object representing the document
     // e.g. {'name': 'Marie', 'age': 66}
 
@@ -40,8 +40,8 @@ export const createUserEuropean = region('europe-west1')
     const idSala = context.params.idSala;
 
     const usuariosRef = db.collection('usuarios');
-    const snapshot = await usuariosRef.doc(tutorId).collection('rolTutor').doc(idSala).collection('usersTutorados').get();
-    if (snapshot.empty) {
+    const snapshotshot = await usuariosRef.doc(tutorId).collection('rolTutor').doc(idSala).collection('usersTutorados').get();
+    if (snapshotshot.empty) {
       console.log('No matching documents.');
       return;
     }
@@ -50,7 +50,7 @@ export const createUserEuropean = region('europe-west1')
     var post = '';
     var respuesta = '';
     var docUParametro = '';
-    var snapShotUsuariosTutorados = '';
+    var snapshotShotUsuariosTutorados = '';
 
     const payload = {
       notification: {
@@ -61,11 +61,11 @@ export const createUserEuropean = region('europe-west1')
     };
 
     //El bucle forEach debe ser asíncrono ya que debe esperar a que la consulta se realice y continuar con la ejecución
-    snapshot.forEach(async doc => {
+    snapshotshot.forEach(async doc => {
       docUsuario = usuariosRef.doc(doc.id.trim());
-      snapShotUsuariosTutorados = await docUsuario.get();
+      snapshotShotUsuariosTutorados = await docUsuario.get();
       console.log('Id de usuario encontrado:*',doc.id,'*')
-      post = snapShotUsuariosTutorados.data();
+      post = snapshotShotUsuariosTutorados.data();
       console.log('Tokens encontrados: ', post);
       //await usuariosRef.doc(doc.id).update({tokens: admin.firestore.FieldValue.arrayRemove(token)}); //Borrar token de un array
 
@@ -97,22 +97,22 @@ export const createUserEuropean = region('europe-west1')
 
 exports.notificarNuevaMision = functions.firestore
   .document("/usuarios/{tutorId}/rolTutor/{tutorId_contenodor}/salas/{idSala}/misiones/{idMision}")
-  .onCreate(async (snap, context) => {
+  .onCreate(async (snapshot, context) => {
     const tutorId = context.params.tutorId;
     const idSala = context.params.idSala;
-    const nombreMision = snap.data()['nombreMision'];
-    const recompensa = snap.data()['recompensaMision'];
-    const fecha = snap.data()['fecha'];
+    const nombreMision = snapshot.data()['nombreMision'];
+    const recompensa = snapshot.data()['recompensaMision'];
+    const fecha = snapshot.data()['fecha'];
     const idMision = context.params.idMision;
 
     //Toma todos los usuario que se encuentran en la sala en la cual se ha creado una nueva misión
     const usuariosRef = db.collection("usuarios");
-    const snapshot = await usuariosRef
+    const snapshotshot = await usuariosRef
       .doc(tutorId)
       .collection("rolTutor").doc(tutorId)
       .collection('salas').doc(idSala).collection('usersTutorados')
       .get();
-    if (snapshot.empty) {
+    if (snapshotshot.empty) {
       console.log("No matching documents.");
       return;
     }
@@ -123,8 +123,8 @@ exports.notificarNuevaMision = functions.firestore
     await usuariosRef
       .doc(tutorId)
       .get()
-      .then((snap) => {
-        nombreTutor = snap.data()["nombre"];
+      .then((snapshot) => {
+        nombreTutor = snapshot.data()["nombre"];
       });
 
     await usuariosRef
@@ -133,13 +133,13 @@ exports.notificarNuevaMision = functions.firestore
       .collection('salas')
       .doc(idSala)
       .get()
-      .then((snap) => { nombreSala = snap.data()['NombreSala'] });
+      .then((snapshot) => { nombreSala = snapshot.data()['NombreSala'] });
 
     var docUsuario = "";
     var post = "";
     var respuesta = "";
     var docUParametro = "";
-    var snapShotUsuariosTutorados = "";
+    var snapshotShotUsuariosTutorados = "";
 
     const payload = {
       notification: {
@@ -150,7 +150,7 @@ exports.notificarNuevaMision = functions.firestore
     };
 
     //El bucle forEach debe ser asíncrono ya que debe esperar a que la consulta se realice y continuar con la ejecución
-    snapshot.forEach(async (doc) => {
+    snapshotshot.forEach(async (doc) => {
       docUsuario = usuariosRef.doc(doc.id.trim());
 
 
@@ -174,7 +174,7 @@ exports.notificarNuevaMision = functions.firestore
           idMision: idMision,
           nombre_mision: nombreMision,
           recompensa: recompensa,
-          fecha: fecha
+          fecha_actual: fecha
         });
 
       await docUsuario
@@ -188,9 +188,9 @@ exports.notificarNuevaMision = functions.firestore
 
 
 
-      snapShotUsuariosTutorados = await docUsuario.get();
+      snapshotShotUsuariosTutorados = await docUsuario.get();
       console.log("Id de usuario encontrado:*", doc.id, "*");
-      post = snapShotUsuariosTutorados.data();
+      post = snapshotShotUsuariosTutorados.data();
       console.log("Tokens encontrados: ", post);
       //await usuariosRef.doc(doc.id).update({tokens: admin.firestore.FieldValue.arrayRemove(token)}); //Borrar token de un array
       respuesta = await admin.messaging().sendToDevice(post.tokens, payload);
@@ -224,25 +224,25 @@ exports.notificarNuevaMision = functions.firestore
     }
   }); //final de metod0
 
-  //Europa__________
-  exports.notificarNuevaMision = functions.region('europe-west1').firestore
+//Europa__________
+exports.notificarNuevaMision = functions.region('europe-west1').firestore
   .document("/usuarios/{tutorId}/rolTutor/{tutorId_contenodor}/salas/{idSala}/misiones/{idMision}")
-  .onCreate(async (snap, context) => {
+  .onCreate(async (snapshot, context) => {
     const tutorId = context.params.tutorId;
     const idSala = context.params.idSala;
-    const nombreMision = snap.data()['nombreMision'];
-    const recompensa = snap.data()['recompensaMision'];
-    const fecha = snap.data()['fecha'];
+    const nombreMision = snapshot.data()['nombreMision'];
+    const recompensa = snapshot.data()['recompensaMision'];
+    const fecha = snapshot.data()['fecha'];
     const idMision = context.params.idMision;
 
     //Toma todos los usuario que se encuentran en la sala en la cual se ha creado una nueva misión
     const usuariosRef = db.collection("usuarios");
-    const snapshot = await usuariosRef
+    const snapshotshot = await usuariosRef
       .doc(tutorId)
       .collection("rolTutor").doc(tutorId)
       .collection('salas').doc(idSala).collection('usersTutorados')
       .get();
-    if (snapshot.empty) {
+    if (snapshotshot.empty) {
       console.log("No matching documents.");
       return;
     }
@@ -253,8 +253,8 @@ exports.notificarNuevaMision = functions.firestore
     await usuariosRef
       .doc(tutorId)
       .get()
-      .then((snap) => {
-        nombreTutor = snap.data()["nombre"];
+      .then((snapshot) => {
+        nombreTutor = snapshot.data()["nombre"];
       });
 
     await usuariosRef
@@ -263,13 +263,13 @@ exports.notificarNuevaMision = functions.firestore
       .collection('salas')
       .doc(idSala)
       .get()
-      .then((snap) => { nombreSala = snap.data()['NombreSala'] });
+      .then((snapshot) => { nombreSala = snapshot.data()['NombreSala'] });
 
     var docUsuario = "";
     var post = "";
     var respuesta = "";
     var docUParametro = "";
-    var snapShotUsuariosTutorados = "";
+    var snapshotShotUsuariosTutorados = "";
 
     const payload = {
       notification: {
@@ -280,7 +280,7 @@ exports.notificarNuevaMision = functions.firestore
     };
 
     //El bucle forEach debe ser asíncrono ya que debe esperar a que la consulta se realice y continuar con la ejecución
-    snapshot.forEach(async (doc) => {
+    snapshotshot.forEach(async (doc) => {
       docUsuario = usuariosRef.doc(doc.id.trim());
 
 
@@ -303,7 +303,7 @@ exports.notificarNuevaMision = functions.firestore
           isNew: true,
           nombre_mision: nombreMision,
           recompensa: recompensa,
-          fecha: fecha
+          fecha_actual: fecha
         });
 
       await docUsuario
@@ -317,9 +317,9 @@ exports.notificarNuevaMision = functions.firestore
 
 
 
-      snapShotUsuariosTutorados = await docUsuario.get();
+      snapshotShotUsuariosTutorados = await docUsuario.get();
       console.log("Id de usuario encontrado:*", doc.id, "*");
-      post = snapShotUsuariosTutorados.data();
+      post = snapshotShotUsuariosTutorados.data();
       console.log("Tokens encontrados: ", post);
       //await usuariosRef.doc(doc.id).update({tokens: admin.firestore.FieldValue.arrayRemove(token)}); //Borrar token de un array
       respuesta = await admin.messaging().sendToDevice(post.tokens, payload);
@@ -358,8 +358,8 @@ exports.notificarSolicitudesRecibidas = functions.firestore
   .document(
     "/usuarios/{userId}/notificaciones/{userId2}/solicitudesRecibidas/{idSolicitud}"
   )
-  .onCreate(async (snap, context) => {
-    var nuevaSolicitud = snap.data();
+  .onCreate(async (snapshot, context) => {
+    var nuevaSolicitud = snapshot.data();
 
     var user_id = context.params.userId;
     var nombre_emisor = nuevaSolicitud.nombre_emisor;
@@ -386,8 +386,8 @@ exports.notificarSolicitudesRecibidas = functions.firestore
     };
 
     //Obtiene los tokens del usuario que se le ha enviado la solicitud y se le envia la notificación
-    await documentUser.get().then(async (snap) => {
-      var tokens = snap.data().tokens;
+    await documentUser.get().then(async (snapshot) => {
+      var tokens = snapshot.data().tokens;
 
       //console.log("Tokens encontrados: ", tokens);
       var respuesta = await admin.messaging().sendToDevice(tokens, payload);
@@ -423,15 +423,15 @@ exports.notificarSolicitudesRecibidas = functions.firestore
   }); //final de metodo
 
 
-  //Solicitud en europa___________________
-  exports.notificarSolicitudesRecibidas = functions.region('europe-west1').firestore
+//Solicitud en europa___________________
+exports.notificarSolicitudesRecibidas = functions.region('europe-west1').firestore
   .document(
-    "/usuarios/{userId}/notificaciones/{userId2}/solicitudesRecibidas/{idSolicitud}"
+    "/notificaciones/doc_nitificaciones/solicitudes/{solicitud_id}"
   )
-  .onCreate(async (snap, context) => {
-    var nuevaSolicitud = snap.data();
+  .onCreate(async (snapshot, context) => {
+    var nuevaSolicitud = snapshot.data();
 
-    var user_id = context.params.userId;
+    var user_id = nuevaSolicitud.id_destinatario;
     var nombre_emisor = nuevaSolicitud.nombre_emisor;
 
     //Obtener documento de usuaro al cual se le ha enviado la solicitud
@@ -456,8 +456,8 @@ exports.notificarSolicitudesRecibidas = functions.firestore
     };
 
     //Obtiene los tokens del usuario que se le ha enviado la solicitud y se le envia la notificación
-    await documentUser.get().then(async (snap) => {
-      var tokens = snap.data().tokens;
+    await documentUser.get().then(async (snapshot) => {
+      var tokens = snapshot.data().tokens;
 
       //console.log("Tokens encontrados: ", tokens);
       var respuesta = await admin.messaging().sendToDevice(tokens, payload);
@@ -490,5 +490,44 @@ exports.notificarSolicitudesRecibidas = functions.firestore
       });
       return Promise.all(tokensDelete);
     }
-  }); 
+  });
 
+
+
+
+//Funcion para eliminar las notificaciones
+exports.eliminarNotificaciones = functions.pubsub.schedule('1 12 * * *')
+  .onRun(async (context) => {
+    var timeZone = new Date();
+    var notificaciones = db.collection('notificaciones').doc('doc_nitificaciones');
+    var solicitudes = await notificaciones.collection('solicitudes').get();
+    var misiones = await notificaciones.collection('misiones_recibidas').get();
+
+    var fechaSolicitud;
+    var dias;
+    var data;
+
+    //Eliminar notificaciones solicitudes
+    solicitudes.forEach(async (doc) => {
+      await comprobarFecha(doc);
+    });
+
+    //Eliminar notificaciones misiones
+    misiones.forEach(async (doc) => {
+      await comprobarFecha(doc);
+    });
+
+    
+    async function comprobarFecha(doc) {
+      data = doc.data();
+      fechaSolicitud = new Date(data.fecha_actual._seconds * 1000);
+
+      dias = (timeZone - fechaSolicitud) / 1000 / 60 / 60 / 24;
+      console.log('dias: ', dias);
+
+      if (dias >= 30) {
+        await doc.ref.delete();
+      }
+    }
+
+  });

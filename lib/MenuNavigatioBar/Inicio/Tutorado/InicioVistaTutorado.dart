@@ -8,6 +8,7 @@ import 'package:retos_proyecto/Rutas.gr.dart';
 import '../../../MediaQuery.dart';
 import '../../../datos/DatosPersonalUser.dart';
 import '../../../datos/UsuarioActual.dart';
+import '../../../recursos/DateActual.dart';
 import '../../../widgets/Dialogs.dart';
 
 class InicioVistaTutorado {
@@ -83,13 +84,14 @@ class InicioVistaTutorado {
                                     //Reclama la recompensa a cambio de los 200 puntos
                                     snapshot['recompensa_x_200']
                                         .forEach((key, value) async {
+                                          var fechaActual = await DateActual.getActualDateTime();
                                       await docTutor
                                           .collection('billeteraRecompensas')
                                           .doc()
                                           .set({
                                         'titulo': key,
                                         'contenido': value,
-                                        'fehca_reclamo': DateTime.now()
+                                        'fehca_reclamo': fechaActual
                                       });
                                     });
                                     //Eliminar la recompensa reclamada
