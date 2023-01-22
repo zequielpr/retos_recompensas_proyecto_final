@@ -13,6 +13,7 @@ import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/Servicios/Autenticacion/EmailPassw/IniciarSessionEmailPassw.dart';
 import 'package:retos_proyecto/datos/Colecciones.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../Colores.dart';
 import '../../Loanding.dart';
@@ -65,9 +66,11 @@ class _LoginState extends State<Login> {
 
   var pLeftRight;
   var mTop;
+  AppLocalizations? valores;
 
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     collecUsuarios = Coleciones.COLECCION_USUARIOS;
     final correo = TextEditingController();
 
@@ -123,8 +126,7 @@ class _LoginState extends State<Login> {
             width: Pantalla.getPorcentPanntalla(90, context, 'x'),
             child: Column(
               children: [
-                Text(
-                  'Inicia sesion en ${AppName.nombre}',
+                Text(valores?.titulo_introduccion_login as String,
                   style: TextStyle(
                       fontSize: 22.5,
                       fontWeight: FontWeight.w600),
@@ -136,10 +138,7 @@ class _LoginState extends State<Login> {
           SizedBox(height: Pantalla.getPorcentPanntalla(1, context, 'y'),),
           SizedBox(
             width: Pantalla.getPorcentPanntalla(70, context, 'x'),
-            child: Text(
-
-              'Inicia sesion en ${AppName.nombre} y tutorea'
-              ' o se tutoreado empleando nuestros servicios',
+            child: Text(valores?.introduccion_login as String,
               style: GoogleFonts.roboto(
                 fontSize: 18,
                 color: Colors.grey,
@@ -210,14 +209,13 @@ class _LoginState extends State<Login> {
 
     switch (option) {
       case 'p':
-        return Text(
-          'Continuar con usuario y contraseña',
+        return Text(valores?.cont_c_email_passw as String,
           style: styleTxt,
         );
       case 'g':
-        return Text('     Continuar con Google', style: styleTxt);
+        return Text(valores?.cont_c_google as String, style: styleTxt);
       case 'a':
-        return Text('        Continuar con Apple', style: styleTxt);
+        return Text(valores?.cont_c_apple as String, style: styleTxt);
       case 'f':
         return Text('      Continuar con Facebook', style: styleTxt);
       default:
@@ -285,12 +283,12 @@ class _LoginState extends State<Login> {
               _irRollPage(datos);
             },
             child: RichText(
-              text: const TextSpan(children: [
+              text:  TextSpan(children: [
                 TextSpan(
-                    text: '¿No tienes una cuenta?',
+                    text: valores?.no_cuenta,
                     style: TextStyle(color: Colors.black)),
                 TextSpan(
-                    text: '   Registrarse',
+                    text: '   ${valores?.registrarse}',
                     style: TextStyle(color: Colores.colorPrincipal))
               ]),
             ),
