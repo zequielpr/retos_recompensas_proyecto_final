@@ -9,6 +9,7 @@ import '../../datos/Colecciones.dart';
 import '../Perfil/admin_usuarios/Admin_tutores.dart';
 import 'Tutor/VistaInicioTutor.dart';
 import 'Tutorado/InicioVistaTutorado.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -78,7 +79,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Home'),
+        title: Text(AppLocalizations.of(context)?.inicio as String),
         actions: [
           Roll_Data.ROLL_USER_IS_TUTORADO?
           Padding(

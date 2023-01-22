@@ -1,0 +1,6 @@
+{
+"inicio": "Home",
+"@inicio":{
+    "descripcion": "vista de inicio"
+}
+}

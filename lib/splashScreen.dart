@@ -8,6 +8,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:auto_route/auto_route.dart';
@@ -25,7 +26,10 @@ import 'Servicios/Autenticacion/EmailPassw/RecogerPassw.dart';
 import 'Servicios/Autenticacion/login.dart';
 import 'datos/TransferirDatos.dart';
 import 'datos/UsuarioActual.dart';
+import 'l10n/l10n.dart';
 import 'main.dart';
+
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // id
@@ -69,6 +73,12 @@ class splashScreen extends StatelessWidget {
     //Color de la barra inferior
 
     return MaterialApp.router(
+      supportedLocales: L10n.all,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate
+      ],
       routerDelegate: _appRouter.delegate(),
       routeInformationParser: _appRouter.defaultRouteParser(),
       theme: ThemeData(
@@ -171,7 +181,7 @@ class _MyHomePageState extends State<MyHomePage> {
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user == null || user.emailVerified == false) {
         var datos = TransferirCollecion(CollecionUsuarios);
-        if(mounted)context.router.replace(OnboadingRouter());
+        if (mounted) context.router.replace(OnboadingRouter());
       } else {
         //Guardar usuario actual
         CurrentUser.setCurrentUser();
@@ -183,6 +193,8 @@ class _MyHomePageState extends State<MyHomePage> {
           context.router.replace(MainRouter());
         });
       }
-    }).onError((handleError){print('holaaaaaaa');});
+    }).onError((handleError) {
+      print('holaaaaaaa');
+    });
   }
 }
