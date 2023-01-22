@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../MediaQuery.dart';
 
 class Dialogos {
-  static mostrarDialog(actions, String titulo, String mensaje, BuildContext context) {
+  static mostrarDialog(actions, String titulo, mensaje, BuildContext context) {
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -21,10 +21,10 @@ class Dialogos {
             left: Pantalla.getPorcentPanntalla(3, context, 'x'),
             right: Pantalla.getPorcentPanntalla(3, context, 'x')),
         title: Text(titulo, textAlign: TextAlign.center),
-        content: Text(
+        content: mensaje.runtimeType == String? Text(
           mensaje,
           textAlign: TextAlign.center,
-        ),
+        ): mensaje,
         actions: actions(context),
       ),
     );
