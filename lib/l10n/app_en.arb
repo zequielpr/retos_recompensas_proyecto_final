@@ -118,6 +118,8 @@
   "tutorado": "Tutored",
   "usuarios": "Users",
   "verificacion_email_necesaria": "Email verification required",
-  "ya_estas_registrado": "You are already registered, log in"
+  "ya_estas_registrado": "You are already registered, log in",
+  "email_incorrecto": "Incorrect email",
+  "passw_incorrecta": "Incorrect password"
 
 }

@@ -87,5 +87,7 @@
   "tutorado": "Tutorado",
   "usuarios": "Usuarios",
   "verificacion_email_necesaria": "Verificación de email necesaria",
-  "ya_estas_registrado": "Ya estas registrado, inicia sesión"
-}
+  "ya_estas_registrado": "Ya estas registrado, inicia sesión",
+  "email_incorrecto": "Email incorrecto",
+  "passw_incorrecta": "Contraseña incorrecta"
+  }
