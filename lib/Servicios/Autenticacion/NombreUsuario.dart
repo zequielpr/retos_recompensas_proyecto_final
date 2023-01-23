@@ -14,6 +14,7 @@ import '../../datos/UsuarioActual.dart';
 import '../../datos/ValidarDatos.dart';
 import '../Notificaciones/AdministrarTokens.dart';
 import 'Autenticacion.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NombreUsuarioWidget {
   static var nombreUsuarioActual;
@@ -26,10 +27,12 @@ class NombreUsuarioWidget {
   var body;
   var loanding;
   bool isWaiting = false;
+  AppLocalizations? valores;
 
   NombreUsuarioWidget(
       this._setState, this._context, this._args, this._isRegistrandoUser) {
     _userNameController.text = _args.userName;
+    valores = valores = AppLocalizations.of(_context);
   }
 
   var _userNameController = TextEditingController();
@@ -80,7 +83,7 @@ class NombreUsuarioWidget {
       child: Padding(
         padding: EdgeInsets.only(bottom: Pantalla.getPorcentPanntalla(4, context, 'y')),
         child: Text(
-          'Nombre de usuario',
+          valores?.nombre_usuario as String,
           style:
           GoogleFonts.roboto(fontSize: 25, fontWeight: FontWeight.w400),
         ),
@@ -100,7 +103,7 @@ class NombreUsuarioWidget {
           },
           decoration: InputDecoration(
               border: const OutlineInputBorder(),
-              labelText: "Nombre de usuario",
+              labelText: valores?.nombre_usuario as String,
               suffixIcon: _estadoUsuario),
         ),
         noMostrarAdver == false ? mensajeAdver : Text('')
@@ -118,7 +121,7 @@ class NombreUsuarioWidget {
           onPressed: _botonActivo
               ? () async => _guardarNombreUsuario(_args)
               : null,
-          child: Text(_isRegistrandoUser ? "Registrarme" : 'Guardar',
+          child: Text(_isRegistrandoUser ? valores?.registrarse as String : valores?.guardar as String,
               style: GoogleFonts.roboto(
                   fontSize: 17, fontWeight: FontWeight.w600)),
         ),

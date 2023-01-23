@@ -9,6 +9,7 @@ import 'package:retos_proyecto/recursos/Espacios.dart';
 import 'package:retos_proyecto/widgets/Dialogs.dart';
 
 import '../../../datos/TransferirDatos.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RecoveryPassw extends StatefulWidget {
   const RecoveryPassw({Key? key}) : super(key: key);
@@ -20,15 +21,17 @@ class RecoveryPassw extends StatefulWidget {
 class _RecoveryPasswState extends State<RecoveryPassw> {
   var emailController = TextEditingController();
   var leftRight;
+  AppLocalizations? valores;
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     leftRight = Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         titleTextStyle: TextStyle(),
         title: Text(
-          'Reestablecer',
+          valores?.reestablecer as String,
           style: TextStyle(color: Colors.black, fontSize: 25),
         ),
       ),
@@ -41,14 +44,15 @@ class _RecoveryPasswState extends State<RecoveryPassw> {
           children: <Widget>[
             Align(
               alignment: Alignment.centerLeft,
-              child: Text('Contraseña olvidada',
+              child: Text(valores?.passw_olvidada as String,
                   style: GoogleFonts.roboto(
                       fontSize: 25, fontWeight: FontWeight.w400)),
             ),
-            Text(
-                'Se te enviará un link a tu correo eltronico mediante el cual, podrás reestablecer tu contraseña',
+            Text(valores?.contenido_passw_olvidada as String,
                 style: GoogleFonts.roboto(
-                    fontSize: 17, fontWeight: FontWeight.w200)),
+                  fontSize: 18,
+                  color: Colors.grey,
+                )),
             Container(
               margin: EdgeInsets.only(
                   top: Pantalla.getPorcentPanntalla(2, context, 'y'),
@@ -58,7 +62,7 @@ class _RecoveryPasswState extends State<RecoveryPassw> {
                 keyboardType: TextInputType.emailAddress,
                 autofocus: true,
                 decoration: InputDecoration(
-                    hintText: 'escribe tu email aquí', labelText: 'Email'),
+                    hintText: valores?.escribe_email_aqui, labelText: 'Email'),
               ),
             ),
             SizedBox(
@@ -68,9 +72,8 @@ class _RecoveryPasswState extends State<RecoveryPassw> {
                   onPressed: () {
                     enviarLinkRecovPassw(emailController.text);
                   },
-                  child: Text('Restablecer')),
+                  child: Text(valores?.reestablecer as String)),
             )
-
           ],
         ),
       ),
@@ -87,7 +90,7 @@ class _RecoveryPasswState extends State<RecoveryPassw> {
       late String title;
       late String message;
       var ex = e.toString();
-      actions(BuildContext context){
+      actions(BuildContext context) {
         return <Widget>[
           TextButton(
             onPressed: () {
@@ -96,42 +99,51 @@ class _RecoveryPasswState extends State<RecoveryPassw> {
             child: const Text('Ok'),
           ),
         ];
-      };
+      }
+
+      ;
       print('error $ex');
       if (ex.contains('invalid-email')) {
-        title = 'Email no válido';
-        message = 'Introduzca un email válido. Ejemplo@gmail.com';
+        title = valores?.email_incorrecto as String;
+        message =
+            '${valores?.introduzca_email_valido}. ${valores?.ejemplo}@gmail.com';
       } else if (ex.contains('user-not-found')) {
-        title = 'Usuario no encontrado';
+        title = valores?.email_no_encontrado as String;
         message =
-            'No existe ningún usuario registrado con el emeail:${emailController.text}';
+            '${valores?.contenido_email_no_econtra} ${emailController.text}';
       } else if (ex.contains('firebase_auth/unknown')) {
-        title = 'Introduzca un email';
-        message =
-            'Es necesario introducir un email para reestablecer su contraseña';
+        title = valores?.introdc_correo_electronico as String;
+        message = valores?.intro_email_contenido as String;
       } else if (ex.contains('too-many-requests')) {
-        title = 'Demasiados intentos';
-        message = 'Rebice su email inbox o intentelo más tarde';
+        title = valores?.demasiados_intentos as String;
+        message = valores?.demasiados_intententos_content as String;
       } else {
-        title = 'Ha ocurrido un error';
-        message = 'Intentelo más tarde';
+        title = valores?.ha_error as String;
+        message = valores?.intentelo_mas_tarde as String;
       }
 
       Dialogos.mostrarDialog(actions, title, message, context);
     }).then((value) {
-      var message = 'Link enviado a ${emailController.text}';
+      var message =
+          '${valores?.link_enviado} ${valores?.a} ${emailController.text}';
 
-      actions(BuildContext context){
+      actions(BuildContext context) {
         return <Widget>[
           TextButton(
-            onPressed: () => context.router.replace(IniSesionEmailPasswordRouter(
-                args: TransDatosInicioSesion('', false, true, emailController.text,
-                ))),
+            onPressed: () =>
+                context.router.replace(IniSesionEmailPasswordRouter(
+                    args: TransDatosInicioSesion(
+              '',
+              false,
+              true,
+              emailController.text,
+            ))),
             child: const Text('OK'),
           ),
         ];
       }
-      String titulo = 'Link enviado';
+
+      String titulo = valores?.link_enviado as String;
       enviar ? Dialogos.mostrarDialog(actions, titulo, message, context) : null;
     });
   }
@@ -151,7 +163,8 @@ class _RecoveryPasswState extends State<RecoveryPassw> {
         actionsPadding:
             EdgeInsets.only(top: Pantalla.getPorcentPanntalla(0, context, 'x')),
         contentPadding: EdgeInsets.only(
-            left: Pantalla.getPorcentPanntalla(3, context, 'x'), right: Pantalla.getPorcentPanntalla(3, context, 'x')),
+            left: Pantalla.getPorcentPanntalla(3, context, 'x'),
+            right: Pantalla.getPorcentPanntalla(3, context, 'x')),
         title: Text(title, textAlign: TextAlign.center),
         content: Text(
           message,

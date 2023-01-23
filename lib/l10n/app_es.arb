@@ -89,5 +89,20 @@
   "verificacion_email_necesaria": "Verificación de email necesaria",
   "ya_estas_registrado": "Ya estas registrado, inicia sesión",
   "email_incorrecto": "Email incorrecto",
-  "passw_incorrecta": "Contraseña incorrecta"
+  "passw_incorrecta": "Contraseña incorrecta",
+  "introduzca_email_valido": "Introduzca un email válido",
+  "guardar": "Guardar",
+  "reestablecer": "Reestablecer",
+  "contenido_passw_olvidada": "Se te enviará un link a tu correo electrónico mediante el cual, podrás reestablecer tu contraseña",
+  "escribe_email_aqui": "Escribe aquí tu email",
+  "link_enviado": "Link enviado",
+  "a": "a",
+  "email_no_encontrado": "Email no encontrado",
+  "contenido_email_no_econtra": "No existe ningún usuario registrado con el email",
+  "intro_email_contenido": "Es necesario introducir un email para reestablecer su contraseña",
+  "demasiados_intentos": "Demasiados intentos",
+  "demasiados_intententos_content": "Revise su bandeja de email o inténtelo más tarde",
+  "intentelo_mas_tarde": "Inténtelo mas tarde",
+  "ha_error": "Ha ocurrido un error"
+
   }

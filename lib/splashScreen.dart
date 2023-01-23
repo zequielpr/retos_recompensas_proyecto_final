@@ -14,6 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/recursos/DateActual.dart';
+import 'package:retos_proyecto/recursos/Valores.dart';
 
 import 'Colores.dart';
 import 'Rutas.gr.dart';
@@ -71,7 +72,7 @@ class splashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //Color de la barra inferior
-
+  Valores.setValores(context);
     return MaterialApp.router(
       supportedLocales: L10n.all,
       localizationsDelegates: const [

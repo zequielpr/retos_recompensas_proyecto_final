@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:retos_proyecto/Loanding.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
+import 'package:retos_proyecto/recursos/Valores.dart';
 
 import '../../../MediaQuery.dart';
 import '../../../datos/TransferirDatos.dart';
@@ -12,6 +13,7 @@ import '../../../recursos/Espacios.dart';
 import '../Autenticacion.dart';
 import 'IniciarSessionEmailPassw.dart';
 import 'RecogerPassw.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RecogerEmail extends StatefulWidget {
   final TrasnferirDatosNombreUser args;
@@ -32,6 +34,7 @@ class _RecogerEmail extends State<RecogerEmail> {
   var loanding;
   bool isWaiting = false;
   bool btnActivo = true;
+  AppLocalizations? valores;
   void _cambiarColor(Color colorWarning, Color colorSubfix) {
     setState(() {
       this.colorWarning = colorWarning;
@@ -41,6 +44,7 @@ class _RecogerEmail extends State<RecogerEmail> {
 
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     paddingRightLeft =
         Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
     body = Container(
@@ -63,7 +67,7 @@ class _RecogerEmail extends State<RecogerEmail> {
     loanding = Loanding.getLoanding(body, context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Registrarse'),
+        title: Text(valores?.registrarse as String),
       ),
       body: isWaiting?loanding:body,
     );
@@ -75,8 +79,7 @@ class _RecogerEmail extends State<RecogerEmail> {
       child: Padding(
         padding: EdgeInsets.only(
             bottom: Pantalla.getPorcentPanntalla(4, context, 'y')),
-        child: Text(
-          'Introduce un correo eletrónico',
+        child: Text(valores?.introdc_correo_electronico as String,
           style: GoogleFonts.roboto(fontSize: 25, fontWeight: FontWeight.w400),
         ),
       ),
@@ -105,11 +108,10 @@ class _RecogerEmail extends State<RecogerEmail> {
       alignment: Alignment.centerLeft,
       child: Row(
         children: [
-          Icon(Icons.warning_amber, size: 17, color: colorWarning),
           Text(
             emailController.text.isEmpty
-                ? 'Introduzca un email'
-                : 'Introduzca un email válido',
+                ? valores?.introdc_correo_electronico as String
+                : valores?.introduzca_email_valido as String,
             style: GoogleFonts.roboto(color: colorWarning),
           ),
         ],
@@ -126,8 +128,7 @@ class _RecogerEmail extends State<RecogerEmail> {
           height: Pantalla.getPorcentPanntalla(6, context, 'y'),
           child: ElevatedButton(
               onPressed: btnActivo ? () async => _continua(args) : null,
-              child: Text(
-                'Continuar',
+              child: Text(valores?.boton_next_p_1 as String,
                 style: GoogleFonts.roboto(
                     fontSize: 17, fontWeight: FontWeight.w600),
               ))),
@@ -145,7 +146,7 @@ class _RecogerEmail extends State<RecogerEmail> {
       //Si es existe un metodo de inicio de sesion, se redireje a la ruta de inicio de sesión
       if (metodoInicioSesion.isNotEmpty) {
         var datos = TransDatosInicioSesion(
-            'Ya estas registrado, inicia sesión', false, true, email);
+            valores?.ya_estas_registrado as String, false, true, email);
         context.router.push(IniSesionEmailPasswordRouter(args: datos)).whenComplete(() => setState(() {isWaiting = false;}));
         return;
       }

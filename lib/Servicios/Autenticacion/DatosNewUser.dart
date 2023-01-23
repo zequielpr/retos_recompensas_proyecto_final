@@ -13,6 +13,7 @@ import 'package:retos_proyecto/Loanding.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/ValidarDatos.dart';
+import 'package:retos_proyecto/recursos/Valores.dart';
 
 import '../../Rutas.dart';
 import '../../datos/TransferirDatos.dart';
@@ -27,6 +28,7 @@ import 'EmailPassw/RecogerEmail.dart';
 import 'EmailPassw/RecogerPassw.dart';
 import 'NombreUsuario.dart';
 import 'login.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NombreUsuario extends StatelessWidget {
   final TrasnferirDatosNombreUser args;
@@ -52,27 +54,20 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
   final TrasnferirDatosNombreUser args;
   _StateNombreUsuario(this.args);
 
-  //Inicia el text field con el nombre de usuario generado en la ruta roll
-  @override
-  initState() {
-    textField = NombreUsuarioWidget(setState, context, args, true);
-    super.initState();
-    /* userNameController.selection = TextSelection.fromPosition(
-        TextPosition(offset: userNameController.text.length));*/
-  }
-
-  late NombreUsuarioWidget textField;
+  AppLocalizations? valores;
+  late NombreUsuarioWidget textField = NombreUsuarioWidget(setState, context, args, true);
   var paddingLeftRight;
-
+  
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     paddingLeftRight =
         Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
     //Coloca el cursor al final del texto
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('Registrarse'),
+          title: Text(valores?.registrarse as String),
         ),
         body: Padding(
           padding: EdgeInsets.only(
@@ -98,7 +93,8 @@ class Roll extends StatefulWidget {
 }
 
 class _StateRoll extends State<Roll> {
-  String dropdownValue = 'Tutorado';
+  AppLocalizations? valores;
+  String dropdownValue = 'Tutor';
   final TranferirDatosRoll args;
   _StateRoll(this.args);
   var paddingRightLeft;
@@ -107,6 +103,8 @@ class _StateRoll extends State<Roll> {
   var isWaiting = false;
   @override
   Widget build(BuildContext context) {
+    Valores.setValores(context);
+    valores = Valores.valores;
     paddingRightLeft =
         Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
     body = Center(
@@ -129,9 +127,8 @@ class _StateRoll extends State<Roll> {
         foregroundColor: Colors.black,
         elevation: 0,
         title: Row(
-          children: const [
-            Text(
-              "Registrarse",
+          children: [
+            Text(valores?.registrarse as String,
             )
           ],
         ),
@@ -147,8 +144,7 @@ class _StateRoll extends State<Roll> {
         padding: EdgeInsets.only(
           bottom: Pantalla.getPorcentPanntalla(2, context, 'y'),
         ),
-        child: Text(
-          'Selecciona un roll para continuar',
+        child: Text(valores?.select_rol as String,
           style: GoogleFonts.roboto(fontSize: 25, fontWeight: FontWeight.w500),
         ),
       ),
@@ -159,7 +155,7 @@ class _StateRoll extends State<Roll> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text('Roll seleccionado: ', style: TextStyle(fontSize: 20)),
+        Text('${valores?.rol_seleccionado as String} ', style: TextStyle(fontSize: 20)),
         DropdownButton<String>(
           value: dropdownValue,
           icon: Padding(
@@ -180,7 +176,7 @@ class _StateRoll extends State<Roll> {
               dropdownValue = newValue!;
             });
           },
-          items: <String>['Tutorado', 'Tutor']
+          items: <String>[valores?.tutorado as String, valores?.tutor as String]
               .map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
@@ -201,8 +197,8 @@ class _StateRoll extends State<Roll> {
         height: Pantalla.getPorcentPanntalla(6, context, 'y'),
         child: ElevatedButton(
           onPressed: () async => _siguiente(args),
-          child: const Text(
-            "Siguiente",
+          child: Text(
+            valores?.boton_next_p_1 as String,
           ),
         ),
       ),

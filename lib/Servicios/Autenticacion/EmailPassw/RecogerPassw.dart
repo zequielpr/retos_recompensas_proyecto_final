@@ -9,9 +9,9 @@ import 'package:retos_proyecto/datos/ValidarDatos.dart';
 import 'package:retos_proyecto/recursos/Espacios.dart';
 
 import '../../../datos/TransferirDatos.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RecogerPassw extends StatefulWidget {
-  static const ROUTE_NAME = 'RecogerPassw';
   final TrasnferirDatosNombreUser args;
   const RecogerPassw({Key? key, required this.args}) : super(key: key);
   @override
@@ -26,6 +26,8 @@ class _RecogerPassw extends State<RecogerPassw> {
   var cumpleLongitud = false;
   var longValid = false;
   var letraNumValid = false;
+  AppLocalizations? valores;
+
   var iconPassw = Icon(
     Icons.visibility_off,
     color: Colors.grey,
@@ -44,10 +46,11 @@ class _RecogerPassw extends State<RecogerPassw> {
   var paddinLeftRight;
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     paddinLeftRight = Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
     return Scaffold(
       appBar: AppBar(
-        title: Text('Registrarse'),
+        title: Text(valores?.registrarse as String),
       ),
       body: Container(
         child: Padding(
@@ -66,8 +69,7 @@ class _RecogerPassw extends State<RecogerPassw> {
           alignment: Alignment.centerLeft,
           child: Padding(
             padding: EdgeInsets.only(bottom: Pantalla.getPorcentPanntalla(4, context, 'y')),
-            child: Text(
-              'Establece una contraseña',
+            child: Text(valores?.establece_passw as String,
               style: GoogleFonts.roboto(
                   fontSize: 25, fontWeight: FontWeight.w400),
             ),
@@ -94,15 +96,14 @@ class _RecogerPassw extends State<RecogerPassw> {
                 icon: iconPassw,
               ),
               border: OutlineInputBorder(),
-              labelText: 'Contraseña'),
+              labelText: valores?.passw),
         ),
         Align(
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
               iconoLogitud,
-              Text(
-                'Entre 8 y 16 caracteres',
+              Text(valores?.requisito_1_passw as String,
                 style: GoogleFonts.roboto(fontSize: 15),
               )
             ],
@@ -113,7 +114,7 @@ class _RecogerPassw extends State<RecogerPassw> {
           child: Row(
             children: [
               iconoLetrasN,
-              Text('Letras, numeros y caracteres especiales',
+              Text(valores?.requisito_2_passw as String,
                   style: GoogleFonts.roboto(fontSize: 15))
             ],
           ),
@@ -129,8 +130,7 @@ class _RecogerPassw extends State<RecogerPassw> {
                   onPressed: botoActivado
                       ? () => _continuar(args, passwController.text)
                       : null,
-                  child: Text(
-                    'Continuar',
+                  child: Text(valores?.boton_next_p_1 as String,
                     style: GoogleFonts.roboto(
                         fontSize: 17, fontWeight: FontWeight.w600),
                   ))),

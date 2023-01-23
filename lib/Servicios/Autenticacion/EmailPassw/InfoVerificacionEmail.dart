@@ -6,6 +6,7 @@ import 'package:retos_proyecto/recursos/Espacios.dart';
 import '../../../Rutas.gr.dart';
 import '../../../datos/TransferirDatos.dart';
 import '../../../datos/UsuarioActual.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InfoVerificacionEmail extends StatefulWidget {
   final TransDatosInicioSesion arg;
@@ -20,6 +21,8 @@ class _InfoVerificacionEmailState extends State<InfoVerificacionEmail> {
   final TransDatosInicioSesion arg;
   _InfoVerificacionEmailState(this.arg);
 
+  AppLocalizations? valores;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -33,10 +36,11 @@ class _InfoVerificacionEmailState extends State<InfoVerificacionEmail> {
 
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Verificar email'),
+          title: Text(valores?.titulo_verificar_email as String),
         ),
         body: Center(
           child: Container(
@@ -50,14 +54,13 @@ class _InfoVerificacionEmailState extends State<InfoVerificacionEmail> {
                   margin: EdgeInsets.only(bottom: Pantalla.getPorcentPanntalla(2, context, 'y')),
                   child: Align(
                   alignment: Alignment.center,
-                  child: Text(
-                    'Verificación de email necesaria',
+                  child: Text(valores?.verificacion_email_necesaria as String,
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
                   ),
                 ),),
                 Text(
-                  'Para verificar el email, abra el link enviado a ${arg.email} y luego inicie sesión.',
-                  textAlign: TextAlign.justify,
+                  '${valores?.parrafo_verificar_email} ${ arg.email} ${valores?.parrafo_verificar_email_2}.',
+                  textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 20),
                 ),
                 SizedBox(
@@ -68,7 +71,7 @@ class _InfoVerificacionEmailState extends State<InfoVerificacionEmail> {
                   height: Pantalla.getPorcentPanntalla(6, context, 'y'),
                   child: ElevatedButton(
                       onPressed: () => _irInicioSesion(arg),
-                      child: Text('Iniciar sesión')),
+                      child: Text(valores?.inicia_sesion as String)),
                 )
 
               ],

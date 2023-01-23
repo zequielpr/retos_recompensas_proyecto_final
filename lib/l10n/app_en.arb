@@ -120,6 +120,20 @@
   "verificacion_email_necesaria": "Email verification required",
   "ya_estas_registrado": "You are already registered, log in",
   "email_incorrecto": "Incorrect email",
-  "passw_incorrecta": "Incorrect password"
+  "passw_incorrecta": "Incorrect password",
+  "introduzca_email_valido": "Please enter a valid email",
+  "guardar": "Save",
+  "reestablecer": "Reset",
+  "contenido_passw_olvidada": "A link will be sent to your email address through which you can reset your password",
+  "escribe_email_aqui": "Type your email here",
+  "link_enviado": "Link sent",
+  "a": "to",
+  "email_no_encontrado": "Email not found",
+  "contenido_email_no_econtra": "There is no registered user with the email",
+  "intro_email_contenido": "You need to enter an email to reset your password",
+  "demasiados_intentos": "Too many attempts",
+  "demasiados_intententos_content": "Check your email inbox or try again later",
+  "intentelo_mas_tarde": "Try again later",
+  "ha_error": "An error has occurred"
 
 }

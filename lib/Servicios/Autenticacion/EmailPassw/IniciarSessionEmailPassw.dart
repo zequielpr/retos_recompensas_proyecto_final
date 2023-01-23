@@ -304,7 +304,7 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
           true,
           CurrentUser.currentUser != null
               ? CurrentUser.currentUser?.email as String
-              : '');
+              : emailController.text);
       context.router.push(InfoVerificacionEmailRouter(arg: datos));
       return;
     }
