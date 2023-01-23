@@ -103,6 +103,19 @@
   "demasiados_intentos": "Demasiados intentos",
   "demasiados_intententos_content": "Revise su bandeja de email o inténtelo más tarde",
   "intentelo_mas_tarde": "Inténtelo mas tarde",
-  "ha_error": "Ha ocurrido un error"
+  "ha_error": "Ha ocurrido un error",
+  "escribit_nombre_sala": "Escriba en nombre de la sala. Debe tener al menos dos letras.",
+  "num_max_salas_titulo": "Número máximo de salas",
+  "num_max_salas_contenido": "Numero máximo de salas alcanzado, elimine una o más salas para crear una nueva.",
+  "add_usuario": "Invita usuarios tu sala",
+  "mision_add_correct": "Misión añadida correctamente",
+  "puntos": "puntos",
+  "eliminar": "Eliminar",
+  "desea_eliminar_room": "¿Deseas eliminar esta sala?",
+  "ver_mas": "ver más",
+  "ver_menos": "ver menos",
+  "desea_eliminar_mision": "¿Deseas eliminar esta misión?",
+  "num_maximo_misiones": "Elimina una misión para crear una nueva",
+  "num_maximo_misiones_titulo": "Numero máximo de misiones"
 
   }

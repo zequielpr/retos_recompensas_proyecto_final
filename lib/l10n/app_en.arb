@@ -134,6 +134,19 @@
   "demasiados_intentos": "Too many attempts",
   "demasiados_intententos_content": "Check your email inbox or try again later",
   "intentelo_mas_tarde": "Try again later",
-  "ha_error": "An error has occurred"
+  "ha_error": "An error has occurred",
+  "escribit_nombre_sala": "Type in the name of the room. Must be at least two letters long.",
+  "num_max_salas_titulo": "Maximum number of rooms",
+  "num_max_salas_contenido": "Maximum number of rooms achieved, delete one or more rooms to create a new one.",
+  "add_usuario": "Invite users to your room",
+  "mision_add_correct": "Mission successfully added",
+  "puntos": "points",
+  "eliminar": "Delete",
+  "desea_eliminar_room": "Do you want to delete this room?",
+  "ver_mas": "see more",
+  "ver_menos": "see less",
+  "desea_eliminar_mision": "Do you want to delete this mission?",
+  "num_maximo_misiones": "Delete a mission to create a new one",
+  "num_maximo_misiones_titulo": "Maximum number of missions"
 
 }

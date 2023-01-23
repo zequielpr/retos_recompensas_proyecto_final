@@ -12,6 +12,7 @@ import '../../../../../../datos/TransferirDatos.dart';
 import '../../../../../../datos/UsuarioActual.dart';
 import '../../../../../../widgets/Dialogs.dart';
 import 'ExpulsarDeSala.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListUsuarios extends StatelessWidget {
   final CollectionReference collectionReferenceUsuariosTutorados;
@@ -23,12 +24,14 @@ class ListUsuarios extends StatelessWidget {
       required this.contextSala,
       required this.collectionReferenceMisiones})
       : super(key: key);
+  AppLocalizations? valores;
 
   static const String titulo = 'Expulsar';
   static const String mensaje = '¿Deseas explusar este usuario de esta sala?';
 
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     return Scaffold(
       body: Center(
         child: StreamBuilder(
@@ -41,8 +44,8 @@ class ListUsuarios extends StatelessWidget {
             }
 
             if (streamSnapshot.data?.docs.isEmpty == true) {
-              return const Center(
-                child: Text('Añade un usuario a tu tutoría'),
+              return  Center(
+                child: Text(valores?.add_usuario as String),
               );
             }
 
@@ -122,7 +125,7 @@ class ListUsuarios extends StatelessWidget {
 //Enviar solici
 
 class enviarSolicitudeUsuario {
-  static InterfaceEnviarSolicitud(BuildContext context, String idSala, String nombreSala) {
+  static InterfaceEnviarSolicitud(BuildContext context, String idSala, String nombreSala, AppLocalizations? valores) {
     var leftRight =
         Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
     var _userNameController = TextEditingController();
@@ -154,8 +157,7 @@ class enviarSolicitudeUsuario {
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Enviar solicitud",
+                      child: Text(valores?.enviar_solicitud as String,
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
@@ -168,8 +170,7 @@ class enviarSolicitudeUsuario {
                 ),
                 TextField(
                   controller: _userNameController,
-                  decoration:
-                      const InputDecoration(labelText: 'Nombre de usuario'),
+                  decoration:InputDecoration(labelText: valores?.nombre_usuario as String),
                 ),
                 SizedBox(
                   height: Pantalla.getPorcentPanntalla(2, context, 'y'),
@@ -192,14 +193,14 @@ class enviarSolicitudeUsuario {
                         var colorSnackBar =
                             resultadoFinal == true ? Colors.green : Colors.red;
                         var mensaje = resultadoFinal == true
-                            ? 'Solicitud enviada correctamente'
-                            : 'Error al enviar solicitud, el usuario no existe';
+                            ? valores?.solicitud_enviada_correct as String
+                            : valores?.error_enviar_solicitud as String;
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             backgroundColor: colorSnackBar,
                             content: Text(mensaje)));
                         Navigator.of(context).pop();
                       },
-                      child: Text('Enviar solicitud')),
+                      child: Text(valores?.enviar_solicitud as String)),
                 )
               ],
             ),

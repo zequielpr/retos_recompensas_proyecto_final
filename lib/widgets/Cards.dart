@@ -5,6 +5,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:readmore/readmore.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
@@ -438,7 +439,7 @@ class Cards {
   }
 
   static Widget getCardMisionInicio(
-      DocumentSnapshot documentSnapshot, BuildContext context) {
+      DocumentSnapshot documentSnapshot, BuildContext context, AppLocalizations? valores) {
     String? idSala = documentSnapshot.reference.parent.parent?.id;
     String idMision = documentSnapshot.id;
     return Card(
@@ -491,8 +492,8 @@ class Cards {
           trimMode: TrimMode.Line,
           lessStyle:
               GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
-          trimCollapsedText: 'ver más',
-          trimExpandedText: ' ver menos',
+          trimCollapsedText: valores?.ver_mas as String,
+          trimExpandedText: ' ${valores?.ver_menos}',
           moreStyle:
               GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
         ),
@@ -501,13 +502,13 @@ class Cards {
           height: Pantalla.getPorcentPanntalla(
               Pantalla.getPorcentPanntalla(0.6, context, 'y'), context, 'y'),
           child: IconButton(
-            tooltip: 'Eliminar',
+            tooltip: valores?.eliminar,
             splashRadius: 0.1,
             icon: const Icon(
               Icons.delete,
             ),
             onPressed: () async => await AdminSala.eliminarMision(
-                idSala, idMision, context), //Eliminar mision
+                idSala, idMision, context, valores), //Eliminar mision
           ),
         ),
       ),
