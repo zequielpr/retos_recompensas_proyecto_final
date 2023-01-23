@@ -8,6 +8,7 @@ import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import '../../../Servicios/Autenticacion/NombreUsuario.dart';
 import '../../../datos/Colecciones.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditarPerfil extends StatefulWidget {
   const EditarPerfil({Key? key}) : super(key: key);
@@ -17,6 +18,7 @@ class EditarPerfil extends StatefulWidget {
 }
 
 class _EditarPerfilState extends State<EditarPerfil> {
+  AppLocalizations? valores;
   void initState() {
     // TODO: implement initState
     NombreUsuarioWidget.vistaModificarUserName = setState;
@@ -34,10 +36,11 @@ class _EditarPerfilState extends State<EditarPerfil> {
   var arrowSize = 16.0;
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Editar Perfil'),
+        title: Text(valores?.editar_perfil as String),
       ),
       body: Container(
         child: Column(

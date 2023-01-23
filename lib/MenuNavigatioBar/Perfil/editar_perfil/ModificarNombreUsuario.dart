@@ -7,6 +7,7 @@ import 'package:retos_proyecto/MediaQuery.dart';
 import '../../../Servicios/Autenticacion/Autenticacion.dart';
 import '../../../Servicios/Autenticacion/NombreUsuario.dart';
 import '../../../datos/TransferirDatos.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ModificarNombreUsuario extends StatefulWidget {
   const ModificarNombreUsuario({Key? key}) : super(key: key);
@@ -16,22 +17,18 @@ class ModificarNombreUsuario extends StatefulWidget {
 }
 
 class _ModificarNombreUsuarioState extends State<ModificarNombreUsuario> {
-  late NombreUsuarioWidget textField;
-  initState() {
-    TrasnferirDatosNombreUser args =
-        TrasnferirDatosNombreUser.SoloNombre(NombreUsuarioWidget.nombreUsuarioActual);
-    textField = NombreUsuarioWidget(setState, context, args, false);
-    super.initState();
-    /* userNameController.selection = TextSelection.fromPosition(
-        TextPosition(offset: userNameController.text.length));*/
-  }
+  TrasnferirDatosNombreUser args =
+  TrasnferirDatosNombreUser.SoloNombre(NombreUsuarioWidget.nombreUsuarioActual);
+  late NombreUsuarioWidget textField = NombreUsuarioWidget(setState, context, args, false);
+  AppLocalizations? valores;
 
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Modificar'),
+        title: Text( valores?.actualizar as String),
       ),
       body: Container(
         margin: EdgeInsets.only(

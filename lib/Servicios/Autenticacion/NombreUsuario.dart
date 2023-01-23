@@ -156,7 +156,7 @@ class NombreUsuarioWidget {
     _timer.cancel();
     if (!Validar.validarUserName(userName)) {
       //Mostrar advertencia especificando por que el nombre de usuario no es valido
-      var mensaje = '3-30 caracteres, no caracteres especiales';
+      var mensaje = valores?.entre_3_30_caracteres_no_especiales;
       _mostrarMensjae(mensaje);
       _cambiarCheck(_noDisponible);
     } else {
@@ -169,7 +169,7 @@ class NombreUsuarioWidget {
               _botonActivo = true;
               _cambiarCheck(_disponible);
             } else {
-              var mensaje = 'Usuario no disponible';
+              var mensaje = valores?.usuario_no_disponible as String;
               _mostrarMensjae(mensaje);
               _botonActivo = false;
               _cambiarCheck(_noDisponible);
@@ -178,7 +178,6 @@ class NombreUsuarioWidget {
 
           _contador = 0;
           timer.cancel();
-          print("Debe comprobarse el nombre de usuario");
         }
       });
     }
@@ -304,12 +303,12 @@ class NombreUsuarioWidget {
 
   Future<void> _modificarUserName(String userName) async {
     bool succeful = true;
-    var mensaje = 'Nombre de usuario guardado correctamente';
+    var mensaje = valores?.nombre_actualizado_correct as String;
     await Coleciones.COLECCION_USUARIOS
         .doc(CurrentUser.getIdCurrentUser())
         .update({'nombre_usuario': userName}).catchError((onError) {
       succeful = false;
-      mensaje = 'El nombre de usuario no se ha guardado correctamente';
+      mensaje = valores?.nombre_usuario_no_guardado as String;
     });
 
     if (succeful) {

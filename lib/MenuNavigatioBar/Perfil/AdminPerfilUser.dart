@@ -16,6 +16,7 @@ import 'admin_usuarios/Admin_tutores.dart';
 import 'admin_usuarios/admin_tutorados.dart';
 import 'cambiar_tutor_actual.dart';
 import 'menu/menu_admin_perfil.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AdminPerfilUser extends StatefulWidget {
   const AdminPerfilUser({Key? key}) : super(key: key);
@@ -26,6 +27,7 @@ class AdminPerfilUser extends StatefulWidget {
 
 class _AdminPerfilUserState extends State<AdminPerfilUser> {
   static var editEmailController = TextEditingController();
+  AppLocalizations? valores;
 
   static bool editandoAtributos = false;
   static var actualizarAppBar;
@@ -45,13 +47,14 @@ class _AdminPerfilUserState extends State<AdminPerfilUser> {
 
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text('Perfil'),
+          title: Text(valores?.perfil as String),
           actions: [
             IconButton(
-              onPressed: () => MenuOption.getMenuOption(context),
+              onPressed: () => MenuOption.getMenuOption(context, valores),
               icon: const Icon(Icons.menu),
             )
           ],

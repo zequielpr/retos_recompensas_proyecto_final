@@ -116,6 +116,12 @@
   "ver_menos": "ver menos",
   "desea_eliminar_mision": "¿Deseas eliminar esta misión?",
   "num_maximo_misiones": "Elimina una misión para crear una nueva",
-  "num_maximo_misiones_titulo": "Numero máximo de misiones"
+  "num_maximo_misiones_titulo": "Numero máximo de misiones",
+  "entre_3_30_caracteres": "3-20 caracteres, solo letra y espacios",
+  "actualizar": "Actualizar",
+  "nombre_actualizado_correct": "Nombre actualizado correctamente.",
+  "nombre_usuario_no_guardado": "El nombre de usuario no se ha guardado correctamente",
+  "usuario_no_disponible": "Nombre de usuario no disponible",
+  "entre_3_30_caracteres_no_especiales": "3-30 caracteres, no caracteres especiales"
 
   }
