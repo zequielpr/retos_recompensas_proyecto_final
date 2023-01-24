@@ -23,7 +23,7 @@ import 'Rutas.dart';
 import 'Servicios/Autenticacion/DatosNewUser.dart';
 import 'Servicios/Autenticacion/EmailPassw/IniciarSessionEmailPassw.dart';
 import 'Servicios/Autenticacion/EmailPassw/RecogerEmail.dart';
-import 'Servicios/Autenticacion/EmailPassw/RecogerPassw.dart';
+import 'Servicios/Autenticacion/EmailPassw/RecogerPassw/RecogerPassw.dart';
 import 'Servicios/Autenticacion/login.dart';
 import 'datos/TransferirDatos.dart';
 import 'datos/UsuarioActual.dart';

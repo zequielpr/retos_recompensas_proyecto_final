@@ -27,7 +27,7 @@ import 'Servicios/Autenticacion/DatosNewUser.dart';
 import 'Servicios/Autenticacion/EmailPassw/InfoVerificacionEmail.dart';
 import 'Servicios/Autenticacion/EmailPassw/IniciarSessionEmailPassw.dart';
 import 'Servicios/Autenticacion/EmailPassw/RecogerEmail.dart';
-import 'Servicios/Autenticacion/EmailPassw/RecogerPassw.dart';
+import 'Servicios/Autenticacion/EmailPassw/RecogerPassw/RecogerPassw.dart';
 import 'Servicios/Autenticacion/login.dart';
 import 'main.dart';
 import 'onboarding/onboarding.dart';

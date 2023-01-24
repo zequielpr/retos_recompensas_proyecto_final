@@ -12,7 +12,7 @@ import '../../../datos/ValidarDatos.dart';
 import '../../../recursos/Espacios.dart';
 import '../Autenticacion.dart';
 import 'IniciarSessionEmailPassw.dart';
-import 'RecogerPassw.dart';
+import 'RecogerPassw/RecogerPassw.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RecogerEmail extends StatefulWidget {

@@ -25,7 +25,7 @@ import '../Notificaciones/AdministrarTokens.dart';
 import 'Autenticacion.dart';
 import 'EmailPassw/IniciarSessionEmailPassw.dart';
 import 'EmailPassw/RecogerEmail.dart';
-import 'EmailPassw/RecogerPassw.dart';
+import 'EmailPassw/RecogerPassw/RecogerPassw.dart';
 import 'NombreUsuario.dart';
 import 'login.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
