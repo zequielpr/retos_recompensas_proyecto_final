@@ -122,6 +122,11 @@
   "nombre_actualizado_correct": "Nombre actualizado correctamente.",
   "nombre_usuario_no_guardado": "El nombre de usuario no se ha guardado correctamente",
   "usuario_no_disponible": "Nombre de usuario no disponible",
-  "entre_3_30_caracteres_no_especiales": "3-30 caracteres, no caracteres especiales"
+  "entre_3_30_caracteres_no_especiales": "3-30 caracteres, no caracteres especiales",
+  "email_actualizado_correct": "Email actualizado correctamente",
+  "accion_necesaria": "Acción necesaria",
+  "accion_necesaria_contenido": "Cierre e inicie sesión para actualizar el email",
+  "email_en_uso": "Email en uso",
+  "email_en_uso_contenido": "El email introducido ya esta en uso"
 
   }

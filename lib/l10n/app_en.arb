@@ -153,6 +153,11 @@
   "nombre_actualizado_correct": "Name updated successfully.",
   "nombre_usuario_no_guardado": "The username was not saved correctly",
   "usuario_no_disponible": "Username not available",
-  "entre_3_30_caracteres_no_especiales": "3-30 characters, not special characters"
+  "entre_3_30_caracteres_no_especiales": "3-30 characters, not special characters",
+  "email_actualizado_correct": "Email successfully updated",
+  "accion_necesaria": "Action needed",
+  "accion_necesaria_contenido": "Log out and log in to update your email",
+  "email_en_uso": "Email in use",
+  "email_en_uso_contenido": "email_en_uso_contenido"
 
 }
