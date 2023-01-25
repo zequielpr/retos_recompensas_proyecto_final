@@ -136,7 +136,7 @@ class _AdminCuentaState extends State<AdminCuenta> {
       margin: EdgeInsets.all(0),
       child: ListTile(
         leading: Icon(Icons.logout),
-        onTap: () => Sesion.dialogCerrarSesion(context, espararCerrarSesion),
+        onTap: () => Sesion.dialogCerrarSesion(context, espararCerrarSesion, valores),
         visualDensity: VisualDensity.compact,
         title: Text(valores?.cerrar_sesion as String),
         trailing: Icon(

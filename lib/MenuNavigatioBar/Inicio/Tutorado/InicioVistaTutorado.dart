@@ -10,6 +10,7 @@ import '../../../datos/DatosPersonalUser.dart';
 import '../../../datos/UsuarioActual.dart';
 import '../../../recursos/DateActual.dart';
 import '../../../widgets/Dialogs.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InicioVistaTutorado {
   static Widget showCajaRecompensa(CollectionReference collectionReferenceUsers,

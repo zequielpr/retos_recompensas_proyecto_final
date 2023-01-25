@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import '../../MediaQuery.dart';
@@ -10,7 +11,7 @@ import '../../datos/Roll_Data.dart';
 import '../../widgets/Dialogs.dart';
 
 class AdminRoll {
-  static Widget getRoll(BuildContext context) {
+  static Widget getRoll(BuildContext context, AppLocalizations? valores) {
     var dropdownValue = Roll_Data.ROLL_USER_IS_TUTORADO ? 'Tutorado' : 'Tutor';
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
       const Text('', style: TextStyle(fontSize: 20)),
@@ -27,7 +28,7 @@ class AdminRoll {
           height: 0,
         ),
         onChanged: (newValor) {
-          changeRoll(newValor, context);
+          changeRoll(newValor, context, valores);
         },
         items: <String>['Tutorado', 'Tutor']
             .map<DropdownMenuItem<String>>((String value) {
@@ -40,7 +41,7 @@ class AdminRoll {
     ]);
   }
 
-  static Future<void> changeRoll(rol_tutorado, BuildContext context) async {
+  static Future<void> changeRoll(rol_tutorado, BuildContext context, AppLocalizations? valores) async {
      actions(BuildContext context){
       return <Widget>[
         TextButton(
@@ -63,8 +64,8 @@ class AdminRoll {
         ),
       ];
     }
-    var titulo = 'Cambiar Rol';
-    var message = 'Desea cambiar de rol? \n al cambiar de rol se reiniciara la aplicación';
+    var titulo = '${valores?.cambiar_rol}';
+    var message = '${valores?.cambiar_rol_contenido}';
     showMessaje(actions, titulo, message, context);
   }
 

@@ -5,6 +5,7 @@ import 'package:retos_proyecto/datos/UsuarioActual.dart';
 import '../../datos/Roll_Data.dart';
 import 'admin_usuarios/Admin_tutores.dart';
 import 'admin_usuarios/admin_tutorados.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TutorActual {
   static Future<void> setNewActualTutor(String idTutor) async {
@@ -22,11 +23,13 @@ class MostrarUsuarios extends StatefulWidget {
 }
 
 class _MostrarUsuariosState extends State<MostrarUsuarios> {
+  AppLocalizations? valores;
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     return Roll_Data.ROLL_USER_IS_TUTORADO
-        ? UsuarioTutores.getAllTutores()
-        : Admin_tutorados.getAllUser(context);
+        ? UsuarioTutores.getAllTutores(valores)
+        : Admin_tutorados.getAllUser(valores);
     ;
   }
 }
