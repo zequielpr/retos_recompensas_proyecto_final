@@ -27,31 +27,33 @@ import '../datos/UsuarioActual.dart';
 
 class Cards {
   static Widget getStadoSolicitud(
-      DocumentSnapshot documentSnapshot, BuildContext context, stado) {
+      DocumentSnapshot documentSnapshot,  BuildContext context, AppLocalizations? valores) {
+
     DateActual.getActualDateTime();
     bool isTutorado = Roll_Data.ROLL_USER_IS_TUTORADO;
     String subtitle = '';
     Color color = Colors.transparent;
+    var stado = documentSnapshot['estado'];
 
     Timestamp fecha_solicitu = documentSnapshot['fecha_actual'];
 
-    var unidadTiempo = AntiguedadNotificaciones.getAntiguedad(fecha_solicitu);
+    var unidadTiempo = AntiguedadNotificaciones.getAntiguedad(fecha_solicitu, valores);
     late Widget trailain;
     switch (stado) {
       case 0:
         color = Colors.transparent;
         trailain = Icon(Icons.access_time_outlined);
-        subtitle = 'Solicitud enviada hace  $unidadTiempo';
+        subtitle = '${valores?.solicitude_env_hace}  $unidadTiempo';
         break;
       case 1:
-        color = Color.fromARGB(84, 105, 240, 174);
-        trailain = Icon(Icons.check);
-        subtitle = 'Solicitud aceptada hace $unidadTiempo';
+        color = Color.fromARGB(200, 105, 240, 174);
+        trailain = Icon(Icons.check, color: color,);
+        subtitle = '${valores?.soicitude_acept_hace} $unidadTiempo';
         break;
       case 2:
-        color = Color.fromARGB(84, 255, 32, 32);
-        trailain = Icon(Icons.cancel_outlined);
-        subtitle = 'Solicitude rechazada hace $unidadTiempo';
+        color = Color.fromARGB(200, 255, 32, 32);
+        trailain = Icon(Icons.cancel_outlined, color: color,);
+        subtitle = '${valores?.solicitud_rechazada_hace} $unidadTiempo';
         break;
     }
 
@@ -71,7 +73,6 @@ class Cards {
     return Card(
       shape: Border(),
       margin: EdgeInsets.all(0),
-      color: color,
       elevation: 0,
       child: ListTile(
         leading: miniatura,
@@ -86,7 +87,7 @@ class Cards {
       DocumentSnapshot documentSnapshot,
       CollectionReference collectionReference,
       String? idCurrentUser,
-      BuildContext context) {
+      BuildContext context, AppLocalizations? valores) {
     return Padding(
         padding: EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 5),
         child: Card(
@@ -102,7 +103,7 @@ class Cards {
                     title: Text(documentSnapshot['nombre_emisor'].toString()),
                     subtitle: Text(
                         documentSnapshot['nombre_emisor'].toString() +
-                            " desea que te unas a su tutoría"),
+                            " ${valores?.desea_unir_tutoria}"),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -119,7 +120,7 @@ class Cards {
                                         collectionReference,
                                         idCurrentUser,
                                         context),
-                                child: Text("Aceptar")),
+                                child: Text("${valores?.aceptar}")),
                           )),
                       SizedBox(
                         height: 30,
@@ -128,7 +129,7 @@ class Cards {
                             onPressed: () async =>
                                 Solicitudes.cambiarStatdoSolicitud(
                                     documentSnapshot, 2),
-                            child: Text("Rechazar")),
+                            child: Text("${valores?.rechazar}")),
                       )
                     ],
                   )
@@ -140,12 +141,12 @@ class Cards {
   //Cuerpo de las notificaciones sobre las misiones_________________________________________________________________
   static Widget cardNotificacionMisiones(
 
-      DocumentSnapshot documentSnapshot, BuildContext context) {
+      DocumentSnapshot documentSnapshot, BuildContext context, AppLocalizations? valores) {
     DateActual.getActualDateTime();
 
     Timestamp fecha_solicitu = documentSnapshot['fecha_actual'];
 
-    var unidadTiempo = AntiguedadNotificaciones.getAntiguedad(fecha_solicitu);
+    var unidadTiempo = AntiguedadNotificaciones.getAntiguedad(fecha_solicitu, valores);
 
     var leftRight =
         Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
@@ -173,11 +174,11 @@ class Cards {
                       style: GoogleFonts.roboto(fontWeight: FontWeight.w500)),
                   TextSpan(
                     text:
-                        ': recibe ${documentSnapshot['recompensa'].toString()} por ',
+                        ': ${valores?.recibe} ${documentSnapshot['recompensa'].toString()}xp ${valores?.por} ',
                   ),
                   TextSpan(
                     text:
-                        '${documentSnapshot['nombre_mision'].toString()} en la sala ',
+                        '${documentSnapshot['nombre_mision'].toString()} ${valores?.en} ',
                   ),
                   TextSpan(
                     text: documentSnapshot['nombre_sala'].toString(),
@@ -185,7 +186,7 @@ class Cards {
                   ),
                 ], style: GoogleFonts.roboto(color: Colors.black)),
               ),
-              subtitle: Text("Hace " + unidadTiempo),
+              subtitle: Text("$unidadTiempo"),
               leading:
                   DatosPersonales.getAvatar(documentSnapshot['id_emisor'], 20),
             ),

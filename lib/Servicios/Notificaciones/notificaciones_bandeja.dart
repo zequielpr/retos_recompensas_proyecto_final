@@ -15,7 +15,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class BandejaNotificaciones {
   static final User? _currentUser = CurrentUser.currentUser;
   static final String? _idCurrentUser = _currentUser?.uid;
-  static final CollectionReference _collectionReference = Coleciones.COLECCION_USUARIOS;
+  static final CollectionReference _collectionReference =
+      Coleciones.COLECCION_USUARIOS;
   BuildContext _context;
   AppLocalizations? _valores;
 
@@ -26,7 +27,7 @@ class BandejaNotificaciones {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          bottom:  TabBar(
+          bottom: TabBar(
             tabs: [
               Tab(
                 text: _valores?.misiones,
@@ -55,10 +56,12 @@ class BandejaNotificaciones {
         .collection('solicitudes');
 
     return StreamBuilder(
-      stream: notificacionesRecibidas.where(
-          Roll_Data.ROLL_USER_IS_TUTORADO ? 'id_destinatario' : 'id_emisor',
-          isEqualTo: _idCurrentUser).orderBy('fecha_actual', descending: true)
-    .snapshots(),
+      stream: notificacionesRecibidas
+          .where(
+              Roll_Data.ROLL_USER_IS_TUTORADO ? 'id_destinatario' : 'id_emisor',
+              isEqualTo: _idCurrentUser)
+          .orderBy('fecha_actual', descending: true)
+          .snapshots(),
       builder: (cxt_stream, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
         if (streamSnapshot.connectionState == ConnectionState.waiting) {
           return const Center(
@@ -67,7 +70,7 @@ class BandejaNotificaciones {
         }
 
         if (streamSnapshot.data?.docs.isEmpty == true) {
-          return  Center(
+          return Center(
             child: Text(_valores?.aun_no_solicitudes as String),
           );
         }
@@ -81,14 +84,17 @@ class BandejaNotificaciones {
               if (Roll_Data.ROLL_USER_IS_TUTORADO &&
                   documentSnapshot['estado'] == 0) {
                 return Cards.getCardSolicitud(documentSnapshot,
-                    _collectionReference, _idCurrentUser, _context);
+                    _collectionReference, _idCurrentUser, _context, _valores);
               }
-              return Column(children: [
-                Cards.getStadoSolicitud(
-                    documentSnapshot, _context, documentSnapshot['estado']),
-              Divider(height: 0, thickness: 0.5,)
-              ],);
-
+              return Column(
+                children: [
+                  Cards.getStadoSolicitud(documentSnapshot, _context, _valores),
+                  Divider(
+                    height: 0,
+                    thickness: 0.5,
+                  )
+                ],
+              );
             },
           );
         }
@@ -106,7 +112,8 @@ class BandejaNotificaciones {
         .collection('misiones_recibidas');
 
     return StreamBuilder(
-      stream: notificacionesRecibidas.where('id_emisor', isEqualTo: UsuarioTutores.tutorActual)
+      stream: notificacionesRecibidas
+          .where('id_emisor', isEqualTo: UsuarioTutores.tutorActual)
           .orderBy('fecha_actual', descending: true)
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
@@ -128,7 +135,15 @@ class BandejaNotificaciones {
             itemBuilder: (context, index) {
               final DocumentSnapshot documentSnapshot =
                   streamSnapshot.data!.docs[index];
-              return Column(children: [Cards.cardNotificacionMisiones(documentSnapshot, context), const Divider(height: 0, thickness: 0.5,)],);
+              return Column(
+                children: [
+                  Cards.cardNotificacionMisiones(documentSnapshot, context, _valores ),
+                  const Divider(
+                    height: 0,
+                    thickness: 0.5,
+                  )
+                ],
+              );
             },
           );
         }
