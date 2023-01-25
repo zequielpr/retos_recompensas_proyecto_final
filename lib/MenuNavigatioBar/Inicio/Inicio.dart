@@ -86,7 +86,7 @@ class _HomeState extends State<Home> {
           Coleciones.COLECCION_USUARIOS,
           currentTutor,
           changeImage,
-          cofre);
+          cofre, valores);
     }else{
       return Center(child: Text(valores?.no_tutoria as String),);
     }

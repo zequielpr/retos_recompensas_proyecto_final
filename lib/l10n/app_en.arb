@@ -183,5 +183,7 @@
     "ver_menos": "see less",
     "ya_estas_registrado": "You are already registered, log in",
     "un_momento": "just now",
-
+    "puntos_insuficiente": "Insufficient points",
+    "recompensa_no_disponible": "Reward not available",
+    "historial_vacio": "Empty history"
 }

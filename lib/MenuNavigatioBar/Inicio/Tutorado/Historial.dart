@@ -270,8 +270,8 @@ class _HistorialState extends State<Historial> {
         }
 
         if (snapshot.data?.docs.isEmpty == true) {
-          return const Center(
-            child: Text('Historial vacío'),
+          return Center(
+            child: Text('${valores?.historial_vacio}'),
           );
         }
 
@@ -348,7 +348,7 @@ class _HistorialState extends State<Historial> {
                 padding: EdgeInsets.only(
                     right: Pantalla.getPorcentPanntalla(3, context, 'x')),
                 child: Text(
-                  'Reclamado en ${DateFormat('dd-MM-yyyy').format(fechaReclamo.toDate())}',
+                  '${valores?.reclamada_el} ${DateFormat('dd-MM-yyyy').format(fechaReclamo.toDate())}',
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w400,

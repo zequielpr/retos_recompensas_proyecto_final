@@ -152,4 +152,7 @@
     "ver_menos": "ver menos",
     "ya_estas_registrado": "Ya estas registrado, inicia sesión",
     "un_momento": "un momento",
+    "puntos_insuficiente": "Puntos insuficiente",
+    "recompensa_no_disponible": "Recompensa no disponible",
+    "historial_vacio": "Historial vacío"
   }
