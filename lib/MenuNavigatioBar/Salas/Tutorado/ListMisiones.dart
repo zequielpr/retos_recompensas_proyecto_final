@@ -6,6 +6,7 @@ import 'package:retos_proyecto/datos/UsuarioActual.dart';
 import '../../../datos/TransferirDatos.dart';
 import '../../../widgets/Cards.dart';
 import '../Tutor/TabPages/pages/UsersTutorados/ExpulsarDeSala.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListMisionesTutorado extends StatefulWidget {
   final TransferirDatos args;
@@ -18,34 +19,42 @@ class ListMisionesTutorado extends StatefulWidget {
 class _ListMisionesTutoradoState extends State<ListMisionesTutorado> {
   final TransferirDatos args;
   _ListMisionesTutoradoState(this.args);
+  AppLocalizations? valores;
 
-  late String idTutor = args.sala.getColecMisiones.parent?.parent.parent?.parent.parent?.id as String;
+  late String idTutor = args
+      .sala.getColecMisiones.parent?.parent.parent?.parent.parent?.id as String;
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
           title: Text(args.nombreSala),
-          actions: [IconButton(onPressed: ()=>_salir_de_sala(args.sala.getIdSala, CurrentUser.getIdCurrentUser(), idTutor), icon: Icon(Icons.output))],
+          actions: [
+            IconButton(
+                onPressed: () => _salir_de_sala(args.sala.getIdSala,
+                    CurrentUser.getIdCurrentUser(), idTutor),
+                icon: const Icon(Icons.output))
+          ],
         ),
         body: getListMisionesVistTutorado(args.sala.getColecMisiones));
     ;
   }
 
   //Metodo para obtener la misiones del usuario actual
-  static Widget getListMisionesVistTutorado(
+  Widget getListMisionesVistTutorado(
       CollectionReference collectionReferenceMisiones) {
     return StreamBuilder(
       stream: collectionReferenceMisiones.snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-        if(streamSnapshot.connectionState == ConnectionState.waiting){
+        if (streamSnapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         }
-        if(streamSnapshot.data?.docs.isEmpty == true){
-          return const Center(
-            child: Text('Aún no tienes misiones'),
+        if (streamSnapshot.data?.docs.isEmpty == true) {
+          return Center(
+            child: Text('${valores?.aun_no_misiones}'),
           );
         }
 
@@ -56,15 +65,7 @@ class _ListMisionesTutoradoState extends State<ListMisionesTutorado> {
               final DocumentSnapshot documentSnapshot =
                   streamSnapshot.data!.docs[index];
               return Cards.getCardMision(
-                  documentSnapshot['nombreMision'],
-                  documentSnapshot['objetivoMision'],
-                  documentSnapshot['completada_por'],
-                  documentSnapshot['solicitu_confirmacion'],
-                  CurrentUser.getIdCurrentUser(),
-                  context,
-                  documentSnapshot.reference,
-                  documentSnapshot['recompensaMision'],
-                  0);
+                  documentSnapshot, CurrentUser.getIdCurrentUser(), context, 0, valores);
             },
           );
         }
@@ -73,9 +74,10 @@ class _ListMisionesTutoradoState extends State<ListMisionesTutorado> {
     );
   }
 
-void _salir_de_sala(idSala, idUsuario, idTutor){
-    var titulo = 'Salir';
-    var mensaje = '¿Deseas salir de esta sala?';
-  ExplusarDeSala.ExplusarUsuarioDesala(context, idSala, idUsuario, idTutor, titulo, mensaje);
-}
+  void _salir_de_sala(idSala, idUsuario, idTutor) {
+    var titulo = '${valores?.salir}';
+    var mensaje = '${valores?.desea_salir_sala}';
+    ExplusarDeSala.ExplusarUsuarioDesala(
+        context, idSala, idUsuario, idTutor, titulo, mensaje);
+  }
 }

@@ -26,9 +26,8 @@ import '../datos/TransferirDatos.dart';
 import '../datos/UsuarioActual.dart';
 
 class Cards {
-  static Widget getStadoSolicitud(
-      DocumentSnapshot documentSnapshot,  BuildContext context, AppLocalizations? valores) {
-
+  static Widget getStadoSolicitud(DocumentSnapshot documentSnapshot,
+      BuildContext context, AppLocalizations? valores) {
     DateActual.getActualDateTime();
     bool isTutorado = Roll_Data.ROLL_USER_IS_TUTORADO;
     String subtitle = '';
@@ -37,7 +36,8 @@ class Cards {
 
     Timestamp fecha_solicitu = documentSnapshot['fecha_actual'];
 
-    var unidadTiempo = AntiguedadNotificaciones.getAntiguedad(fecha_solicitu, valores);
+    var unidadTiempo =
+        AntiguedadNotificaciones.getAntiguedad(fecha_solicitu, valores);
     late Widget trailain;
     switch (stado) {
       case 0:
@@ -47,12 +47,18 @@ class Cards {
         break;
       case 1:
         color = Color.fromARGB(200, 105, 240, 174);
-        trailain = Icon(Icons.check, color: color,);
+        trailain = Icon(
+          Icons.check,
+          color: color,
+        );
         subtitle = '${valores?.soicitude_acept_hace} $unidadTiempo';
         break;
       case 2:
         color = Color.fromARGB(200, 255, 32, 32);
-        trailain = Icon(Icons.cancel_outlined, color: color,);
+        trailain = Icon(
+          Icons.cancel_outlined,
+          color: color,
+        );
         subtitle = '${valores?.solicitud_rechazada_hace} $unidadTiempo';
         break;
     }
@@ -87,7 +93,8 @@ class Cards {
       DocumentSnapshot documentSnapshot,
       CollectionReference collectionReference,
       String? idCurrentUser,
-      BuildContext context, AppLocalizations? valores) {
+      BuildContext context,
+      AppLocalizations? valores) {
     return Padding(
         padding: EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 5),
         child: Card(
@@ -139,14 +146,14 @@ class Cards {
   }
 
   //Cuerpo de las notificaciones sobre las misiones_________________________________________________________________
-  static Widget cardNotificacionMisiones(
-
-      DocumentSnapshot documentSnapshot, BuildContext context, AppLocalizations? valores) {
+  static Widget cardNotificacionMisiones(DocumentSnapshot documentSnapshot,
+      BuildContext context, AppLocalizations? valores) {
     DateActual.getActualDateTime();
 
     Timestamp fecha_solicitu = documentSnapshot['fecha_actual'];
 
-    var unidadTiempo = AntiguedadNotificaciones.getAntiguedad(fecha_solicitu, valores);
+    var unidadTiempo =
+        AntiguedadNotificaciones.getAntiguedad(fecha_solicitu, valores);
 
     var leftRight =
         Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
@@ -197,16 +204,16 @@ class Cards {
   }
 
   //Terjeta de misiones
-  static Widget getCardMision(
-      String nombreMision,
-      String objetivoMision,
-      List<dynamic> completada_por,
-      List<dynamic> solicitudeConf,
-      String userId,
-      BuildContext context,
-      DocumentReference docMision,
-      double Recompensa,
-      dynamic puntos_total_de_usuario) {
+  static Widget getCardMision( DocumentSnapshot documentSnapshot, String userId,
+      BuildContext context, dynamic puntos_total_de_usuario, AppLocalizations? valores) {
+    String nombreMision = documentSnapshot['nombreMision'];
+    String objetivoMision = documentSnapshot['objetivoMision'];
+    List<dynamic> completada_por = documentSnapshot['completada_por'];
+    List<dynamic> solicitudeConf = documentSnapshot['solicitu_confirmacion'];
+    DocumentReference docMision = documentSnapshot.reference;
+
+    double Recompensa = documentSnapshot['recompensaMision'];
+
     return Card(
       margin: EdgeInsets.only(
           left: Pantalla.getPorcentPanntalla(4, context, 'x'),
@@ -254,8 +261,8 @@ class Cards {
           trimMode: TrimMode.Line,
           lessStyle:
               GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
-          trimCollapsedText: 'ver más',
-          trimExpandedText: 'ver menos',
+          trimCollapsedText: '${valores?.ver_mas}',
+          trimExpandedText: '${valores?.ver_menos}',
           moreStyle:
               GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
         ),
@@ -281,7 +288,7 @@ class Cards {
                   nombreMision,
                   docMision,
                   Recompensa,
-                  puntos_total_de_usuario)),
+                  puntos_total_de_usuario, valores)),
         ),
       ),
     );
@@ -295,16 +302,16 @@ class Cards {
       String nombreMision,
       DocumentReference docMision,
       double recompensa,
-      dynamic puntos_total_de_usuario) {
+      dynamic puntos_total_de_usuario, AppLocalizations? valores) {
     if (completada_por.contains(userId)) {
-      getDialogMisionRealizada(context, nombreMision);
+      getDialogMisionRealizada(context, nombreMision, valores);
     } else if (solicitudeConf.contains(userId)) {
       getDialogPendienteConfirmacion(context, nombreMision, docMision, userId,
-          puntos_total_de_usuario, recompensa);
+          puntos_total_de_usuario, recompensa, valores);
     } else {
       if (Roll_Data.ROLL_USER_IS_TUTORADO) {
         //Solicitar confirmacion de mision11
-        getDialogSolicitud(context, nombreMision, docMision, userId);
+        getDialogSolicitud(context, nombreMision, docMision, userId, valores);
         return;
       }
       String titulo = nombreMision;
@@ -324,9 +331,9 @@ class Cards {
   }
 
   //Dialogs_____________________________________________________-
-  static void getDialogMisionRealizada(BuildContext context, nombreMision) {
+  static void getDialogMisionRealizada(BuildContext context, nombreMision, AppLocalizations? valores) {
     String titulo = nombreMision;
-    String mensaje = 'Esta misión ha sido realizada';
+    String mensaje = '${valores?.esta_misions_realizada}';
     actions(BuildContext context) {
       return <Widget>[
         TextButton(
@@ -340,7 +347,7 @@ class Cards {
   }
 
   static void getDialogPendienteConfirmacion(context, nombreMision, docMision,
-      userId, puntos_total_de_usuario, recompensa) {
+      userId, puntos_total_de_usuario, recompensa, AppLocalizations? valores) {
     //Añadir recompensa sobrante
     GuardarRecompensaSobrante(recompensa) async {
       await Coleciones.COLECCION_USUARIOS
@@ -362,7 +369,7 @@ class Cards {
 
     String mensaje = !Roll_Data.ROLL_USER_IS_TUTORADO
         ? '¿La tarea ha sido completada?'
-        : 'Confirmacion pendiente';
+        : '${valores?.confirmacion_pendiente}';
     String titulo = nombreMision;
     actions(BuildContext context) {
       return <Widget>[
@@ -416,14 +423,14 @@ class Cards {
     Dialogos.mostrarDialog(actions, titulo, mensaje, context);
   }
 
-  static void getDialogSolicitud(context, nombreMision, docMision, userId) {
-    String mensaje = '¿Enviar un solicitud de confirmacion?';
+  static void getDialogSolicitud(context, nombreMision, docMision, userId, AppLocalizations? valores) {
+    String mensaje = '${valores?.enviar_solicitud_confirmacion}';
     String titulo = nombreMision;
     actions(BuildContext context) {
       return <Widget>[
         TextButton(
             onPressed: () => Navigator.pop(context, 'OK'),
-            child: const Text('Cancelar')),
+            child: Text('${valores?.cancelar}')),
         TextButton(
           onPressed: () async {
             await docMision.update({
@@ -431,7 +438,7 @@ class Cards {
             });
             Navigator.pop(context, 'OK');
           },
-          child: const Text('Enviar solicitud'),
+          child: Text('${valores?.enviar}'),
         ),
       ];
     }
@@ -439,8 +446,8 @@ class Cards {
     Dialogos.mostrarDialog(actions, titulo, mensaje, context);
   }
 
-  static Widget getCardMisionInicio(
-      DocumentSnapshot documentSnapshot, BuildContext context, AppLocalizations? valores) {
+  static Widget getCardMisionInicio(DocumentSnapshot documentSnapshot,
+      BuildContext context, AppLocalizations? valores) {
     String? idSala = documentSnapshot.reference.parent.parent?.id;
     String idMision = documentSnapshot.id;
     return Card(

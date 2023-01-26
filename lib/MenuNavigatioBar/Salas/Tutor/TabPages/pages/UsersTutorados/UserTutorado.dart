@@ -14,6 +14,7 @@ import '../../../../../../datos/DatosPersonalUser.dart';
 import '../../../../../../datos/TransferirDatos.dart';
 import '../../../../../../datos/UsuarioActual.dart';
 import '../../../../../../widgets/Cards.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserTutorado extends StatefulWidget {
   final TransfDatosUserTutorado args;
@@ -28,9 +29,11 @@ class _UserTutoradoState extends State<UserTutorado> {
   _UserTutoradoState(this.args);
   double _currentSliderValue = 15;
   static var puntos;
+  AppLocalizations? valores;
 
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     final colecTodosLosUsuarios = Coleciones
         .COLECCION_USUARIOS; //navega hacia la coleccion de todos los usuarios
 
@@ -116,7 +119,7 @@ class _UserTutoradoState extends State<UserTutorado> {
           ),
           body: TabBarView(
             children: [
-              _getListaMisiones(colecTodosLosUsuarios, args, puntos),
+              _getListaMisiones(colecTodosLosUsuarios, args, puntos, valores),
               Center(
                 child: getRecompensaForUser(),
               ),
@@ -128,7 +131,7 @@ class _UserTutoradoState extends State<UserTutorado> {
   ///Devuelve el indicador de los puntos del usuarrio tutorado en tiempo real
 
   static Widget _getListaMisiones(
-      collectionReferenceUsers, TransfDatosUserTutorado args, dynamic puntos) {
+      collectionReferenceUsers, TransfDatosUserTutorado args, dynamic puntos, AppLocalizations? valores) {
     //Toma los puntos totales en tiempo real, sin necedidad de reiniciar el widget
     return StreamBuilder(
         stream: collectionReferenceUsers
@@ -150,16 +153,10 @@ class _UserTutoradoState extends State<UserTutorado> {
                   itemBuilder: (context, index) {
                     final DocumentSnapshot documentSnapshot =
                         streamSnapshot.data!.docs[index];
-                    return Cards.getCardMision(
-                        documentSnapshot['nombreMision'],
-                        documentSnapshot['objetivoMision'],
-                        documentSnapshot['completada_por'],
-                        documentSnapshot['solicitu_confirmacion'],
+                    return Cards.getCardMision(documentSnapshot,
                         args.snap.id.trim(),
                         context,
-                        documentSnapshot.reference,
-                        documentSnapshot['recompensaMision'],
-                        userDocument['puntosTotal']);
+                        documentSnapshot['recompensaMision'], valores);
                   },
                 );
               }

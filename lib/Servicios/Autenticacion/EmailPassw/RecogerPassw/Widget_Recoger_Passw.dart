@@ -123,7 +123,7 @@ class Widget_Recoger_Passw {
                         }
                       : null,
                   child: Text(
-                    _valores?.boton_next_p_1 as String,
+                    _isSignUp?'${_valores?.boton_next_p_1}':'${_valores?.guardar}',
                     style: GoogleFonts.roboto(
                         fontSize: 17, fontWeight: FontWeight.w600),
                   ))),
@@ -133,7 +133,6 @@ class Widget_Recoger_Passw {
   }
 
   void _mostrarPassw() {
-    print('object');
     _passwOculta = false;
     _iconPassw = Icon(
       Icons.visibility,
