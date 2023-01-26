@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 import 'package:retos_proyecto/widgets/Dialogs.dart';
@@ -9,19 +10,19 @@ import 'package:retos_proyecto/widgets/Dialogs.dart';
 import '../../../MediaQuery.dart';
 
 class DejarTutoria {
-  static eliminarTutor(BuildContext context, String idTutor) {
-    dialogDejarTutoria(context, idTutor);
+  static eliminarTutor(BuildContext context, String idTutor, AppLocalizations? valores) {
+    dialogDejarTutoria(context, idTutor, valores);
   }
 
   //preguntar antes de dejar la tutoría
-  static dialogDejarTutoria(BuildContext context, String idTutor) {
-    String titulo = 'Dejar tutoría';
-    String mensaje = 'Los avances obtenidos en esta tutoría serán eliminados y no será posible recuperarlos';
+  static dialogDejarTutoria(BuildContext context, String idTutor, AppLocalizations? valores) {
+    String titulo = '${valores?.dejar_tutoria}';
+    String mensaje = '${valores?.avances_obtenidos_perder}';
     actions(BuildContext context){
       return <Widget>[
         TextButton(
           onPressed: () => context.router.pop(),
-          child: Text('Cancelar'),
+          child: Text('${valores?.cancelar}'),
         ),
         TextButton(
           onPressed: () async {

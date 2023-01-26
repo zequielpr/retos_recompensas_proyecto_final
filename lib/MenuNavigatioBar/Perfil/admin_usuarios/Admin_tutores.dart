@@ -52,8 +52,8 @@ class UsuarioTutores {
               itemBuilder: (BuildContext context, int index) {
                 return Container(
                   child: Center(
-                    child: getCardUsuarioTutorado(
-                        snapshot.data?.docs[index].id, context),
+                    child: getCardUsuarioTutor(
+                        snapshot.data?.docs[index].id, context, valores),
                   ),
                 );
               },
@@ -64,7 +64,7 @@ class UsuarioTutores {
         });
   }
 
-  static getCardUsuarioTutorado(String? idUsuario, BuildContext context) {
+  static getCardUsuarioTutor(String? idUsuario, BuildContext context, AppLocalizations? valores) {
     return Card(
       color: Colors.transparent,
       elevation: 0,
@@ -82,7 +82,7 @@ class UsuarioTutores {
           height: Pantalla.getPorcentPanntalla(5, context, 'y'),
           width: Pantalla.getPorcentPanntalla(20, context, 'x'),
           child: Row(
-            children: [MarcActualTutor(idUsuario), opciones(idUsuario)],
+            children: [MarcActualTutor(idUsuario), opciones(idUsuario, valores)],
           ),
         ),
       ),
@@ -90,7 +90,7 @@ class UsuarioTutores {
   }
 
   static String _selectedMenu = '';
-  static Widget opciones(String idTutor) {
+  static Widget opciones(String idTutor, AppLocalizations? valores) {
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
       return PopupMenuButton<Menu>(
@@ -104,12 +104,12 @@ class UsuarioTutores {
           itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
                 PopupMenuItem<Menu>(
                   value: Menu.AddMision,
-                  onTap: () => DejarTutoria.eliminarTutor(context, idTutor),
-                  child: Text('Dejar tutoría'),
+                  onTap: () => DejarTutoria.eliminarTutor(context, idTutor, valores),
+                  child: Text('${valores?.dejar_tutoria}'),
                 ),
                 PopupMenuItem<Menu>(
                   value: Menu.EliminarSala,
-                  child: Text('Seleccionar tutoría'),
+                  child: Text('${valores?.seleccionar_tutoria}'),
                   onTap: () => TutorActual.setNewActualTutor(idTutor),
                 )
               ]);

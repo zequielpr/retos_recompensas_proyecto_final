@@ -160,5 +160,9 @@
       "verificacion_email_necesaria": "Verificación de email necesaria",
       "ver_mas": "ver más",
       "ver_menos": "ver menos",
-      "ya_estas_registrado": "Ya estas registrado, inicia sesión"
+      "ya_estas_registrado": "Ya estas registrado, inicia sesión",
+      "tutoria": "Tutoría",
+      "avances_obtenidos_perder": "Los avances obtenidos en esta tutoría serán eliminados y no será posible recuperarlos.",
+      "seleccionar_tutoria": "Seleccionar tutoría",
+      "dejar_tutoria": "Dejar tutoría"
   }

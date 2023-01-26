@@ -191,5 +191,9 @@
     "verificacion_email_necesaria": "Email verification required",
     "ver_mas": "see more",
     "ver_menos": "see less",
-    "ya_estas_registrado": "You are already registered, log in"
+    "ya_estas_registrado": "You are already registered, log in",
+    "tutoria": "Mentoring",
+    "avances_obtenidos_perder": "The progress achieved in this mentoring will be eliminated and it will not be possible to recover them.",
+    "seleccionar_tutoria": "Select mentoring",
+    "dejar_tutoria": "Leave tutoring"
 }
