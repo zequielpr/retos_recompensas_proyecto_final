@@ -95,7 +95,7 @@ class _AdminCuentaState extends State<AdminCuenta> {
                   ?.sendEmailVerification()
                   .then((value) => _linkEnviado()),
               visualDensity: VisualDensity.compact,
-              title: Text('Verificar email'),
+              title: Text('${valores?.titulo_verificar_email}'),
               trailing: Icon(
                 Icons.arrow_forward_ios_sharp,
                 size: arrowSize,
@@ -148,16 +148,16 @@ class _AdminCuentaState extends State<AdminCuenta> {
   }
 
   void _linkEnviado() {
-    String titulo = 'Link enviado';
+    String titulo = '${valores?.link_enviado}';
     String mensaje =
-        'Se ha enviado un link al nuevo correo, abre el link para verificar el correo';
+        '${valores?.link_enviado_nuevo_email}';
     actions(BuildContext context) {
       return <Widget>[
         TextButton(
           onPressed: () {
             context.router.pop();
           },
-          child: const Text('Ok'),
+          child: Text('${valores?.ok}'),
         ),
       ];
     }

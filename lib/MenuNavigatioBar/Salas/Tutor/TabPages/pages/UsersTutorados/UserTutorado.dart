@@ -50,8 +50,8 @@ class _UserTutoradoState extends State<UserTutorado> {
                       args.collectionReferenceMisiones.parent?.id,
                       args.snap.reference.id,
                       CurrentUser.getIdCurrentUser(),
-                      ListUsuarios.titulo,
-                      ListUsuarios.mensaje),
+                      ListaUsuarioState.titulo,
+                      ListaUsuarioState.mensaje),
                   icon: Icon(Icons.output_rounded)),
             ],
             backgroundColor: Colors.white,
@@ -94,7 +94,7 @@ class _UserTutoradoState extends State<UserTutorado> {
                         )
                       ],
                     ),
-                    const TabBar(
+                    TabBar(
                       indicatorColor: Colores.colorPrincipal,
                       labelColor: Colors.black,
                       tabs: [
@@ -103,14 +103,14 @@ class _UserTutoradoState extends State<UserTutorado> {
                             Icons.flag,
                             color: Colors.black,
                           ),
-                          text: 'misiones',
+                          text: '${valores?.misiones}',
                         ),
                         Tab(
                           icon: Icon(
                             Icons.apps,
                             color: Colors.black,
                           ),
-                          text: 'Recompensa',
+                          text: '${valores?.recompensa}',
                         ),
                       ],
                     ),
@@ -121,7 +121,7 @@ class _UserTutoradoState extends State<UserTutorado> {
             children: [
               _getListaMisiones(colecTodosLosUsuarios, args, puntos, valores),
               Center(
-                child: getRecompensaForUser(),
+                child: getRecompensaForUser(valores),
               ),
             ],
           ),
@@ -170,7 +170,7 @@ class _UserTutoradoState extends State<UserTutorado> {
   }
 
   //Recompensa que obtendrá el usuario
-  Widget getRecompensaForUser() {
+  Widget getRecompensaForUser(AppLocalizations? valores) {
     return StreamBuilder<DocumentSnapshot>(
       stream: Coleciones.COLECCION_USUARIOS
           .doc(args.snap.reference.id.trim())
@@ -180,7 +180,7 @@ class _UserTutoradoState extends State<UserTutorado> {
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
-          return Text('Ha ocurrido un error');
+          return Text('${valores?.ha_error}');
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -204,7 +204,7 @@ class _UserTutoradoState extends State<UserTutorado> {
                     size: 40,
                   ),
                 ),
-                Text('Añadir recompensa')
+                Text('${valores?.add_recompensa}')
               ],
             );
           }

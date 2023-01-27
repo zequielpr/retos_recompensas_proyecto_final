@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Perfil/admin_usuarios/DejarTutoria.dart';
 
 import '../../../MediaQuery.dart';
@@ -11,23 +12,23 @@ import '../../../widgets/Dialogs.dart';
 class EliminarTutorado{
 
 
-  static eliminarUserTutorado(BuildContext context, String idUserTutorado){
-    dialogDejarTutoria(context, idUserTutorado);
+  static eliminarUserTutorado(BuildContext context, String idUserTutorado, AppLocalizations? valores){
+    dialogDejarTutoria(context, idUserTutorado, valores);
   }
 
 
 
   //preguntar antes de dejar la tutoría
-  static dialogDejarTutoria(BuildContext context, String idRemoveUser) {
-    String titulo = 'Eliminar usuario';
-   String mensaje = 'Los avances obtenidos en esta tutoría serán eliminados y no será posible recuperarlos';
+  static dialogDejarTutoria(BuildContext context, String idRemoveUser, AppLocalizations? valores) {
+    String titulo = '${valores?.eliminar_usuario}';
+   String mensaje = '${valores?.eliminar_usuario_contenido}';
 
 
     actions(BuildContext context){
       return <Widget>[
         TextButton(
           onPressed: () => context.router.pop(),
-          child: Text('Cancelar'),
+          child: Text('${valores?.cancelar}'),
         ),
         TextButton(
           onPressed: () async {
@@ -37,7 +38,7 @@ class EliminarTutorado{
             eliminarDeTodasSalas(idRemoveUser);
             context.router.pop();
           },
-          child: Text('ok'),
+          child: Text('${valores?.ok}'),
         )
       ];
     }

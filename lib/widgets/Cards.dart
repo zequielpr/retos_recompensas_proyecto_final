@@ -315,13 +315,13 @@ class Cards {
         return;
       }
       String titulo = nombreMision;
-      String mensaje = 'Misión pendiente de realizar';
+      String mensaje = '${valores?.mision_pendiente_realizar}';
 
       actions(BuildContext context) {
         return <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'OK'),
-            child: const Text('OK'),
+            child: Text('${valores?.ok}'),
           ),
         ];
       }
@@ -338,7 +338,7 @@ class Cards {
       return <Widget>[
         TextButton(
           onPressed: () => Navigator.pop(context, 'OK'),
-          child: const Text('OK'),
+          child: Text('${valores?.ok}'),
         ),
       ];
     }
@@ -368,7 +368,7 @@ class Cards {
     }
 
     String mensaje = !Roll_Data.ROLL_USER_IS_TUTORADO
-        ? '¿La tarea ha sido completada?'
+        ? '${valores?.mision_realizada_question}'
         : '${valores?.confirmacion_pendiente}';
     String titulo = nombreMision;
     actions(BuildContext context) {
@@ -376,11 +376,11 @@ class Cards {
         !Roll_Data.ROLL_USER_IS_TUTORADO
             ? TextButton(
                 onPressed: () => Navigator.pop(context, 'OK'),
-                child: const Text('no'),
+                child: Text('${valores?.no}'),
               )
             : TextButton(
                 onPressed: () => Navigator.pop(context, 'OK'),
-                child: const Text('ok'),
+                child: Text('${valores?.ok}'),
               ),
         !Roll_Data.ROLL_USER_IS_TUTORADO
             ? TextButton(
@@ -412,9 +412,9 @@ class Cards {
                       return;
                     });
                   });
-                  Navigator.pop(context, 'OK');
+                  Navigator.pop(context, '${valores?.ok}');
                 },
-                child: const Text('si'),
+                child: Text('${valores?.si}'),
               )
             : Text(''),
       ];

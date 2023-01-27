@@ -86,7 +86,7 @@ class Admin_tutorados {
                 padding: MaterialStateProperty.all(EdgeInsets.all(0)),
                 ),
             child: Text('${valores?.eliminar}'),
-            onPressed: () => EliminarTutorado.eliminarUserTutorado(context, idUsuario),
+            onPressed: () => EliminarTutorado.eliminarUserTutorado(context, idUsuario, valores),
           ),
         ),
       ),

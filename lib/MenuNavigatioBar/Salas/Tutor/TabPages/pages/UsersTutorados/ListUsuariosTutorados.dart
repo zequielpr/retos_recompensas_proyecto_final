@@ -14,20 +14,40 @@ import '../../../../../../widgets/Dialogs.dart';
 import 'ExpulsarDeSala.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class ListUsuarios extends StatelessWidget {
+
+
+class ListUsuarios extends StatefulWidget {
   final CollectionReference collectionReferenceUsuariosTutorados;
   final BuildContext contextSala;
   final CollectionReference collectionReferenceMisiones;
   ListUsuarios(
       {Key? key,
-      required this.collectionReferenceUsuariosTutorados,
-      required this.contextSala,
-      required this.collectionReferenceMisiones})
+        required this.collectionReferenceUsuariosTutorados,
+        required this.contextSala,
+        required this.collectionReferenceMisiones})
       : super(key: key);
-  AppLocalizations? valores;
 
-  static const String titulo = 'Expulsar';
-  static const String mensaje = '¿Deseas explusar este usuario de esta sala?';
+
+
+
+
+  State<ListUsuarios> createState() => ListaUsuarioState(collectionReferenceMisiones, contextSala, collectionReferenceUsuariosTutorados);
+
+
+}
+
+class ListaUsuarioState extends State<ListUsuarios> {
+  final CollectionReference collectionReferenceUsuariosTutorados;
+  final BuildContext contextSala;
+  final CollectionReference collectionReferenceMisiones;
+
+  ListaUsuarioState(this.collectionReferenceMisiones,this.contextSala, this.collectionReferenceUsuariosTutorados);
+
+  static AppLocalizations? valores;
+  static String titulo = '${valores?.expulsar}';
+  static  String mensaje = '${valores?.expulsar_contenido}';
+  @override
+
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +74,7 @@ class ListUsuarios extends StatelessWidget {
                 itemCount: streamSnapshot.data!.docs.length,
                 itemBuilder: (context, index) {
                   final DocumentSnapshot documentSnapshot =
-                      streamSnapshot.data!.docs[index];
+                  streamSnapshot.data!.docs[index];
 
                   var idSala = documentSnapshot.reference.parent.parent?.id;
                   return Card(
@@ -83,7 +103,7 @@ class ListUsuarios extends StatelessWidget {
                         //Navigator.push(context, MaterialPageRoute(builder: (context)=>MenuSala()) );
                       },
                       leading:
-                          DatosPersonales.getAvatar(documentSnapshot.id, 20),
+                      DatosPersonales.getAvatar(documentSnapshot.id, 20),
                       title:DatosPersonales.getDato(
                           documentSnapshot.id, 'nombre', TextStyle()),
                       subtitle: DatosPersonales.getDato(
@@ -94,7 +114,7 @@ class ListUsuarios extends StatelessWidget {
                           children: [
                             IconButton(
                                 icon:
-                                    const Icon(Icons.output_rounded, size: 25),
+                                const Icon(Icons.output_rounded, size: 25),
                                 onPressed: () =>
                                     ExplusarDeSala.ExplusarUsuarioDesala(
                                         context,
@@ -122,12 +142,15 @@ class ListUsuarios extends StatelessWidget {
   }
 }
 
+
 //Enviar solici
 
 class enviarSolicitudeUsuario {
   static InterfaceEnviarSolicitud(BuildContext context, String idSala, String nombreSala, AppLocalizations? valores) {
+    var top = Pantalla.getPorcentPanntalla(2, context, 'y');
     var leftRight =
         Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
+    var h = Pantalla.getPorcentPanntalla(4, context, "y");
     var _userNameController = TextEditingController();
     return showModalBottomSheet(
         shape: const RoundedRectangleBorder(
@@ -138,7 +161,7 @@ class enviarSolicitudeUsuario {
         builder: (BuildContext ctx) {
           return Padding(
             padding: EdgeInsets.only(
-                top: Pantalla.getPorcentPanntalla(2, context, 'y'),
+                top: top,
                 left: leftRight,
                 right: leftRight,
                 bottom: MediaQuery.of(ctx).viewInsets.bottom + 30),
@@ -153,7 +176,7 @@ class enviarSolicitudeUsuario {
                   //mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: Pantalla.getPorcentPanntalla(4, context, "y"),
+                      height: h,
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
@@ -166,14 +189,14 @@ class enviarSolicitudeUsuario {
                   ],
                 ),
                 SizedBox(
-                  height: Pantalla.getPorcentPanntalla(1.5, context, "y"),
+                  height: h,
                 ),
                 TextField(
                   controller: _userNameController,
                   decoration:InputDecoration(labelText: valores?.nombre_usuario as String),
                 ),
                 SizedBox(
-                  height: Pantalla.getPorcentPanntalla(2, context, 'y'),
+                  height: h,
                 ),
 
                 //Boton de enviar solicitud

@@ -12,7 +12,8 @@ import '../../widgets/Dialogs.dart';
 
 class AdminRoll {
   static Widget getRoll(BuildContext context, AppLocalizations? valores) {
-    var dropdownValue = Roll_Data.ROLL_USER_IS_TUTORADO ? 'Tutorado' : 'Tutor';
+    var dropdownValue =
+        Roll_Data.ROLL_USER_IS_TUTORADO ? '${valores?.tutorado}' : '${valores?.tutor}';
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
       const Text('', style: TextStyle(fontSize: 20)),
       DropdownButton<String>(
@@ -30,7 +31,7 @@ class AdminRoll {
         onChanged: (newValor) {
           changeRoll(newValor, context, valores);
         },
-        items: <String>['Tutorado', 'Tutor']
+        items: <String>['${valores?.tutorado}', '${valores?.tutor}']
             .map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
@@ -41,8 +42,9 @@ class AdminRoll {
     ]);
   }
 
-  static Future<void> changeRoll(rol_tutorado, BuildContext context, AppLocalizations? valores) async {
-     actions(BuildContext context){
+  static Future<void> changeRoll(
+      rol_tutorado, BuildContext context, AppLocalizations? valores) async {
+    actions(BuildContext context) {
       return <Widget>[
         TextButton(
           onPressed: () {
@@ -54,8 +56,8 @@ class AdminRoll {
           onPressed: () async {
             var rol = rol_tutorado == 'Tutorado' ? true : false;
             await (Coleciones.COLECCION_USUARIOS
-                .doc(CurrentUser.getIdCurrentUser())
-                .update({'rol_tutorado': rol}))
+                    .doc(CurrentUser.getIdCurrentUser())
+                    .update({'rol_tutorado': rol}))
                 .catchError((onError) {})
                 .then((value) {});
             SystemNavigator.pop(animated: true);
@@ -64,14 +66,14 @@ class AdminRoll {
         ),
       ];
     }
+
     var titulo = '${valores?.cambiar_rol}';
     var message = '${valores?.cambiar_rol_contenido}';
     showMessaje(actions, titulo, message, context);
   }
 
-  static showMessaje(actions, String titulo, String mensaje, BuildContext context) {
+  static showMessaje(
+      actions, String titulo, String mensaje, BuildContext context) {
     Dialogos.mostrarDialog(actions, titulo, mensaje, context);
   }
-
-
 }
