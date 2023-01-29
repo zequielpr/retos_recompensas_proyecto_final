@@ -83,7 +83,7 @@
         "error_enviar_solicitud": "Error al enviar solicitud. El usuario no existe",
         "escribe_email_aqui": "Escribe aquí tu email",
         "escribe_passw": "Escribe tu contraseña aquí",
-        "escribit_nombre_sala": "Escriba en nombre de la sala. Debe tener al menos dos letras",
+        "escribit_nombre_sala": "Escriba el nombre de la sala.",
         "establece_passw": "Establece una contraseña",
         "esta_misions_realizada": "Esta misión ha sido realizada",
         "expulsar": "Expulsar",
@@ -177,5 +177,6 @@
         "recompensa": "Recompensa",
         "si": "Sí",
         "no": "No",
-        "link_enviado_nuevo_email": "Se ha enviado un link al nuevo correo, abre el link para verificar el correo"
+        "link_enviado_nuevo_email": "Se ha enviado un link al nuevo correo, abre el link para verificar el correo",
+        "introduce_nombre_usuario": "introduce_nombre_usuario"
   }

@@ -114,7 +114,7 @@
     "error_enviar_solicitud": "Failed to send request. The user does not exist",
     "escribe_email_aqui": "Type your email here",
     "escribe_passw": "Type your password here",
-    "escribit_nombre_sala": "Type in the name of the room. Must be at least two letters long",
+    "escribit_nombre_sala": "Type the name of the room.",
     "establece_passw": "Set a password",
     "esta_misions_realizada": "This mission has been carried out",
     "expulsar": "Expel",
@@ -208,5 +208,6 @@
     "recompensa": "Reward",
     "si": "Yes",
     "no": "No",
-    "link_enviado_nuevo_email": "A link has been sent to the new email, open the link to verify the email"
+    "link_enviado_nuevo_email": "A link has been sent to the new email, open the link to verify the email",
+    "introduce_nombre_usuario": "Please enter a username"
 }

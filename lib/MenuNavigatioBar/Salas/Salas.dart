@@ -199,11 +199,15 @@ class _SalasState extends State<Salas> {
   }
 
   Future<void> showModalCrearSala() async {
+    var top = Pantalla.getPorcentPanntalla(2, context, 'y');
+    bool nombreSalaIsEmpty = false;
+    var h = Pantalla.getPorcentPanntalla(4, context, "y");
     bool botonActivo = true;
+    var heightLinea = Pantalla.getPorcentPanntalla(1, context, "y");
 
     var nombreSala = TextEditingController();
     showModalBottomSheet(
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10), topRight: Radius.circular(10))),
         isScrollControlled: true,
@@ -213,6 +217,7 @@ class _SalasState extends State<Salas> {
               builder: (BuildContext context, StateSetter setState) {
             return Padding(
               padding: EdgeInsets.only(
+                top: top,
                 left:
                     Pantalla.getPorcentPanntalla(Espacios.leftRight, ctx, 'x'),
                 right:
@@ -226,65 +231,69 @@ class _SalasState extends State<Salas> {
                   /*  Row(children: [
                   IconButton(onPressed: (){}, icon: Icon(Icons.cancel_outlined))
                 ],),*/
-
-                  Row(
-                    //mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          valores?.crea_nueva_sala as String,
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(
-                        height: Pantalla.getPorcentPanntalla(8, context, "y"),
-                      ),
-                    ],
+                  Card(
+                    elevation: 0,
+                    color: Colors.black26,
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    child: Container(
+                      width: 100,
+                      height: heightLinea,
+                    ),
                   ),
-                  /*const ListTile(
-                    leading: Material(
-                      color: Colors.transparent,
+
+                  Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 15, bottom: 10),
+                      child: Text(
+                        valores?.crea_nueva_sala as String,
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
                     ),
-                    title: Text(
-                      "Enviar solicitud a usuario",
-                      style: TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                ),*/
+                  ),
+                  const Divider(
+                    thickness: 1,
+                  ),
+
+                  SizedBox(
+                    height: h,
+                  ),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Column(
-                      children: [
-                        TextField(
-                          onChanged: (nombreSala) {
-                            if (nombreSala.length > 16) {
-                              setState(() {
-                                botonActivo = false;
-                              });
-                              return;
-                            }
-                            setState(() {
-                              botonActivo = true;
-                            });
-                          },
-                          maxLength: 16,
-                          controller: nombreSala,
-                          decoration: InputDecoration(
-                              labelText: valores?.nombre_sala),
-                        )
-                      ],
+                    child: TextField(
+                      maxLength: 16,
+                      controller: nombreSala,
+                      decoration:
+                          InputDecoration(labelText: valores?.nombre_sala),
                     ),
                   ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: nombreSalaIsEmpty
+                        ? Text(valores
+                        ?.escribit_nombre_sala as String,
+                            style: const TextStyle(color: Colors.red),
+                          )
+                        : const Text(''),
+                  ),
 
+                  SizedBox(
+                    height: 10,
+                  ),
                   //Boton de enviar solicitud
                   Align(
                     alignment: Alignment.centerLeft,
                     child: ElevatedButton(
-                      child: Text(valores?.crea_sala as String),
                       onPressed: botonActivo == true
                           ? () async {
+                              if (nombreSala.text.isEmpty) {
+                                setState(() {
+                                  nombreSalaIsEmpty = true;
+                                });
+                                return;
+                              }
                               final String name = nombreSala.text;
 
                               if (name.isNotEmpty) {
@@ -300,20 +309,19 @@ class _SalasState extends State<Salas> {
                                   'numTutorados': 0
                                 }).whenComplete(() => {
                                           ScaffoldMessenger.of(context)
-                                              .showSnackBar( SnackBar(
-                                                  content: Text(valores?.sala_creada_correct as String)))
+                                              .showSnackBar(SnackBar(
+                                                  content: Text(valores
+                                                          ?.sala_creada_correct
+                                                      as String)))
                                         });
                                 nombreSala.text = '';
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                     SnackBar(
-                                        content: Text(valores?.escribit_nombre_sala as String)));
                               }
 
                               // Hide the bottom sheet
                               Navigator.of(context).pop();
                             }
                           : null,
+                      child: Text(valores?.crea_sala as String),
                     ),
                   )
                 ],
