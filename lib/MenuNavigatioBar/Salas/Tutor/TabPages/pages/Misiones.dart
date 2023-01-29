@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ntp/ntp.dart';
 import 'package:readmore/readmore.dart';
+import 'package:retos_proyecto/Colores.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminRoles.dart';
 import 'package:retos_proyecto/recursos/Espacios.dart';
@@ -158,6 +159,7 @@ class AddMisionState extends State<AddMision> {
                   ),
 
                   Slider(
+                    activeColor: Colores.colorPrincipal,
                     value: _currentSliderValue,
                     max: 25,
                     divisions: 5,

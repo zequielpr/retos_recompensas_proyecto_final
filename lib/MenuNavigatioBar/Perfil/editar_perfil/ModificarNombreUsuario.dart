@@ -23,6 +23,11 @@ class _ModificarNombreUsuarioState extends State<ModificarNombreUsuario> {
   AppLocalizations? valores;
 
   @override
+  void dispose() {
+    textField.cancelTimer();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     valores = AppLocalizations.of(context);
     return Scaffold(

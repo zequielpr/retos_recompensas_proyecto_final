@@ -17,6 +17,10 @@ class Widget_Recoger_Passw {
   var _setState;
   bool _isSignUp;
 
+  static void setPasswController(){
+    _passwController.text = '';
+  }
+
   Widget_Recoger_Passw(
       this._context, this._valores, this._args, this._setState, this._isSignUp);
 

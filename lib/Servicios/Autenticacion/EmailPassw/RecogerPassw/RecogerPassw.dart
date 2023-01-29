@@ -25,6 +25,13 @@ class _RecogerPassw extends State<RecogerPassw> {
   _RecogerPassw(this.args);
   AppLocalizations? valores;
   var paddinLeftRight;
+
+  @override
+  void dispose() {
+    Widget_Recoger_Passw.setPasswController();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     valores = AppLocalizations.of(context);

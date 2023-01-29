@@ -26,6 +26,12 @@ class _ChangePasswdState extends State<ChangePasswd> {
   TrasnferirDatosNombreUser arg = TrasnferirDatosNombreUser.SoloNombre('userName');
 
   @override
+  void dispose() {
+    Widget_Recoger_Passw.setPasswController();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     valores = AppLocalizations.of(context);
 

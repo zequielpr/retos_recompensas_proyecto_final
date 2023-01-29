@@ -35,6 +35,10 @@ class NombreUsuarioWidget {
     valores = valores = AppLocalizations.of(_context);
   }
 
+  void cancelTimer(){
+    _timer.cancel();
+  }
+
   var _userNameController = TextEditingController();
   Timer _timer = Timer.periodic(Duration(seconds: 1), (timer) {});
   late int _contador;

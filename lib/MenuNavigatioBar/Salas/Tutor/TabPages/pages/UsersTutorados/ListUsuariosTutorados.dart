@@ -197,6 +197,7 @@ class enviarSolicitudeUsuario {
                     height: h,
                   ),
                   TextField(
+                    maxLength: 30,
                     controller: _userNameController,
                     decoration: InputDecoration(
                         labelText: valores?.nombre_usuario as String),
@@ -211,6 +212,9 @@ class enviarSolicitudeUsuario {
                         : const Text(''),
                   ),
 
+                  SizedBox(
+                    height: 10,
+                  ),
                   //Boton de enviar solicitud
                   Align(
                     alignment: Alignment.centerLeft,

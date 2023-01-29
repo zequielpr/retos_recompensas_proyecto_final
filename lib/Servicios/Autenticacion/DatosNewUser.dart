@@ -57,6 +57,11 @@ class _StateNombreUsuario extends State<StateNombreUsuario> {
   AppLocalizations? valores;
   late NombreUsuarioWidget textField = NombreUsuarioWidget(setState, context, args, true);
   var paddingLeftRight;
+
+  void dispose() {
+    textField.cancelTimer();
+    super.dispose();
+  }
   
   @override
   Widget build(BuildContext context) {
