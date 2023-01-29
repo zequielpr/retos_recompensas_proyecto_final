@@ -59,6 +59,7 @@ class Widget_Recoger_Passw {
           ),
         ),
         TextField(
+          maxLength: 16,
           keyboardType: TextInputType.visiblePassword,
           controller: _passwController,
           onChanged: (passw) {

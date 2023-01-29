@@ -140,7 +140,8 @@ class _RecogerEmail extends State<RecogerEmail> {
     if (Validar.validarEmail(email)) {
       setState(() {isWaiting = true;});
       _cambiarColor(Colors.transparent, Colors.transparent);
-      List<String> metodoInicioSesion =
+
+      dynamic metodoInicioSesion =
           await Autenticar.metodoInicioSesion(email);
 
       //Si es existe un metodo de inicio de sesion, se redireje a la ruta de inicio de sesión
