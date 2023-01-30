@@ -5,6 +5,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:readmore/readmore.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
@@ -25,32 +26,40 @@ import '../datos/TransferirDatos.dart';
 import '../datos/UsuarioActual.dart';
 
 class Cards {
-  static Widget getStadoSolicitud(
-      DocumentSnapshot documentSnapshot, BuildContext context, stado) {
+  static Widget getStadoSolicitud(DocumentSnapshot documentSnapshot,
+      BuildContext context, AppLocalizations? valores) {
     DateActual.getActualDateTime();
     bool isTutorado = Roll_Data.ROLL_USER_IS_TUTORADO;
     String subtitle = '';
     Color color = Colors.transparent;
+    var stado = documentSnapshot['estado'];
 
     Timestamp fecha_solicitu = documentSnapshot['fecha_actual'];
 
-    var unidadTiempo = AntiguedadNotificaciones.getAntiguedad(fecha_solicitu);
+    var unidadTiempo =
+        AntiguedadNotificaciones.getAntiguedad(fecha_solicitu, valores);
     late Widget trailain;
     switch (stado) {
       case 0:
         color = Colors.transparent;
         trailain = Icon(Icons.access_time_outlined);
-        subtitle = 'Solicitud enviada hace  $unidadTiempo';
+        subtitle = '${valores?.solicitude_env_hace}  $unidadTiempo';
         break;
       case 1:
-        color = Color.fromARGB(84, 105, 240, 174);
-        trailain = Icon(Icons.check);
-        subtitle = 'Solicitud aceptada hace $unidadTiempo';
+        color = Color.fromARGB(200, 105, 240, 174);
+        trailain = Icon(
+          Icons.check,
+          color: color,
+        );
+        subtitle = '${valores?.soicitude_acept_hace} $unidadTiempo';
         break;
       case 2:
-        color = Color.fromARGB(84, 255, 32, 32);
-        trailain = Icon(Icons.cancel_outlined);
-        subtitle = 'Solicitude rechazada hace $unidadTiempo';
+        color = Color.fromARGB(200, 255, 32, 32);
+        trailain = Icon(
+          Icons.cancel_outlined,
+          color: color,
+        );
+        subtitle = '${valores?.solicitud_rechazada_hace} $unidadTiempo';
         break;
     }
 
@@ -70,7 +79,6 @@ class Cards {
     return Card(
       shape: Border(),
       margin: EdgeInsets.all(0),
-      color: color,
       elevation: 0,
       child: ListTile(
         leading: miniatura,
@@ -85,7 +93,8 @@ class Cards {
       DocumentSnapshot documentSnapshot,
       CollectionReference collectionReference,
       String? idCurrentUser,
-      BuildContext context) {
+      BuildContext context,
+      AppLocalizations? valores) {
     return Padding(
         padding: EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 5),
         child: Card(
@@ -101,7 +110,7 @@ class Cards {
                     title: Text(documentSnapshot['nombre_emisor'].toString()),
                     subtitle: Text(
                         documentSnapshot['nombre_emisor'].toString() +
-                            " desea que te unas a su tutoría"),
+                            " ${valores?.desea_unir_tutoria}"),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -118,7 +127,7 @@ class Cards {
                                         collectionReference,
                                         idCurrentUser,
                                         context),
-                                child: Text("Aceptar")),
+                                child: Text("${valores?.aceptar}")),
                           )),
                       SizedBox(
                         height: 30,
@@ -127,7 +136,7 @@ class Cards {
                             onPressed: () async =>
                                 Solicitudes.cambiarStatdoSolicitud(
                                     documentSnapshot, 2),
-                            child: Text("Rechazar")),
+                            child: Text("${valores?.rechazar}")),
                       )
                     ],
                   )
@@ -137,14 +146,14 @@ class Cards {
   }
 
   //Cuerpo de las notificaciones sobre las misiones_________________________________________________________________
-  static Widget cardNotificacionMisiones(
-
-      DocumentSnapshot documentSnapshot, BuildContext context) {
+  static Widget cardNotificacionMisiones(DocumentSnapshot documentSnapshot,
+      BuildContext context, AppLocalizations? valores) {
     DateActual.getActualDateTime();
 
     Timestamp fecha_solicitu = documentSnapshot['fecha_actual'];
 
-    var unidadTiempo = AntiguedadNotificaciones.getAntiguedad(fecha_solicitu);
+    var unidadTiempo =
+        AntiguedadNotificaciones.getAntiguedad(fecha_solicitu, valores);
 
     var leftRight =
         Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
@@ -172,11 +181,11 @@ class Cards {
                       style: GoogleFonts.roboto(fontWeight: FontWeight.w500)),
                   TextSpan(
                     text:
-                        ': recibe ${documentSnapshot['recompensa'].toString()} por ',
+                        ': ${valores?.recibe} ${documentSnapshot['recompensa'].toString()}xp ${valores?.por} ',
                   ),
                   TextSpan(
                     text:
-                        '${documentSnapshot['nombre_mision'].toString()} en la sala ',
+                        '${documentSnapshot['nombre_mision'].toString()} ${valores?.en} ',
                   ),
                   TextSpan(
                     text: documentSnapshot['nombre_sala'].toString(),
@@ -184,7 +193,7 @@ class Cards {
                   ),
                 ], style: GoogleFonts.roboto(color: Colors.black)),
               ),
-              subtitle: Text("Hace " + unidadTiempo),
+              subtitle: Text("$unidadTiempo"),
               leading:
                   DatosPersonales.getAvatar(documentSnapshot['id_emisor'], 20),
             ),
@@ -195,16 +204,16 @@ class Cards {
   }
 
   //Terjeta de misiones
-  static Widget getCardMision(
-      String nombreMision,
-      String objetivoMision,
-      List<dynamic> completada_por,
-      List<dynamic> solicitudeConf,
-      String userId,
-      BuildContext context,
-      DocumentReference docMision,
-      double Recompensa,
-      dynamic puntos_total_de_usuario) {
+  static Widget getCardMision( DocumentSnapshot documentSnapshot, String userId,
+      BuildContext context, dynamic puntos_total_de_usuario, AppLocalizations? valores) {
+    String nombreMision = documentSnapshot['nombreMision'];
+    String objetivoMision = documentSnapshot['objetivoMision'];
+    List<dynamic> completada_por = documentSnapshot['completada_por'];
+    List<dynamic> solicitudeConf = documentSnapshot['solicitu_confirmacion'];
+    DocumentReference docMision = documentSnapshot.reference;
+
+    double Recompensa = documentSnapshot['recompensaMision'];
+
     return Card(
       margin: EdgeInsets.only(
           left: Pantalla.getPorcentPanntalla(4, context, 'x'),
@@ -252,8 +261,8 @@ class Cards {
           trimMode: TrimMode.Line,
           lessStyle:
               GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
-          trimCollapsedText: 'ver más',
-          trimExpandedText: 'ver menos',
+          trimCollapsedText: '${valores?.ver_mas}',
+          trimExpandedText: '${valores?.ver_menos}',
           moreStyle:
               GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
         ),
@@ -279,7 +288,7 @@ class Cards {
                   nombreMision,
                   docMision,
                   Recompensa,
-                  puntos_total_de_usuario)),
+                  puntos_total_de_usuario, valores)),
         ),
       ),
     );
@@ -293,26 +302,26 @@ class Cards {
       String nombreMision,
       DocumentReference docMision,
       double recompensa,
-      dynamic puntos_total_de_usuario) {
+      dynamic puntos_total_de_usuario, AppLocalizations? valores) {
     if (completada_por.contains(userId)) {
-      getDialogMisionRealizada(context, nombreMision);
+      getDialogMisionRealizada(context, nombreMision, valores);
     } else if (solicitudeConf.contains(userId)) {
       getDialogPendienteConfirmacion(context, nombreMision, docMision, userId,
-          puntos_total_de_usuario, recompensa);
+          puntos_total_de_usuario, recompensa, valores);
     } else {
       if (Roll_Data.ROLL_USER_IS_TUTORADO) {
         //Solicitar confirmacion de mision11
-        getDialogSolicitud(context, nombreMision, docMision, userId);
+        getDialogSolicitud(context, nombreMision, docMision, userId, valores);
         return;
       }
       String titulo = nombreMision;
-      String mensaje = 'Misión pendiente de realizar';
+      String mensaje = '${valores?.mision_pendiente_realizar}';
 
       actions(BuildContext context) {
         return <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'OK'),
-            child: const Text('OK'),
+            child: Text('${valores?.ok}'),
           ),
         ];
       }
@@ -322,14 +331,14 @@ class Cards {
   }
 
   //Dialogs_____________________________________________________-
-  static void getDialogMisionRealizada(BuildContext context, nombreMision) {
+  static void getDialogMisionRealizada(BuildContext context, nombreMision, AppLocalizations? valores) {
     String titulo = nombreMision;
-    String mensaje = 'Esta misión ha sido realizada';
+    String mensaje = '${valores?.esta_misions_realizada}';
     actions(BuildContext context) {
       return <Widget>[
         TextButton(
           onPressed: () => Navigator.pop(context, 'OK'),
-          child: const Text('OK'),
+          child: Text('${valores?.ok}'),
         ),
       ];
     }
@@ -338,7 +347,7 @@ class Cards {
   }
 
   static void getDialogPendienteConfirmacion(context, nombreMision, docMision,
-      userId, puntos_total_de_usuario, recompensa) {
+      userId, puntos_total_de_usuario, recompensa, AppLocalizations? valores) {
     //Añadir recompensa sobrante
     GuardarRecompensaSobrante(recompensa) async {
       await Coleciones.COLECCION_USUARIOS
@@ -359,19 +368,19 @@ class Cards {
     }
 
     String mensaje = !Roll_Data.ROLL_USER_IS_TUTORADO
-        ? '¿La tarea ha sido completada?'
-        : 'Confirmacion pendiente';
+        ? '${valores?.mision_realizada_question}'
+        : '${valores?.confirmacion_pendiente}';
     String titulo = nombreMision;
     actions(BuildContext context) {
       return <Widget>[
         !Roll_Data.ROLL_USER_IS_TUTORADO
             ? TextButton(
                 onPressed: () => Navigator.pop(context, 'OK'),
-                child: const Text('no'),
+                child: Text('${valores?.no}'),
               )
             : TextButton(
                 onPressed: () => Navigator.pop(context, 'OK'),
-                child: const Text('ok'),
+                child: Text('${valores?.ok}'),
               ),
         !Roll_Data.ROLL_USER_IS_TUTORADO
             ? TextButton(
@@ -403,9 +412,9 @@ class Cards {
                       return;
                     });
                   });
-                  Navigator.pop(context, 'OK');
+                  Navigator.pop(context, '${valores?.ok}');
                 },
-                child: const Text('si'),
+                child: Text('${valores?.si}'),
               )
             : Text(''),
       ];
@@ -414,14 +423,14 @@ class Cards {
     Dialogos.mostrarDialog(actions, titulo, mensaje, context);
   }
 
-  static void getDialogSolicitud(context, nombreMision, docMision, userId) {
-    String mensaje = '¿Enviar un solicitud de confirmacion?';
+  static void getDialogSolicitud(context, nombreMision, docMision, userId, AppLocalizations? valores) {
+    String mensaje = '${valores?.enviar_solicitud_confirmacion}';
     String titulo = nombreMision;
     actions(BuildContext context) {
       return <Widget>[
         TextButton(
             onPressed: () => Navigator.pop(context, 'OK'),
-            child: const Text('Cancelar')),
+            child: Text('${valores?.cancelar}')),
         TextButton(
           onPressed: () async {
             await docMision.update({
@@ -429,7 +438,7 @@ class Cards {
             });
             Navigator.pop(context, 'OK');
           },
-          child: const Text('Enviar solicitud'),
+          child: Text('${valores?.enviar}'),
         ),
       ];
     }
@@ -437,8 +446,8 @@ class Cards {
     Dialogos.mostrarDialog(actions, titulo, mensaje, context);
   }
 
-  static Widget getCardMisionInicio(
-      DocumentSnapshot documentSnapshot, BuildContext context) {
+  static Widget getCardMisionInicio(DocumentSnapshot documentSnapshot,
+      BuildContext context, AppLocalizations? valores) {
     String? idSala = documentSnapshot.reference.parent.parent?.id;
     String idMision = documentSnapshot.id;
     return Card(
@@ -491,8 +500,8 @@ class Cards {
           trimMode: TrimMode.Line,
           lessStyle:
               GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
-          trimCollapsedText: 'ver más',
-          trimExpandedText: ' ver menos',
+          trimCollapsedText: valores?.ver_mas as String,
+          trimExpandedText: ' ${valores?.ver_menos}',
           moreStyle:
               GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.bold),
         ),
@@ -501,13 +510,13 @@ class Cards {
           height: Pantalla.getPorcentPanntalla(
               Pantalla.getPorcentPanntalla(0.6, context, 'y'), context, 'y'),
           child: IconButton(
-            tooltip: 'Eliminar',
+            tooltip: valores?.eliminar,
             splashRadius: 0.1,
             icon: const Icon(
               Icons.delete,
             ),
             onPressed: () async => await AdminSala.eliminarMision(
-                idSala, idMision, context), //Eliminar mision
+                idSala, idMision, context, valores), //Eliminar mision
           ),
         ),
       ),

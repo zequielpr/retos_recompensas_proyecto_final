@@ -9,6 +9,7 @@ import '../../../Rutas.gr.dart';
 import '../../../datos/DatosPersonalUser.dart';
 import '../../../datos/SalaDatos.dart';
 import '../../../datos/TransferirDatos.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InicioTutor extends StatefulWidget {
   const InicioTutor({Key? key}) : super(key: key);
@@ -18,13 +19,15 @@ class InicioTutor extends StatefulWidget {
 }
 
 class _InicioTutorState extends State<InicioTutor> {
+  static AppLocalizations? valores;
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     return Container(
-      child: getSalas(),
       padding: EdgeInsets.only(
         left: Pantalla.getPorcentPanntalla(4, context, 'x'),
       ),
+      child: getSalas(),
     );
     ;
   }
@@ -37,7 +40,7 @@ class _InicioTutorState extends State<InicioTutor> {
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
-          return const Text('Ha ocurrido un error');
+          return Text(valores?.ha_error as String);
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -45,8 +48,8 @@ class _InicioTutorState extends State<InicioTutor> {
         }
 
         if(snapshot.data?.docs.isEmpty == true){
-          return const Center(
-            child: Text('Crea una sala'),
+          return  Center(
+            child: Text(valores?.crea_sala as String),
           );
         }
 
@@ -57,7 +60,6 @@ class _InicioTutorState extends State<InicioTutor> {
               .map((DocumentSnapshot document) {
                 Map<String, dynamic> data =
                     document.data()! as Map<String, dynamic>;
-                print('nombre ${data['NombreSala']}');
 
                 return StreamBuilder(
                     stream: document.reference
@@ -69,7 +71,7 @@ class _InicioTutorState extends State<InicioTutor> {
                       }
 
                       if (snapshot.hasData) {
-                        if (snapshot.data!.docs.length > 0) {
+                        if (snapshot.data!.docs.isNotEmpty) {
                           return Align(
                             alignment: Alignment.topLeft,
                             child: Column(
@@ -99,7 +101,7 @@ class _InicioTutorState extends State<InicioTutor> {
                       return const Text('');
                     });
 
-                return Text('data');
+
               })
               .toList()
               .cast(),
@@ -115,7 +117,7 @@ class _InicioTutorState extends State<InicioTutor> {
       stream: documentReference.collection('usersTutorados').snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
-          return const Text('Ha ocurrido un error');
+          return Text(valores?.ha_error as String);
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -128,8 +130,7 @@ class _InicioTutorState extends State<InicioTutor> {
           child: ListView(
             children: snapshot.data!.docs
                 .map((DocumentSnapshot document) {
-                  print('nombre ${document.id}');
-                  if(document.id.length > 0){
+                  if(document.id.isNotEmpty){
                     return Padding(
                         padding: EdgeInsets.only(
                             bottom:
@@ -143,7 +144,7 @@ class _InicioTutorState extends State<InicioTutor> {
                             context.router.push(UserTutorado(args: datosUser));
                           },
                           style: ListTileStyle.drawer,
-                          contentPadding: EdgeInsets.all(0),
+                          contentPadding: const EdgeInsets.all(0),
                           dense: true,
                           visualDensity: VisualDensity.comfortable,
                           leading: DatosPersonales.getAvatar( document.id, 26),
@@ -169,7 +170,7 @@ class _InicioTutorState extends State<InicioTutor> {
                           ),
                         ));
                   }
-                  return Text('');
+                  return const Text('');
                 })
                 .toList()
                 .cast(),
@@ -181,7 +182,7 @@ class _InicioTutorState extends State<InicioTutor> {
 
   //Comprobar si el usuario tiene una recompensa por reclamar
   static Widget comprobarRecompensa(String idUser) {
-    if(idUser.length > 0) {
+    if(idUser.isNotEmpty) {
       return StreamBuilder(
           stream: Coleciones.COLECCION_USUARIOS
               .doc(idUser)
@@ -191,17 +192,17 @@ class _InicioTutorState extends State<InicioTutor> {
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
               if (!snapshot.data ['recompensa_x_200'].isEmpty) {
-                return Icon(Icons.redeem);
+                return const Icon(Icons.redeem);
               } else {
-                return Icon(Icons.check_box_outline_blank);
+                return const Icon(Icons.check_box_outline_blank);
               }
             } else if (snapshot.hasError) {
-              return Icon(Icons.error_outline);
+              return const Icon(Icons.error_outline);
             } else {
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             }
           });
     }
-    return Text('');
+    return const Text('');
   }
 }

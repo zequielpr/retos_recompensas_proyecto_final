@@ -12,6 +12,7 @@ import '../../datos/Colecciones.dart';
 import '../../widgets/Cards.dart';
 import '../../widgets/Dialogs.dart';
 import '../Perfil/admin_usuarios/Admin_tutores.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Salas extends StatefulWidget {
   const Salas({Key? key}) : super(key: key);
@@ -22,7 +23,7 @@ class Salas extends StatefulWidget {
 
 class _SalasState extends State<Salas> {
   var currentTutor;
-
+  AppLocalizations? valores;
   void initCurrentTutor(currentTutor) {
     if (mounted) {
       setState(() {
@@ -38,10 +39,11 @@ class _SalasState extends State<Salas> {
 
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Salas'),
+        title: Text(valores?.salas as String),
         actions: [
           Roll_Data.ROLL_USER_IS_TUTORADO
               ? Text('')
@@ -53,7 +55,7 @@ class _SalasState extends State<Salas> {
       body: Container(
         child: Roll_Data.ROLL_USER_IS_TUTORADO
             ? listaSalasVistaTutorado()
-            : getVistaSalasVistaTutor(context, Coleciones.COLECCION_USUARIOS),
+            : _getVistaSalasVistaTutor(context, Coleciones.COLECCION_USUARIOS),
       ),
     );
     ;
@@ -65,7 +67,7 @@ class _SalasState extends State<Salas> {
           context, Coleciones.COLECCION_USUARIOS, currentTutor);
     } else {
       return Center(
-        child: Text('Aun no tienes un tutor'),
+        child: Text(valores?.no_tutoria as String),
       );
     }
   }
@@ -123,7 +125,7 @@ class _SalasState extends State<Salas> {
         });
   }
 
-  static Widget getVistaSalasVistaTutor(
+  Widget _getVistaSalasVistaTutor(
       BuildContext context, CollectionReference collecionUsuarios) {
     //lista todas las salas que ha creado el usuario actual
     return StreamBuilder(
@@ -140,8 +142,8 @@ class _SalasState extends State<Salas> {
           );
         }
         if (streamSnapshot.data?.docs.isEmpty == true) {
-          return const Center(
-            child: Text('Crea una sala'),
+          return Center(
+            child: Text(valores?.crea_sala as String),
           );
         }
         if (streamSnapshot.hasData) {
@@ -188,9 +190,8 @@ class _SalasState extends State<Salas> {
 
     ;
 
-    var title = 'Numero maximo de salas';
-    var message =
-        'Numero maximo de salas alcanzado, debe eliminar una o más salas si desea crear una sala';
+    var title = valores?.num_max_salas_titulo as String;
+    var message = valores?.num_max_salas_contenido as String;
     var numeroDeSalas = await getNumerosalas();
     numeroDeSalas <= 3
         ? showModalCrearSala()
@@ -198,11 +199,15 @@ class _SalasState extends State<Salas> {
   }
 
   Future<void> showModalCrearSala() async {
+    var top = Pantalla.getPorcentPanntalla(2, context, 'y');
+    bool nombreSalaIsEmpty = false;
+    var h = Pantalla.getPorcentPanntalla(4, context, "y");
     bool botonActivo = true;
+    var heightLinea = Pantalla.getPorcentPanntalla(1, context, "y");
 
     var nombreSala = TextEditingController();
     showModalBottomSheet(
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10), topRight: Radius.circular(10))),
         isScrollControlled: true,
@@ -212,6 +217,7 @@ class _SalasState extends State<Salas> {
               builder: (BuildContext context, StateSetter setState) {
             return Padding(
               padding: EdgeInsets.only(
+                top: top,
                 left:
                     Pantalla.getPorcentPanntalla(Espacios.leftRight, ctx, 'x'),
                 right:
@@ -225,65 +231,69 @@ class _SalasState extends State<Salas> {
                   /*  Row(children: [
                   IconButton(onPressed: (){}, icon: Icon(Icons.cancel_outlined))
                 ],),*/
-
-                  Row(
-                    //mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Crear una nueva sala",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(
-                        height: Pantalla.getPorcentPanntalla(8, context, "y"),
-                      ),
-                    ],
+                  Card(
+                    elevation: 0,
+                    color: Colors.black26,
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    child: Container(
+                      width: 100,
+                      height: heightLinea,
+                    ),
                   ),
-                  /*const ListTile(
-                    leading: Material(
-                      color: Colors.transparent,
+
+                  Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 15, bottom: 10),
+                      child: Text(
+                        valores?.crea_nueva_sala as String,
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
                     ),
-                    title: Text(
-                      "Enviar solicitud a usuario",
-                      style: TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                ),*/
+                  ),
+                  const Divider(
+                    thickness: 1,
+                  ),
+
+                  SizedBox(
+                    height: h,
+                  ),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Column(
-                      children: [
-                        TextField(
-                          onChanged: (nombreSala) {
-                            if (nombreSala.length > 16) {
-                              setState(() {
-                                botonActivo = false;
-                              });
-                              return;
-                            }
-                            setState(() {
-                              botonActivo = true;
-                            });
-                          },
-                          maxLength: 16,
-                          controller: nombreSala,
-                          decoration: const InputDecoration(
-                              labelText: 'Nombre de sala'),
-                        )
-                      ],
+                    child: TextField(
+                      maxLength: 16,
+                      controller: nombreSala,
+                      decoration:
+                          InputDecoration(labelText: valores?.nombre_sala),
                     ),
                   ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: nombreSalaIsEmpty
+                        ? Text(valores
+                        ?.escribit_nombre_sala as String,
+                            style: const TextStyle(color: Colors.red),
+                          )
+                        : const Text(''),
+                  ),
 
+                  SizedBox(
+                    height: 10,
+                  ),
                   //Boton de enviar solicitud
                   Align(
                     alignment: Alignment.centerLeft,
                     child: ElevatedButton(
-                      child: Text('Crear sala'),
                       onPressed: botonActivo == true
                           ? () async {
+                              if (nombreSala.text.isEmpty) {
+                                setState(() {
+                                  nombreSalaIsEmpty = true;
+                                });
+                                return;
+                              }
                               final String name = nombreSala.text;
 
                               if (name.isNotEmpty) {
@@ -299,22 +309,19 @@ class _SalasState extends State<Salas> {
                                   'numTutorados': 0
                                 }).whenComplete(() => {
                                           ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
-                                                  content: Text(
-                                                      'Sala creada correctamente')))
+                                              .showSnackBar(SnackBar(
+                                                  content: Text(valores
+                                                          ?.sala_creada_correct
+                                                      as String)))
                                         });
                                 nombreSala.text = '';
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            'Escriba en nombre de la sala. Debe tener al menos dos letras')));
                               }
 
                               // Hide the bottom sheet
                               Navigator.of(context).pop();
                             }
                           : null,
+                      child: Text(valores?.crea_sala as String),
                     ),
                   )
                 ],

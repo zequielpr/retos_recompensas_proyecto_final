@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminRoles.dart';
 import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
@@ -10,10 +11,9 @@ import '../../../MediaQuery.dart';
 
 class AdminSala {
   static Future<void> eliminarSala(
-      String idSala, BuildContext context, BuildContext c) async {
-    var title = const Text('Eliminar Sala', textAlign: TextAlign.center);
-    var message = const Text(
-      '¿Deseas eliminar esta sala?',
+      String idSala, BuildContext context, BuildContext c, AppLocalizations? valores) async {
+    var title =  Text(valores?.eliminar_sala as String, textAlign: TextAlign.center);
+    var message =  Text(valores?.desea_eliminar_room as String,
       textAlign: TextAlign.center,
     );
 
@@ -44,7 +44,7 @@ class AdminSala {
             onPressed: () {
               context.router.pop();
             },
-            child: Text('Cancelar'),
+            child: Text('No'),
           ),
           TextButton(
             onPressed: () async {
@@ -52,7 +52,7 @@ class AdminSala {
               context.router.pop();
               contextSala.router.pop();
             },
-            child: Text('Eliminar'),
+            child: Text('Ok'),
           )
         ],
       ),
@@ -113,16 +113,16 @@ class AdminSala {
 
   //Eliminar mision
   static Future<void> eliminarMision(
-      String? idSala, String idMision, BuildContext context) async {
-    var title = 'Eliminar mision';
-    var message = '¿Deseas eliminar esta misión?';
+      String? idSala, String idMision, BuildContext context, AppLocalizations? valores) async {
+    var title = '${valores?.eliminar}';
+    var message = valores?.desea_eliminar_mision;
     actions(BuildContext context){
       return <Widget>[
         TextButton(
           onPressed: () {
             context.router.pop();
           },
-          child: Text('Cancelar'),
+          child: Text('No'),
         ),
         TextButton(
           onPressed: () async {
@@ -141,7 +141,7 @@ class AdminSala {
                   (value) => context.router.pop(),
             );
           },
-          child: Text('Eliminar'),
+          child: Text('Ok'),
         )
       ];
     }

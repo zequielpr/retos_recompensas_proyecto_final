@@ -9,6 +9,7 @@ import '../../../datos/UsuarioActual.dart';
 import 'EliminarCuenta.dart';
 import 'ModificarEmail.dart';
 import 'Sesion.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AdminCuenta extends StatefulWidget {
   const AdminCuenta({Key? key}) : super(key: key);
@@ -22,8 +23,11 @@ class _AdminCuentaState extends State<AdminCuenta> {
   bool isWaiting = false;
   var body;
   var loanding;
+  AppLocalizations? valores;
+
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     body = Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -55,7 +59,7 @@ class _AdminCuentaState extends State<AdminCuenta> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Cuenta'),
+        title: Text(valores?.cuenta as String),
       ),
       body: isWaiting?loanding:body,
     );
@@ -91,7 +95,7 @@ class _AdminCuentaState extends State<AdminCuenta> {
                   ?.sendEmailVerification()
                   .then((value) => _linkEnviado()),
               visualDensity: VisualDensity.compact,
-              title: Text('Verificar email'),
+              title: Text('${valores?.titulo_verificar_email}'),
               trailing: Icon(
                 Icons.arrow_forward_ios_sharp,
                 size: arrowSize,
@@ -117,7 +121,7 @@ class _AdminCuentaState extends State<AdminCuenta> {
         onTap: () => context.router
             .push(ChangePasswdRouter(contextPerfil: context)),
         visualDensity: VisualDensity.compact,
-        title: Text('Camiar contraseña'),
+        title: Text(valores?.actualizar_passw as String),
         trailing: Icon(
           Icons.arrow_forward_ios_sharp,
           size: arrowSize,
@@ -132,9 +136,9 @@ class _AdminCuentaState extends State<AdminCuenta> {
       margin: EdgeInsets.all(0),
       child: ListTile(
         leading: Icon(Icons.logout),
-        onTap: () => Sesion.dialogCerrarSesion(context, espararCerrarSesion),
+        onTap: () => Sesion.dialogCerrarSesion(context, espararCerrarSesion, valores),
         visualDensity: VisualDensity.compact,
-        title: Text('Cerrar sesión'),
+        title: Text(valores?.cerrar_sesion as String),
         trailing: Icon(
           Icons.arrow_forward_ios_sharp,
           size: arrowSize,
@@ -144,16 +148,16 @@ class _AdminCuentaState extends State<AdminCuenta> {
   }
 
   void _linkEnviado() {
-    String titulo = 'Link enviado';
+    String titulo = '${valores?.link_enviado}';
     String mensaje =
-        'Se ha enviado un link al nuevo correo, abre el link para verificar el correo';
+        '${valores?.link_enviado_nuevo_email}';
     actions(BuildContext context) {
       return <Widget>[
         TextButton(
           onPressed: () {
             context.router.pop();
           },
-          child: const Text('Ok'),
+          child: Text('${valores?.ok}'),
         ),
       ];
     }

@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import '../../MediaQuery.dart';
@@ -10,8 +11,9 @@ import '../../datos/Roll_Data.dart';
 import '../../widgets/Dialogs.dart';
 
 class AdminRoll {
-  static Widget getRoll(BuildContext context) {
-    var dropdownValue = Roll_Data.ROLL_USER_IS_TUTORADO ? 'Tutorado' : 'Tutor';
+  static Widget getRoll(BuildContext context, AppLocalizations? valores) {
+    var dropdownValue =
+        Roll_Data.ROLL_USER_IS_TUTORADO ? '${valores?.tutorado}' : '${valores?.tutor}';
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
       const Text('', style: TextStyle(fontSize: 20)),
       DropdownButton<String>(
@@ -27,9 +29,9 @@ class AdminRoll {
           height: 0,
         ),
         onChanged: (newValor) {
-          changeRoll(newValor, context);
+          changeRoll(newValor, context, valores);
         },
-        items: <String>['Tutorado', 'Tutor']
+        items: <String>['${valores?.tutorado}', '${valores?.tutor}']
             .map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
@@ -40,8 +42,9 @@ class AdminRoll {
     ]);
   }
 
-  static Future<void> changeRoll(rol_tutorado, BuildContext context) async {
-     actions(BuildContext context){
+  static Future<void> changeRoll(
+      rol_tutorado, BuildContext context, AppLocalizations? valores) async {
+    actions(BuildContext context) {
       return <Widget>[
         TextButton(
           onPressed: () {
@@ -53,8 +56,8 @@ class AdminRoll {
           onPressed: () async {
             var rol = rol_tutorado == 'Tutorado' ? true : false;
             await (Coleciones.COLECCION_USUARIOS
-                .doc(CurrentUser.getIdCurrentUser())
-                .update({'rol_tutorado': rol}))
+                    .doc(CurrentUser.getIdCurrentUser())
+                    .update({'rol_tutorado': rol}))
                 .catchError((onError) {})
                 .then((value) {});
             SystemNavigator.pop(animated: true);
@@ -63,14 +66,14 @@ class AdminRoll {
         ),
       ];
     }
-    var titulo = 'Cambiar Rol';
-    var message = 'Desea cambiar de rol? \n al cambiar de rol se reiniciara la aplicación';
+
+    var titulo = '${valores?.cambiar_rol}';
+    var message = '${valores?.cambiar_rol_contenido}';
     showMessaje(actions, titulo, message, context);
   }
 
-  static showMessaje(actions, String titulo, String mensaje, BuildContext context) {
+  static showMessaje(
+      actions, String titulo, String mensaje, BuildContext context) {
     Dialogos.mostrarDialog(actions, titulo, mensaje, context);
   }
-
-
 }

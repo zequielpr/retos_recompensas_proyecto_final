@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class Validar {
   static bool validarEmail(String email) {
     return RegExp(
-            r"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$")
+            r"^[a-z0-9!#$%&'*+/=?^_`{|}~-]{4,200}(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$")
         .hasMatch(email);
   }
 

@@ -1,12 +1,13 @@
 //Menu de opcione para administrar el perfil
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
 
 import '../../../Rutas.gr.dart';
 
 class MenuOption{
-  static getMenuOption(BuildContext context){
+  static getMenuOption(BuildContext context, AppLocalizations? valores){
     var arrowSize = 16.0;
     return showModalBottomSheet(context: context, builder: (context){
       return Container(
@@ -25,7 +26,7 @@ class MenuOption{
                 onTap: () => context.router.push(const AdminCuentaRoute()),
                 visualDensity: VisualDensity.compact,
                 leading: const Icon(Icons.settings),
-                title: const Text('Cuenta'),
+                title: Text(valores?.cuenta as String),
                 trailing: Icon(
                   Icons.arrow_forward_ios_sharp,
                   size: arrowSize,
@@ -40,7 +41,7 @@ class MenuOption{
                 onTap: () => context.router.push(const EditarPerfilRouter()),
                 visualDensity: VisualDensity.compact,
                 leading: const Icon(Icons.person),
-                title: const Text('Editar perfil'),
+                title: Text(valores?.editar_perfil as String),
                 trailing: Icon(
                   Icons.arrow_forward_ios_sharp,
                   size: arrowSize,

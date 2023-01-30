@@ -10,14 +10,15 @@ import '../../../datos/DatosPersonalUser.dart';
 import '../../../datos/UsuarioActual.dart';
 import '../../../recursos/DateActual.dart';
 import '../../../widgets/Dialogs.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InicioVistaTutorado {
   static Widget showCajaRecompensa(CollectionReference collectionReferenceUsers,
-      String idTutorActual, changeImg, cofre) {
+      String idTutorActual, changeImg, cofre, AppLocalizations? valores) {
     //Mensaje para cuendo no se encuentra ninguna recompensa disponible
 
     var tituloNoRecompensa = Text(
-      'Recompensa no disponible',
+      '${valores?.recompensa_no_disponible}',
       style: const TextStyle(
           fontSize: 20.0, color: Colors.black, fontWeight: FontWeight.w600),
     );
@@ -129,7 +130,7 @@ class InicioVistaTutorado {
                                                     actionOk,
                                                     Text(
                                                       key,
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                           fontSize: 20.0,
                                                           color: Colors.black,
                                                           fontWeight:
@@ -161,7 +162,6 @@ class InicioVistaTutorado {
                                     await docTutor
                                         .update({'puntos_acumulados': 0});
                                   });
-                                  print('se reclama');
                                   //añadir la recompensa a la billetera
                                   /* docTutor.update({'billetera_recompensa': snapshot['recompensa_x_200']}).whenComplete(() => {
                     docTutor.set({'recompensa_x_200': {} })
@@ -187,7 +187,7 @@ class InicioVistaTutorado {
                                   );
                                 }
                           : () =>
-                              mostrarMensaje(snapshot['puntosTotal'], context),
+                              mostrarMensaje(snapshot['puntosTotal'], context, valores),
                       child: Image.asset("lib/imgs/cofre/cofre.png")),
                 ),
                 DatosPersonales.getIndicadoAvance(
@@ -203,7 +203,7 @@ class InicioVistaTutorado {
     );
   }
 
-  static mostrarMensaje(puntosActuales, BuildContext context) {
+  static mostrarMensaje(puntosActuales, BuildContext context, AppLocalizations? valores) {
     actions(BuildContext context) {
       return <Widget>[
         TextButton(
@@ -215,7 +215,7 @@ class InicioVistaTutorado {
       ];
     }
 
-    var titulo ='Puntos insuficientes';
+    var titulo ='${valores?.puntos_insuficiente}';
     var content = Image.asset('lib/imgs/undraw_feeling_blue_4b7q.png');
 
     Dialogos.mostrarDialog(actions, titulo, content, context);

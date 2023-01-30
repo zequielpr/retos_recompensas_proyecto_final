@@ -6,6 +6,7 @@ import '../../../MediaQuery.dart';
 import '../../../datos/UsuarioActual.dart';
 import '../../../widgets/Dialogs.dart';
 import '../AdminRoles.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ModificarEmail extends StatefulWidget {
   const ModificarEmail({Key? key}) : super(key: key);
@@ -16,6 +17,7 @@ class ModificarEmail extends StatefulWidget {
 
 class _ModificarEmailState extends State<ModificarEmail> {
   var emailControler = TextEditingController();
+  AppLocalizations? valores;
 
   @override
   void initState() {
@@ -26,10 +28,11 @@ class _ModificarEmailState extends State<ModificarEmail> {
 
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     leftRight = Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
     return Scaffold(
         appBar: AppBar(
-          title: Text('Cambiar email'),
+          title: Text(valores?.modificar_email as String),
         ),
         body: Container(
           margin: EdgeInsets.only(
@@ -61,7 +64,7 @@ class _ModificarEmailState extends State<ModificarEmail> {
                 height: Pantalla.getPorcentPanntalla(6, context, 'y'),
                 child: ElevatedButton(
                     onPressed: () => changeEmail(emailControler.text),
-                    child: Text('Guardar')))
+                    child: Text(valores?.guardar as String)))
             ],
           ),
         ));
@@ -73,24 +76,24 @@ class _ModificarEmailState extends State<ModificarEmail> {
     bool emailCambiado = true;
     var title;
     var message;
-    const snackBar = SnackBar(
-      content: Text('Email cambiado correctamente'),
+    SnackBar snackBar = SnackBar(
+      content: Text('${valores?.email_actualizado_correct}'),
     );
     //print('email:  $newEmail');
     (CurrentUser.currentUser?.updateEmail(newEmail))?.catchError((onError) {
       var e = onError.toString();
       if (e.contains('invalid-email')) {
-        title = 'Email no válido';
-        message = 'Introduzca un email válido. Ejemplo@gmail.com';
+        title = valores?.email_incorrecto as String;
+        message = '${valores?.introduzca_email_valido}. ${valores?.ejemplo}@gmail.com';
       } else if (e.contains('firebase_auth/unknown')) {
-        title = 'Introduzca un email';
-        message = 'Introduzca un email';
+        title = '${valores?.introdc_correo_electronico}';
+        message = '${valores?.introdc_correo_electronico}';
       } else if (e.contains('requires-recent-login')) {
-        title ='Acción necesaria';
-        message = 'Cierre e inicie sesion para poder realizar esta acción';
+        title ='${valores?.accion_necesaria}';
+        message = '${valores?.accion_necesaria_contenido}';
       } else if (e.contains('email-already-in-use')) {
-        title ='Email en usao';
-        message = 'El email introducido ya esta en uso';
+        title ='${valores?.email_en_uso}';
+        message = '${valores?.email_en_uso_contenido}';
       }
       emailCambiado = false;
       _mostrarExepcion(title, message);

@@ -12,6 +12,7 @@ import '../../../datos/UsuarioActual.dart';
 import 'package:intl/intl.dart';
 
 import '../../Perfil/admin_usuarios/Admin_tutores.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Historial extends StatefulWidget {
   const Historial({
@@ -29,11 +30,13 @@ enum Orden { ascendente, descendente }
 class _HistorialState extends State<Historial> {
   Campos? _campo = Campos.titulo;
   Orden? orden = Orden.ascendente;
+  AppLocalizations? valores;
   var campo = 'titulo';
   var order = false;
   var isChecked = false;
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     return Scaffold(
         appBar: AppBar(
           actions: [
@@ -45,10 +48,10 @@ class _HistorialState extends State<Historial> {
                   child: Icon(Icons.filter_list)),
             )
           ],
-          title: Text('Recompensas recibidas'),
+          title: Text('${valores?.recompensas_recibidas}'),
         ),
-        body: _getTodasRecompensas(Coleciones.COLECCION_USUARIOS,
-            UsuarioTutores.tutorActual, campo, order)
+        body: _getTodasRecompensas(
+            UsuarioTutores.tutorActual, campo, order, valores)
         //_getTidasRecompensas(
         //                 CollecUser.COLECCION_USUARIOS, 'hr44Bc4CRqWJjFfDYMCBmu707Qq1')
         );
@@ -87,7 +90,7 @@ class _HistorialState extends State<Historial> {
                             height: 15.0,
                           ),
                           Text(
-                            'Ordenar por:',
+                            '${valores?.ordenad_por}',
                             style: TextStyle(fontSize: 22),
                           ),
                           Column(
@@ -95,8 +98,8 @@ class _HistorialState extends State<Historial> {
                               ListTile(
                                 contentPadding: EdgeInsets.all(0),
                                 dense: true,
-                                title: const Text(
-                                  'Título',
+                                title: Text(
+                                  '${valores?.titulo}',
                                   style: TextStyle(fontSize: 22),
                                 ),
                                 leading: Radio<Campos>(
@@ -111,8 +114,8 @@ class _HistorialState extends State<Historial> {
                               ),
                               ListTile(
                                 contentPadding: EdgeInsets.all(0),
-                                title: const Text(
-                                  'Fecha de reclamo',
+                                title: Text(
+                                  '${valores?.fecha_reclamo}',
                                   style: TextStyle(fontSize: 22),
                                 ),
                                 leading: Radio<Campos>(
@@ -127,7 +130,8 @@ class _HistorialState extends State<Historial> {
                               ),
                             ],
                           ),
-                          Text('Orden:', style: TextStyle(fontSize: 22)),
+                          Text('${valores?.ordenad_por}',
+                              style: TextStyle(fontSize: 22)),
                           const SizedBox(
                             height: 5.0,
                           ),
@@ -136,8 +140,8 @@ class _HistorialState extends State<Historial> {
                               ListTile(
                                 contentPadding: EdgeInsets.all(0),
                                 dense: true,
-                                title: const Text(
-                                  'Ascendente',
+                                title: Text(
+                                  '${valores?.ascendente}',
                                   style: TextStyle(fontSize: 22),
                                 ),
                                 leading: Radio<Orden>(
@@ -153,8 +157,8 @@ class _HistorialState extends State<Historial> {
                               ListTile(
                                 contentPadding: EdgeInsets.all(0),
                                 dense: true,
-                                title: const Text(
-                                  'Descendente',
+                                title: Text(
+                                  '${valores?.descendente}',
                                   style: TextStyle(fontSize: 22),
                                 ),
                                 leading: Radio<Orden>(
@@ -188,8 +192,8 @@ class _HistorialState extends State<Historial> {
                                       onPressed: () {
                                         context.router.pop();
                                       },
-                                      child: const Text(
-                                        "Cancelar",
+                                      child: Text(
+                                        '${valores?.cancelar}',
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
@@ -208,8 +212,8 @@ class _HistorialState extends State<Historial> {
                                         ordenar(campo, order);
                                         context.router.pop();
                                       },
-                                      child: const Text(
-                                        "OK",
+                                      child: Text(
+                                        '${valores?.ok}',
                                         textAlign: TextAlign.center,
                                       ),
                                     )
@@ -241,11 +245,13 @@ class _HistorialState extends State<Historial> {
     });
   }
 
-  Widget _getTodasRecompensas(CollectionReference collectionReferenceUser,
-      String idTutorActual, campo, orden) {
-
-    if(idTutorActual.isEmpty){
-      return const Center(child: Text('Aún no tienes una tutoría'),);
+  Widget _getTodasRecompensas(
+      String idTutorActual, campo, orden, AppLocalizations? valores) {
+    CollectionReference collectionReferenceUser = Coleciones.COLECCION_USUARIOS;
+    if (idTutorActual.isEmpty) {
+      return Center(
+        child: Text('${valores?.no_tutoria}'),
+      );
     }
 
     return FutureBuilder<QuerySnapshot>(
@@ -257,13 +263,16 @@ class _HistorialState extends State<Historial> {
           .orderBy(campo, descending: order)
           .get(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-
-        if(snapshot.connectionState == ConnectionState.waiting){
-          return const Center(child: CircularProgressIndicator(),);
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         }
 
-        if(snapshot.data?.docs.isEmpty == true){
-          return const Center(child: Text('Historial vacío'),);
+        if (snapshot.data?.docs.isEmpty == true) {
+          return Center(
+            child: Text('${valores?.historial_vacio}'),
+          );
         }
 
         if (snapshot.hasData) {
@@ -305,8 +314,6 @@ class _HistorialState extends State<Historial> {
 
         return const Text('vacío');
       },
-
-
     );
   }
 
@@ -341,8 +348,11 @@ class _HistorialState extends State<Historial> {
                 padding: EdgeInsets.only(
                     right: Pantalla.getPorcentPanntalla(3, context, 'x')),
                 child: Text(
-                  'Reclamado en ${DateFormat('dd-MM-yyyy').format(fechaReclamo.toDate())}',
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400, color: Colors.white),
+                  '${valores?.reclamada_el} ${DateFormat('dd-MM-yyyy').format(fechaReclamo.toDate())}',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white),
                 ),
               )
             ],

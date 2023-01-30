@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/datos/DatosPersonalUser.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
@@ -8,7 +9,7 @@ import '../../../MediaQuery.dart';
 import 'eliminar_tutorado.dart';
 
 class Admin_tutorados {
-  static getAllUser(BuildContext context) {
+  static getAllUser( AppLocalizations? valores) {
     return StreamBuilder<DocumentSnapshot>(
       stream: Coleciones.COLECCION_USUARIOS
           .doc(CurrentUser.getIdCurrentUser())
@@ -19,11 +20,11 @@ class Admin_tutorados {
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
-          return Text("Something went wrong");
+          return Text("${valores?.ha_error}");
         }
 
         if (!snapshot.hasData) {
-          Text('Aun no tienes usuarios en tu tutoría');
+          Text('${valores?.no_usuarios_tutoria}');
         }
 
         if (snapshot.hasData && snapshot.data!.data() != null) {
@@ -34,7 +35,7 @@ class Admin_tutorados {
 
             List<dynamic> listaUsuariosTutorados = data['idUserTotorado'];
             if(listaUsuariosTutorados.isEmpty){
-              return const Center(child: Text('Aun no tienes usuarios en tu tutoría'),);
+              return Center(child: Text('${valores?.no_usuarios_tutoria}'),);
             }
 
             return ListView.builder(
@@ -44,14 +45,13 @@ class Admin_tutorados {
                 return Container(
                   child: Center(
                     child: getCardUsuarioTutorado(
-                        listaUsuariosTutorados[index], context),
+                        listaUsuariosTutorados[index], context, valores),
                   ),
                 );
               },
             );
           }catch(e, s){
-            print('Error $e');
-            return const Center(child: Text('Ha ocurrido un error'),);
+            return Center(child: Text('${valores?.ha_error}'),);
           }
         }
 
@@ -59,12 +59,12 @@ class Admin_tutorados {
           return const Center(child: CircularProgressIndicator(),);
         }
 
-        return const Center(child: Text('Aun no tienes usuarios en tu tutoría'),);
+        return Center(child: Text('${valores?.no_usuarios_tutoria}'),);
       },
     );
   }
 
-  static getCardUsuarioTutorado(String idUsuario, BuildContext context) {
+  static getCardUsuarioTutorado(String idUsuario, BuildContext context, AppLocalizations? valores) {
     return Card(
       color: Colors.transparent,
       elevation: 0,
@@ -85,8 +85,8 @@ class Admin_tutorados {
                 ),
                 padding: MaterialStateProperty.all(EdgeInsets.all(0)),
                 ),
-            child: Text('Eliminar'),
-            onPressed: () => EliminarTutorado.eliminarUserTutorado(context, idUsuario),
+            child: Text('${valores?.eliminar}'),
+            onPressed: () => EliminarTutorado.eliminarUserTutorado(context, idUsuario, valores),
           ),
         ),
       ),

@@ -5,6 +5,7 @@ import 'package:retos_proyecto/MediaQuery.dart';
 import '../../../../../../datos/Colecciones.dart';
 import '../../../../../../datos/UsuarioActual.dart';
 import '../../../../../../widgets/Dialogs.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddReward extends StatefulWidget {
   final userId;
@@ -19,11 +20,13 @@ class _AddRewardState extends State<AddReward> {
   var contenidoController = TextEditingController();
   var userId;
   _AddRewardState(this.userId);
+  AppLocalizations? valores;
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Establecer recompensa'),
+        title: Text('${valores?.add_recompensa}'),
       ),
       body: Center(
         child: Column(
@@ -53,7 +56,7 @@ class _AddRewardState extends State<AddReward> {
             ElevatedButton(
               onPressed: () async =>
                   addReward(tituloController.text, contenidoController.text),
-              child: Text('Guardar'),
+              child: Text('${valores?.guardar}'),
             )
           ],
         ),
@@ -67,10 +70,10 @@ class _AddRewardState extends State<AddReward> {
       autofocus: true,
       autocorrect: true,
       controller: tituloController,
-      decoration: const InputDecoration(
-          hintText: 'ejemplo',
+      decoration: InputDecoration(
+          hintText: '${valores?.ejemplo}',
           border: OutlineInputBorder(),
-          labelText: 'Título'),
+          labelText: '${valores?.titulo}'),
     );
   }
 
@@ -80,10 +83,10 @@ class _AddRewardState extends State<AddReward> {
       maxLength: 200,
       autocorrect: true,
       controller: contenidoController,
-      decoration: const InputDecoration(
-        contentPadding: EdgeInsets.all(10),
-          border: OutlineInputBorder(),
-          labelText: 'Contenido'),
+      decoration: InputDecoration(
+        contentPadding: const EdgeInsets.all(10),
+          border: const OutlineInputBorder(),
+          labelText: '${valores?.contenido}'),
     );
   }
 
@@ -111,13 +114,13 @@ class _AddRewardState extends State<AddReward> {
           onPressed: () {
             context.router.pop();
           },
-          child: const Text('Ok'),
+          child: Text('${valores?.ok}'),
         ),
       ];
     }
 
-    var tituloMensaje = 'Rellenar campo';
-    var message = 'Es necesario asignar un titulo y un contenido para asignar una recompensa';
+    var tituloMensaje = '${valores?.rellenar_campos}';
+    var message = '${valores?.titulo_contenido_recompensa}';
 
     Dialogos.mostrarDialog(actions, tituloMensaje, message, context);
   }

@@ -6,6 +6,7 @@ import 'package:retos_proyecto/Rutas.gr.dart';
 
 import '../Servicios/Autenticacion/login.dart';
 import 'contenido.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Onboarding extends StatefulWidget {
   @override
@@ -16,26 +17,11 @@ class _OnboardingState extends State<Onboarding> {
   int currentIndex = 0;
   late PageController _controller;
   late List<UnbordingContent> contents;
+  AppLocalizations? valores;
 
   @override
   void initState() {
     _controller = PageController(initialPage: 0);
-    contents = [
-      UnbordingContent(
-          title: 'Salas',
-          image: 'lib/imgs/undraw_Educator_re_ju47.png',
-          discription:
-              "Crea o unite a salas en las cuales podrás recibir o asignar tareas"),
-      UnbordingContent(
-          title: 'Tareas',
-          image: 'lib/imgs/undraw_Accept_tasks_re_09mv.png',
-          discription: "Recibe o asigna tareas a cambio de puntos"),
-      UnbordingContent(
-          title: 'Recompensas',
-          image: 'lib/imgs/undraw_Gift_box_re_vau4.png',
-          discription: "Recibe o asigna recompensas a cambio de puntos"),
-    ];
-
     super.initState();
   }
 
@@ -47,6 +33,8 @@ class _OnboardingState extends State<Onboarding> {
 
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
+    _setContent(context);
     return Scaffold(
       body: Column(
         children: [
@@ -60,8 +48,8 @@ class _OnboardingState extends State<Onboarding> {
                 style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all(Colors.transparent)),
-                child: const Text(
-                  'Saltar',
+                child: Text(
+                  valores?.boton_saltar_p_1 as String,
                   style: TextStyle(color: Colors.black54),
                 ),
               ),
@@ -125,8 +113,8 @@ class _OnboardingState extends State<Onboarding> {
             width: double.infinity,
             child: ElevatedButton(
               child: Text(currentIndex == contents.length - 1
-                  ? "Comenzar"
-                  : "Siguiente"),
+                  ? valores?.boton_comenzar_p_3 as String
+                  : valores?.boton_next_p_1 as String),
               onPressed: () {
                 if (currentIndex == contents.length - 1) {
                   context.router.replaceAll([const LoginRouter()]);
@@ -153,5 +141,23 @@ class _OnboardingState extends State<Onboarding> {
         color: Theme.of(context).primaryColor,
       ),
     );
+  }
+
+  void _setContent(BuildContext context){
+    contents = [
+      UnbordingContent(
+          title: valores?.titulo_p_1 as String,
+          image: 'lib/imgs/undraw_Educator_re_ju47.png',
+          discription:
+          valores?.contenido_p_1 as String),
+      UnbordingContent(
+          title: valores?.titulo_p_2 as String,
+          image: 'lib/imgs/undraw_Accept_tasks_re_09mv.png',
+          discription: valores?.contenido_p_2 as String),
+      UnbordingContent(
+          title: valores?.titulo_p_3 as String,
+          image: 'lib/imgs/undraw_Gift_box_re_vau4.png',
+          discription: valores?.contenido_p_3 as String),
+    ];
   }
 }

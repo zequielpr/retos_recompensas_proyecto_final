@@ -20,6 +20,7 @@ import '../../../datos/ValidarDatos.dart';
 import '../../../recursos/AppName.dart';
 import '../../../recursos/Espacios.dart';
 import '../Autenticacion.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class IniSesionEmailPassword extends StatelessWidget {
   final TransDatosInicioSesion args;
@@ -97,12 +98,14 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
     });
   }
 
+  AppLocalizations? valores;
   var body;
 
   var isWaiting = false;
   late Widget loanding;
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     body = Container(
       margin: EdgeInsets.only(
           left: Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x'),
@@ -147,7 +150,7 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: TextButton(
         onPressed: () => _ActionCrearUnaCuenta(args),
-        child: Text('Crear una cuenta en <App name>'),
+        child: Text(valores?.crear_cuenta as String),
       ),
     );
   }
@@ -178,7 +181,6 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
   }
 
   Widget _getTextFielCorreo() {
-    print('debe hacer focus en el email ${args.focusEmail}');
     return Column(
       children: [
         TextField(
@@ -194,16 +196,15 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
             setStateBtn(false);
           },
           controller: emailController,
-          decoration: const InputDecoration(
-              hintText: 'ejemplo@gmail.com',
+          decoration: InputDecoration(
+              hintText: '${valores?.ejemplo }@gmail.com',
               border: OutlineInputBorder(),
               labelText: 'Email'),
         ),
         Align(
           alignment: Alignment.centerLeft,
           child: elusuarioNoExiste == true
-              ? Text(
-                  'Usuario incorrecto',
+              ? Text(valores?.email_incorrecto as String,
                   style: TextStyle(fontSize: 14, color: Colors.red),
                 )
               : SizedBox(),
@@ -228,7 +229,6 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
                   emailController.text.isNotEmpty &&
                   Validar.validarEmail(emailController.text.trim())) {
                 setStateBtn(true);
-                print('Es valido');
                 return;
               }
               setStateBtn(false);
@@ -244,14 +244,13 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
                         icon: iconPassw,
                       )
                     : null,
-                hintText: 'escribe tu contraseña',
-                labelText: 'Contraseña'),
+                hintText: valores?.escribe_passw,
+                labelText: valores?.passw),
           ),
           Align(
             alignment: Alignment.centerLeft,
             child: isPasswordIncorrect == true
-                ? Text(
-                    'Contraseña incorrecta',
+                ? Text(valores?.passw_incorrecta as String,
                     style: TextStyle(fontSize: 14, color: Colors.red),
                   )
                 : SizedBox(),
@@ -266,7 +265,7 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
         onPressed: () {
           context.router.push(RecoveryPassw());
         },
-        child: Text('¿Has olvidado tu contraseña'));
+        child: Text(valores?.passw_olvidada as String));
   }
 
   Widget _getBtnIniciarSesion() {
@@ -292,8 +291,7 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
                     if (resultado != 's')_indicarDatoErroneo(resultado);
                   }
                 : null,
-            child: Text(
-              'Iniciar sesion',
+            child: Text(valores?.inicia_sesion as String,
             )));
   }
 
@@ -306,7 +304,7 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
           true,
           CurrentUser.currentUser != null
               ? CurrentUser.currentUser?.email as String
-              : '');
+              : emailController.text);
       context.router.push(InfoVerificacionEmailRouter(arg: datos));
       return;
     }

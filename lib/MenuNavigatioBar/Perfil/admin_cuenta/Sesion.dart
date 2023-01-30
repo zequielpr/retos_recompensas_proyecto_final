@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 
@@ -9,19 +10,19 @@ import '../../../widgets/Dialogs.dart';
 import '../AdminRoles.dart';
 
 class Sesion {
-  static dialogCerrarSesion(BuildContext context, espararCerrarSesion) {
-    var titulo ='Cerrar sesión';
-    var mensaje ='¿Desea cerrar sesión?';
+  static dialogCerrarSesion(BuildContext context, espararCerrarSesion, AppLocalizations? valores) {
+    var titulo ='${valores?.cerrar_sesion}';
+    var mensaje ='${valores?.desea_cerrar_sesion}';
 
     List<TextButton> actions(BuildContext context) {
       return [
         TextButton(
           onPressed: () => context.router.pop(),
-          child: Text('Cancelar'),
+          child: Text('No'),
         ),
         TextButton(
           onPressed: () => cerrarSesion(context, espararCerrarSesion),
-          child: Text('Cerrar sesión'),
+          child: Text('Ok'),
         )
       ];
     }

@@ -3,6 +3,7 @@ import 'package:retos_proyecto/datos/Colecciones.dart';
 
 import '../Servicios/Notificaciones/notificaciones_bandeja.dart';
 import 'Perfil/admin_usuarios/Admin_tutores.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Notificaciones extends StatefulWidget {
   const Notificaciones({Key? key}) : super(key: key);
@@ -13,6 +14,7 @@ class Notificaciones extends StatefulWidget {
 
 class _NotificacionesState extends State<Notificaciones> {
   GlobalKey _scaffold = GlobalKey();
+  AppLocalizations? valores;
   void initCurrentTutor(currentTutor) {
     if (mounted) setState(() {});
   }
@@ -24,16 +26,16 @@ class _NotificacionesState extends State<Notificaciones> {
 
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     return Scaffold(
         key: _scaffold,
         appBar: AppBar(
           title: Align(
             alignment: Alignment.center,
-            child: Text('Notificaciones'),
+            child: Text(valores?.notificaciones as String),
           ),
         ),
-        body: BandejaNotificaciones.getBandejaNotificaciones(
-            Coleciones.COLECCION_USUARIOS, context));
+        body: BandejaNotificaciones(context, valores).getBandejaNotificaciones());
     ;
   }
 }

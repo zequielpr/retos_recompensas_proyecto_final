@@ -12,6 +12,7 @@ import '../../../MediaQuery.dart';
 import '../../../datos/TransferirDatos.dart';
 import '../../../widgets/Dialogs.dart';
 import '../../Perfil/AdminRoles.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final GlobalKey<NavigatorState> _navKey = GlobalKey<NavigatorState>();
 
@@ -31,16 +32,19 @@ class _SalaContVistaTutorState extends State<SalaContVistaTutor>
   final TransferirDatos args;
   _SalaContVistaTutorState(this.args);
   late final TabController _tabController;
+  AppLocalizations? valores;
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
 
+
   String _selectedMenu = '';
 
   @override
   Widget build(BuildContext contextSala) {
+    valores = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(args.nombreSala),
@@ -48,7 +52,7 @@ class _SalaContVistaTutorState extends State<SalaContVistaTutor>
           IconButton(
             onPressed: () {
               enviarSolicitudeUsuario.InterfaceEnviarSolicitud(
-                  contextSala,  args.sala.getIdSala, args.nombreSala);
+                  contextSala,  args.sala.getIdSala, args.nombreSala, valores);
             },
             icon: Icon(Icons.person_add),
           ),
@@ -70,14 +74,14 @@ class _SalaContVistaTutorState extends State<SalaContVistaTutor>
                       PopupMenuItem<Menu>(
                         value: Menu.AddMision,
                         onTap: () => _crearMision(context),
-                        child: Text('Añadir misión'),
+                        child: Text(valores?.crear_mision as String),
                       ),
                       PopupMenuItem<Menu>(
                         value: Menu.EliminarSala,
-                        child: Text('Eliminar sala'),
+                        child: Text(valores?.eliminar_sala as String),
                         onTap: () async {
                           await AdminSala.eliminarSala(
-                              args.sala.getIdSala, contextSala, context);
+                              args.sala.getIdSala, contextSala, context, valores);
                         },
                       )
                     ]);
@@ -86,12 +90,12 @@ class _SalaContVistaTutorState extends State<SalaContVistaTutor>
         bottom: TabBar(
           indicatorColor: Colores.colorPrincipal,
           controller: _tabController,
-          tabs: const [
+          tabs:  [
             Tab(
-              child: Text('Misiones'),
+              child: Text(valores?.misiones as String),
             ),
             Tab(
-              child: Text('Usuarios'),
+              child: Text(valores?.usuarios as String),
             ),
           ],
         ),
@@ -120,12 +124,12 @@ class _SalaContVistaTutorState extends State<SalaContVistaTutor>
   _crearMision(BuildContext context) {
     AdminSala.comprobarNumMisiones(args.sala.getIdSala).then((value) {
       if (value <= 7) {
-        context.router.push(AddMisionRouter(
+        context.router.push( AddMisionRouter(
             collectionReferenceMisiones: args.sala.getColecMisiones,
             contextSala: context));
       } else {
-        var titulo ='Numero maximo de misiones';
-        var mensaje = 'Elimina una misión para crear una nueva';
+        var titulo = valores?.num_maximo_misiones_titulo as String;
+        var mensaje = valores?.num_maximo_misiones;
         action(BuildContext context) {
           return <Widget>[
             TextButton(

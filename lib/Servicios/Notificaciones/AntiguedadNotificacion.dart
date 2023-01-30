@@ -1,7 +1,9 @@
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../recursos/DateActual.dart';
 
 class AntiguedadNotificaciones{
-  static String getAntiguedad( fecha_solicitu){
+  static String getAntiguedad( fecha_solicitu, AppLocalizations? valores){
     DateTime fechaActual = DateActual.dateActual;
     dynamic tiempo = fechaActual.millisecondsSinceEpoch -
         fecha_solicitu.millisecondsSinceEpoch;
@@ -20,19 +22,19 @@ class AntiguedadNotificaciones{
     tiempo = tiempo.round();
     switch (contador) {
       case 1:
-        unidadTiempo = tiempo > 1 ? '$tiempo segundos': '$tiempo segundo';
+        unidadTiempo = tiempo > 1 ? '$tiempo ${valores?.segundo}${valores?.s} ${valores?.hace}': '$tiempo ${valores?.segundo} ${valores?.hace}';
         break;
       case 2:
-        unidadTiempo = tiempo > 1 ? '$tiempo minutos': '$tiempo minuto';
+        unidadTiempo = tiempo > 1 ? '$tiempo ${valores?.minuto}${valores?.s} ${valores?.hace}': '$tiempo ${valores?.minuto} ${valores?.hace}';
         break;
       case 3:
-        unidadTiempo = tiempo > 1 ? '$tiempo horas': '$tiempo hora';
+        unidadTiempo = tiempo > 1 ? '$tiempo ${valores?.hora}${valores?.s} ${valores?.hace}': '$tiempo ${valores?.hora} ${valores?.hace}';
         break;
       case 4:
-        unidadTiempo = tiempo > 1 ? '$tiempo días': '$tiempo día';
+        unidadTiempo = tiempo > 1 ? '$tiempo ${valores?.dia}${valores?.s} ${valores?.hace}': '$tiempo ${valores?.dia} ${valores?.hace}';
         break;
       default:
-        unidadTiempo = 'un momento';
+        unidadTiempo = '${valores?.un_momento}';
         break;
     }
 

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../MediaQuery.dart';
 import '../../../datos/Colecciones.dart';
@@ -21,7 +22,7 @@ class UsuarioTutores {
     });
   }
 
-  static getAllTutores() {
+  static getAllTutores(AppLocalizations? valores) {
     return StreamBuilder(
         stream: Coleciones.COLECCION_USUARIOS
             .doc(CurrentUser.getIdCurrentUser())
@@ -29,7 +30,7 @@ class UsuarioTutores {
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return Text('Something went wrong');
+            return Text('${valores?.ha_error}');
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -38,13 +39,9 @@ class UsuarioTutores {
             );
           }
 
-          if (snapshot.hasError) {
-            return Text("Algo ha ido mal");
-          }
-
-          if (snapshot.data?.docs.length == 0) {
+          if (snapshot.data?.docs.isEmpty == true) {
             return Center(
-              child: Text('Aún no tienes un tutor'),
+              child: Text('${valores?.no_tutor}'),
             );
           }
 
@@ -55,19 +52,19 @@ class UsuarioTutores {
               itemBuilder: (BuildContext context, int index) {
                 return Container(
                   child: Center(
-                    child: getCardUsuarioTutorado(
-                        snapshot.data?.docs[index].id, context),
+                    child: getCardUsuarioTutor(
+                        snapshot.data?.docs[index].id, context, valores),
                   ),
                 );
               },
             );
           } else {
-            return Text('Aun no tienes un tutor');
+            return Text('${valores?.no_tutor}');
           }
         });
   }
 
-  static getCardUsuarioTutorado(String? idUsuario, BuildContext context) {
+  static getCardUsuarioTutor(String? idUsuario, BuildContext context, AppLocalizations? valores) {
     return Card(
       color: Colors.transparent,
       elevation: 0,
@@ -85,7 +82,7 @@ class UsuarioTutores {
           height: Pantalla.getPorcentPanntalla(5, context, 'y'),
           width: Pantalla.getPorcentPanntalla(20, context, 'x'),
           child: Row(
-            children: [MarcActualTutor(idUsuario), opciones(idUsuario)],
+            children: [MarcActualTutor(idUsuario), opciones(idUsuario, valores)],
           ),
         ),
       ),
@@ -93,7 +90,7 @@ class UsuarioTutores {
   }
 
   static String _selectedMenu = '';
-  static Widget opciones(String idTutor) {
+  static Widget opciones(String idTutor, AppLocalizations? valores) {
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
       return PopupMenuButton<Menu>(
@@ -107,12 +104,12 @@ class UsuarioTutores {
           itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
                 PopupMenuItem<Menu>(
                   value: Menu.AddMision,
-                  onTap: () => DejarTutoria.eliminarTutor(context, idTutor),
-                  child: Text('Dejar tutoría'),
+                  onTap: () => DejarTutoria.eliminarTutor(context, idTutor, valores),
+                  child: Text('${valores?.dejar_tutoria}'),
                 ),
                 PopupMenuItem<Menu>(
                   value: Menu.EliminarSala,
-                  child: Text('Seleccionar tutoría'),
+                  child: Text('${valores?.seleccionar_tutoria}'),
                   onTap: () => TutorActual.setNewActualTutor(idTutor),
                 )
               ]);

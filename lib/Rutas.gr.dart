@@ -44,7 +44,7 @@ import 'Servicios/Autenticacion/EmailPassw/InfoVerificacionEmail.dart' as _i8;
 import 'Servicios/Autenticacion/EmailPassw/IniciarSessionEmailPassw.dart'
     as _i3;
 import 'Servicios/Autenticacion/EmailPassw/RecogerEmail.dart' as _i5;
-import 'Servicios/Autenticacion/EmailPassw/RecogerPassw.dart' as _i6;
+import 'Servicios/Autenticacion/EmailPassw/RecogerPassw/RecogerPassw.dart' as _i6;
 import 'Servicios/Autenticacion/EmailPassw/RecoverPassw.dart' as _i7;
 import 'Servicios/Autenticacion/login.dart' as _i2;
 import 'splashScreen.dart' as _i1;

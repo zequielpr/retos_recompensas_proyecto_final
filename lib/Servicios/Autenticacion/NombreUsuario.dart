@@ -14,6 +14,7 @@ import '../../datos/UsuarioActual.dart';
 import '../../datos/ValidarDatos.dart';
 import '../Notificaciones/AdministrarTokens.dart';
 import 'Autenticacion.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NombreUsuarioWidget {
   static var nombreUsuarioActual;
@@ -26,10 +27,16 @@ class NombreUsuarioWidget {
   var body;
   var loanding;
   bool isWaiting = false;
+  AppLocalizations? valores;
 
   NombreUsuarioWidget(
       this._setState, this._context, this._args, this._isRegistrandoUser) {
     _userNameController.text = _args.userName;
+    valores = valores = AppLocalizations.of(_context);
+  }
+
+  void cancelTimer(){
+    _timer.cancel();
   }
 
   var _userNameController = TextEditingController();
@@ -80,7 +87,7 @@ class NombreUsuarioWidget {
       child: Padding(
         padding: EdgeInsets.only(bottom: Pantalla.getPorcentPanntalla(4, context, 'y')),
         child: Text(
-          'Nombre de usuario',
+          valores?.nombre_usuario as String,
           style:
           GoogleFonts.roboto(fontSize: 25, fontWeight: FontWeight.w400),
         ),
@@ -100,7 +107,7 @@ class NombreUsuarioWidget {
           },
           decoration: InputDecoration(
               border: const OutlineInputBorder(),
-              labelText: "Nombre de usuario",
+              labelText: valores?.nombre_usuario as String,
               suffixIcon: _estadoUsuario),
         ),
         noMostrarAdver == false ? mensajeAdver : Text('')
@@ -118,7 +125,7 @@ class NombreUsuarioWidget {
           onPressed: _botonActivo
               ? () async => _guardarNombreUsuario(_args)
               : null,
-          child: Text(_isRegistrandoUser ? "Registrarme" : 'Guardar',
+          child: Text(_isRegistrandoUser ? valores?.registrarse as String : valores?.guardar as String,
               style: GoogleFonts.roboto(
                   fontSize: 17, fontWeight: FontWeight.w600)),
         ),
@@ -153,7 +160,7 @@ class NombreUsuarioWidget {
     _timer.cancel();
     if (!Validar.validarUserName(userName)) {
       //Mostrar advertencia especificando por que el nombre de usuario no es valido
-      var mensaje = '3-30 caracteres, no caracteres especiales';
+      var mensaje = valores?.entre_3_30_caracteres_no_especiales;
       _mostrarMensjae(mensaje);
       _cambiarCheck(_noDisponible);
     } else {
@@ -166,7 +173,7 @@ class NombreUsuarioWidget {
               _botonActivo = true;
               _cambiarCheck(_disponible);
             } else {
-              var mensaje = 'Usuario no disponible';
+              var mensaje = valores?.usuario_no_disponible as String;
               _mostrarMensjae(mensaje);
               _botonActivo = false;
               _cambiarCheck(_noDisponible);
@@ -175,7 +182,6 @@ class NombreUsuarioWidget {
 
           _contador = 0;
           timer.cancel();
-          print("Debe comprobarse el nombre de usuario");
         }
       });
     }
@@ -301,12 +307,12 @@ class NombreUsuarioWidget {
 
   Future<void> _modificarUserName(String userName) async {
     bool succeful = true;
-    var mensaje = 'Nombre de usuario guardado correctamente';
+    var mensaje = valores?.nombre_actualizado_correct as String;
     await Coleciones.COLECCION_USUARIOS
         .doc(CurrentUser.getIdCurrentUser())
         .update({'nombre_usuario': userName}).catchError((onError) {
       succeful = false;
-      mensaje = 'El nombre de usuario no se ha guardado correctamente';
+      mensaje = valores?.nombre_usuario_no_guardado as String;
     });
 
     if (succeful) {

@@ -9,6 +9,7 @@ import '../../datos/Colecciones.dart';
 import '../Perfil/admin_usuarios/Admin_tutores.dart';
 import 'Tutor/VistaInicioTutor.dart';
 import 'Tutorado/InicioVistaTutorado.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -19,6 +20,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late String currentTutor = '';
+  AppLocalizations? valores;
 
   void initCurrentTutor(currentTutor){
     if(mounted) {
@@ -38,24 +40,6 @@ class _HomeState extends State<Home> {
     cofre_6 = Image.asset("lib/imgs/cofre/cofre_6.png");
   }
 
-  //Metodo callback abriendo cofre
-  /*
-  String cofre_1 = "lib/imgs/cofre/cofre_1.png";
-  String cofre_2 = "lib/imgs/cofre/cofre_2.png";
-  String cofre_3 = "lib/imgs/cofre/cofre_3.png";
-  String cofre_4 = "lib/imgs/cofre/cofre_4.png";
-  String cofre_5 = "lib/imgs/cofre/cofre_5.png";
-  String cofre_6 = "lib/imgs/cofre/cofre_6.png";
-   */
-
-  var cofres = [
-    "lib/imgs/cofre/cofre_1.png",
-    "lib/imgs/cofre/cofre_2.png",
-    "lib/imgs/cofre/cofre_3.png",
-    "lib/imgs/cofre/cofre_4.png",
-    "lib/imgs/cofre/cofre_5.png",
-    "lib/imgs/cofre/cofre_6.png"
-  ];
 
   var cofre = Image.asset("lib/imgs/cofre/cofre_1.png");
 
@@ -63,8 +47,7 @@ class _HomeState extends State<Home> {
     var count = 0;
     Timer.periodic(Duration(milliseconds: 200), (timer) {
       count++;
-      setState(() {
-        print("holaaaa");
+      setState(() {;
         cofre = cofre_6;
       });
 
@@ -75,16 +58,17 @@ class _HomeState extends State<Home> {
   }
 
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Home'),
+        title: Text(AppLocalizations.of(context)?.inicio as String),
         actions: [
           Roll_Data.ROLL_USER_IS_TUTORADO?
           Padding(
             padding: EdgeInsets.only(right: 5),
             child: IconButton(
-              tooltip: 'Historial',
+              tooltip: valores?.historial,
               onPressed: () => context.router.pushNamed('Historial'),
               icon: Icon(Icons.history),
             ),
@@ -102,9 +86,9 @@ class _HomeState extends State<Home> {
           Coleciones.COLECCION_USUARIOS,
           currentTutor,
           changeImage,
-          cofre);
+          cofre, valores);
     }else{
-      return Center(child: Text('Aun no tienes una tutoría'),);
+      return Center(child: Text(valores?.no_tutoria as String),);
     }
 
   }

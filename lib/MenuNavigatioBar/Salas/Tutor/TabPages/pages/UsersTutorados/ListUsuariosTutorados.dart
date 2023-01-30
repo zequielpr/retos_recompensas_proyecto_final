@@ -12,8 +12,9 @@ import '../../../../../../datos/TransferirDatos.dart';
 import '../../../../../../datos/UsuarioActual.dart';
 import '../../../../../../widgets/Dialogs.dart';
 import 'ExpulsarDeSala.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class ListUsuarios extends StatelessWidget {
+class ListUsuarios extends StatefulWidget {
   final CollectionReference collectionReferenceUsuariosTutorados;
   final BuildContext contextSala;
   final CollectionReference collectionReferenceMisiones;
@@ -24,11 +25,27 @@ class ListUsuarios extends StatelessWidget {
       required this.collectionReferenceMisiones})
       : super(key: key);
 
-  static const String titulo = 'Expulsar';
-  static const String mensaje = '¿Deseas explusar este usuario de esta sala?';
+  State<ListUsuarios> createState() => ListaUsuarioState(
+      collectionReferenceMisiones,
+      contextSala,
+      collectionReferenceUsuariosTutorados);
+}
 
+class ListaUsuarioState extends State<ListUsuarios> {
+  final CollectionReference collectionReferenceUsuariosTutorados;
+  final BuildContext contextSala;
+  final CollectionReference collectionReferenceMisiones;
+
+  ListaUsuarioState(this.collectionReferenceMisiones, this.contextSala,
+      this.collectionReferenceUsuariosTutorados);
+
+  static AppLocalizations? valores;
+  static String titulo = '${valores?.expulsar}';
+  static String mensaje = '${valores?.expulsar_contenido}';
+  @override
   @override
   Widget build(BuildContext context) {
+    valores = AppLocalizations.of(context);
     return Scaffold(
       body: Center(
         child: StreamBuilder(
@@ -41,8 +58,8 @@ class ListUsuarios extends StatelessWidget {
             }
 
             if (streamSnapshot.data?.docs.isEmpty == true) {
-              return const Center(
-                child: Text('Añade un usuario a tu tutoría'),
+              return Center(
+                child: Text(valores?.add_usuario as String),
               );
             }
 
@@ -81,7 +98,7 @@ class ListUsuarios extends StatelessWidget {
                       },
                       leading:
                           DatosPersonales.getAvatar(documentSnapshot.id, 20),
-                      title:DatosPersonales.getDato(
+                      title: DatosPersonales.getDato(
                           documentSnapshot.id, 'nombre', TextStyle()),
                       subtitle: DatosPersonales.getDato(
                           documentSnapshot.id, 'nombre_usuario', TextStyle()),
@@ -122,108 +139,116 @@ class ListUsuarios extends StatelessWidget {
 //Enviar solici
 
 class enviarSolicitudeUsuario {
-  static InterfaceEnviarSolicitud(BuildContext context, String idSala, String nombreSala) {
+  static InterfaceEnviarSolicitud(BuildContext context, String idSala,
+      String nombreSala, AppLocalizations? valores) {
+    var top = Pantalla.getPorcentPanntalla(2, context, 'y');
     var leftRight =
         Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
+    var h = Pantalla.getPorcentPanntalla(4, context, "y");
+    var heightLinea = Pantalla.getPorcentPanntalla(1, context, "y");
     var _userNameController = TextEditingController();
+    bool nUserIsEmpty = false;
     return showModalBottomSheet(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10), topRight: Radius.circular(10))),
         isScrollControlled: true,
         context: context,
-        builder: (BuildContext ctx) {
-          return Padding(
-            padding: EdgeInsets.only(
-                top: Pantalla.getPorcentPanntalla(2, context, 'y'),
-                left: leftRight,
-                right: leftRight,
-                bottom: MediaQuery.of(ctx).viewInsets.bottom + 30),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                /*  Row(children: [
-                  IconButton(onPressed: (){}, icon: Icon(Icons.cancel_outlined))
-                ],),*/
-
-                Row(
-                  //mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: Pantalla.getPorcentPanntalla(4, context, "y"),
+        builder: (
+          BuildContext ctx,
+        ) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                  top: top,
+                  left: leftRight,
+                  right: leftRight,
+                  bottom: MediaQuery.of(ctx).viewInsets.bottom + 30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Card(
+                    elevation: 0,
+                    color: Colors.black26,
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    child: Container(
+                      width: 100,
+                      height: heightLinea,
                     ),
-                    Align(
-                      alignment: Alignment.centerLeft,
+                  ),
+
+                  Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 15, bottom: 10),
                       child: Text(
-                        "Enviar solicitud",
-                        style: TextStyle(
+                        valores?.enviar_solicitud as String,
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ),
+                  ),
+                  const Divider(
+                    thickness: 1,
+                  ),
+                  SizedBox(
+                    height: h,
+                  ),
+                  TextField(
+                    maxLength: 30,
+                    controller: _userNameController,
+                    decoration: InputDecoration(
+                        labelText: valores?.nombre_usuario as String),
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: nUserIsEmpty
+                        ? Text(
+                            '${valores?.introduce_nombre_usuario}',
+                            style: const TextStyle(color: Colors.red),
+                          )
+                        : const Text(''),
+                  ),
 
-                  ],
-                ),
-                SizedBox(
-                  height: Pantalla.getPorcentPanntalla(1.5, context, "y"),
-                ),
-                TextField(
-                  controller: _userNameController,
-                  decoration:
-                      const InputDecoration(labelText: 'Nombre de usuario'),
-                ),
-                SizedBox(
-                  height: Pantalla.getPorcentPanntalla(2, context, 'y'),
-                ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  //Boton de enviar solicitud
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: ElevatedButton(
+                        onPressed: () async {
+                          if (_userNameController.text.isEmpty) {
+                            setState(() {
+                              nUserIsEmpty = true;
+                            });
+                            return;
+                          }
 
-                //Boton de enviar solicitud
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: ElevatedButton(
-                      onPressed: () async {
-                        if (_userNameController.text.isEmpty) {
-                          mostrarMensaje(context);
-                          return;
-                        }
+                          var resultadoFinal =
+                              await Solicitudes.enviarSolicitud(
+                                  _userNameController.text, idSala, nombreSala);
 
-                        var resultadoFinal = await Solicitudes.enviarSolicitud(
-                            _userNameController.text,
-                            idSala, nombreSala);
-
-                        var colorSnackBar =
-                            resultadoFinal == true ? Colors.green : Colors.red;
-                        var mensaje = resultadoFinal == true
-                            ? 'Solicitud enviada correctamente'
-                            : 'Error al enviar solicitud, el usuario no existe';
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: colorSnackBar,
-                            content: Text(mensaje)));
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('Enviar solicitud')),
-                )
-              ],
-            ),
-          );
+                          var colorSnackBar = resultadoFinal == true
+                              ? Colors.green
+                              : Colors.red;
+                          var mensaje = resultadoFinal == true
+                              ? valores?.solicitud_enviada_correct as String
+                              : valores?.error_enviar_solicitud as String;
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: colorSnackBar,
+                              content: Text(mensaje)));
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(valores?.enviar_solicitud as String)),
+                  )
+                ],
+              ),
+            );
+          });
         });
-  }
-
-  static mostrarMensaje(BuildContext context) {
-    actions(BuildContext context) {
-      return <Widget>[
-        TextButton(
-          onPressed: () {
-            context.router.pop();
-          },
-          child: const Text('Ok'),
-        ),
-      ];
-    }
-
-    var titulo = 'Nombre de usuario vacío';
-    var message =
-        'Es necesario escribir un nombre de usuario para enviar una solicitud';
-
-    Dialogos.mostrarDialog(actions, titulo, message, context);
   }
 
   //Metodo para ennviar solicitud de usuario
