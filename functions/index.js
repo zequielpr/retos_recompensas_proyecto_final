@@ -531,3 +531,128 @@ exports.eliminarNotificaciones = functions.pubsub.schedule('1 12 * * *')
     }
 
   });
+
+
+
+  //Notificar solicitud de confirmacion de mision------------------------------------------------------------------------
+  exports.notifiConfirmMision = functions.firestore
+  .document(
+    "/notificaciones/doc_nitificaciones/confirm_mision_solicitud/{confirm_mision_solicitud_id}"
+  )
+  .onCreate(async (snapshot, context) => {
+    var nuevaSolicitud = snapshot.data();
+
+    var user_id = nuevaSolicitud.id_tutor;
+    var nombre_emisor = nuevaSolicitud.nombre_tutorado;
+    var nombre_mision = nuevaSolicitud.nombre_mision;
+
+    //Obtener documento de usuaro al cual se le ha enviado la solicitud
+    var documentUser = db.collection("usuarios").doc(user_id.trim());
+
+
+    //Crea la notificacion
+    const payload = {
+      notification: {
+        title: "Confirmar misión",
+        body: nombre_emisor + ": confirmar misión " + nombre_mision,
+      },
+    };
+
+    //Obtiene los tokens del usuario que se le ha enviado la solicitud y se le envia la notificación
+    await documentUser.get().then(async (snapshot) => {
+      var tokens = snapshot.data().tokens;
+
+      //console.log("Tokens encontrados: ", tokens);
+      var respuesta = await admin.messaging().sendToDevice(tokens, payload);
+      await cleanupTokens(respuesta, tokens, documentUser);
+    });
+
+    //Funcion para eliminar todos los tokens que no tengan ningun dispositivo asosciado
+    //Funcion para eliminar todos los tokens que no tengan ningun dispositivo asosciado
+    async function cleanupTokens(response, tokens, documento) {
+      const tokensDelete = [];
+      response.results.forEach(async (result, index) => {
+        const error = result.error;
+        if (error) {
+          console.error(
+            "Failure sending notification to",
+            tokens[index],
+            error
+          );
+          // Cleanup the tokens who are not registered anymore.
+          if (
+            error.code === "messaging/invalid-registration-token" ||
+            error.code === "messaging/registration-token-not-registered"
+          ) {
+            const deleteTask = await documento.update({
+              tokens: admin.firestore.FieldValue.arrayRemove(tokens[index]),
+            }); //Borrar token obsoleto
+            tokensDelete.push(deleteTask);
+          }
+        }
+      });
+      return Promise.all(tokensDelete);
+    }
+  });
+
+   //Notificar solicitud de confirmacion de mision----------------------------Europa--------------------------------------------
+  exports.notifiConfirmMision = functions.region('europe-west1').firestore
+  .document(
+    "/notificaciones/doc_nitificaciones/confirm_mision_solicitud/{confirm_mision_solicitud_id}"
+  )
+  .onCreate(async (snapshot, context) => {
+    var nuevaSolicitud = snapshot.data();
+
+    var user_id = nuevaSolicitud.id_tutor;
+    var nombre_emisor = nuevaSolicitud.nombre_tutorado;
+    var nombre_mision = nuevaSolicitud.nombre_mision;
+
+    //Obtener documento de usuaro al cual se le ha enviado la solicitud
+    var documentUser = db.collection("usuarios").doc(user_id.trim());
+
+
+    //Crea la notificacion
+    const payload = {
+      notification: {
+        title: "Confirmar misión",
+        body: nombre_emisor + ": confirmar misión " + nombre_mision,
+      },
+    };
+
+    //Obtiene los tokens del usuario que se le ha enviado la solicitud y se le envia la notificación
+    await documentUser.get().then(async (snapshot) => {
+      var tokens = snapshot.data().tokens;
+
+      //console.log("Tokens encontrados: ", tokens);
+      var respuesta = await admin.messaging().sendToDevice(tokens, payload);
+      await cleanupTokens(respuesta, tokens, documentUser);
+    });
+
+    //Funcion para eliminar todos los tokens que no tengan ningun dispositivo asosciado
+    //Funcion para eliminar todos los tokens que no tengan ningun dispositivo asosciado
+    async function cleanupTokens(response, tokens, documento) {
+      const tokensDelete = [];
+      response.results.forEach(async (result, index) => {
+        const error = result.error;
+        if (error) {
+          console.error(
+            "Failure sending notification to",
+            tokens[index],
+            error
+          );
+          // Cleanup the tokens who are not registered anymore.
+          if (
+            error.code === "messaging/invalid-registration-token" ||
+            error.code === "messaging/registration-token-not-registered"
+          ) {
+            const deleteTask = await documento.update({
+              tokens: admin.firestore.FieldValue.arrayRemove(tokens[index]),
+            }); //Borrar token obsoleto
+            tokensDelete.push(deleteTask);
+          }
+        }
+      });
+      return Promise.all(tokensDelete);
+    }
+  });
+
