@@ -156,7 +156,7 @@ class _UserTutoradoState extends State<UserTutorado> {
                     return Cards.getCardMision(documentSnapshot,
                         args.snap.id.trim(),
                         context,
-                        documentSnapshot['recompensaMision'], valores);
+                        documentSnapshot['recompensaMision'], valores, 'x');
                   },
                 );
               }

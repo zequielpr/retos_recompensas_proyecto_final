@@ -66,7 +66,7 @@ class _ListMisionesTutoradoState extends State<ListMisionesTutorado> {
               final DocumentSnapshot documentSnapshot =
                   streamSnapshot.data!.docs[index];
               return Cards.getCardMision(
-                  documentSnapshot, CurrentUser.getIdCurrentUser(), context, 0, valores);
+                  documentSnapshot, CurrentUser.getIdCurrentUser(), context, 0, valores, args.nombreSala);
             },
           );
         }

@@ -96,6 +96,12 @@ class _SalasState extends State<Salas> {
           listaIdasSalas = documentSnapShot[
               "salas_id"]; //Ids de las salas a las que está añadido el usuario actual
 
+          if(listaIdasSalas.isEmpty){
+            return Center(
+              child: Text(valores?.unete_sala as String),
+            );;
+          }
+
           //Recorre las lista de Ids de salas y obtiene las snap del tutor actual
           return ListView.builder(
             itemBuilder: (BuildContext, index) {
@@ -108,7 +114,7 @@ class _SalasState extends State<Salas> {
                       .doc(listaIdasSalas[index])
                       .snapshots(),
                   builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(
                         child: CircularProgressIndicator(),
                       );

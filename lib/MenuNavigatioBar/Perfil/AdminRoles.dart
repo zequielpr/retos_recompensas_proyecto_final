@@ -54,7 +54,7 @@ class AdminRoll {
         ),
         TextButton(
           onPressed: () async {
-            var rol = rol_tutorado == 'Tutorado' ? true : false;
+            var rol = rol_tutorado == valores?.tutorado ? true : false;
             await (Coleciones.COLECCION_USUARIOS
                     .doc(CurrentUser.getIdCurrentUser())
                     .update({'rol_tutorado': rol}))

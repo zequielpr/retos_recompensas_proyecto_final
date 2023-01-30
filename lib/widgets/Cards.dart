@@ -18,6 +18,7 @@ import 'package:retos_proyecto/widgets/Dialogs.dart';
 
 import '../Colores.dart';
 import '../Servicios/Notificaciones/AntiguedadNotificacion.dart';
+import '../Servicios/Notificaciones/NotiSolicitudConfirmacion.dart';
 import '../datos/DatosPersonalUser.dart';
 import '../datos/Roll_Data.dart';
 import '../Servicios/Solicitudes/AdminSolicitudes.dart';
@@ -166,12 +167,6 @@ class Cards {
             ListTile(
               contentPadding:
                   EdgeInsets.only(left: leftRight, right: leftRight),
-              /*
-                                leading: const CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4U5WnC1MCC0IFVbJPePBA2H0oEep5aDR_xS_FbNx3wlqqORv2QRsf5L5fbwOZBeqMdl4&usqp=CAU"),
-                                ),
-                                 */
               title: RichText(
                 overflow: TextOverflow.ellipsis,
                 maxLines: 3,
@@ -204,8 +199,13 @@ class Cards {
   }
 
   //Terjeta de misiones
-  static Widget getCardMision( DocumentSnapshot documentSnapshot, String userId,
-      BuildContext context, dynamic puntos_total_de_usuario, AppLocalizations? valores) {
+  static Widget getCardMision(
+      DocumentSnapshot documentSnapshot,
+      String userId,
+      BuildContext context,
+      dynamic puntos_total_de_usuario,
+      AppLocalizations? valores,
+      String nombreSala) {
     String nombreMision = documentSnapshot['nombreMision'];
     String objetivoMision = documentSnapshot['objetivoMision'];
     List<dynamic> completada_por = documentSnapshot['completada_por'];
@@ -288,21 +288,26 @@ class Cards {
                   nombreMision,
                   docMision,
                   Recompensa,
-                  puntos_total_de_usuario, valores)),
+                  puntos_total_de_usuario,
+                  valores,
+                  nombreSala)),
         ),
       ),
     );
   }
 
   static mostrarDialog(
-      BuildContext context,
-      List completada_por,
-      List solicitudeConf,
-      String userId,
-      String nombreMision,
-      DocumentReference docMision,
-      double recompensa,
-      dynamic puntos_total_de_usuario, AppLocalizations? valores) {
+    BuildContext context,
+    List completada_por,
+    List solicitudeConf,
+    String userId,
+    String nombreMision,
+    DocumentReference docMision,
+    double recompensa,
+    dynamic puntos_total_de_usuario,
+    AppLocalizations? valores,
+    String nombreSala,
+  ) {
     if (completada_por.contains(userId)) {
       getDialogMisionRealizada(context, nombreMision, valores);
     } else if (solicitudeConf.contains(userId)) {
@@ -311,7 +316,8 @@ class Cards {
     } else {
       if (Roll_Data.ROLL_USER_IS_TUTORADO) {
         //Solicitar confirmacion de mision11
-        getDialogSolicitud(context, nombreMision, docMision, userId, valores);
+        getDialogSolicitud(
+            context, nombreMision, docMision, userId, valores, nombreSala);
         return;
       }
       String titulo = nombreMision;
@@ -331,7 +337,8 @@ class Cards {
   }
 
   //Dialogs_____________________________________________________-
-  static void getDialogMisionRealizada(BuildContext context, nombreMision, AppLocalizations? valores) {
+  static void getDialogMisionRealizada(
+      BuildContext context, nombreMision, AppLocalizations? valores) {
     String titulo = nombreMision;
     String mensaje = '${valores?.esta_misions_realizada}';
     actions(BuildContext context) {
@@ -423,7 +430,8 @@ class Cards {
     Dialogos.mostrarDialog(actions, titulo, mensaje, context);
   }
 
-  static void getDialogSolicitud(context, nombreMision, docMision, userId, AppLocalizations? valores) {
+  static void getDialogSolicitud(context, nombreMision, docMision, userId,
+      AppLocalizations? valores, String nombreSala) {
     String mensaje = '${valores?.enviar_solicitud_confirmacion}';
     String titulo = nombreMision;
     actions(BuildContext context) {
@@ -436,6 +444,8 @@ class Cards {
             await docMision.update({
               'solicitu_confirmacion': FieldValue.arrayUnion([userId])
             });
+            await NotiSolicitudConfirmacion.setNotiSolicitudNotificacion(
+                nombreMision, nombreSala);
             Navigator.pop(context, 'OK');
           },
           child: Text('${valores?.enviar}'),
@@ -609,6 +619,55 @@ class Cards {
           style: TextStyle(
               fontSize: 35, color: Color.fromARGB(255, 255, 255, 255)),
         )),
+      ),
+    );
+  }
+
+  //Cuerpo de las notificaciones sobre las misiones_________________________________________________________________
+  static Widget cardNotiSolicitudMision(DocumentSnapshot documentSnapshot,
+      BuildContext context, AppLocalizations? valores) {
+    DateActual.getActualDateTime();
+
+    Timestamp fecha_solicitu = documentSnapshot['fecha_actual'];
+
+    var unidadTiempo =
+        AntiguedadNotificaciones.getAntiguedad(fecha_solicitu, valores);
+
+    var leftRight =
+        Pantalla.getPorcentPanntalla(Espacios.leftRight, context, 'x');
+    return Card(
+      color: Colors.transparent,
+      elevation: 0,
+      child: SizedBox(
+        child: Column(
+          children: [
+            ListTile(
+              contentPadding:
+                  EdgeInsets.only(left: leftRight, right: leftRight),
+              title: RichText(
+                overflow: TextOverflow.ellipsis,
+                maxLines: 3,
+                text: TextSpan(children: [
+                  TextSpan(
+                      text: documentSnapshot['nombre_tutorado'],
+                      style: GoogleFonts.roboto(fontWeight: FontWeight.w500)),
+                  TextSpan(
+                    text:
+                        ': confirmar ${documentSnapshot['nombre_mision'].toString()}',
+                  ),
+                  TextSpan(
+                    style: GoogleFonts.roboto(fontWeight: FontWeight.w500),
+                    text:
+                        ' ${valores?.en} ${documentSnapshot['nombre_sala'].toString()}',
+                  ),
+                ], style: GoogleFonts.roboto(color: Colors.black)),
+              ),
+              subtitle: Text("$unidadTiempo"),
+              leading:
+                  DatosPersonales.getAvatar(documentSnapshot['id_emisor'], 20),
+            ),
+          ],
+        ),
       ),
     );
   }

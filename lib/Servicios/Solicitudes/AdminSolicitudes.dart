@@ -63,7 +63,7 @@ class Solicitudes {
         await sala
             .collection('usersTutorados')
             .doc(idCurrentUser)
-            .set({'xxx': 0}).then((value) async => {
+            .set({}).then((value) async => {
                   await addUser(id_emisor, CurrentUser.getIdCurrentUser()),
                 });
         return true;

@@ -178,5 +178,6 @@
         "si": "Sí",
         "no": "No",
         "link_enviado_nuevo_email": "Se ha enviado un link al nuevo correo, abre el link para verificar el correo",
-        "introduce_nombre_usuario": "introduce_nombre_usuario"
+        "introduce_nombre_usuario": "introduce_nombre_usuario",
+        "unete_sala": "Únete a una sala"
   }
