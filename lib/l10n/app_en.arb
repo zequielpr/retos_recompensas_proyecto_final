@@ -210,5 +210,6 @@
     "no": "No",
     "link_enviado_nuevo_email": "A link has been sent to the new email, open the link to verify the email",
     "introduce_nombre_usuario": "Please enter a username",
-    "unete_sala": "Join a room"
+    "unete_sala": "Join a room",
+    "confirmar": "confirm"
 }

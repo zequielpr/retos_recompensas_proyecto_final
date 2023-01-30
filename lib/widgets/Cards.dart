@@ -653,12 +653,12 @@ class Cards {
                       style: GoogleFonts.roboto(fontWeight: FontWeight.w500)),
                   TextSpan(
                     text:
-                        ': confirmar ${documentSnapshot['nombre_mision'].toString()}',
+                        ': ${valores?.confirmar} ${documentSnapshot['nombre_mision'].toString()} ${valores?.en}',
                   ),
                   TextSpan(
                     style: GoogleFonts.roboto(fontWeight: FontWeight.w500),
                     text:
-                        ' ${valores?.en} ${documentSnapshot['nombre_sala'].toString()}',
+                        ' ${documentSnapshot['nombre_sala'].toString()}',
                   ),
                 ], style: GoogleFonts.roboto(color: Colors.black)),
               ),
