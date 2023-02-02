@@ -107,7 +107,7 @@ class _UserTutoradoState extends State<UserTutorado> {
                         ),
                         Tab(
                           icon: Icon(
-                            Icons.apps,
+                            Icons.redeem,
                             color: Colors.black,
                           ),
                           text: '${valores?.recompensa}',
@@ -155,8 +155,7 @@ class _UserTutoradoState extends State<UserTutorado> {
                         streamSnapshot.data!.docs[index];
                     return Cards.getCardMision(documentSnapshot,
                         args.snap.id.trim(),
-                        context,
-                        documentSnapshot['recompensaMision'], valores, 'x');
+                        context, valores, 'x', puntos);
                   },
                 );
               }

@@ -203,9 +203,8 @@ class Cards {
       DocumentSnapshot documentSnapshot,
       String userId,
       BuildContext context,
-      dynamic puntos_total_de_usuario,
       AppLocalizations? valores,
-      String nombreSala) {
+      String nombreSala, puntos_total_de_usuario) {
     String nombreMision = documentSnapshot['nombreMision'];
     String objetivoMision = documentSnapshot['objetivoMision'];
     List<dynamic> completada_por = documentSnapshot['completada_por'];
