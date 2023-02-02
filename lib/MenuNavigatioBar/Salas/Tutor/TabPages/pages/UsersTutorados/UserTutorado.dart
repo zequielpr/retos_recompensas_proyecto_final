@@ -27,8 +27,6 @@ class UserTutorado extends StatefulWidget {
 class _UserTutoradoState extends State<UserTutorado> {
   final TransfDatosUserTutorado args;
   _UserTutoradoState(this.args);
-  double _currentSliderValue = 15;
-  static var puntos;
   AppLocalizations? valores;
 
   @override
@@ -119,7 +117,7 @@ class _UserTutoradoState extends State<UserTutorado> {
           ),
           body: TabBarView(
             children: [
-              _getListaMisiones(colecTodosLosUsuarios, args, puntos, valores),
+              _getListaMisiones(colecTodosLosUsuarios, args, valores),
               Center(
                 child: getRecompensaForUser(valores),
               ),
@@ -131,7 +129,7 @@ class _UserTutoradoState extends State<UserTutorado> {
   ///Devuelve el indicador de los puntos del usuarrio tutorado en tiempo real
 
   static Widget _getListaMisiones(
-      collectionReferenceUsers, TransfDatosUserTutorado args, dynamic puntos, AppLocalizations? valores) {
+      collectionReferenceUsers, TransfDatosUserTutorado args, AppLocalizations? valores) {
     //Toma los puntos totales en tiempo real, sin necedidad de reiniciar el widget
     return StreamBuilder(
         stream: collectionReferenceUsers
@@ -144,6 +142,7 @@ class _UserTutoradoState extends State<UserTutorado> {
             return const Text("Loading");
           }
           var userDocument = snapshot.data as DocumentSnapshot;
+          print('puntos totales ${ userDocument['puntosTotal']}');
           return StreamBuilder(
             stream: args.collectionReferenceMisiones.snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
@@ -155,7 +154,7 @@ class _UserTutoradoState extends State<UserTutorado> {
                         streamSnapshot.data!.docs[index];
                     return Cards.getCardMision(documentSnapshot,
                         args.snap.id.trim(),
-                        context, valores, 'x', puntos);
+                        context, valores, 'x', userDocument['puntosTotal']);
                   },
                 );
               }

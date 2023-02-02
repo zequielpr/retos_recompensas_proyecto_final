@@ -210,8 +210,9 @@ class Cards {
     List<dynamic> completada_por = documentSnapshot['completada_por'];
     List<dynamic> solicitudeConf = documentSnapshot['solicitu_confirmacion'];
     DocumentReference docMision = documentSnapshot.reference;
-
     double Recompensa = documentSnapshot['recompensaMision'];
+
+
 
     return Card(
       margin: EdgeInsets.only(
