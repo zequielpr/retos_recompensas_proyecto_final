@@ -98,6 +98,7 @@ flutter:
      - lib/imgs/undraw_Gift_box_re_vau4.png
      - lib/imgs/undraw_feeling_blue_4b7q.png
      - lib/imgs/undraw_xmas_surprise_57p1.png
+     - lib/imgs/img_login.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

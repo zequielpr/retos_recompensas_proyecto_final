@@ -175,10 +175,11 @@ class _LoginState extends State<Login> {
     switch (option) {
       case 'p':
         return CircleAvatar(
+
           backgroundColor: TRANSPARENT,
           maxRadius: sizeImg,
           minRadius: 0,
-          backgroundImage: AssetImage('lib/imgs/ic_launcher.png'),
+          backgroundImage: const AssetImage('lib/imgs/img_login.png'),
         );
       case 'g':
         return CircleAvatar(
