@@ -66,7 +66,7 @@ class MainState extends State<Main> {
               android: AndroidNotificationDetails(
                 channel.id,
                 channel.name,
-                //channel.description,
+                channelDescription: channel.description,
                 color: Colors.blue,
                 playSound: true,
                 icon: '@mipmap/ic_launcher',

@@ -32,33 +32,89 @@ import 'main.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-const AndroidNotificationChannel channel = AndroidNotificationChannel(
+late  AndroidNotificationChannel channel;
+late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+bool isFlutterLocalNotificationsInitialized = false;
+
+Future<void> setupFlutterNotifications() async {
+  if (isFlutterLocalNotificationsInitialized) {
+    return;
+  }
+
+  channel = const AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
-    //'This channel is used for important notifications.', // description
+    description:
+    'This channel is used for important notifications.', // description
     importance: Importance.high,
-    playSound: true);
+    showBadge: false
+  );
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+  flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
-  await Firebase.initializeApp();
-
+  /// Create an Android Notification Channel.
+  ///
+  /// We use this channel in the `AndroidManifest.xml` file to override the
+  /// default FCM channel to enable heads up notifications.
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
+      AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
 
+  /// Update the iOS foreground notification presentation options to allow
+  /// heads up notifications.
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
     badge: true,
     sound: true,
   );
+
+  isFlutterLocalNotificationsInitialized = true;
+}
+
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+  await setupFlutterNotifications();
+
+/*  RemoteNotification? notification = message.notification;
+  AndroidNotification? android = message.notification?.android;
+  if (notification != null && android != null) {
+    flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        'xxxxxxxxxxxxxx',
+        'xxxxx',
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            channelDescription: channel.description,
+            color: Colors.blue,
+            playSound: true,
+            icon: '@mipmap/ic_launcher',
+          ),
+        ));
+    print('final');
+  }*/
+}
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await setupFlutterNotifications();
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
 
   runApp(splashScreen());
 }
@@ -68,7 +124,7 @@ class splashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //Color de la barra inferior
-  Valores.setValores(context);
+    Valores.setValores(context);
     return MaterialApp.router(
       supportedLocales: L10n.all,
       localizationsDelegates: const [
