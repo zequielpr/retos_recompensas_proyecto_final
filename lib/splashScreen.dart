@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:isolate';
+import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -13,11 +15,13 @@ import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
+import 'package:retos_proyecto/generated/intl/messages_en.dart';
 import 'package:retos_proyecto/recursos/DateActual.dart';
 import 'package:retos_proyecto/recursos/Valores.dart';
 
 import 'Colores.dart';
 import 'Rutas.gr.dart';
+import 'Servicios/Notificaciones/AdminTopics.dart';
 import 'datos/Roll_Data.dart';
 import 'Rutas.dart';
 import 'Servicios/Autenticacion/DatosNewUser.dart';
@@ -32,7 +36,7 @@ import 'main.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-late  AndroidNotificationChannel channel;
+late AndroidNotificationChannel channel;
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 bool isFlutterLocalNotificationsInitialized = false;
 
@@ -41,14 +45,14 @@ Future<void> setupFlutterNotifications() async {
     return;
   }
 
+
+
   channel = const AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title
-    description:
-    'This channel is used for important notifications.', // description
-    importance: Importance.high,
-    showBadge: false
-  );
+      'high_importance_channel', // id
+      'High Importance Notifications', // title
+      description:
+          'This channel is used for important notifications.', // description
+      importance: Importance.max,);
 
   flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -58,7 +62,7 @@ Future<void> setupFlutterNotifications() async {
   /// default FCM channel to enable heads up notifications.
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()
+          AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
 
   /// Update the iOS foreground notification presentation options to allow
@@ -73,19 +77,25 @@ Future<void> setupFlutterNotifications() async {
 }
 
 
+
+/*
 @pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+Future<dynamic> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
   await setupFlutterNotifications();
 
-/*  RemoteNotification? notification = message.notification;
+ // AppLocalizations? valores = AppLocalizations.of( contx);
+
+
+  RemoteNotification? notification = message.notification;
   AndroidNotification? android = message.notification?.android;
+
   if (notification != null && android != null) {
     flutterLocalNotificationsPlugin.show(
         notification.hashCode,
-        'xxxxxxxxxxxxxx',
+        'xxxxxxxx',
         'xxxxx',
         NotificationDetails(
           android: AndroidNotificationDetails(
@@ -98,23 +108,27 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
           ),
         ));
     print('final');
-  }*/
+  }
+  ReceivePort _port = ReceivePort();
+  IsolateNameServer.registerPortWithName(
+      _port.sendPort, 'port_name');
+  _port.listen((dynamic data) {
+  });
+
+
 }
+*/
+
 
 Future<void> main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await setupFlutterNotifications();
 
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
-
-
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
 
   runApp(splashScreen());
 }
@@ -123,6 +137,11 @@ class splashScreen extends StatelessWidget {
   final _appRouter = AppRouter();
   @override
   Widget build(BuildContext context) {
+    /*final SendPort? send =
+    IsolateNameServer.lookupPortByName('port_name');
+    send?.send(true);*/
+
+
     //Color de la barra inferior
     Valores.setValores(context);
     return MaterialApp.router(

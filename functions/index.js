@@ -143,8 +143,8 @@ exports.notificarNuevaMision = functions.firestore
 
     const payload = {
       notification: {
-        title: "Nueva misión",
-        body: nombreTutor + " ha añadido una nueva misión.",
+        title_loc_key: 'title_loc_key_nueva_mision',
+        body_loc_key: 'body_loc_key_nueva_mision',
       },
     };
 
@@ -272,8 +272,8 @@ exports.notificarNuevaMision = functions.region('europe-west1').firestore
 
     const payload = {
       notification: {
-        title: "Nueva misión",
-        body: nombreTutor + " ha añadido una nueva misión.",
+        title_loc_key: 'title_loc_key_nueva_mision',
+        body_loc_key: 'body_loc_key_nueva_mision',
       },
     };
 
@@ -377,8 +377,8 @@ exports.notificarSolicitudesRecibidas = functions.firestore
     //Crea la notificacion
     const payload = {
       notification: {
-        title: "Solicitud de tutoría",
-        body: nombre_emisor + " te ha enviado una solicitud de tutoría",
+        title_loc_key: 'title_loc_key_solicitud',
+        body_loc_key: 'body_loc_key_solicitud',
       },
     };
 
@@ -446,8 +446,8 @@ exports.notificarSolicitudesRecibidas = functions.region('europe-west1').firesto
     //Crea la notificacion
     const payload = {
       notification: {
-        title: "Solicitud de tutoría",
-        body: nombre_emisor + " te ha enviado una solicitud de tutoría",
+        title_loc_key: 'title_loc_key_solicitud',
+        body_loc_key: 'body_loc_key_solicitud',
         
       },
     };
@@ -558,8 +558,8 @@ exports.notifiConfirmMision = functions.firestore
     //Crea la notificacion
     const payload = {
       notification: {
-        title: "Confirmar misión",
-        body: nombre_emisor + ": confirmar misión " + nombre_mision + ' en ' + nombre_sala,
+        title_loc_key: 'title_loc_key_conf_mision',
+        body_loc_key: 'body_loc_key_conf_mision',
       },
     };
 
@@ -620,8 +620,8 @@ exports.notifiConfirmMision = functions.region('europe-west1').firestore
     //Crea la notificacion
     const payload = {
       notification: {
-        title: "Confirmar misión",
-        body: nombre_emisor + ": confirmar misión " + nombre_mision + ' en ' + nombre_sala,
+        title_loc_key: 'title_loc_key_conf_mision',
+        body_loc_key: 'body_loc_key_conf_mision',
       },
     };
 

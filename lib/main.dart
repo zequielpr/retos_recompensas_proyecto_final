@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:auto_route/auto_route.dart';
@@ -20,6 +19,7 @@ import 'MediaQuery.dart';
 import 'Servicios/Notificaciones/notificaciones_bandeja.dart';
 import 'Servicios/Autenticacion/login.dart';
 import 'datos/TransferirDatos.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Main extends StatefulWidget {
   const Main({Key? key}) : super(key: key);
@@ -33,6 +33,7 @@ class MainState extends State<Main> {
   List<int> _badgeCounts = List<int>.generate(5, (index) => index);
   List<bool> _badgeShows = List<bool>.generate(5, (index) => false);
   var count_notificaciones;
+  late AppLocalizations? valores = AppLocalizations.of(context);
   void initState() {
     _badgeShows[1] = false;
     super.initState();
@@ -52,16 +53,39 @@ class MainState extends State<Main> {
     void actualizarWidgetNitificaciones(actualizar){
       actualizar();
     }
-
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
       if (notification != null && android != null) {
+
+
+        String? titulo = notification.titleLocKey;
+        String body = '';
+        switch(titulo){
+          case 'title_loc_key_conf_mision':
+            titulo = '${valores?.confirmar_mision}';
+            body = '${valores?.hay_mision_conf}';
+            break;
+          case 'title_loc_key_solicitud':
+            titulo = '${valores?.solicitud}';
+            body = '${valores?.te_ha_enviado_solicitud}';
+            break;
+          case 'title_loc_key_nueva_mision':
+            titulo = '${valores?.nueva_mision}';
+            body = '${valores?.ha_add_nueva_mision}';
+            break;
+          default:
+            print('titulo: ${notification.titleLocKey}');
+            break;
+        }
+
+
+
         print(notification.title);
         flutterLocalNotificationsPlugin.show(
             notification.hashCode,
-            notification.title,
-            notification.body,
+            titulo,
+            body,
             NotificationDetails(
               android: AndroidNotificationDetails(
                 channel.id,
