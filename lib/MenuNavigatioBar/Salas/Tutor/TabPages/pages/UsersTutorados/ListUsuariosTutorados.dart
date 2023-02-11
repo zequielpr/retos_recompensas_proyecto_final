@@ -40,8 +40,8 @@ class ListaUsuarioState extends State<ListUsuarios> {
       this.collectionReferenceUsuariosTutorados);
 
   static AppLocalizations? valores;
-  static String titulo = '${valores?.expulsar}';
-  static String mensaje = '${valores?.expulsar_contenido}';
+  String titulo = '${valores?.expulsar}';
+  String mensaje = '${valores?.expulsar_contenido}';
   @override
   @override
   Widget build(BuildContext context) {

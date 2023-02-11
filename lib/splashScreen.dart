@@ -15,6 +15,7 @@ import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:retos_proyecto/MediaQuery.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/generated/intl/messages_en.dart';
 import 'package:retos_proyecto/recursos/DateActual.dart';
 import 'package:retos_proyecto/recursos/Valores.dart';
@@ -247,18 +248,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _navigateToHome() async {
-    final CollectionReference CollecionUsuarios =
-        FirebaseFirestore.instance.collection('usuarios');
     await Future.delayed(const Duration(milliseconds: 1900), () {});
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user == null || user.emailVerified == false) {
-        var datos = TransferirCollecion(CollecionUsuarios);
         if (mounted) context.router.replace(OnboadingRouter());
       } else {
         //Guardar usuario actual
         CurrentUser.setCurrentUser();
         DocumentReference docUser =
-            CollecionUsuarios.doc(CurrentUser.getIdCurrentUser());
+            Coleciones.COLECCION_USUARIOS.doc(CurrentUser.getIdCurrentUser());
         await docUser.get().then((value) {
           Roll_Data.ROLL_USER_IS_TUTORADO = value['rol_tutorado'];
           if (!mounted) return;

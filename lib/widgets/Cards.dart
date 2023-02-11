@@ -68,7 +68,7 @@ class Cards {
         isTutorado
             ? documentSnapshot['id_emisor']
             : documentSnapshot['id_destinatario'],
-        26);
+        20);
 
     Widget nombre = DatosPersonales.getDato(
         isTutorado
@@ -107,7 +107,7 @@ class Cards {
                 children: [
                   ListTile(
                     leading: DatosPersonales.getAvatar(
-                        documentSnapshot['id_emisor'], 26),
+                        documentSnapshot['id_emisor'], 20),
                     title: Text(documentSnapshot['nombre_emisor'].toString()),
                     subtitle: Text(
                         documentSnapshot['nombre_emisor'].toString() +
@@ -190,7 +190,7 @@ class Cards {
               ),
               subtitle: Text("$unidadTiempo"),
               leading:
-                  DatosPersonales.getAvatar(documentSnapshot['id_emisor'], 26),
+                  DatosPersonales.getAvatar(documentSnapshot['id_emisor'], 20),
             ),
           ],
         ),
