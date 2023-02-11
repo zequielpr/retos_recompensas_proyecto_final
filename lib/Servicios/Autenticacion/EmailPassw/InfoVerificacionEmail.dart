@@ -55,7 +55,7 @@ class _InfoVerificacionEmailState extends State<InfoVerificacionEmail> {
                   child: Align(
                   alignment: Alignment.center,
                   child: Text(valores?.verificacion_email_necesaria as String,
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500), textAlign: TextAlign.center,
                   ),
                 ),),
                 Text(

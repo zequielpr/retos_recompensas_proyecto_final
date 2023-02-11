@@ -129,18 +129,12 @@ class _StateRoll extends State<Roll> {
     loanding = Loanding.getLoanding(body, context);
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: Colors.black,
         elevation: 0,
-        title: Row(
-          children: [
-            Text(valores?.registrarse as String,
-            )
-          ],
+        title: Text(valores?.registrarse as String
         ),
       ),
       body: isWaiting ? loanding : body,
     );
-    throw UnimplementedError();
   }
 
   Align _getTitle() {

@@ -75,7 +75,7 @@ class _SalasState extends State<Salas> {
   //Vista de las salas para los tutorados
   _listarVistaTutorados(BuildContext context,
       CollectionReference collecionUsuarios, tutorActual) {
-    List<dynamic> listaIdasSalas;
+    List<dynamic> listaIdasSalas = [];
 
     return StreamBuilder(
         stream: collecionUsuarios
@@ -92,9 +92,13 @@ class _SalasState extends State<Salas> {
 
           var documentSnapShot = snapshot.data as DocumentSnapshot;
 
-          //Tomar las snapshot necesesarias
-          listaIdasSalas = documentSnapShot[
-              "salas_id"]; //Ids de las salas a las que está añadido el usuario actual
+          try{
+            //Tomar las snapshot necesesarias
+            listaIdasSalas = documentSnapShot[
+            "salas_id"]; //Ids de las salas a las que está añadido el usuario actual
+          }catch(e){
+
+          }
 
           if(listaIdasSalas.isEmpty){
             return Center(

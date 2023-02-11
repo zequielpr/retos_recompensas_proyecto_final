@@ -190,7 +190,7 @@ class Cards {
               ),
               subtitle: Text("$unidadTiempo"),
               leading:
-                  DatosPersonales.getAvatar(documentSnapshot['id_emisor'], 20),
+                  DatosPersonales.getAvatar(documentSnapshot['id_emisor'], 26),
             ),
           ],
         ),
@@ -473,7 +473,6 @@ class Cards {
             bottom: Pantalla.getPorcentPanntalla(1, context, 'y')),
         visualDensity: VisualDensity.comfortable,
         dense: true,
-        onTap: () => print('object'),
         horizontalTitleGap: -4,
         /*leading: CircleAvatar(
                   backgroundImage: NetworkImage(
