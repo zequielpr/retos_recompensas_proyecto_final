@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:retos_proyecto/Colores.dart';
+import 'package:retos_proyecto/recursos/Colores.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/AdminSala.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/Misiones.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/Ruleta.dart';
@@ -8,7 +8,7 @@ import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/Users
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/Colecciones.dart';
 
-import '../../../MediaQuery.dart';
+import '../../../recursos/MediaQuery.dart';
 import '../../../datos/TransferirDatos.dart';
 import '../../../widgets/Dialogs.dart';
 import '../../Perfil/AdminRoles.dart';

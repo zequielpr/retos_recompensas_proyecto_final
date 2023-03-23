@@ -4,10 +4,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:retos_proyecto/Loanding.dart';
+import 'package:retos_proyecto/recursos/Loanding.dart';
 import 'package:retos_proyecto/datos/Colecciones.dart';
 
-import '../../MediaQuery.dart';
+import '../../recursos/MediaQuery.dart';
 import '../../Rutas.gr.dart';
 import '../../datos/TransferirDatos.dart';
 import '../../datos/UsuarioActual.dart';

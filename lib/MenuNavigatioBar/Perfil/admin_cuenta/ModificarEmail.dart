@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:retos_proyecto/recursos/Espacios.dart';
 
-import '../../../MediaQuery.dart';
+import '../../../recursos/MediaQuery.dart';
 import '../../../datos/UsuarioActual.dart';
 import '../../../widgets/Dialogs.dart';
 import '../AdminRoles.dart';

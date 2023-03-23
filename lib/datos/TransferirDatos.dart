@@ -29,9 +29,8 @@ class TransfDatosUserTutorado {
 
 class TranferirDatosRoll {
   final dynamic oaUthCredential;
-  final CollectionReference collectionReferenceUsers;
 
-  TranferirDatosRoll(this.oaUthCredential, this.collectionReferenceUsers);
+  TranferirDatosRoll(this.oaUthCredential);
 }
 
 class TransDatosInicioSesion {

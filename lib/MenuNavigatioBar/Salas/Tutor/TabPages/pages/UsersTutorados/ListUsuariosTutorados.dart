@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:retos_proyecto/MediaQuery.dart';
+import 'package:retos_proyecto/recursos/MediaQuery.dart';
 import 'package:retos_proyecto/Servicios/Solicitudes/AdminSolicitudes.dart';
 import 'package:retos_proyecto/recursos/Espacios.dart';
 import '../../../../../../Rutas.gr.dart';
@@ -40,8 +40,6 @@ class ListaUsuarioState extends State<ListUsuarios> {
       this.collectionReferenceUsuariosTutorados);
 
   static AppLocalizations? valores;
-  String titulo = '${valores?.expulsar}';
-  String mensaje = '${valores?.expulsar_contenido}';
   @override
   @override
   Widget build(BuildContext context) {
@@ -115,8 +113,8 @@ class ListaUsuarioState extends State<ListUsuarios> {
                                         idSala,
                                         documentSnapshot.id,
                                         CurrentUser.getIdCurrentUser(),
-                                        titulo,
-                                        mensaje)),
+                                        '${valores?.expulsar}',
+                                        '${valores?.expulsar_contenido}')),
                             // This icon button is used to delete a single product
                           ],
                         ),

@@ -15,7 +15,7 @@ import 'package:retos_proyecto/splashScreen.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:retos_proyecto/widgets/Dialogs.dart';
 
-import 'MediaQuery.dart';
+import 'recursos/MediaQuery.dart';
 import 'Servicios/Notificaciones/notificaciones_bandeja.dart';
 import 'Servicios/Autenticacion/login.dart';
 import 'datos/TransferirDatos.dart';

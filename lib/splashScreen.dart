@@ -14,13 +14,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:retos_proyecto/MediaQuery.dart';
+import 'package:retos_proyecto/recursos/MediaQuery.dart';
 import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/generated/intl/messages_en.dart';
 import 'package:retos_proyecto/recursos/DateActual.dart';
 import 'package:retos_proyecto/recursos/Valores.dart';
 
-import 'Colores.dart';
+import 'recursos/Colores.dart';
 import 'Rutas.gr.dart';
 import 'Servicios/Notificaciones/AdminTopics.dart';
 import 'datos/Roll_Data.dart';
@@ -244,7 +244,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Container(
         color: Colors.white,
-        child: Image.asset('lib/imgs/ic_launcher.png', scale: 10.0));
+        child: Image.asset('lib/recursos/imgs/ic_launcher.png', scale: 10.0));
   }
 
   _navigateToHome() async {
@@ -264,7 +264,6 @@ class _MyHomePageState extends State<MyHomePage> {
         });
       }
     }).onError((handleError) {
-      print('holaaaaaaa');
     });
   }
 }

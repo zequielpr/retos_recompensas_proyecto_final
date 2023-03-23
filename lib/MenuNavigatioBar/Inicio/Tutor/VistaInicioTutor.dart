@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
-import '../../../MediaQuery.dart';
+import '../../../recursos/MediaQuery.dart';
 import '../../../Rutas.gr.dart';
 import '../../../datos/DatosPersonalUser.dart';
 import '../../../datos/SalaDatos.dart';

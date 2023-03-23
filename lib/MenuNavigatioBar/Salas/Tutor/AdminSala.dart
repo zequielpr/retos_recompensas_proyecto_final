@@ -7,7 +7,7 @@ import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 import 'package:retos_proyecto/widgets/Dialogs.dart';
 
-import '../../../MediaQuery.dart';
+import '../../../recursos/MediaQuery.dart';
 
 class AdminSala {
   static Future<void> eliminarSala(

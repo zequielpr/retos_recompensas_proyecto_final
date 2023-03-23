@@ -5,7 +5,7 @@ import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/datos/DatosPersonalUser.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
-import '../../../MediaQuery.dart';
+import '../../../recursos/MediaQuery.dart';
 import 'eliminar_tutorado.dart';
 
 class Admin_tutorados {

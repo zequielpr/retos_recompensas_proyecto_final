@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:retos_proyecto/Loanding.dart';
+import 'package:retos_proyecto/recursos/Loanding.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/widgets/Dialogs.dart';
 

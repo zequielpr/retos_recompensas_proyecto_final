@@ -29,7 +29,7 @@ class Autenticar {
       GoogleSignInAccount? googleUser) async {
     //Obtiene el autenticador
     GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-    ////Crea una credencial con el token de acceso facilitado por facebook
+    ////Crea una credencial con el token de acceso
     var credential = GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
@@ -62,18 +62,17 @@ class Autenticar {
 
   //Comprueba si el usuario es nuevo o viejo
   static Future<void> newOrOld(
-      CollectionReference collecUsuarios,
       BuildContext context,
       var isNewUser,
       OAuthCredential? credential,
       String metodoDeInicio) async {
     {
-      var datos;
+
       if (isNewUser) {
         //Si el usuario es de facebook se elimina, ya que para comprobar si es nuevo o no, es necesario registrarlo previamente
 
         var credentialColecUsers =
-            TranferirDatosRoll(credential, collecUsuarios);
+            TranferirDatosRoll(credential);
 
         await GoogleSignIn().disconnect().whenComplete(() async => {
               context.router.push(RollRouter(args: credentialColecUsers))
@@ -83,7 +82,7 @@ class Autenticar {
         await iniciarSesion(credential!).then((userCredential) async => {
               Token.guardarToken(),
               //El usuario accede su cuenta con las vista correspendiente al roll preestablecido.
-              docUser = collecUsuarios.doc(userCredential?.user?.uid),
+              docUser = Coleciones.COLECCION_USUARIOS.doc(userCredential?.user?.uid),
               await docUser.get().then((snap) => {
                     //Dirigirse a la pantalla principal
                 context.router.replace(MainRouter())
