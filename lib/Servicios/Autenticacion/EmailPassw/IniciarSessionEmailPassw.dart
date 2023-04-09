@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:retos_proyecto/Servicios/Notificaciones/AdministrarTokens.dart';
 import 'package:retos_proyecto/recursos/MediaQuery.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/Servicios/Autenticacion/DatosNewUser.dart';
@@ -288,7 +289,8 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
                                 isWaiting = false;
                               });
                             });
-                    if (resultado != 's')_indicarDatoErroneo(resultado);
+                    if (resultado != 's'){_indicarDatoErroneo(resultado);}
+                    else{await Token.guardarToken();}
                   }
                 : null,
             child: Text(valores?.inicia_sesion as String,

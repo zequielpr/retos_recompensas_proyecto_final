@@ -188,7 +188,7 @@ class InicioVistaTutorado {
                                 }
                           : () =>
                               mostrarMensaje(snapshot['puntosTotal'], context, valores),
-                      child: Image.asset("lib/imgs/cofre/cofre.png")),
+                      child: Image.asset("lib/recursos/imgs/cofre/cofre.png")),
                 ),
                 DatosPersonales.getIndicadoAvance(
                     CurrentUser.getIdCurrentUser(),
@@ -216,7 +216,7 @@ class InicioVistaTutorado {
     }
 
     var titulo ='${valores?.puntos_insuficiente}';
-    var content = Image.asset('lib/imgs/undraw_feeling_blue_4b7q.png');
+    var content = Image.asset('lib/recursos/imgs/undraw_feeling_blue_4b7q.png');
 
     Dialogos.mostrarDialog(actions, titulo, content, context);
   }

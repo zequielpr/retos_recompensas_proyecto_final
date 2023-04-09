@@ -109,24 +109,21 @@ class BandejaNotificaciones {
   Widget _getMisiones() {
     bool usuarioIsTutorado = Roll_Data.ROLL_USER_IS_TUTORADO;
 
-    Query<Map<String, dynamic>> notificacionesSolicitudMision = Coleciones
-        .NOTIFICACIONES
-        .doc('doc_nitificaciones')
-        .collection('confirm_mision_solicitud')
-        .where('id_tutor', isEqualTo: CurrentUser.getIdCurrentUser())
-        .orderBy('fecha_actual', descending: true);
-
-    Query<Map<String, dynamic>> notificacionesRecibidas = Coleciones
-        .NOTIFICACIONES
-        .doc('doc_nitificaciones')
-        .collection('misiones_recibidas')
-        .where('id_emisor', isEqualTo: UsuarioTutores.tutorActual)
-        .orderBy('fecha_actual', descending: true);
+    Query<Map<String, dynamic>> notificacionMisiones =
+        !usuarioIsTutorado
+            ? Coleciones.NOTIFICACIONES
+                .doc('doc_nitificaciones')
+                .collection('confirm_mision_solicitud')
+                .where('id_tutor', isEqualTo: CurrentUser.getIdCurrentUser())
+                .orderBy('fecha_actual', descending: true)
+            : Coleciones.NOTIFICACIONES
+                .doc('doc_nitificaciones')
+                .collection('misiones_recibidas')
+                .where('id_emisor', isEqualTo: UsuarioTutores.tutorActual)
+                .orderBy('fecha_actual', descending: true);
 
     return StreamBuilder(
-      stream: usuarioIsTutorado
-          ? notificacionesRecibidas.snapshots()
-          : notificacionesSolicitudMision.snapshots(),
+      stream: notificacionMisiones.snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
         if (streamSnapshot.connectionState == ConnectionState.waiting) {
           return const Center(
@@ -148,9 +145,11 @@ class BandejaNotificaciones {
                   streamSnapshot.data!.docs[index];
               return Column(
                 children: [
-                  usuarioIsTutorado?Cards.cardNotificacionMisiones(
-                      documentSnapshot, context, _valores):Cards.cardNotiSolicitudMision(
-                      documentSnapshot, context, _valores),
+                  usuarioIsTutorado
+                      ? Cards.cardNotificacionMisiones(
+                          documentSnapshot, context, _valores)
+                      : Cards.cardNotiSolicitudMision(
+                          documentSnapshot, context, _valores),
                   const Divider(
                     height: 0,
                     thickness: 0.5,

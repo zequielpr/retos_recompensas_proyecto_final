@@ -40,8 +40,7 @@ class Autenticar {
 
   //Metodo para comprobar que el nombre de usuario sea válido
   //Comprobar nombre de usuario:
-  static Future<bool> comprUserName(
-      String userName) async {
+  static Future<bool> comprUserName(String userName) async {
     bool userNameValido = false;
 
     await Coleciones.COLECCION_USUARIOS
@@ -61,31 +60,26 @@ class Autenticar {
   }
 
   //Comprueba si el usuario es nuevo o viejo
-  static Future<void> newOrOld(
-      BuildContext context,
-      var isNewUser,
-      OAuthCredential? credential,
-      String metodoDeInicio) async {
+  static Future<void> newOrOld(BuildContext context, var isNewUser,
+      OAuthCredential? credential, String metodoDeInicio) async {
     {
-
       if (isNewUser) {
         //Si el usuario es de facebook se elimina, ya que para comprobar si es nuevo o no, es necesario registrarlo previamente
 
-        var credentialColecUsers =
-            TranferirDatosRoll(credential);
+        var credentialColecUsers = TranferirDatosRoll(credential);
 
-        await GoogleSignIn().disconnect().whenComplete(() async => {
-              context.router.push(RollRouter(args: credentialColecUsers))
-            });
+        await GoogleSignIn().disconnect().whenComplete(() async =>
+            {context.router.push(RollRouter(args: credentialColecUsers))});
       } else if (!isNewUser) {
         late DocumentReference docUser;
         await iniciarSesion(credential!).then((userCredential) async => {
               Token.guardarToken(),
-              //El usuario accede su cuenta con las vista correspendiente al roll preestablecido.
-              docUser = Coleciones.COLECCION_USUARIOS.doc(userCredential?.user?.uid),
+              //El usuario accede su cuenta con las vista correspendiente al rol preestablecido.
+              docUser =
+                  Coleciones.COLECCION_USUARIOS.doc(userCredential?.user?.uid),
               await docUser.get().then((snap) => {
                     //Dirigirse a la pantalla principal
-                context.router.replace(MainRouter())
+                    context.router.replace(MainRouter())
                   })
             });
       } else {
@@ -139,34 +133,25 @@ class Autenticar {
   static Future<String> inciarSesionEmailPasswd(String email, String password,
       CollectionReference collectionReferenceUser, BuildContext context) async {
     try {
-      final credential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
-
-      String? uidUser = credential.user?.uid.trim();
-      var datos;
-      if(credential.user?.emailVerified == false){
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+      if (credential.user?.emailVerified == false) {
         return 'env'; //Email no verificado
       }
 
       CurrentUser.setCurrentUser();
-      DocumentReference docUser =
-      Coleciones.COLECCION_USUARIOS.doc(CurrentUser.getIdCurrentUser());
+      DocumentReference docUser = Coleciones.COLECCION_USUARIOS.doc(CurrentUser.getIdCurrentUser());
       await docUser.get().then((value) {
         Roll_Data.ROLL_USER_IS_TUTORADO = value['rol_tutorado'];
         context.router.replace(MainRouter());
       });
 
-
-
-      return 's';//Succeful
+      return 's'; //Succeful
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         return 'u';
       } else if (e.code == 'wrong-password') {
         return 'p';
-      }
-
-      else{
+      } else {
         return 'ed'; //Error desconocido
       }
     }

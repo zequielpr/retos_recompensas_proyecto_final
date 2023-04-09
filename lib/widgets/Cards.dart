@@ -204,15 +204,14 @@ class Cards {
       String userId,
       BuildContext context,
       AppLocalizations? valores,
-      String nombreSala, puntos_total_de_usuario) {
+      String nombreSala,
+      puntos_total_de_usuario) {
     String nombreMision = documentSnapshot['nombreMision'];
     String objetivoMision = documentSnapshot['objetivoMision'];
     List<dynamic> completada_por = documentSnapshot['completada_por'];
     List<dynamic> solicitudeConf = documentSnapshot['solicitu_confirmacion'];
     DocumentReference docMision = documentSnapshot.reference;
     double Recompensa = documentSnapshot['recompensaMision'];
-
-
 
     return Card(
       margin: EdgeInsets.only(
@@ -656,8 +655,7 @@ class Cards {
                   ),
                   TextSpan(
                     style: GoogleFonts.roboto(fontWeight: FontWeight.w500),
-                    text:
-                        ' ${documentSnapshot['nombre_sala'].toString()}',
+                    text: ' ${documentSnapshot['nombre_sala'].toString()}',
                   ),
                 ], style: GoogleFonts.roboto(color: Colors.black)),
               ),

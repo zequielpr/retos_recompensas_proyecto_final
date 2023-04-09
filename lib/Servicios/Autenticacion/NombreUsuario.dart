@@ -20,6 +20,7 @@ class NombreUsuarioWidget {
   static var nombreUsuarioActual;
   static var vistaModificarUserName;
   static var vistaPerfil;
+
   var _setState;
   late BuildContext _context;
   TrasnferirDatosNombreUser _args;
@@ -32,10 +33,10 @@ class NombreUsuarioWidget {
   NombreUsuarioWidget(
       this._setState, this._context, this._args, this._isRegistrandoUser) {
     _userNameController.text = _args.userName;
-    valores = valores = AppLocalizations.of(_context);
+    valores = AppLocalizations.of(_context);
   }
 
-  void cancelTimer(){
+  void cancelTimer() {
     _timer.cancel();
   }
 
@@ -68,33 +69,28 @@ class NombreUsuarioWidget {
   }
 
   Widget textFielNombreUsuario(BuildContext context) {
-
     body = Column(
-      children: [
-        _getTitle(context)
-        ,
-        _getTextField()
-        ,
-        _getBtn(context)
-      ],
+      children: [_getTitle(context), _getTextField(), _getBtn(context)],
     );
     loanding = Loanding.getLoanding(body, context);
-    return isWaiting?loanding:body;
+    return isWaiting ? loanding : body;
   }
-  Align _getTitle(BuildContext context){
+
+  Align _getTitle(BuildContext context) {
     return Align(
       alignment: Alignment.centerLeft,
       child: Padding(
-        padding: EdgeInsets.only(bottom: Pantalla.getPorcentPanntalla(4, context, 'y')),
+        padding: EdgeInsets.only(
+            bottom: Pantalla.getPorcentPanntalla(4, context, 'y')),
         child: Text(
           valores?.nombre_usuario as String,
-          style:
-          GoogleFonts.roboto(fontSize: 25, fontWeight: FontWeight.w400),
+          style: GoogleFonts.roboto(fontSize: 25, fontWeight: FontWeight.w400),
         ),
       ),
     );
   }
-  Column _getTextField(){
+
+  Column _getTextField() {
     return Column(
       children: [
         TextField(
@@ -114,25 +110,28 @@ class NombreUsuarioWidget {
       ],
     );
   }
-  Padding _getBtn(BuildContext context){
+
+  Padding _getBtn(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: Pantalla.getPorcentPanntalla(2, context, 'y')),
+      padding:
+          EdgeInsets.only(top: Pantalla.getPorcentPanntalla(2, context, 'y')),
       child: SizedBox(
         width: Pantalla.getPorcentPanntalla(50, context, 'x'),
         height: Pantalla.getPorcentPanntalla(6, context, 'y'),
         child: ElevatedButton(
           style: ButtonStyle(elevation: MaterialStateProperty.all(0)),
-          onPressed: _botonActivo
-              ? () async => _guardarNombreUsuario(_args)
-              : null,
-          child: Text(_isRegistrandoUser ? valores?.registrarse as String : valores?.guardar as String,
+          onPressed:
+              _botonActivo ? () async => _guardarNombreUsuario(_args) : null,
+          child: Text(
+              _isRegistrandoUser
+                  ? valores?.registrarse as String
+                  : valores?.guardar as String,
               style: GoogleFonts.roboto(
                   fontSize: 17, fontWeight: FontWeight.w600)),
         ),
       ),
     );
   }
-  
 
   void _guardarNombreUsuario(_args) {
     if (_isRegistrandoUser) {
@@ -153,7 +152,6 @@ class NombreUsuarioWidget {
     noMostrarAdver = true;
     _botonActivo = false;
     _cambiarCheck(_escribiendo);
-    print('Nombre: $userName');
 
     _args.setUserName(userName);
     _contador = 0;
@@ -228,45 +226,49 @@ class NombreUsuarioWidget {
     var datos;
     var medioRegistro = args.oaUthCredential.runtimeType;
 
-    _setState((){isWaiting = true;});
+    _setState(() {
+      isWaiting = true;
+    });
     //Usuario que no se registran con google
     if (medioRegistro != GoogleAuthCredential) {
       //En este caso el el atributo oaUthCredebtial continiene un hash map con la clave y la contrasela para realizar el registro
       //Registrarse con email y contreña
       await Autenticar.registrarConEmailPassw(args.oaUthCredential)
-          .then((userCredential) async{
-                _currentUser = userCredential?.user;
-                if (_currentUser != null)
-                  {
-                    CurrentUser.setCurrentUser();
-                    CurrentUser.currentUser?.updatePhotoURL('https://firebasestorage.googleapis.com/v0/b/retosrecompensas.appspot.com/o/Imagen_anonimo.jpg?alt=media&token=b9e53ae2-d606-4a52-a7c5-4c4f146b9c89');
-                    CurrentUser.currentUser?.updateDisplayName( _userNameController.text.trim());
-                    await args.collectionReferenceUsers
-                        .doc(_currentUser?.uid)
-                        .set({
-                      "current_tutor": '',
-                      "nombre_usuario": _userNameController.text.trim(),
-                      "rol_tutorado":
-                          args.dropdownValue == "Tutor" ? false : true,
-                      'nombre': args.userName,
-                      'imgPerfil': 'https://firebasestorage.googleapis.com/v0/b/retosrecompensas.appspot.com/o/Imagen_anonimo.jpg?alt=media&token=b9e53ae2-d606-4a52-a7c5-4c4f146b9c89'
-                    });
-                    await args.collectionReferenceUsers
-                        .doc(_currentUser?.uid)
-                        .collection('notificaciones')
-                        .doc(_currentUser?.uid)
-                        .set({
-                      'nueva_mision': false,
-                      'nueva_solicitud': false,
-                      'numb_misiones': 0,
-                      'numb_solicitudes': 0
-                    });
-                    Token.guardarToken();
-                    var datos = TransDatosInicioSesion('', false, true, CurrentUser.currentUser?.email as String);
-                    await _context.router.replaceAll([InfoVerificacionEmailRouter( arg: datos)]);
-
-                  }
-              }).whenComplete(() => _setState((){isWaiting = false;}));
+          .then((userCredential) async {
+        _currentUser = userCredential?.user;
+        if (_currentUser != null) {
+          CurrentUser.setCurrentUser();
+          CurrentUser.currentUser?.updatePhotoURL(
+              'https://firebasestorage.googleapis.com/v0/b/retosrecompensas.appspot.com/o/Imagen_anonimo.jpg?alt=media&token=b9e53ae2-d606-4a52-a7c5-4c4f146b9c89');
+          CurrentUser.currentUser
+              ?.updateDisplayName(_userNameController.text.trim());
+          await args.collectionReferenceUsers.doc(_currentUser?.uid).set({
+            "current_tutor": '',
+            "nombre_usuario": _userNameController.text.trim(),
+            "rol_tutorado": args.dropdownValue == "Tutor" ? false : true,
+            'nombre': args.userName,
+            'imgPerfil':
+                'https://firebasestorage.googleapis.com/v0/b/retosrecompensas.appspot.com/o/Imagen_anonimo.jpg?alt=media&token=b9e53ae2-d606-4a52-a7c5-4c4f146b9c89'
+          });
+          await args.collectionReferenceUsers
+              .doc(_currentUser?.uid)
+              .collection('notificaciones')
+              .doc(_currentUser?.uid)
+              .set({
+            'nueva_mision': false,
+            'nueva_solicitud': false,
+            'numb_misiones': 0,
+            'numb_solicitudes': 0
+          });
+          Token.guardarToken();
+          var datos = TransDatosInicioSesion(
+              '', false, true, CurrentUser.currentUser?.email as String);
+          await _context.router
+              .replaceAll([InfoVerificacionEmailRouter(arg: datos)]);
+        }
+      }).whenComplete(() => _setState(() {
+                isWaiting = false;
+              }));
     } else {
       await Autenticar.iniciarSesion(args.oaUthCredential)
           .then((userCredential) async => {
@@ -301,7 +303,10 @@ class NombreUsuarioWidget {
                     //Dirigirse a la pantalla principal
                     _context.router.replace(MainRouter())
                   }
-              }).whenComplete(() => _setState((){isWaiting = false;}));
+              })
+          .whenComplete(() => _setState(() {
+                isWaiting = false;
+              }));
     }
   }
 

@@ -30,6 +30,5 @@ class _MostrarUsuariosState extends State<MostrarUsuarios> {
     return Roll_Data.ROLL_USER_IS_TUTORADO
         ? UsuarioTutores.getAllTutores(valores)
         : Admin_tutorados.getAllUser(valores);
-    ;
   }
 }

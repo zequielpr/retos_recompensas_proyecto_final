@@ -81,7 +81,7 @@ class _HomeState extends State<Home> {
   }
 
   Widget getInicioCurrentTutor(){
-    if(currentTutor!= null && currentTutor.length != 0){
+    if(currentTutor.isNotEmpty){
       return  InicioVistaTutorado.showCajaRecompensa(
           Coleciones.COLECCION_USUARIOS,
           currentTutor,

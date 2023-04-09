@@ -213,7 +213,6 @@ class _StateRoll extends State<Roll> {
         .whenComplete(() => setState(() {
               isWaiting = false;
             }));
-    var creden = args.oaUthCredential;
 
     if (args.oaUthCredential.runtimeType == String) {
       var datos = TrasnferirDatosNombreUser({'email': '', 'passw': ''},
