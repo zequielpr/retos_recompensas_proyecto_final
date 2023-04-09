@@ -2,11 +2,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:retos_proyecto/Loanding.dart';
+import 'package:retos_proyecto/recursos/Loanding.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/recursos/Valores.dart';
 
-import '../../../MediaQuery.dart';
+import '../../../recursos/MediaQuery.dart';
 import '../../../datos/TransferirDatos.dart';
 import '../../../datos/ValidarDatos.dart';
 import '../../../recursos/Espacios.dart';
@@ -141,8 +141,7 @@ class _RecogerEmail extends State<RecogerEmail> {
       setState(() {isWaiting = true;});
       _cambiarColor(Colors.transparent, Colors.transparent);
 
-      dynamic metodoInicioSesion =
-          await Autenticar.metodoInicioSesion(email);
+      dynamic metodoInicioSesion = await Autenticar.metodoInicioSesion(email);
 
       //Si es existe un metodo de inicio de sesion, se redireje a la ruta de inicio de sesión
       if (metodoInicioSesion.isNotEmpty) {
@@ -152,8 +151,7 @@ class _RecogerEmail extends State<RecogerEmail> {
         return;
       }
 
-      args.setValor('email',
-          email); //Añede el correo al objeto map creado en la ruta tutorado
+      args.setValor('email', email); //Añede el correo al objeto map creado en la ruta tutorado
       if (!mounted) return;
       
       context.router.push(RecogerPasswRouter(args: args)).whenComplete(() => setState(() {isWaiting = false;}));

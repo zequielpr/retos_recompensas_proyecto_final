@@ -76,11 +76,8 @@ import 'onboarding/onboarding.dart';
             AutoRoute(path: 'UserTutoradoDescrip', page: UserTutorado),
             AutoRoute(
                 path: 'AddReward', page: AddReward, name: 'AddRewardRouter')
-            //AutoRoute(path: ':bookId', page: BookDetailsPage),
-            //RedirectRoute(path: '*', redirectTo: ''),
           ],
         ),
-        // our AccountRouter has been moved into the children field
 
         //RUta de notificaciones
         AutoRoute(

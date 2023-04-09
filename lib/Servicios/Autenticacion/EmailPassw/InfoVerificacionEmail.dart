@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:retos_proyecto/MediaQuery.dart';
+import 'package:retos_proyecto/recursos/MediaQuery.dart';
 import 'package:retos_proyecto/recursos/Espacios.dart';
 
 import '../../../Rutas.gr.dart';
@@ -55,7 +55,7 @@ class _InfoVerificacionEmailState extends State<InfoVerificacionEmail> {
                   child: Align(
                   alignment: Alignment.center,
                   child: Text(valores?.verificacion_email_necesaria as String,
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500), textAlign: TextAlign.center,
                   ),
                 ),),
                 Text(

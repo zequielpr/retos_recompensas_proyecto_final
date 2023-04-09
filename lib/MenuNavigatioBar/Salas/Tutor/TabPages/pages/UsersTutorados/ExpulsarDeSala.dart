@@ -42,7 +42,7 @@ class ExplusarDeSala {
                     .doc(idTutor)
                     .update({
                   'salas_id': FieldValue.arrayRemove([idSala])
-                });
+                }).whenComplete(() => context.router.pop());
               });
               context.router.pop();
             },

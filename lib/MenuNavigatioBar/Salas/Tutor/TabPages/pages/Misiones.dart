@@ -4,15 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ntp/ntp.dart';
 import 'package:readmore/readmore.dart';
-import 'package:retos_proyecto/Colores.dart';
-import 'package:retos_proyecto/MediaQuery.dart';
+import 'package:retos_proyecto/recursos/Colores.dart';
+import 'package:retos_proyecto/recursos/MediaQuery.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminRoles.dart';
 import 'package:retos_proyecto/recursos/Espacios.dart';
 import 'package:retos_proyecto/widgets/Dialogs.dart';
 
 import '../../../../../recursos/DateActual.dart';
 import '../../../../../widgets/Cards.dart';
-import '../../../../../widgets/Fields.dart';
 import '../../AdminSala.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

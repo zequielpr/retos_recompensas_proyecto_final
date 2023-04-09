@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:isolate';
+import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,12 +14,15 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:retos_proyecto/MediaQuery.dart';
+import 'package:retos_proyecto/recursos/MediaQuery.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
+import 'package:retos_proyecto/generated/intl/messages_en.dart';
 import 'package:retos_proyecto/recursos/DateActual.dart';
 import 'package:retos_proyecto/recursos/Valores.dart';
 
-import 'Colores.dart';
+import 'recursos/Colores.dart';
 import 'Rutas.gr.dart';
+import 'Servicios/Notificaciones/AdminTopics.dart';
 import 'datos/Roll_Data.dart';
 import 'Rutas.dart';
 import 'Servicios/Autenticacion/DatosNewUser.dart';
@@ -32,37 +37,99 @@ import 'main.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title
-    //'This channel is used for important notifications.', // description
-    importance: Importance.high,
-    playSound: true);
+late AndroidNotificationChannel channel;
+late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+bool isFlutterLocalNotificationsInitialized = false;
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+Future<void> setupFlutterNotifications() async {
+  if (isFlutterLocalNotificationsInitialized) {
+    return;
+  }
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-}
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
-  await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
+  channel = const AndroidNotificationChannel(
+      'high_importance_channel', // id
+      'High Importance Notifications', // title
+      description:
+          'This channel is used for important notifications.', // description
+      importance: Importance.max,);
+
+  flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  /// Create an Android Notification Channel.
+  ///
+  /// We use this channel in the `AndroidManifest.xml` file to override the
+  /// default FCM channel to enable heads up notifications.
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
 
+  /// Update the iOS foreground notification presentation options to allow
+  /// heads up notifications.
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
     badge: true,
     sound: true,
   );
+
+  isFlutterLocalNotificationsInitialized = true;
+}
+
+
+
+/*
+@pragma('vm:entry-point')
+Future<dynamic> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+  await setupFlutterNotifications();
+
+ // AppLocalizations? valores = AppLocalizations.of( contx);
+
+
+  RemoteNotification? notification = message.notification;
+  AndroidNotification? android = message.notification?.android;
+
+  if (notification != null && android != null) {
+    flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        'xxxxxxxx',
+        'xxxxx',
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            channelDescription: channel.description,
+            color: Colors.blue,
+            playSound: true,
+            icon: '@mipmap/ic_launcher',
+          ),
+        ));
+    print('final');
+  }
+  ReceivePort _port = ReceivePort();
+  IsolateNameServer.registerPortWithName(
+      _port.sendPort, 'port_name');
+  _port.listen((dynamic data) {
+  });
+
+
+}
+*/
+
+
+Future<void> main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await setupFlutterNotifications();
+
+  //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
 
   runApp(splashScreen());
 }
@@ -71,8 +138,13 @@ class splashScreen extends StatelessWidget {
   final _appRouter = AppRouter();
   @override
   Widget build(BuildContext context) {
+    /*final SendPort? send =
+    IsolateNameServer.lookupPortByName('port_name');
+    send?.send(true);*/
+
+
     //Color de la barra inferior
-  Valores.setValores(context);
+    Valores.setValores(context);
     return MaterialApp.router(
       supportedLocales: L10n.all,
       localizationsDelegates: const [
@@ -172,22 +244,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Container(
         color: Colors.white,
-        child: Image.asset('lib/imgs/ic_launcher.png', scale: 10.0));
+        child: Image.asset('lib/recursos/imgs/ic_launcher.png', scale: 10.0));
   }
 
   _navigateToHome() async {
-    final CollectionReference CollecionUsuarios =
-        FirebaseFirestore.instance.collection('usuarios');
     await Future.delayed(const Duration(milliseconds: 1900), () {});
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user == null || user.emailVerified == false) {
-        var datos = TransferirCollecion(CollecionUsuarios);
         if (mounted) context.router.replace(OnboadingRouter());
       } else {
         //Guardar usuario actual
         CurrentUser.setCurrentUser();
         DocumentReference docUser =
-            CollecionUsuarios.doc(CurrentUser.getIdCurrentUser());
+            Coleciones.COLECCION_USUARIOS.doc(CurrentUser.getIdCurrentUser());
         await docUser.get().then((value) {
           Roll_Data.ROLL_USER_IS_TUTORADO = value['rol_tutorado'];
           if (!mounted) return;
@@ -195,7 +264,6 @@ class _MyHomePageState extends State<MyHomePage> {
         });
       }
     }).onError((handleError) {
-      print('holaaaaaaa');
     });
   }
 }

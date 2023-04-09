@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 
-import '../../../MediaQuery.dart';
+import '../../../recursos/MediaQuery.dart';
 import '../../../datos/DatosPersonalUser.dart';
 import '../../../datos/UsuarioActual.dart';
 import '../../../recursos/DateActual.dart';
@@ -179,7 +179,7 @@ class InicioVistaTutorado {
                                         elevation: 0.0,
                                         backgroundColor: Colors.transparent,
                                         child: dialogPulCofre(
-                                            context,Image.asset('lib/imgs/undraw_xmas_surprise_57p1.png'),
+                                            context,Image.asset('lib/recursos/imgs/undraw_xmas_surprise_57p1.png'),
                                             actionOk,
                                             tituloNoRecompensa),
                                       );
@@ -188,7 +188,7 @@ class InicioVistaTutorado {
                                 }
                           : () =>
                               mostrarMensaje(snapshot['puntosTotal'], context, valores),
-                      child: Image.asset("lib/imgs/cofre/cofre.png")),
+                      child: Image.asset("lib/recursos/imgs/cofre/cofre.png")),
                 ),
                 DatosPersonales.getIndicadoAvance(
                     CurrentUser.getIdCurrentUser(),
@@ -216,7 +216,7 @@ class InicioVistaTutorado {
     }
 
     var titulo ='${valores?.puntos_insuficiente}';
-    var content = Image.asset('lib/imgs/undraw_feeling_blue_4b7q.png');
+    var content = Image.asset('lib/recursos/imgs/undraw_feeling_blue_4b7q.png');
 
     Dialogos.mostrarDialog(actions, titulo, content, context);
   }

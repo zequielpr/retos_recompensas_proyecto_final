@@ -147,16 +147,16 @@ class _OnboardingState extends State<Onboarding> {
     contents = [
       UnbordingContent(
           title: valores?.titulo_p_1 as String,
-          image: 'lib/imgs/undraw_Educator_re_ju47.png',
+          image: 'lib/recursos/imgs/undraw_Educator_re_ju47.png',
           discription:
           valores?.contenido_p_1 as String),
       UnbordingContent(
           title: valores?.titulo_p_2 as String,
-          image: 'lib/imgs/undraw_Accept_tasks_re_09mv.png',
+          image: 'lib/recursos/imgs/undraw_Accept_tasks_re_09mv.png',
           discription: valores?.contenido_p_2 as String),
       UnbordingContent(
           title: valores?.titulo_p_3 as String,
-          image: 'lib/imgs/undraw_Gift_box_re_vau4.png',
+          image: 'lib/recursos/imgs/undraw_Gift_box_re_vau4.png',
           discription: valores?.contenido_p_3 as String),
     ];
   }

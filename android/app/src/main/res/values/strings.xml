@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RetoCompensa</string>
+
+    <string name="facebook_app_id">1191129078396649</string>
+    <string name="facebook_client_token">28bf8755754b14dc048eae99e9b6f723</string>
+    <string name="fb_login_protocol_scheme">fb1191129078396649</string>
+
+    <string name="title_loc_key_conf_mision">Confirmar misión</string>
+    <string name="body_loc_key_conf_mision">Hay una nueva misión por confirmar</string>
+
+    <string name="title_loc_key_solicitud">Solicitud</string>
+    <string name="body_loc_key_solicitud">Tienes una nueva solicitud de tutoría</string>
+
+    <string name="title_loc_key_nueva_mision">Nueva misión</string>
+    <string name="body_loc_key_nueva_mision">Tienes una nueva misión</string>
+
+</resources>

@@ -15,9 +15,9 @@ import 'package:retos_proyecto/Servicios/Autenticacion/EmailPassw/IniciarSession
 import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../Colores.dart';
-import '../../Loanding.dart';
-import '../../MediaQuery.dart';
+import '../../recursos/Colores.dart';
+import '../../recursos/Loanding.dart';
+import '../../recursos/MediaQuery.dart';
 import '../../datos/TransferirDatos.dart';
 import '../../recursos/AppName.dart';
 import '../../recursos/Espacios.dart';
@@ -126,23 +126,25 @@ class _LoginState extends State<Login> {
             width: Pantalla.getPorcentPanntalla(90, context, 'x'),
             child: Column(
               children: [
-                Text(valores?.titulo_introduccion_login as String,
-                  style: TextStyle(
-                      fontSize: 22.5,
-                      fontWeight: FontWeight.w600),
+                Text(
+                  valores?.titulo_introduccion_login as String,
+                  style: TextStyle(fontSize: 22.5, fontWeight: FontWeight.w600),
                   textAlign: TextAlign.center,
                 ),
               ],
             ),
           ),
-          SizedBox(height: Pantalla.getPorcentPanntalla(1, context, 'y'),),
+          SizedBox(
+            height: Pantalla.getPorcentPanntalla(1, context, 'y'),
+          ),
           SizedBox(
             width: Pantalla.getPorcentPanntalla(70, context, 'x'),
-            child: Text(valores?.introduccion_login as String,
+            child: Text(
+              valores?.introduccion_login as String,
               style: GoogleFonts.roboto(
                 fontSize: 18,
                 color: Colors.grey,
-    ),
+              ),
               textAlign: TextAlign.center,
             ),
           )
@@ -178,25 +180,19 @@ class _LoginState extends State<Login> {
           backgroundColor: TRANSPARENT,
           maxRadius: sizeImg,
           minRadius: 0,
-          backgroundImage: AssetImage('lib/imgs/ic_launcher.png'),
+          backgroundImage: const AssetImage('lib/recursos/imgs/img_login.png'),
         );
       case 'g':
         return CircleAvatar(
           backgroundColor: TRANSPARENT,
           maxRadius: sizeImg,
-          backgroundImage: AssetImage('lib/imgs/img_google.png'),
+          backgroundImage: AssetImage('lib/recursos/imgs/img_google.png'),
         );
       case 'a':
         return CircleAvatar(
           backgroundColor: TRANSPARENT,
           maxRadius: sizeImg + 1,
-          backgroundImage: AssetImage('lib/imgs/img_apple.png'),
-        );
-      case 'f':
-        return CircleAvatar(
-          backgroundColor: TRANSPARENT,
-          maxRadius: sizeImg,
-          backgroundImage: AssetImage('lib/imgs/img_facebook.png'),
+          backgroundImage: AssetImage('lib/recursos/imgs/img_apple.png'),
         );
       default:
         return Text('');
@@ -204,12 +200,13 @@ class _LoginState extends State<Login> {
   }
 
   Widget _getTitle(option, BuildContext context) {
-    var wordSize =17.5;
+    var wordSize = 17.5;
     var styleTxt = GoogleFonts.roboto(fontSize: wordSize);
 
     switch (option) {
       case 'p':
-        return Text(valores?.cont_c_email_passw as String,
+        return Text(
+          valores?.cont_c_email_passw as String,
           style: styleTxt,
         );
       case 'g':
@@ -235,7 +232,7 @@ class _LoginState extends State<Login> {
       case 'a':
         return;
       case 'f':
-        _buttonFacebook();
+        //_buttonFacebook();
         return;
       default:
         return;
@@ -279,11 +276,11 @@ class _LoginState extends State<Login> {
                 backgroundColor: MaterialStateProperty.all(Colors.transparent)),
             onPressed: () {
               TranferirDatosRoll datos =
-                  TranferirDatosRoll('userContraseña', collecUsuarios);
+                  TranferirDatosRoll('userContraseña');
               _irRollPage(datos);
             },
             child: RichText(
-              text:  TextSpan(children: [
+              text: TextSpan(children: [
                 TextSpan(
                     text: valores?.no_cuenta,
                     style: TextStyle(color: Colors.black)),
@@ -344,19 +341,17 @@ class _LoginState extends State<Login> {
     var credencialGoogle =
         await Autenticar.obtenerCredencialesGoogle(googleAccount)
             .catchError((e) {
-      print('holaa');
     });
 
     //Obtiene los método de inicio correspondiente al email pasado por parámetro.
     List<String> metodosInicioSesion =
         await Autenticar.metodoInicioSesion(googleAccount.email);
 
-    var isNewUser = metodosInicioSesion.isNotEmpty ? false : true;
+    var isNewUser = metodosInicioSesion.isEmpty;
 
     if (!mounted) return;
 
-    await Autenticar.newOrOld(
-            collecUsuarios, context, isNewUser, credencialGoogle, 'Google')
+    await Autenticar.newOrOld( context, isNewUser, credencialGoogle, 'Google')
         .whenComplete(() => _login());
   }
 
@@ -376,8 +371,7 @@ class _LoginState extends State<Login> {
         ? await credentialUser?.user?.delete()
         : null; //Si es nuevo se borra el usuario
 
-    await Autenticar.newOrOld(
-            collecUsuarios, context, isNewUser, oaUthCredential, 'Facebook')
+    await Autenticar.newOrOld( context, isNewUser, oaUthCredential, 'Facebook')
         .whenComplete(() => _login());
   }
 }

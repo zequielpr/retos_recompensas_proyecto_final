@@ -9,13 +9,14 @@ import 'package:firebase_auth_platform_interface/src/providers/oauth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:retos_proyecto/Loanding.dart';
-import 'package:retos_proyecto/MediaQuery.dart';
+import 'package:retos_proyecto/recursos/Loanding.dart';
+import 'package:retos_proyecto/recursos/MediaQuery.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/ValidarDatos.dart';
 import 'package:retos_proyecto/recursos/Valores.dart';
 
 import '../../Rutas.dart';
+import '../../datos/Colecciones.dart';
 import '../../datos/TransferirDatos.dart';
 import '../../datos/UsuarioActual.dart';
 import '../../main.dart';
@@ -129,18 +130,12 @@ class _StateRoll extends State<Roll> {
     loanding = Loanding.getLoanding(body, context);
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: Colors.black,
         elevation: 0,
-        title: Row(
-          children: [
-            Text(valores?.registrarse as String,
-            )
-          ],
+        title: Text(valores?.registrarse as String
         ),
       ),
       body: isWaiting ? loanding : body,
     );
-    throw UnimplementedError();
   }
 
   Align _getTitle() {
@@ -214,20 +209,19 @@ class _StateRoll extends State<Roll> {
     setState(() {
       isWaiting = true;
     });
-    String userName = await generarUserName(args.collectionReferenceUsers)
+    String userName = await generarUserName(Coleciones.COLECCION_USUARIOS)
         .whenComplete(() => setState(() {
               isWaiting = false;
             }));
-    var creden = args.oaUthCredential;
 
     if (args.oaUthCredential.runtimeType == String) {
       var datos = TrasnferirDatosNombreUser({'email': '', 'passw': ''},
-          dropdownValue, userName, args.collectionReferenceUsers);
+          dropdownValue, userName, Coleciones.COLECCION_USUARIOS);
       if (!mounted) return;
       context.router.push(RecogerEmailRouter(args: datos));
     } else {
       var datos = TrasnferirDatosNombreUser(args.oaUthCredential, dropdownValue,
-          userName, args.collectionReferenceUsers);
+          userName, Coleciones.COLECCION_USUARIOS);
       if (!mounted) return;
       context.router.push(NombreUsuarioRouter(args: datos));
     }

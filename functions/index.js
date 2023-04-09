@@ -143,9 +143,8 @@ exports.notificarNuevaMision = functions.firestore
 
     const payload = {
       notification: {
-        title: "Nueva misión",
-        body: nombreTutor + " ha añadido una nueva mision",
-        icon: "https://firebasestorage.googleapis.com/v0/b/retosrecompensas.appspot.com/o/Imagen_anonimo.jpg?alt=media&token=b9e53ae2-d606-4a52-a7c5-4c4f146b9c89",
+        title_loc_key: 'title_loc_key_nueva_mision',
+        body_loc_key: 'body_loc_key_nueva_mision',
       },
     };
 
@@ -273,9 +272,8 @@ exports.notificarNuevaMision = functions.region('europe-west1').firestore
 
     const payload = {
       notification: {
-        title: "Nueva misión",
-        body: nombreTutor + " ha añadido una nueva mision",
-        icon: "https://firebasestorage.googleapis.com/v0/b/retosrecompensas.appspot.com/o/Imagen_anonimo.jpg?alt=media&token=b9e53ae2-d606-4a52-a7c5-4c4f146b9c89",
+        title_loc_key: 'title_loc_key_nueva_mision',
+        body_loc_key: 'body_loc_key_nueva_mision',
       },
     };
 
@@ -379,9 +377,8 @@ exports.notificarSolicitudesRecibidas = functions.firestore
     //Crea la notificacion
     const payload = {
       notification: {
-        title: "Solicitud de tutoría",
-        body: nombre_emisor + " te ha enviado una solicitud de tutoría",
-        icon: "https://firebasestorage.googleapis.com/v0/b/retosrecompensas.appspot.com/o/Imagen_anonimo.jpg?alt=media&token=b9e53ae2-d606-4a52-a7c5-4c4f146b9c89",
+        title_loc_key: 'title_loc_key_solicitud',
+        body_loc_key: 'body_loc_key_solicitud',
       },
     };
 
@@ -449,9 +446,9 @@ exports.notificarSolicitudesRecibidas = functions.region('europe-west1').firesto
     //Crea la notificacion
     const payload = {
       notification: {
-        title: "Solicitud de tutoría",
-        body: nombre_emisor + " te ha enviado una solicitud de tutoría",
-        icon: "https://firebasestorage.googleapis.com/v0/b/retosrecompensas.appspot.com/o/Imagen_anonimo.jpg?alt=media&token=b9e53ae2-d606-4a52-a7c5-4c4f146b9c89",
+        title_loc_key: 'title_loc_key_solicitud',
+        body_loc_key: 'body_loc_key_solicitud',
+        
       },
     };
 
@@ -502,6 +499,7 @@ exports.eliminarNotificaciones = functions.pubsub.schedule('1 12 * * *')
     var notificaciones = db.collection('notificaciones').doc('doc_nitificaciones');
     var solicitudes = await notificaciones.collection('solicitudes').get();
     var misiones = await notificaciones.collection('misiones_recibidas').get();
+    var solicitud_conf_mision = await notificaciones.collection('confirm_mision_solicitud').get();
 
     var fechaSolicitud;
     var dias;
@@ -517,7 +515,12 @@ exports.eliminarNotificaciones = functions.pubsub.schedule('1 12 * * *')
       await comprobarFecha(doc);
     });
 
-    
+    //Eliminar notificaciones misiones
+    solicitud_conf_mision.forEach(async (doc) => {
+      await comprobarFecha(doc);
+    });
+
+
     async function comprobarFecha(doc) {
       data = doc.data();
       fechaSolicitud = new Date(data.fecha_actual._seconds * 1000);
@@ -531,3 +534,131 @@ exports.eliminarNotificaciones = functions.pubsub.schedule('1 12 * * *')
     }
 
   });
+
+
+
+//Notificar solicitud de confirmacion de mision------------------------------------------------------------------------
+exports.notifiConfirmMision = functions.firestore
+  .document(
+    "/notificaciones/doc_nitificaciones/confirm_mision_solicitud/{confirm_mision_solicitud_id}"
+  )
+  .onCreate(async (snapshot, context) => {
+    var nuevaSolicitud = snapshot.data();
+
+    var user_id = nuevaSolicitud.id_tutor;
+    var nombre_emisor = nuevaSolicitud.nombre_tutorado;
+    var nombre_mision = nuevaSolicitud.nombre_mision;
+    var nombre_sala = nuevaSolicitud.nombre_sala;
+
+
+    //Obtener documento de usuaro al cual se le ha enviado la solicitud
+    var documentUser = db.collection("usuarios").doc(user_id.trim());
+
+
+    //Crea la notificacion
+    const payload = {
+      notification: {
+        title_loc_key: 'title_loc_key_conf_mision',
+        body_loc_key: 'body_loc_key_conf_mision',
+      },
+    };
+
+    //Obtiene los tokens del usuario que se le ha enviado la solicitud y se le envia la notificación
+    await documentUser.get().then(async (snapshot) => {
+      var tokens = snapshot.data().tokens;
+
+      //console.log("Tokens encontrados: ", tokens);
+      var respuesta = await admin.messaging().sendToDevice(tokens, payload);
+      await cleanupTokens(respuesta, tokens, documentUser);
+    });
+
+    //Funcion para eliminar todos los tokens que no tengan ningun dispositivo asosciado
+    //Funcion para eliminar todos los tokens que no tengan ningun dispositivo asosciado
+    async function cleanupTokens(response, tokens, documento) {
+      const tokensDelete = [];
+      response.results.forEach(async (result, index) => {
+        const error = result.error;
+        if (error) {
+          console.error(
+            "Failure sending notification to",
+            tokens[index],
+            error
+          );
+          // Cleanup the tokens who are not registered anymore.
+          if (
+            error.code === "messaging/invalid-registration-token" ||
+            error.code === "messaging/registration-token-not-registered"
+          ) {
+            const deleteTask = await documento.update({
+              tokens: admin.firestore.FieldValue.arrayRemove(tokens[index]),
+            }); //Borrar token obsoleto
+            tokensDelete.push(deleteTask);
+          }
+        }
+      });
+      return Promise.all(tokensDelete);
+    }
+  });
+
+//Notificar solicitud de confirmacion de mision----------------------------Europa--------------------------------------------
+exports.notifiConfirmMision = functions.region('europe-west1').firestore
+  .document(
+    "/notificaciones/doc_nitificaciones/confirm_mision_solicitud/{confirm_mision_solicitud_id}"
+  )
+  .onCreate(async (snapshot, context) => {
+    var nuevaSolicitud = snapshot.data();
+
+    var user_id = nuevaSolicitud.id_tutor;
+    var nombre_emisor = nuevaSolicitud.nombre_tutorado;
+    var nombre_mision = nuevaSolicitud.nombre_mision;
+    var nombre_sala = nuevaSolicitud.nombre_sala;
+
+    //Obtener documento de usuaro al cual se le ha enviado la solicitud
+    var documentUser = db.collection("usuarios").doc(user_id.trim());
+
+
+    //Crea la notificacion
+    const payload = {
+      notification: {
+        title_loc_key: 'title_loc_key_conf_mision',
+        body_loc_key: 'body_loc_key_conf_mision',
+      },
+    };
+
+    //Obtiene los tokens del usuario que se le ha enviado la solicitud y se le envia la notificación
+    await documentUser.get().then(async (snapshot) => {
+      var tokens = snapshot.data().tokens;
+
+      //console.log("Tokens encontrados: ", tokens);
+      var respuesta = await admin.messaging().sendToDevice(tokens, payload);
+      await cleanupTokens(respuesta, tokens, documentUser);
+    });
+
+    //Funcion para eliminar todos los tokens que no tengan ningun dispositivo asosciado
+    //Funcion para eliminar todos los tokens que no tengan ningun dispositivo asosciado
+    async function cleanupTokens(response, tokens, documento) {
+      const tokensDelete = [];
+      response.results.forEach(async (result, index) => {
+        const error = result.error;
+        if (error) {
+          console.error(
+            "Failure sending notification to",
+            tokens[index],
+            error
+          );
+          // Cleanup the tokens who are not registered anymore.
+          if (
+            error.code === "messaging/invalid-registration-token" ||
+            error.code === "messaging/registration-token-not-registered"
+          ) {
+            const deleteTask = await documento.update({
+              tokens: admin.firestore.FieldValue.arrayRemove(tokens[index]),
+            }); //Borrar token obsoleto
+            tokensDelete.push(deleteTask);
+          }
+        }
+      });
+      return Promise.all(tokensDelete);
+    }
+  });
+

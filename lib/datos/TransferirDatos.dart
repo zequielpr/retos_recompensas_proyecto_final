@@ -29,9 +29,8 @@ class TransfDatosUserTutorado {
 
 class TranferirDatosRoll {
   final dynamic oaUthCredential;
-  final CollectionReference collectionReferenceUsers;
 
-  TranferirDatosRoll(this.oaUthCredential, this.collectionReferenceUsers);
+  TranferirDatosRoll(this.oaUthCredential);
 }
 
 class TransDatosInicioSesion {
@@ -40,8 +39,8 @@ class TransDatosInicioSesion {
   final bool focusPassw;
   final String email;
 
-  TransDatosInicioSesion(this.titulo, this.focusEmail, this.focusPassw,
-      this.email);
+  TransDatosInicioSesion(
+      this.titulo, this.focusEmail, this.focusPassw, this.email);
 }
 
 class TrasnferirDatosNombreUser {
@@ -49,7 +48,8 @@ class TrasnferirDatosNombreUser {
   late final CollectionReference collectionReferenceUsers;
   late dynamic oaUthCredential;
   late String dropdownValue;
-  TrasnferirDatosNombreUser(this.oaUthCredential, this.dropdownValue, this.userName, this.collectionReferenceUsers);
+  TrasnferirDatosNombreUser(this.oaUthCredential, this.dropdownValue,
+      this.userName, this.collectionReferenceUsers);
 
   TrasnferirDatosNombreUser.SoloNombre(this.userName);
 

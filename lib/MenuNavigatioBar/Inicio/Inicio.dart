@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:retos_proyecto/MediaQuery.dart';
+import 'package:retos_proyecto/recursos/MediaQuery.dart';
 import 'package:retos_proyecto/datos/Roll_Data.dart';
 
 import '../../datos/Colecciones.dart';
@@ -81,7 +81,7 @@ class _HomeState extends State<Home> {
   }
 
   Widget getInicioCurrentTutor(){
-    if(currentTutor!= null && currentTutor.length != 0){
+    if(currentTutor.isNotEmpty){
       return  InicioVistaTutorado.showCajaRecompensa(
           Coleciones.COLECCION_USUARIOS,
           currentTutor,

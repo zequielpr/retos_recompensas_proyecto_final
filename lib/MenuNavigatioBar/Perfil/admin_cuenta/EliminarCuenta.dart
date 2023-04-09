@@ -4,7 +4,7 @@ import 'package:retos_proyecto/MenuNavigatioBar/Perfil/admin_cuenta/Sesion.dart'
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 import 'package:retos_proyecto/widgets/Dialogs.dart';
 
-import '../../../MediaQuery.dart';
+import '../../../recursos/MediaQuery.dart';
 
 class EliminarCuenta {
   static eliminarCuenta(BuildContext context) {

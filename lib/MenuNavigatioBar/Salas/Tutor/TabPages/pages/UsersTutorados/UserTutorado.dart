@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:retos_proyecto/MediaQuery.dart';
+import 'package:retos_proyecto/recursos/MediaQuery.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/AddRewardUser.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/ExpulsarDeSala.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Salas/Tutor/TabPages/pages/UsersTutorados/ListUsuariosTutorados.dart';
@@ -9,7 +9,7 @@ import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/recursos/Espacios.dart';
 
-import '../../../../../../Colores.dart';
+import '../../../../../../recursos/Colores.dart';
 import '../../../../../../datos/DatosPersonalUser.dart';
 import '../../../../../../datos/TransferirDatos.dart';
 import '../../../../../../datos/UsuarioActual.dart';
@@ -27,8 +27,6 @@ class UserTutorado extends StatefulWidget {
 class _UserTutoradoState extends State<UserTutorado> {
   final TransfDatosUserTutorado args;
   _UserTutoradoState(this.args);
-  double _currentSliderValue = 15;
-  static var puntos;
   AppLocalizations? valores;
 
   @override
@@ -50,8 +48,8 @@ class _UserTutoradoState extends State<UserTutorado> {
                       args.collectionReferenceMisiones.parent?.id,
                       args.snap.reference.id,
                       CurrentUser.getIdCurrentUser(),
-                      ListaUsuarioState.titulo,
-                      ListaUsuarioState.mensaje),
+                      '${valores?.expulsar}',
+                      '${valores?.expulsar_contenido}'),
                   icon: Icon(Icons.output_rounded)),
             ],
             backgroundColor: Colors.white,
@@ -107,7 +105,7 @@ class _UserTutoradoState extends State<UserTutorado> {
                         ),
                         Tab(
                           icon: Icon(
-                            Icons.apps,
+                            Icons.redeem,
                             color: Colors.black,
                           ),
                           text: '${valores?.recompensa}',
@@ -119,7 +117,7 @@ class _UserTutoradoState extends State<UserTutorado> {
           ),
           body: TabBarView(
             children: [
-              _getListaMisiones(colecTodosLosUsuarios, args, puntos, valores),
+              _getListaMisiones(colecTodosLosUsuarios, args, valores),
               Center(
                 child: getRecompensaForUser(valores),
               ),
@@ -131,7 +129,7 @@ class _UserTutoradoState extends State<UserTutorado> {
   ///Devuelve el indicador de los puntos del usuarrio tutorado en tiempo real
 
   static Widget _getListaMisiones(
-      collectionReferenceUsers, TransfDatosUserTutorado args, dynamic puntos, AppLocalizations? valores) {
+      collectionReferenceUsers, TransfDatosUserTutorado args, AppLocalizations? valores) {
     //Toma los puntos totales en tiempo real, sin necedidad de reiniciar el widget
     return StreamBuilder(
         stream: collectionReferenceUsers
@@ -144,6 +142,7 @@ class _UserTutoradoState extends State<UserTutorado> {
             return const Text("Loading");
           }
           var userDocument = snapshot.data as DocumentSnapshot;
+          print('puntos totales ${ userDocument['puntosTotal']}');
           return StreamBuilder(
             stream: args.collectionReferenceMisiones.snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
@@ -155,8 +154,7 @@ class _UserTutoradoState extends State<UserTutorado> {
                         streamSnapshot.data!.docs[index];
                     return Cards.getCardMision(documentSnapshot,
                         args.snap.id.trim(),
-                        context,
-                        documentSnapshot['recompensaMision'], valores);
+                        context, valores, 'x', userDocument['puntosTotal']);
                   },
                 );
               }

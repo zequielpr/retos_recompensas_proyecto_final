@@ -7,13 +7,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:retos_proyecto/MediaQuery.dart';
+import 'package:retos_proyecto/Servicios/Notificaciones/AdministrarTokens.dart';
+import 'package:retos_proyecto/recursos/MediaQuery.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 import 'package:retos_proyecto/Servicios/Autenticacion/DatosNewUser.dart';
 import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/datos/TransferirDatos.dart';
 
-import '../../../Loanding.dart';
+import '../../../recursos/Loanding.dart';
 import '../../../datos/Roll_Data.dart';
 import '../../../datos/UsuarioActual.dart';
 import '../../../datos/ValidarDatos.dart';
@@ -68,7 +69,7 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
   var paddingBottonAppName = 130.0;
 
   void _ActionCrearUnaCuenta(TransDatosInicioSesion arg) {
-    var datos = TranferirDatosRoll('x', Coleciones.COLECCION_USUARIOS);
+    var datos = TranferirDatosRoll('x');
     context.router.push(RollRouter(args: datos));
   }
 
@@ -288,7 +289,8 @@ class _StateIniSesionEmailPassword extends State<StateIniSesionEmailPassword> {
                                 isWaiting = false;
                               });
                             });
-                    if (resultado != 's')_indicarDatoErroneo(resultado);
+                    if (resultado != 's'){_indicarDatoErroneo(resultado);}
+                    else{await Token.guardarToken();}
                   }
                 : null,
             child: Text(valores?.inicia_sesion as String,

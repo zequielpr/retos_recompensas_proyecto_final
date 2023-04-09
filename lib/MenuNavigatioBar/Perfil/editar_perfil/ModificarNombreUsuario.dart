@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:retos_proyecto/MediaQuery.dart';
+import 'package:retos_proyecto/recursos/MediaQuery.dart';
 
 import '../../../Servicios/Autenticacion/Autenticacion.dart';
 import '../../../Servicios/Autenticacion/NombreUsuario.dart';

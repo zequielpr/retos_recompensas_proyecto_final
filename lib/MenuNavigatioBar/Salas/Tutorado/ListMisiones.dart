@@ -1,6 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:retos_proyecto/MediaQuery.dart';
+import 'package:retos_proyecto/recursos/MediaQuery.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
 import '../../../datos/TransferirDatos.dart';
@@ -65,7 +66,7 @@ class _ListMisionesTutoradoState extends State<ListMisionesTutorado> {
               final DocumentSnapshot documentSnapshot =
                   streamSnapshot.data!.docs[index];
               return Cards.getCardMision(
-                  documentSnapshot, CurrentUser.getIdCurrentUser(), context, 0, valores);
+                  documentSnapshot, CurrentUser.getIdCurrentUser(), context, valores, args.nombreSala,0);
             },
           );
         }

@@ -5,7 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
 
-import '../../../MediaQuery.dart';
+import '../../../recursos/MediaQuery.dart';
 import '../../../widgets/Dialogs.dart';
 import '../AdminRoles.dart';
 

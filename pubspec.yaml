@@ -87,22 +87,16 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-     - lib/imgs/img_google.png
-     - lib/imgs/img_facebook.png
-     - lib/imgs/img_apple.png
-     - lib/imgs/img_logo_provicional.png
-     - lib/imgs/cofre/cofre_1.png
-     - lib/imgs/cofre/cofre_2.png
-     - lib/imgs/cofre/cofre_3.png
-     - lib/imgs/cofre/cofre_4.png
-     - lib/imgs/cofre/cofre_5.png
-     - lib/imgs/cofre/cofre.png
-     - lib/imgs/ic_launcher.png
-     - lib/imgs/undraw_Educator_re_ju47.png
-     - lib/imgs/undraw_Accept_tasks_re_09mv.png
-     - lib/imgs/undraw_Gift_box_re_vau4.png
-     - lib/imgs/undraw_feeling_blue_4b7q.png
-     - lib/imgs/undraw_xmas_surprise_57p1.png
+     - lib/recursos/imgs/img_google.png
+     - lib/recursos/imgs/img_apple.png
+     - lib/recursos/imgs/cofre/cofre.png
+     - lib/recursos/imgs/ic_launcher.png
+     - lib/recursos/imgs/undraw_Educator_re_ju47.png
+     - lib/recursos/imgs/undraw_Accept_tasks_re_09mv.png
+     - lib/recursos/imgs/undraw_Gift_box_re_vau4.png
+     - lib/recursos/imgs/undraw_feeling_blue_4b7q.png
+     - lib/recursos/imgs/undraw_xmas_surprise_57p1.png
+     - lib/recursos/imgs/img_login.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

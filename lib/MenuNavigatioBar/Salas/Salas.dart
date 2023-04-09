@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:retos_proyecto/MediaQuery.dart';
+import 'package:retos_proyecto/recursos/MediaQuery.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminRoles.dart';
 import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/datos/Roll_Data.dart';
@@ -75,7 +75,7 @@ class _SalasState extends State<Salas> {
   //Vista de las salas para los tutorados
   _listarVistaTutorados(BuildContext context,
       CollectionReference collecionUsuarios, tutorActual) {
-    List<dynamic> listaIdasSalas;
+    List<dynamic> listaIdasSalas = [];
 
     return StreamBuilder(
         stream: collecionUsuarios
@@ -92,9 +92,19 @@ class _SalasState extends State<Salas> {
 
           var documentSnapShot = snapshot.data as DocumentSnapshot;
 
-          //Tomar las snapshot necesesarias
-          listaIdasSalas = documentSnapShot[
-              "salas_id"]; //Ids de las salas a las que está añadido el usuario actual
+          try{
+            //Tomar las snapshot necesesarias
+            listaIdasSalas = documentSnapShot[
+            "salas_id"]; //Ids de las salas a las que está añadido el usuario actual
+          }catch(e){
+
+          }
+
+          if(listaIdasSalas.isEmpty){
+            return Center(
+              child: Text(valores?.unete_sala as String),
+            );;
+          }
 
           //Recorre las lista de Ids de salas y obtiene las snap del tutor actual
           return ListView.builder(
@@ -108,7 +118,7 @@ class _SalasState extends State<Salas> {
                       .doc(listaIdasSalas[index])
                       .snapshots(),
                   builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(
                         child: CircularProgressIndicator(),
                       );
