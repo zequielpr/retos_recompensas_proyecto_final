@@ -9,7 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:retos_proyecto/Rutas.gr.dart';
-import 'package:retos_proyecto/Servicios/Notificaciones/Badge.dart';
+import 'package:retos_proyecto/Servicios/Notificaciones/BadgeNotificaciones.dart';
 import 'package:retos_proyecto/datos/Roll_Data.dart';
 import 'package:retos_proyecto/splashScreen.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
@@ -18,7 +18,6 @@ import 'package:retos_proyecto/widgets/Dialogs.dart';
 import 'recursos/MediaQuery.dart';
 import 'Servicios/Notificaciones/notificaciones_bandeja.dart';
 import 'Servicios/Autenticacion/login.dart';
-import 'datos/TransferirDatos.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Main extends StatefulWidget {
@@ -46,7 +45,8 @@ class MainState extends State<Main> {
     }
 
     //CallBack que actualiza el widget y muestra cuantas notificaciones hay
-    Badge.isNewNotifications(mostrarBadge);
+
+    BadgeNotificaciones.isNewNotifications(mostrarBadge);
 
 
     //Actualizar widget de nitificaciion
@@ -178,7 +178,7 @@ class MainState extends State<Main> {
               }
 
               if(index == 1){
-                Badge.setStatusNewMision();
+                BadgeNotificaciones.setStatusNewMision();
               }
 
             },
