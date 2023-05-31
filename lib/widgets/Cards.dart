@@ -539,9 +539,10 @@ class Cards {
     return Padding(
       padding: EdgeInsets.only(
           top: Pantalla.getPorcentPanntalla(Espacios.top, context, 'y')),
-      child: FlatButton(
-        color: Colors.transparent,
-        splashColor: Colors.black26,
+      child: ElevatedButton(
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.transparent),
+            elevation: MaterialStateProperty.all(0)),
 
         //pasar datos de la sala pulzada a la siguiente ventana
         onPressed: () {

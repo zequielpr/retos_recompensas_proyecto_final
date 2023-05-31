@@ -123,6 +123,7 @@
   "fecha_reclamo": "Claim Date",
   "guardar": "Save",
   "ha_add_nueva_mision": "You have a new mission",
+  "hace_es":"",
   "hace": "ago ",
   "ha_error": "An error has occurred",
   "hay_mision_conf": "There is a new mission to be confirmed",
