@@ -138,8 +138,15 @@ class _UserTutoradoState extends State<UserTutorado> {
             .doc(CurrentUser.getIdCurrentUser())
             .snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Text("Loading");
+          if (snapshot.hasData!) {
+            return Center(
+              child: Text('${valores?.aun_no_misiones}'),
+            );
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
           var userDocument = snapshot.data as DocumentSnapshot;
           print('puntos totales ${ userDocument['puntosTotal']}');

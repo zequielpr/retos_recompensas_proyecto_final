@@ -37,7 +37,11 @@ class InicioVistaTutorado {
     return StreamBuilder(
       stream: docTutor.snapshots(),
       builder: (context, data) {
-        if (data.hasData) {
+        print(' resultado: ${data.hasData}');
+        if (!data.hasData) {
+          return Text('${data.hasData}');
+        }
+        if (data.hasData == true) {
           DocumentSnapshot snapshot = data.data as DocumentSnapshot;
 
           return Container(
@@ -80,7 +84,8 @@ class InicioVistaTutorado {
                                     //Reclama la recompensa a cambio de los 200 puntos
                                     snapshot['recompensa_x_200']
                                         .forEach((key, value) async {
-                                          var fechaActual = await DateActual.getActualDateTime();
+                                      var fechaActual =
+                                          await DateActual.getActualDateTime();
                                       await docTutor
                                           .collection('billeteraRecompensas')
                                           .doc()
@@ -179,15 +184,17 @@ class InicioVistaTutorado {
                                         elevation: 0.0,
                                         backgroundColor: Colors.transparent,
                                         child: dialogPulCofre(
-                                            context,Image.asset('lib/recursos/imgs/undraw_xmas_surprise_57p1.png'),
+                                            context,
+                                            Image.asset(
+                                                'lib/recursos/imgs/undraw_xmas_surprise_57p1.png'),
                                             actionOk,
                                             tituloNoRecompensa),
                                       );
                                     },
                                   );
                                 }
-                          : () =>
-                              mostrarMensaje(snapshot['puntosTotal'], context, valores),
+                          : () => mostrarMensaje(
+                              snapshot['puntosTotal'], context, valores),
                       child: Image.asset("lib/recursos/imgs/cofre/cofre.png")),
                 ),
                 DatosPersonales.getIndicadoAvance(
@@ -198,12 +205,13 @@ class InicioVistaTutorado {
             ),
           );
         }
-        return Text('Vacío');
+        return Text('xxx');
       },
     );
   }
 
-  static mostrarMensaje(puntosActuales, BuildContext context, AppLocalizations? valores) {
+  static mostrarMensaje(
+      puntosActuales, BuildContext context, AppLocalizations? valores) {
     actions(BuildContext context) {
       return <Widget>[
         TextButton(
@@ -215,7 +223,7 @@ class InicioVistaTutorado {
       ];
     }
 
-    var titulo ='${valores?.puntos_insuficiente}';
+    var titulo = '${valores?.puntos_insuficiente}';
     var content = Image.asset('lib/recursos/imgs/undraw_feeling_blue_4b7q.png');
 
     Dialogos.mostrarDialog(actions, titulo, content, context);
@@ -264,7 +272,7 @@ class InicioVistaTutorado {
                 Center(
                     child: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child:  mensaje,
+                  child: mensaje,
                 ) //
                     ),
                 SizedBox(height: 24.0),

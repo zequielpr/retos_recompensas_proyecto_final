@@ -49,7 +49,8 @@ class Misiones extends StatelessWidget {
               itemBuilder: (context, index) {
                 final DocumentSnapshot documentSnapshot =
                     streamSnapshot.data!.docs[index];
-                return Cards.getCardMisionInicio(documentSnapshot, context, valores);
+                return Cards.getCardMisionInicio(
+                    documentSnapshot, context, valores);
               },
             );
           }
@@ -102,11 +103,7 @@ class AddMisionState extends State<AddMision> {
   var isFieldNombreCorrect = true;
   var isFieldObjetiveCorrect = true;
 
-
-
   AppLocalizations? valores;
-
-
 
   AddMisionState(this.collectionReferenceMisiones, this.contextSala);
 
@@ -125,8 +122,8 @@ class AddMisionState extends State<AddMision> {
               child: Column(
                 children: <Widget>[
                   SizedBox(
-                    height:
-                    Pantalla.getPorcentPanntalla(Espacios.top, context, 'y'),
+                    height: Pantalla.getPorcentPanntalla(
+                        Espacios.top, context, 'y'),
                   ),
 
                   //Nombre de misión
@@ -135,7 +132,7 @@ class AddMisionState extends State<AddMision> {
                     maxLines: 1,
                     maxLength: 15,
                     obscureText: oculto,
-                    decoration:  InputDecoration(
+                    decoration: InputDecoration(
                       border: const OutlineInputBorder(),
                       labelText: valores?.nombre,
                     ),
@@ -151,25 +148,18 @@ class AddMisionState extends State<AddMision> {
                     maxLines: 4,
                     maxLength: 150,
                     obscureText: oculto,
-                    decoration:  InputDecoration(
+                    decoration: InputDecoration(
                       border: const OutlineInputBorder(),
                       labelText: valores?.objetivo_mision,
                     ),
                   ),
 
-                  Slider(
-                    activeColor: Colores.colorPrincipal,
-                    value: _currentSliderValue,
-                    max: 25,
-                    divisions: 5,
-                    label: _currentSliderValue.round().toString() + ' ${valores?.puntos}',
-                    onChanged: (double value) {
-                      setState(() {
-                        _currentSliderValue = value;
-                      });
-                    },
-                  ),
-
+                  //Puntuacion de la mision
+                  _asignar_puntuacion(),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          bottom:
+                              Pantalla.getPorcentPanntalla(8, context, 'y'))),
                   //Boton para guardar mision
                   Padding(
                       padding: EdgeInsets.only(left: 70, right: 70),
@@ -178,56 +168,141 @@ class AddMisionState extends State<AddMision> {
                         height: Pantalla.getPorcentPanntalla(6, context, 'y'),
                         child: ElevatedButton(
                             onPressed: isFieldNombreCorrect &&
-                                isFieldObjetiveCorrect
+                                    isFieldObjetiveCorrect
                                 ? () async {
+                                    if (nombreMisionController
+                                            .text.isNotEmpty &&
+                                        objetivoMisionController
+                                            .text.isNotEmpty) {
+                                      DateTime dateActual =
+                                          await DateActual.getActualDateTime();
 
-                              if (nombreMisionController.text.isNotEmpty &&
-                                  objetivoMisionController.text.isNotEmpty) {
+                                      await collectionReferenceMisiones.add({
+                                        'fecha': dateActual,
+                                        'nombreMision':
+                                            nombreMisionController.text,
+                                        'objetivoMision':
+                                            objetivoMisionController.text,
+                                        'recompensaMision': puntos_recompensa,
+                                        'completada_por':
+                                            FieldValue.arrayUnion([]),
+                                        'solicitu_confirmacion':
+                                            FieldValue.arrayUnion([])
+                                      }).then((value) {
+                                        Navigator.pop(
+                                            contextSala); //Regresa al contextxo de la sala
+                                        ScaffoldMessenger.of(contextSala)
+                                            .showSnackBar(SnackBar(
+                                                content: Text(
+                                                    valores?.mision_add_correct
+                                                        as String)));
+                                      });
+                                      return;
+                                    }
 
-                                DateTime dateActual = await DateActual.getActualDateTime();
+                                    actions(BuildContext context) {
+                                      return <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            context.router.pop();
+                                          },
+                                          child: const Text('Ok'),
+                                        ),
+                                      ];
+                                    }
 
-                                await collectionReferenceMisiones.add({
-                                  'fecha': dateActual,
-                                  'nombreMision': nombreMisionController.text,
-                                  'objetivoMision':
-                                  objetivoMisionController.text,
-                                  'recompensaMision': _currentSliderValue,
-                                  'completada_por': FieldValue.arrayUnion([]),
-                                  'solicitu_confirmacion':
-                                  FieldValue.arrayUnion([])
-                                }).then((value) {
-                                  Navigator.pop(
-                                      contextSala); //Regresa al contextxo de la sala
-                                  ScaffoldMessenger.of(contextSala)
-                                      .showSnackBar( SnackBar(
-                                      content: Text(valores?.mision_add_correct as String)));
-                                });
-                                return;
-                              }
+                                    var titulo =
+                                        valores?.rellenar_campos as String;
+                                    var message =
+                                        valores?.rellenar_campo_contenido;
 
-                              actions(BuildContext context) {
-                                return <Widget>[
-                                  TextButton(
-                                    onPressed: () {
-                                      context.router.pop();
-                                    },
-                                    child: const Text('Ok'),
-                                  ),
-                                ];
-                              }
-
-                              var titulo = valores?.rellenar_campos as String;
-                              var message = valores?.rellenar_campo_contenido;
-
-                              Dialogos.mostrarDialog(
-                                  actions, titulo, message, context);
-                            }
+                                    Dialogos.mostrarDialog(
+                                        actions, titulo, message, context);
+                                  }
                                 : null,
                             child: Text(valores?.guardar as String)),
                       )),
                 ],
               )),
         ));
-    ;
+  }
+
+  double puntos_recompensa = 5;
+  Widget _asignar_puntuacion() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Flexible(
+          flex: 1,
+          child: IconButton(
+            onPressed: () => _add(),
+            icon: Transform.scale(
+              scaleX: 2.5,
+              scaleY: 2.5,
+              child: Icon(
+                color: Colors.black54,
+                Icons.add,
+              ),
+            ),
+          ),
+        ),
+        Flexible(
+            flex: 3,
+            child: Card(
+              elevation: 0,
+                margin: EdgeInsets.only(
+                    left: Pantalla.getPorcentPanntalla(3, context, 'x'),
+                    right: Pantalla.getPorcentPanntalla(3, context, 'x')),
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    side: BorderSide(color: Colores.colorPrincipal, width: 1)),
+                child: SizedBox(
+                  height: Pantalla.getPorcentPanntalla(25, context, 'x'),
+                  width: Pantalla.getPorcentPanntalla(40, context, 'x'),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "${puntos_recompensa.toInt()}xp",
+                        style: const TextStyle(fontSize: 50, color: Colors.black54),
+                      )
+                    ],
+                  ),
+                ))),
+        Flexible(
+          flex: 1,
+          child: IconButton(
+            onPressed: () => _substract(),
+            icon: Transform.scale(
+              scaleX: 2.5,
+              scaleY: 2.5,
+              child: Icon(
+                Icons.remove,
+                color: Colors.black54,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  int rest = 5;
+  void _substract() {
+    if (puntos_recompensa > 5) {
+      setState(() {
+        puntos_recompensa -= rest;
+      });
+    }
+  }
+
+  int sum = 5;
+  void _add() {
+    if (puntos_recompensa < 25){
+      setState(() {
+        puntos_recompensa += sum;
+      });
+    }
+
   }
 }

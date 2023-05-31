@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:retos_proyecto/datos/Colecciones.dart';
 import 'package:retos_proyecto/datos/UsuarioActual.dart';
 
-class Badge {
+class BadgeNotificaciones {
   static void isNewNotifications(mostrarBadge) {
     CollectionReference collectionReferenceUser = Coleciones.COLECCION_USUARIOS;
 
