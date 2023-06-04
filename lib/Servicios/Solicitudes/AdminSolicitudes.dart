@@ -102,8 +102,7 @@ class Solicitudes {
 
 //Eliminar solicitude------------------------------------------------------------------------------------
   static cambiarStatdoSolicitud(DocumentSnapshot documentSnapshot, int nuevoStado) async {
-    //DateTime fechaActual = await DateActual.getActualDateTime();
-    DateTime fechaActual = DateTime.now();
+    DateTime fechaActual = await DateActual.getActualDateTime();
     await documentSnapshot.reference.update({'estado':nuevoStado, 'fecha_actual': fechaActual});
   }
 
