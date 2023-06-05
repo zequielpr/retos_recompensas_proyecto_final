@@ -138,11 +138,8 @@ class _UserTutoradoState extends State<UserTutorado> {
             .doc(CurrentUser.getIdCurrentUser())
             .snapshots(),
         builder: (context, snapshot) {
-          if (snapshot.hasData!) {
-            return Center(
-              child: Text('${valores?.aun_no_misiones}'),
-            );
-          }
+
+
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -153,7 +150,12 @@ class _UserTutoradoState extends State<UserTutorado> {
           return StreamBuilder(
             stream: args.collectionReferenceMisiones.snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-              if (streamSnapshot.hasData) {
+              if (streamSnapshot.data?.docs.isEmpty == true) {
+                return Center(
+                  child: Text('${valores?.aun_no_misiones}'),
+                );
+              }
+              else if (streamSnapshot.hasData) {
                 return ListView.builder(
                   itemCount: streamSnapshot.data!.docs.length,
                   itemBuilder: (context, index) {
