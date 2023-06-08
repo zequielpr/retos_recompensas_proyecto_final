@@ -122,8 +122,8 @@ class Cards {
                             height: 30,
                             width: 100,
                             child: ElevatedButton(
-                                onPressed: () async =>
-                                    await Solicitudes.aceptarSolicitud(
+                                onPressed: () =>
+                                    Solicitudes.aceptarSolicitud(
                                         documentSnapshot,
                                         collectionReference,
                                         idCurrentUser,

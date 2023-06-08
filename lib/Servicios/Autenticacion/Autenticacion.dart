@@ -10,7 +10,7 @@ import 'package:retos_proyecto/datos/TransferirDatos.dart';
 
 import '../../datos/Roll_Data.dart';
 import '../../datos/UsuarioActual.dart';
-import '../../main.dart';
+import '../../MenuNavigatioBar/menu.dart';
 import '../Notificaciones/AdministrarTokens.dart';
 import 'DatosNewUser.dart';
 import 'login.dart';

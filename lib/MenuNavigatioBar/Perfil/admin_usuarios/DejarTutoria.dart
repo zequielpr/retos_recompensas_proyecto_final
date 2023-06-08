@@ -26,8 +26,7 @@ class DejarTutoria {
         ),
         TextButton(
           onPressed: () async {
-            eliminarDeCurrentTutor(CurrentUser.getIdCurrentUser());
-            eliminarAvance(idTutor);
+            eliminarDeCurrentTutor(CurrentUser.getIdCurrentUser()).whenComplete(() => eliminarAvance(idTutor));
             eliminarDeListaAllUsers(idTutor);
             eliminarDeTodasSalas(idTutor);
             context.router.pop();

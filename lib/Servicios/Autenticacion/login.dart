@@ -23,7 +23,7 @@ import '../../recursos/AppName.dart';
 import '../../recursos/Espacios.dart';
 import '../Notificaciones/AdministrarTokens.dart';
 import 'Autenticacion.dart';
-import '../../main.dart';
+import '../../MenuNavigatioBar/menu.dart';
 import 'DatosNewUser.dart';
 
 class Login extends StatefulWidget {

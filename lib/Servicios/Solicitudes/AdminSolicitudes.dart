@@ -14,6 +14,7 @@ class Solicitudes {
       CollectionReference collectionReferenceUers,
       String? idCurrentUser,
       BuildContext context) async {
+    cambiarStatdoSolicitud(documentSnapshot, 1);
 
     String id_emisor = documentSnapshot['id_emisor'];
     String id_sala = documentSnapshot['id_sala'];
@@ -32,18 +33,19 @@ class Solicitudes {
             });
             return;
           }
-          //Si el usuario aun no esta bajo su tutoría
-          await collectionReferenceUers
-              .doc(idCurrentUser)
-              .update({'current_tutor': id_emisor.trim()});
           await value.reference.set({
             'salas_id': FieldValue.arrayUnion([id_sala]),
             'puntosTotal': 0,
             'recompensa_x_200': {},
             'puntos_acumulados': 0
           });
+
+          //Si el usuario aun no esta bajo su tutoría
+          await collectionReferenceUers
+              .doc(idCurrentUser)
+              .update({'current_tutor': id_emisor.trim()});
+
         });
-        cambiarStatdoSolicitud(documentSnapshot, 1);
       }
     });
   }
