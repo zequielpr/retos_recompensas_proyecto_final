@@ -17,7 +17,7 @@ import 'package:cloud_firestore/cloud_firestore.dart' as _i32;
 import 'package:flutter/material.dart' as _i30;
 
 import 'datos/TransferirDatos.dart' as _i31;
-import 'main.dart' as _i10;
+import 'MenuNavigatioBar/menu.dart' as _i10;
 import 'MenuNavigatioBar/Inicio/Inicio.dart' as _i12;
 import 'MenuNavigatioBar/Inicio/Tutorado/Historial.dart' as _i13;
 import 'MenuNavigatioBar/Notificaciones.dart' as _i16;
@@ -47,7 +47,7 @@ import 'Servicios/Autenticacion/EmailPassw/RecogerEmail.dart' as _i5;
 import 'Servicios/Autenticacion/EmailPassw/RecogerPassw/RecogerPassw.dart' as _i6;
 import 'Servicios/Autenticacion/EmailPassw/RecoverPassw.dart' as _i7;
 import 'Servicios/Autenticacion/login.dart' as _i2;
-import 'splashScreen.dart' as _i1;
+import 'main.dart' as _i1;
 
 class AppRouter extends _i29.RootStackRouter {
   AppRouter([_i30.GlobalKey<_i30.NavigatorState>? navigatorKey])

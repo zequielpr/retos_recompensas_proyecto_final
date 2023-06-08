@@ -2,7 +2,7 @@ import 'package:auto_route/empty_router_widgets.dart';
 import 'package:retos_proyecto/MenuNavigatioBar/Perfil/AdminPerfilUser.dart';
 import 'package:retos_proyecto/Servicios/Autenticacion/EmailPassw/RecoverPassw.dart';
 import 'package:retos_proyecto/datos/Roll_Data.dart';
-import 'package:retos_proyecto/splashScreen.dart';
+import 'package:retos_proyecto/main.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
@@ -29,7 +29,7 @@ import 'Servicios/Autenticacion/EmailPassw/IniciarSessionEmailPassw.dart';
 import 'Servicios/Autenticacion/EmailPassw/RecogerEmail.dart';
 import 'Servicios/Autenticacion/EmailPassw/RecogerPassw/RecogerPassw.dart';
 import 'Servicios/Autenticacion/login.dart';
-import 'main.dart';
+import 'MenuNavigatioBar/menu.dart';
 import 'onboarding/onboarding.dart';
 
 @MaterialAutoRouter(

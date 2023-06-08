@@ -1,242 +1,269 @@
+import 'dart:async';
+import 'dart:isolate';
 import 'dart:ui';
-
-import 'package:auto_route/auto_route.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:retos_proyecto/Rutas.gr.dart';
-import 'package:retos_proyecto/Servicios/Notificaciones/BadgeNotificaciones.dart';
-import 'package:retos_proyecto/datos/Roll_Data.dart';
-import 'package:retos_proyecto/splashScreen.dart';
-import 'package:custom_navigation_bar/custom_navigation_bar.dart';
-import 'package:retos_proyecto/widgets/Dialogs.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:retos_proyecto/recursos/MediaQuery.dart';
+import 'package:retos_proyecto/datos/Colecciones.dart';
+import 'package:retos_proyecto/generated/intl/messages_en.dart';
+import 'package:retos_proyecto/recursos/DateActual.dart';
+import 'package:retos_proyecto/recursos/Valores.dart';
 
-import 'recursos/MediaQuery.dart';
-import 'Servicios/Notificaciones/notificaciones_bandeja.dart';
+import 'recursos/Colores.dart';
+import 'Rutas.gr.dart';
+import 'Servicios/Notificaciones/AdminTopics.dart';
+import 'datos/Roll_Data.dart';
+import 'Rutas.dart';
+import 'Servicios/Autenticacion/DatosNewUser.dart';
+import 'Servicios/Autenticacion/EmailPassw/IniciarSessionEmailPassw.dart';
+import 'Servicios/Autenticacion/EmailPassw/RecogerEmail.dart';
+import 'Servicios/Autenticacion/EmailPassw/RecogerPassw/RecogerPassw.dart';
 import 'Servicios/Autenticacion/login.dart';
+import 'datos/TransferirDatos.dart';
+import 'datos/UsuarioActual.dart';
+import 'l10n/l10n.dart';
+import 'MenuNavigatioBar/menu.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class Main extends StatefulWidget {
-  const Main({Key? key}) : super(key: key);
+late AndroidNotificationChannel channel;
+late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+bool isFlutterLocalNotificationsInitialized = false;
 
-  @override
-  State<Main> createState() => MainState();
+Future<void> setupFlutterNotifications() async {
+  if (isFlutterLocalNotificationsInitialized) {
+    return;
+  }
+
+
+
+  channel = const AndroidNotificationChannel(
+      'high_importance_channel', // id
+      'High Importance Notifications', // title
+      description:
+          'This channel is used for important notifications.', // description
+      importance: Importance.max,);
+
+  flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  /// Create an Android Notification Channel.
+  ///
+  /// We use this channel in the `AndroidManifest.xml` file to override the
+  /// default FCM channel to enable heads up notifications.
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+
+  /// Update the iOS foreground notification presentation options to allow
+  /// heads up notifications.
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  isFlutterLocalNotificationsInitialized = true;
 }
 
-//Clase donde se probara to el proceso de crear una misión
-class MainState extends State<Main> {
-  List<int> _badgeCounts = List<int>.generate(5, (index) => index);
-  List<bool> _badgeShows = List<bool>.generate(5, (index) => false);
-  var count_notificaciones;
-  late AppLocalizations? valores = AppLocalizations.of(context);
-  void initState() {
-    _badgeShows[1] = false;
-    super.initState();
-    //Mostrar el badge
-    mostrarBadge(bool mostrar, cantidad) {
-      setState(() {
-        _badgeShows[1] = mostrar;
-        _badgeCounts[1] = cantidad;
-      });
-    }
-
-    //CallBack que actualiza el widget y muestra cuantas notificaciones hay
-
-    BadgeNotificaciones.isNewNotifications(mostrarBadge);
 
 
-    //Actualizar widget de nitificaciion
-    void actualizarWidgetNitificaciones(actualizar){
-      actualizar();
-    }
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
-      if (notification != null && android != null) {
+/*
+@pragma('vm:entry-point')
+Future<dynamic> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+  await setupFlutterNotifications();
+
+ // AppLocalizations? valores = AppLocalizations.of( contx);
 
 
-        String? titulo = notification.titleLocKey;
-        String body = '';
-        switch(titulo){
-          case 'title_loc_key_conf_mision':
-            titulo = '${valores?.confirmar_mision}';
-            body = '${valores?.hay_mision_conf}';
-            break;
-          case 'title_loc_key_solicitud':
-            titulo = '${valores?.solicitud}';
-            body = '${valores?.te_ha_enviado_solicitud}';
-            break;
-          case 'title_loc_key_nueva_mision':
-            titulo = '${valores?.nueva_mision}';
-            body = '${valores?.ha_add_nueva_mision}';
-            break;
-          default:
-            print('titulo: ${notification.titleLocKey}');
-            break;
-        }
+  RemoteNotification? notification = message.notification;
+  AndroidNotification? android = message.notification?.android;
+
+  if (notification != null && android != null) {
+    flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        'xxxxxxxx',
+        'xxxxx',
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            channelDescription: channel.description,
+            color: Colors.blue,
+            playSound: true,
+            icon: '@mipmap/ic_launcher',
+          ),
+        ));
+    print('final');
+  }
+  ReceivePort _port = ReceivePort();
+  IsolateNameServer.registerPortWithName(
+      _port.sendPort, 'port_name');
+  _port.listen((dynamic data) {
+  });
 
 
+}
+*/
 
-        print(notification.title);
-        flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            titulo,
-            body,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                channel.id,
-                channel.name,
-                channelDescription: channel.description,
-                color: Colors.blue,
-                playSound: true,
-                icon: '@mipmap/ic_launcher',
+
+Future<void> main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await setupFlutterNotifications();
+
+  //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+
+  runApp(splashScreen());
+}
+
+class splashScreen extends StatelessWidget {
+  final _appRouter = AppRouter();
+  @override
+  Widget build(BuildContext context) {
+    /*final SendPort? send =
+    IsolateNameServer.lookupPortByName('port_name');
+    send?.send(true);*/
+
+
+    //Color de la barra inferior
+    Valores.setValores(context);
+    return MaterialApp.router(
+      supportedLocales: L10n.all,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate
+      ],
+      routerDelegate: _appRouter.delegate(),
+      routeInformationParser: _appRouter.defaultRouteParser(),
+      theme: ThemeData(
+          primaryColor: Colores.colorPrincipal,
+          textButtonTheme: TextButtonThemeData(
+              style: ButtonStyle(
+                  textStyle: MaterialStateProperty.all(TextStyle(fontSize: 15)),
+                  foregroundColor:
+                      MaterialStateProperty.all(Colores.colorPrincipal))),
+          textTheme: TextTheme(
+            subtitle1: GoogleFonts.roboto(color: Colors.black),
+            bodyText2: GoogleFonts.roboto(color: Colors.black),
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+              labelStyle: TextStyle(color: Colors.black),
+              contentPadding: EdgeInsets.all(10),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(
+                  style: BorderStyle.solid,
+                ),
               ),
-            ));
-        print('final');
-      }
-    });
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    style: BorderStyle.solid, color: Colores.colorPrincipal),
+              )),
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
+            elevation: 0,
+            systemOverlayStyle: SystemUiOverlayStyle.dark,
+          ),
+          tabBarTheme: TabBarTheme(labelColor: Colors.black),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all(
+                      Color.fromARGB(236, 255, 255, 255)),
+                  //foregroundColor: MaterialStateProperty.all(Colors.black26),
+                  overlayColor: MaterialStateProperty.all(
+                      const Color.fromARGB(165, 243, 241, 241)),
+                  elevation: MaterialStateProperty.all(0),
+                  backgroundColor:
+                      MaterialStateProperty.all(Colores.colorPrincipal),
+                  textStyle: MaterialStateProperty.all(GoogleFonts.roboto(
+                      fontSize: 16, fontWeight: FontWeight.w700))))),
+    );
+  }
+}
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
-      if (notification != null && android != null) {
-        _onItemTapped(1);
-      }
-    });
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void initState() {
+    DateActual.getActualDateTime();
+    super.initState();
+    FlutterStatusbarcolor.setNavigationBarWhiteForeground(
+        false); //Colores de los iconos de la barra inferior
+    FlutterStatusbarcolor.setNavigationBarColor(Colors.red);
+
+    _navigateToHome();
   }
 
-  final CollectionReference CollecionUsuarios = FirebaseFirestore.instance
-      .collection('usuarios'); //Coleccion en la que se guardarán los usuarios
-
-  void _onItemTapped(int index) {
-    setState(() {
-      routes.setActiveIndex(index);
-    });
-  }
-
-  late TabsRouter routes;
+  var datos;
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: AutoTabsScaffold(
-        routes: const [
-          HomeRouter(),
-          NotificacionesRouter(),
-          SalasRouter(),
-          AdminPerfilUserRouter()
-        ],
-        bottomNavigationBuilder: (_, tabsRouter) {
-          routes = tabsRouter;
-          return CustomNavigationBar(
-            iconSize: 30.0,
-            selectedColor: Color(0xff040307),
-            strokeColor: Color(0x30040307),
-            unSelectedColor: Color(0xffacacac),
-            backgroundColor: Colors.white,
-            items: [
-              CustomNavigationBarItem(
-                icon: Icon(Icons.home),
-              ),
-              CustomNavigationBarItem(
-                icon: Icon(Icons.notifications),
-                badgeCount: _badgeCounts[1],
-                showBadge: _badgeShows[1],
-              ),
-              CustomNavigationBarItem(
-                icon: Icon(Icons.meeting_room),
-              ),
-              CustomNavigationBarItem(
-                icon: Icon(Icons.account_circle_rounded),
-              ),
-            ],
-            currentIndex: routes.activeIndex,
-            onTap: (index) {
-              routes.setActiveIndex(index);
-              if (routes.canPopSelfOrChildren) {
-                switch (routes.activeIndex) {
-                  case 0:
-                    routes.navigate(const HomeRouter());
-                    return;
-                  case 1:
-                    routes.navigate(const NotificacionesRouter());
-                    return;
-                  case 2:
-                    routes.navigate(const SalasRouter());
-                    return;
-                  case 3:
-                    routes.navigate(const AdminPerfilUserRouter());
-                    return;
-                  default:
-                    return;
-                }
-              }
+    FlutterStatusbarcolor.setStatusBarColor(Colors.transparent, animate: true);
+    FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
 
-              if(index == 1){
-                BadgeNotificaciones.setStatusNewMision();
-              }
+    FlutterStatusbarcolor.setNavigationBarWhiteForeground(
+        true); //Colores de los iconos de la barra inferior
+    FlutterStatusbarcolor.setNavigationBarColor(Colors.transparent);
+    /*
+    FlutterStatusbarcolor.setStatusBarWhiteForeground(
+        false); //Colores de los iconos de la barra superior
+    FlutterStatusbarcolor.setStatusBarColor(Colors.transparent,
+        animate: false); //Color de barra superior
 
-            },
-          );
-        },
-      ),
-    );
+    FlutterStatusbarcolor.setNavigationBarColor(
+        Colors.black); //Color de la barra inferior
+     */
+
+    FlutterStatusbarcolor.setNavigationBarColor(
+        Colors.black); //Color de la barra inferior
+    FlutterStatusbarcolor.setNavigationBarWhiteForeground(true);
+
+    return Container(
+        color: Colors.white,
+        child: Image.asset('lib/recursos/imgs/ic_launcher.png', scale: 10.0));
   }
 
-  //Metodo que evitará que la aplicacion se salga sin preguntar
-  Future<bool> _onWillPop() async {
-    if (routes.activeIndex > 0) {
-      _onItemTapped(0);
-      return false;
-    }
-    var actions = <Widget>[
-      TextButton(
-        onPressed: () {
-          Navigator.of(context).pop(false);
-        },
-        child: const Text('No'),
-      ),
-      TextButton(
-        onPressed: () {
-          Navigator.of(context).pop(true);
-        },
-        child: const Text('si'),
-      ),
-
-    ];
-    var titulo = const Text('Salir', textAlign: TextAlign.center);
-    var message = const Text(
-      '¿Deseas salir de la aplicacion?',
-      textAlign: TextAlign.center,
-    );
-
-
-
-    return (await showDialog<bool>(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        titlePadding: EdgeInsets.only(
-            left: Pantalla.getPorcentPanntalla(3, context, 'x'),
-            top: Pantalla.getPorcentPanntalla(3, context, 'x'),
-            bottom: Pantalla.getPorcentPanntalla(1, context, 'x')),
-        alignment: Alignment.center,
-        actionsAlignment: MainAxisAlignment.center,
-        buttonPadding: EdgeInsets.all(0),
-        actionsPadding:
-        EdgeInsets.only(top: Pantalla.getPorcentPanntalla(0, context, 'x')),
-        contentPadding: EdgeInsets.only(
-            left: Pantalla.getPorcentPanntalla(3, context, 'x'),
-            right: Pantalla.getPorcentPanntalla(3, context, 'x')),
-        title: titulo,
-        content: message,
-        actions: actions,
-      ),
-    )) ??
-        false;
+  _navigateToHome() async {
+    await Future.delayed(const Duration(milliseconds: 1900), () {});
+    FirebaseAuth.instance.authStateChanges().listen((User? user) async {
+      if (user == null || user.emailVerified == false) {
+        if (mounted) context.router.replace(OnboadingRouter());
+      } else {
+        //Guardar usuario actual
+        CurrentUser.setCurrentUser();
+        DocumentReference docUser =
+            Coleciones.COLECCION_USUARIOS.doc(CurrentUser.getIdCurrentUser());
+        await docUser.get().then((value) {
+          Roll_Data.ROLL_USER_IS_TUTORADO = value['rol_tutorado'];
+          if (!mounted) return;
+          context.router.replace(MainRouter());
+        });
+      }
+    }).onError((handleError) {
+    });
   }
 }
