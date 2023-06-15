@@ -48,7 +48,7 @@ class ListaUsuarioState extends State<ListUsuarios> {
       body: Center(
         child: StreamBuilder(
           stream: collectionReferenceUsuariosTutorados.snapshots(),
-          builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+          builder: (contextStreamBuilder, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
             if (streamSnapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(),
@@ -64,7 +64,7 @@ class ListaUsuarioState extends State<ListUsuarios> {
             if (streamSnapshot.hasData) {
               return ListView.builder(
                 itemCount: streamSnapshot.data!.docs.length,
-                itemBuilder: (context, index) {
+                itemBuilder: (contextItemBuilder, index) {
                   final DocumentSnapshot documentSnapshot =
                       streamSnapshot.data!.docs[index];
 
@@ -72,9 +72,9 @@ class ListaUsuarioState extends State<ListUsuarios> {
                   return Card(
                     color: Colors.transparent,
                     margin: EdgeInsets.only(
-                        left: Pantalla.getPorcentPanntalla(4, context, 'x'),
-                        right: Pantalla.getPorcentPanntalla(2, context, 'x'),
-                        top: Pantalla.getPorcentPanntalla(1, context, 'y')),
+                        left: Pantalla.getPorcentPanntalla(4, contextItemBuilder, 'x'),
+                        right: Pantalla.getPorcentPanntalla(2, contextItemBuilder, 'x'),
+                        top: Pantalla.getPorcentPanntalla(1, contextItemBuilder, 'y')),
                     elevation: 0,
                     child: ListTile(
                       onTap: () {
@@ -101,7 +101,7 @@ class ListaUsuarioState extends State<ListUsuarios> {
                       subtitle: DatosPersonales.getDato(
                           documentSnapshot.id, 'nombre_usuario', TextStyle()),
                       trailing: SizedBox(
-                        width: Pantalla.getPorcentPanntalla(15, context, 'x'),
+                        width: Pantalla.getPorcentPanntalla(15, contextItemBuilder, 'x'),
                         child: Row(
                           children: [
                             IconButton(
